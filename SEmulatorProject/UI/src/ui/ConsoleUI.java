@@ -31,7 +31,8 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        engine.loadProgram();
+        String xmlPath = "/Users/omrishtruzer/Downloads/badic.xml";
+        engine.loadProgram(xmlPath);
     }
 
     @Override

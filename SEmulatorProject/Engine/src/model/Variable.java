@@ -30,7 +30,7 @@ public class Variable {
             if (stringVariable.length() != 1) {
                 throw new IllegalArgumentException("Variable of kind 'y' must not have an index");
             }
-            return new Variable(varKind, -1);
+            return new Variable(varKind, 0);
         }
 
         if (stringVariable.length() < 2) {

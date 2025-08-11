@@ -10,4 +10,21 @@ public class Program {
         this.name = name;
         this.instructions = instructions;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getAllLabels(){
+        return null;
+    }
+
+    public List<String> getAllInputsNames(){
+        return null;
+    }
+
+    public List<Instruction> getInstructions()
+    {
+        return instructions;
+    }
 }

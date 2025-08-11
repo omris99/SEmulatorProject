@@ -6,6 +6,7 @@ import model.InstructionDetails;
 import model.Variable;
 import model.generated.SInstruction;
 import model.generated.SInstructionArgument;
+import model.generated.SInstructionArguments;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,12 +27,16 @@ public class InstructionMapper{
 
         try{
             Variable variable = Variable.parse(jaxbInstruction.getSVariable());
-            List<InstructionArgument> arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
-            if (jaxbInstruction.getSInstructionArguments().getSInstructionArgument() == null) {
+            SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
+            List<InstructionArgument> arguments = null;
 
-
+            if(sInstructionArguments != null){
                 arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
             }
+
+//            if (jaxbInstruction.getSInstructionArguments().getSInstructionArgument() != null) {
+//                arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
+//            }
             Instruction domainInstruction = new Instruction(
                     details,
                     variable,
@@ -43,7 +48,6 @@ public class InstructionMapper{
         }catch (Exception e){
             System.out.println("take care of it");
         }
-
         return null;
     }
 

@@ -17,8 +17,11 @@ public class Variable {
     }
 
     public static Variable parse(String stringVariable) {
-        if (stringVariable == null || stringVariable.isEmpty()) {
+        if (stringVariable == null) {
             throw new IllegalArgumentException("Variable string cannot be null or empty");
+        }
+        else if (stringVariable.isEmpty()) {
+            return new Variable("", 0);
         }
 
         String varKind = stringVariable.substring(0, 1);
@@ -57,7 +60,7 @@ public class Variable {
     }
 
     private static boolean isStringVariableIndexValid(int index) {
-        return index >= 0; // או כל כלל אחר שאתה רוצה
+        return index >= 0;
     }
 
     public String getKind() {

@@ -36,7 +36,7 @@ public class EmulatorEngine implements Engine {
             File xmlFile = new File(xmlPath);
             JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            SProgram sProgram= (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
+            SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
             program = ProgramMapper.toDomain(sProgram);
             System.out.println(sProgram);
         }

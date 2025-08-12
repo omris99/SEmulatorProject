@@ -1,6 +1,7 @@
 package model.mappers;
 
 import model.Instruction;
+import model.InstructionArgument;
 import model.InstructionDetails;
 import model.Variable;
 import model.generated.SInstruction;
@@ -29,7 +30,7 @@ public class InstructionMapper{
         try{
             Variable variable = Variable.parse(jaxbInstruction.getSVariable());
             SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
-            Map<String, String> arguments = null;
+            Map<InstructionArgument, String> arguments = null;
 
             if(sInstructionArguments != null){
                 arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
@@ -53,14 +54,15 @@ public class InstructionMapper{
     }
 
 
-    private static Map<String, String> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments) {
+    private static Map<InstructionArgument, String> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments) {
         if (jaxbInstructionsArguments == null || jaxbInstructionsArguments.isEmpty()) {
             return null;
         }
 
-        Map<String, String> domainArguments = new HashMap<>();
+        Map<InstructionArgument, String> domainArguments = new HashMap<>();
         for (SInstructionArgument jaxbInstructionArgument : jaxbInstructionsArguments) {
-            domainArguments.put(jaxbInstructionArgument.getName(), jaxbInstructionArgument.getValue());
+            String argumentName = jaxbInstructionArgument.getName();
+            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), jaxbInstructionArgument.getValue());
         }
 
         return domainArguments;

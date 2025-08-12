@@ -5,11 +5,13 @@ import java.util.Objects;
 public class Variable {
     private final String kind;
     private final int index;
+    private int value;
 
     public Variable(String kind, int index) {
         if (!isStringVariableKindValid(kind)) {
             throw new IllegalArgumentException("Invalid kind: " + kind);
         }
+
         if (!isStringVariableIndexValid(index)) {
             throw new IllegalArgumentException("Invalid index: " + index);
         }

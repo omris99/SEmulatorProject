@@ -2,6 +2,7 @@ package ui;
 
 import engine.EmulatorEngine;
 import exceptions.InvalidXmlFileException;
+import exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
 import model.*;
 
@@ -35,7 +36,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Downloads/minus.xml";
+        String xmlPath = "/Users/omrishtruzer/Downloads/error-1.xml";
 
         try{
             engine.loadProgram(xmlPath);
@@ -45,6 +46,8 @@ public class ConsoleUI implements UI
             System.out.println("File not found: " + e.getMessage());
         } catch (JAXBException e) {
             System.out.println("Error reading XML: " + e.getMessage());
+        } catch (UnknownLabelReferenceExeption e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -76,7 +79,7 @@ public class ConsoleUI implements UI
     @Override
     public void run() {
         loadProgram();
-        showProgramDetails();
+        //showProgramDetails();
     }
 
     @Override

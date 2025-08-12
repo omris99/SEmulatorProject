@@ -6,11 +6,11 @@ import java.util.Map;
 public class Instruction {
     private InstructionDetails details;
     private String label;
-    private final Map<String, String> arguments;
+    private final Map<InstructionArgument, String> arguments;
     private Variable variable;
     private String instructionDisplayFormat;
 
-    public Instruction(InstructionDetails details, Variable variable, String label, Map<String, String> arguments) {
+    public Instruction(InstructionDetails details, Variable variable, String label, Map<InstructionArgument, String> arguments) {
         this.details = details;
         this.variable = variable;
         this.label = label;
@@ -36,7 +36,7 @@ public class Instruction {
                 instructionDisplayFormat = String.format("%s <- %s - 1", variable, variable);
                 break;
             case JUMP_NOT_ZERO:
-                instructionDisplayFormat = String.format("IF %s != 0 GOTO %s", variable, arguments.get("JNZLabel"));
+                instructionDisplayFormat = String.format("IF %s != 0 GOTO %s", variable, arguments.get(InstructionArgument.JNZ_LABEL));
                 break;
             case NEUTRAL:
                 instructionDisplayFormat = String.format("%s <- %s", variable, variable);
@@ -45,22 +45,22 @@ public class Instruction {
                 instructionDisplayFormat = String.format("%s <- 0", variable);
                 break;
             case GOTO_LABEL:
-                instructionDisplayFormat = String.format("GOTO %s", arguments.get("gotoLabel"));
+                instructionDisplayFormat = String.format("GOTO %s", arguments.get(InstructionArgument.GOTO_LABEL));
                 break;
             case ASSIGNMENT:
-                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get("assignedVariable"));
+                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(InstructionArgument.ASSIGNED_VARIABLE));
                 break;
             case CONSTANT_ASSIGNMENT:
-                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get("constantValue"));
+                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(InstructionArgument.CONSTANT_VALUE));
                 break;
             case JUMP_ZERO:
-                instructionDisplayFormat = String.format("IF %s = 0 GOTO %s", variable, arguments.get("JZLabel"));
+                instructionDisplayFormat = String.format("IF %s = 0 GOTO %s", variable, arguments.get(InstructionArgument.JZ_LABEL));
                 break;
             case JUMP_EQUAL_CONSTANT:
-                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get("JEConstantLabel"), arguments.get("constantValue"));
+                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE));
                 break;
             case JUMP_EQUAL_VARIABLE:
-                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get("JEVariableLabel"), arguments.get("variableName"));
+                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown instruction: " + details);
@@ -77,6 +77,10 @@ public class Instruction {
 
     public Variable getVariable(){
         return variable;
+    }
+
+    public Map<InstructionArgument, String> getArguments() {
+        return arguments;
     }
 }
 

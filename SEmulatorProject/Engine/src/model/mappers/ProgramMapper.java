@@ -15,13 +15,15 @@ public class ProgramMapper {
             return null;
         }
 
-//        List<Instruction> instructions = new ArrayList<>();
-        Instructions instructions = new Instructions();
+        List<Instruction> instructionsList = new ArrayList<>();
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {
-            instructions.add(InstructionMapper.toDomain(instruction));
+            instructionsList.add(InstructionMapper.toDomain(instruction));
         }
+
+        Instructions instructions = new Instructions(instructionsList);
+
 
         return new Program(jaxbProgram.getName(), instructions);
     }

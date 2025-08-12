@@ -16,7 +16,7 @@ public class Program {
         return name;
     }
 
-    public List<String> getAllInstructionsLabels(){
+    public Set<String> getAllInstructionsLabels(){
         return instructions.getLabels();
     }
 

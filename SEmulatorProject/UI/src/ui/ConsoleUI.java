@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
+ *  2. ensure that every exception message is fully detailed.
  */
 
 public class ConsoleUI implements UI
@@ -36,10 +37,11 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Downloads/error-1.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
 
         try{
             engine.loadProgram(xmlPath);
+            System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");
         } catch (InvalidXmlFileException e) {
             System.out.println(e.getMessage());
         } catch (FileNotFoundException e) {
@@ -79,7 +81,7 @@ public class ConsoleUI implements UI
     @Override
     public void run() {
         loadProgram();
-        //showProgramDetails();
+        showProgramDetails();
     }
 
     @Override

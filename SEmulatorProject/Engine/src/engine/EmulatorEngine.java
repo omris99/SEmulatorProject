@@ -24,7 +24,7 @@ public class EmulatorEngine implements Engine {
         return program.getName();
     }
 
-    public List<String> getProgramLabelsNames() {
+    public Set<String> getProgramLabelsNames() {
         return program.getAllInstructionsLabels();
     }
     public Set<Variable> getProgramInputsNames() {

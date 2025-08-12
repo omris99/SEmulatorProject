@@ -4,7 +4,7 @@ import engine.EmulatorEngine;
 import model.*;
 /*
  * TODO:
- *  1. IMPLEMENT loadProgram
+ *  1. search for xml application errors and make sure the errors exceptions corrrectly
  */
 
 public class ConsoleUI implements UI
@@ -31,7 +31,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Downloads/badic.xml";
+        String xmlPath = "/Users/omrishtruzer/Downloads/minus.xml";
         engine.loadProgram(xmlPath);
     }
 

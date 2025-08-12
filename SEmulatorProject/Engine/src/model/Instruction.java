@@ -1,15 +1,16 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 public class Instruction {
     private InstructionDetails details;
     private String label;
-    private List<InstructionArgument> arguments;
+    private final Map<String, String> arguments;
     private Variable variable;
     private String instructionDisplayFormat;
 
-    public Instruction(InstructionDetails details, Variable variable, String label, List<InstructionArgument> arguments) {
+    public Instruction(InstructionDetails details, Variable variable, String label, Map<String, String> arguments) {
         this.details = details;
         this.variable = variable;
         this.label = label;
@@ -21,7 +22,7 @@ public class Instruction {
     public String toString() {
         return String.format("(%s) [ %-4s] %s (%d)",
                 details.getType().equals("basic") ? "B" : "S",
-                label,
+                label != null ? label : "",
                 instructionDisplayFormat,
                 details.getCycles());
     }
@@ -29,42 +30,53 @@ public class Instruction {
     private void setInstructionDisplayFormat() {
         switch(details) {
             case INCREASE:
-                instructionDisplayFormat = String.format("%s <- %s + 1", variable);
+                instructionDisplayFormat = String.format("%s <- %s + 1", variable, variable);
                 break;
             case DECREASE:
-                instructionDisplayFormat = String.format("%s <- %s - 1", variable);
+                instructionDisplayFormat = String.format("%s <- %s - 1", variable, variable);
                 break;
             case JUMP_NOT_ZERO:
-                instructionDisplayFormat = String.format("IF %s!=0 GOTO %s", arguments.get(1));
+                instructionDisplayFormat = String.format("IF %s != 0 GOTO %s", variable, arguments.get("JNZLabel"));
                 break;
             case NEUTRAL:
-                instructionDisplayFormat = String.format("%s <- %s", variable);
+                instructionDisplayFormat = String.format("%s <- %s", variable, variable);
                 break;
             case ZERO_VARIABLE:
                 instructionDisplayFormat = String.format("%s <- 0", variable);
                 break;
             case GOTO_LABEL:
-                instructionDisplayFormat = String.format("GOTO %s", arguments.get(1));
+                instructionDisplayFormat = String.format("GOTO %s", arguments.get("gotoLabel"));
                 break;
             case ASSIGNMENT:
-                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(0));
+                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get("assignedVariable"));
                 break;
             case CONSTANT_ASSIGNMENT:
-                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(1));
+                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get("constantValue"));
                 break;
             case JUMP_ZERO:
-                instructionDisplayFormat = String.format("IF %s=0 GOTO %s", variable, arguments.get(1));
+                instructionDisplayFormat = String.format("IF %s = 0 GOTO %s", variable, arguments.get("JZLabel"));
                 break;
             case JUMP_EQUAL_CONSTANT:
-                instructionDisplayFormat = String.format("IF %s=%s GOTO %s", variable, arguments.get(1), arguments.get(3));
+                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get("JEConstantLabel"), arguments.get("constantValue"));
                 break;
             case JUMP_EQUAL_VARIABLE:
-                instructionDisplayFormat = String.format("IF %s=%s GOTO %s", variable, arguments.get(3), arguments.get(1));
+                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get("JEVariableLabel"), arguments.get("variableName"));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown instruction: " + details);
         }
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean isLabled(){
+        return label != null;
+    }
+
+    public Variable getVariable(){
+        return variable;
+    }
 }
 

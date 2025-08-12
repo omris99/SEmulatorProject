@@ -1,7 +1,6 @@
 package model.mappers;
 
 import model.Instruction;
-import model.InstructionArgument;
 import model.InstructionDetails;
 import model.Variable;
 import model.generated.SInstruction;
@@ -10,7 +9,9 @@ import model.generated.SInstructionArguments;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //TODO: 1. HANDLE EXCEPTION
 
@@ -28,7 +29,7 @@ public class InstructionMapper{
         try{
             Variable variable = Variable.parse(jaxbInstruction.getSVariable());
             SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
-            List<InstructionArgument> arguments = null;
+            Map<String, String> arguments = null;
 
             if(sInstructionArguments != null){
                 arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
@@ -52,15 +53,16 @@ public class InstructionMapper{
     }
 
 
-    private static List<InstructionArgument> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments) {
+    private static Map<String, String> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments) {
         if (jaxbInstructionsArguments == null || jaxbInstructionsArguments.isEmpty()) {
             return null;
         }
 
-        List<InstructionArgument> domainArguments = new ArrayList<>();
+        Map<String, String> domainArguments = new HashMap<>();
         for (SInstructionArgument jaxbInstructionArgument : jaxbInstructionsArguments) {
-            domainArguments.add(InstructionArgumentMapper.toDomain(jaxbInstructionArgument));
+            domainArguments.put(jaxbInstructionArgument.getName(), jaxbInstructionArgument.getValue());
         }
+
         return domainArguments;
     }
 }

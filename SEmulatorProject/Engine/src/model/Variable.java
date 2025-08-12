@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Variable {
     private final String kind;
     private final int index;
@@ -80,4 +82,19 @@ public class Variable {
         }
     }
 
+    public boolean isInputVariable(){
+        return kind.equals("x");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Variable variable = (Variable) o;
+        return index == variable.index && Objects.equals(kind, variable.kind);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(kind, index);
+    }
 }

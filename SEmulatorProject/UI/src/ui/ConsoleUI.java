@@ -1,7 +1,11 @@
 package ui;
 
 import engine.EmulatorEngine;
+import exceptions.InvalidXmlFileException;
+import jakarta.xml.bind.JAXBException;
 import model.*;
+
+import java.io.FileNotFoundException;
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
@@ -32,12 +36,21 @@ public class ConsoleUI implements UI
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
         String xmlPath = "/Users/omrishtruzer/Downloads/minus.xml";
-        engine.loadProgram(xmlPath);
+
+        try{
+            engine.loadProgram(xmlPath);
+        } catch (InvalidXmlFileException e) {
+            System.out.println(e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        } catch (JAXBException e) {
+            System.out.println("Error reading XML: " + e.getMessage());
+        }
     }
 
     @Override
     public void showProgramDetails() {
-        int i = 0;
+        int i = 1;
 
         System.out.println(String.format("Program Name: %s", engine.getProgramName()));
         System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
@@ -45,7 +58,8 @@ public class ConsoleUI implements UI
         for(Instruction instruction : engine.getInstructions())
         {
             System.out.print(String.format("#%d ", i));
-            System.out.print(instruction);
+            System.out.println(instruction);
+            i++;
         }
     }
 

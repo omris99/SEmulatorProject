@@ -1,12 +1,13 @@
 package model;
 
 import java.util.List;
+import java.util.Set;
 
 public class Program {
     private String name;
-    private List<Instruction> instructions;
+    private Instructions instructions;
 
-    public Program(String name, List<Instruction> instructions) {
+    public Program(String name, Instructions instructions) {
         this.name = name;
         this.instructions = instructions;
     }
@@ -15,15 +16,15 @@ public class Program {
         return name;
     }
 
-    public List<String> getAllLabels(){
-        return null;
+    public List<String> getAllInstructionsLabels(){
+        return instructions.getLabels();
     }
 
-    public List<String> getAllInputsNames(){
-        return null;
+    public Set<Variable> getAllInputsNames(){
+        return instructions.getInputs();
     }
 
-    public List<Instruction> getInstructions()
+    public Instructions getInstructions()
     {
         return instructions;
     }

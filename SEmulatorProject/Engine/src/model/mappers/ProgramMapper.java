@@ -1,6 +1,7 @@
 package model.mappers;
 
 import model.Instruction;
+import model.Instructions;
 import model.Program;
 import model.generated.SInstruction;
 import model.generated.SProgram;
@@ -14,7 +15,8 @@ public class ProgramMapper {
             return null;
         }
 
-        List<Instruction> instructions = new ArrayList<>();
+//        List<Instruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {

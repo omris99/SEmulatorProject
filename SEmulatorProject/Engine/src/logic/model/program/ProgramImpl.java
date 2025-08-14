@@ -1,9 +1,11 @@
 package logic.model.program;
 
 import logic.model.instruction.Instruction;
+import logic.model.variable.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ProgramImpl implements Program {
     private final String name;
@@ -45,4 +47,14 @@ public class ProgramImpl implements Program {
         // traverse all commands and calculate cycles
         return 0;
     }
+
+    public Set<String> getAllInstructionsLabels(){
+        return null;
+    }
+
+    public Set<Variable> getAllInputsNames(){
+        return null;
+    }
+
+
 }

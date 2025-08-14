@@ -5,9 +5,11 @@ import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionOld;
 import logic.model.program.Program;
-import logic.model.variable.VariableOld;
+import logic.model.program.ProgramImpl;
+import logic.model.variable.Variable;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
 
@@ -26,12 +28,12 @@ public class EmulatorEngine implements Engine {
     public Set<String> getProgramLabelsNames() {
         return program.getAllInstructionsLabels();
     }
-    public Set<VariableOld> getProgramInputsNames() {
+    public Set<Variable> getProgramInputsNames() {
         return program.getAllInputsNames();
     }
 
-    public List<InstructionOld> getInstructions() {
-        return program.getInstructions().getInstructionsList();
+    public List<Instruction> getInstructions() {
+        return program.getInstructions();
     }
 
     @Override

@@ -10,4 +10,5 @@ public interface Instruction {
     int getCycles();
     Label getLabel();
     Variable getVariable();
+    String getInstructionDisplayFormat();
 }

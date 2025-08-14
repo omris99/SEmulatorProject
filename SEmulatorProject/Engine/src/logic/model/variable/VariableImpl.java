@@ -1,11 +1,18 @@
 package logic.model.variable;
 
-public class VariableImpl implements Variable {
+import logic.model.Argument;
+
+public class VariableImpl implements Variable, Argument {
 
     private final VariableType type;
     private final int number;
 
-    public static Variable parse(String stringVariable)
+    @Override
+    public String getArgumentString() {
+        return getRepresentation();
+    }
+
+    public static VariableImpl parse(String stringVariable)
     {
         if (stringVariable == null || stringVariable.isEmpty()) {
             throw new IllegalArgumentException("Variable string cannot be null or empty");

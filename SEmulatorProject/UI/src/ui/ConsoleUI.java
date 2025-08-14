@@ -4,13 +4,14 @@ import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
-import logic.model.instruction.InstructionOld;
+import logic.model.instruction.Instruction;
 
 import java.io.FileNotFoundException;
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
  *  2. ensure that every exception message is fully detailed.
+ *  3. improve the implemetntation of VariableImpl class (parse)
  */
 
 public class ConsoleUI implements UI
@@ -37,7 +38,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/badic.xml";
 
         try{
             engine.loadProgram(xmlPath);
@@ -60,10 +61,10 @@ public class ConsoleUI implements UI
         System.out.println(String.format("Program Name: %s", engine.getProgramName()));
         System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
         System.out.println(String.format("Labels Names: %s", engine.getProgramLabelsNames()));
-        for(InstructionOld instruction : engine.getInstructions())
+        for(Instruction instruction : engine.getInstructions())
         {
             System.out.print(String.format("#%d ", i));
-            System.out.println(instruction);
+            System.out.println(instruction.getInstructionDisplayFormat());
             i++;
         }
     }

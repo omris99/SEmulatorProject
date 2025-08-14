@@ -16,16 +16,13 @@ public class ProgramMapper {
             return null;
         }
 
-        List<Instruction> instructionsList = new ArrayList<>();
+        Program domainProgram = new ProgramImpl(jaxbProgram.getName());
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {
-            instructionsList.add(InstructionMapper.toDomain(instruction));
+            domainProgram.addInstruction(InstructionMapper.toDomain(instruction));
         }
 
-        Instructions instructions = new Instructions(instructionsList);
-
-
-        return new ProgramImpl(jaxbProgram.getName(), instructions);
+        return domainProgram;
     }
 }

@@ -38,4 +38,5 @@ public abstract class AbstractInstruction implements Instruction {
     public Variable getVariable() {
         return variable;
     }
+
 }

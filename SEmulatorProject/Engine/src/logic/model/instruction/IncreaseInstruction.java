@@ -5,20 +5,21 @@ import logic.model.label.FixedLabel;
 import logic.model.label.Label;
 import logic.model.variable.Variable;
 
-public class DecreaseInstruction extends AbstractInstruction {
+public class IncreaseInstruction extends AbstractInstruction{
 
-    public DecreaseInstruction(Variable variable) {
-        super(InstructionData.DECREASE, variable );
+    public IncreaseInstruction(Variable variable) {
+        super(InstructionData.INCREASE, variable);
     }
 
-    public DecreaseInstruction(Variable variable, Label label) {
-        super(InstructionData.DECREASE, variable, label);
+    public IncreaseInstruction(Variable variable, Label label) {
+        super(InstructionData.INCREASE, variable, label);
     }
+
     @Override
     public Label execute(ExecutionContext context) {
 
         long variableValue = context.getVariableValue(getVariable());
-        variableValue = Math.max(0, variableValue - 1);
+        variableValue++;
         context.updateVariable(getVariable(), variableValue);
 
         return FixedLabel.EMPTY;
@@ -26,6 +27,6 @@ public class DecreaseInstruction extends AbstractInstruction {
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("%s <- %s - 1", getVariable().getRepresentation(), getVariable().getRepresentation());
+        return String.format("%s <- %s + 1", getVariable().getRepresentation(), getVariable().getRepresentation());
     }
 }

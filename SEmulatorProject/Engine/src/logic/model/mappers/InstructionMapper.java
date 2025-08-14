@@ -1,12 +1,13 @@
 package logic.model.mappers;
 
-import logic.model.instruction.InstructionOld;
+import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionData;
-import logic.model.variable.VariableOld;
+import logic.model.variable.Variable;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SInstructionArgument;
 import logic.model.generated.SInstructionArguments;
+import logic.model.variable.VariableImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 public class InstructionMapper{
 
-    public static InstructionOld toDomain(SInstruction jaxbInstruction) {
+    public static Instruction toDomain(SInstruction jaxbInstruction) {
         if (jaxbInstruction == null) {
             return null;
         }
@@ -26,7 +27,8 @@ public class InstructionMapper{
                 jaxbInstruction.getType());
 
         try{
-            VariableOld variable = VariableOld.parse(jaxbInstruction.getSVariable());
+//            Variable variable = new VariableImpl(type, index);
+            Variable variable = VariableImpl.parse(jaxbInstruction.getSVariable());
             SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
             Map<InstructionArgument, String> arguments = null;
 

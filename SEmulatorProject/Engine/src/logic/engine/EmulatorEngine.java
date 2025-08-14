@@ -6,7 +6,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import logic.model.instruction.InstructionOld;
-import logic.model.program.ProgramOld;
+import logic.model.program.Program;
 import logic.model.variable.VariableOld;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 public class EmulatorEngine implements Engine {
-    ProgramOld program;
+    Program program;
 
     public String getProgramName() {
         return program.getName();

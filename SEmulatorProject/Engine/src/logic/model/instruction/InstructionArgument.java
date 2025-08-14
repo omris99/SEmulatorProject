@@ -1,4 +1,4 @@
-package model;
+package logic.model.instruction;
 
 //TODO; IMPLMENT THIS
 

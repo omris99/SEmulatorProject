@@ -1,16 +1,17 @@
-package model;
+package logic.model.instruction;
 
-import java.util.List;
+import logic.model.variable.VariableOld;
+
 import java.util.Map;
 
-public class Instruction {
-    private InstructionDetails details;
+public class InstructionOld {
+    private InstructionData details;
     private String label;
     private final Map<InstructionArgument, String> arguments;
-    private Variable variable;
+    private VariableOld variable;
     private String instructionDisplayFormat;
 
-    public Instruction(InstructionDetails details, Variable variable, String label, Map<InstructionArgument, String> arguments) {
+    public InstructionOld(InstructionData details, VariableOld variable, String label, Map<InstructionArgument, String> arguments) {
         this.details = details;
         this.variable = variable;
         this.label = label;
@@ -75,7 +76,7 @@ public class Instruction {
         return label != null;
     }
 
-    public Variable getVariable(){
+    public VariableOld getVariable(){
         return variable;
     }
 

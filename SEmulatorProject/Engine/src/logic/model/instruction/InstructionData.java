@@ -1,6 +1,6 @@
-package model;
+package logic.model.instruction;
 
-public enum InstructionDetails {
+public enum InstructionData {
     NEUTRAL("basic", 0),
     INCREASE("basic", 1),
     DECREASE("basic", 1),
@@ -16,7 +16,7 @@ public enum InstructionDetails {
     private final String type;
     private final int cycles;
 
-    InstructionDetails(String type, int cycles) {
+    InstructionData(String type, int cycles) {
         this.type = type;
         this.cycles = cycles;
     }
@@ -37,9 +37,9 @@ public enum InstructionDetails {
         return "synthetic".equals(type);
     }
 
-    public static InstructionDetails fromNameAndType(String name, String type) {
+    public static InstructionData fromNameAndType(String name, String type) {
         // אם רוצים לוודא התאמה מלאה
-        for (InstructionDetails detail : values()) {
+        for (InstructionData detail : values()) {
             if (detail.name().equals(name) && detail.type.equals(type)) {
                 return detail;
             }

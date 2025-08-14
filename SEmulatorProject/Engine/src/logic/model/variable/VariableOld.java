@@ -1,13 +1,13 @@
-package model;
+package logic.model.variable;
 
 import java.util.Objects;
 
-public class Variable {
+public class VariableOld {
     private final String kind;
     private final int index;
     private int value;
 
-    public Variable(String kind, int index) {
+    public VariableOld(String kind, int index) {
         if (!isStringVariableKindValid(kind)) {
             throw new IllegalArgumentException("Invalid kind: " + kind);
         }
@@ -20,12 +20,12 @@ public class Variable {
         this.index = index;
     }
 
-    public static Variable parse(String stringVariable) {
+    public static VariableOld parse(String stringVariable) {
         if (stringVariable == null) {
             throw new IllegalArgumentException("Variable string cannot be null or empty");
         }
         else if (stringVariable.isEmpty()) {
-            return new Variable("", 0);
+            return new VariableOld("", 0);
         }
 
         String varKind = stringVariable.substring(0, 1);
@@ -37,7 +37,7 @@ public class Variable {
             if (stringVariable.length() != 1) {
                 throw new IllegalArgumentException("Variable of kind 'y' must not have an index");
             }
-            return new Variable(varKind, 0);
+            return new VariableOld(varKind, 0);
         }
 
         if (stringVariable.length() < 2) {
@@ -56,7 +56,7 @@ public class Variable {
             throw new IllegalArgumentException("Invalid index");
         }
 
-        return new Variable(varKind, varIndex);
+        return new VariableOld(varKind, varIndex);
     }
 
     private static boolean isStringVariableKindValid(String kind) {
@@ -91,7 +91,7 @@ public class Variable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Variable variable = (Variable) o;
+        VariableOld variable = (VariableOld) o;
         return index == variable.index && Objects.equals(kind, variable.kind);
     }
 

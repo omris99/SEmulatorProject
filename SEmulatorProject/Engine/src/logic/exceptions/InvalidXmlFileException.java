@@ -1,4 +1,4 @@
-package exceptions;
+package logic.exceptions;
 
 public class InvalidXmlFileException extends RuntimeException {
     public InvalidXmlFileException(String Path) {

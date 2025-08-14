@@ -1,10 +1,10 @@
 package ui;
 
-import engine.EmulatorEngine;
-import exceptions.InvalidXmlFileException;
-import exceptions.UnknownLabelReferenceExeption;
+import logic.engine.EmulatorEngine;
+import logic.exceptions.InvalidXmlFileException;
+import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
-import model.*;
+import logic.model.instruction.InstructionOld;
 
 import java.io.FileNotFoundException;
 /*
@@ -60,7 +60,7 @@ public class ConsoleUI implements UI
         System.out.println(String.format("Program Name: %s", engine.getProgramName()));
         System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
         System.out.println(String.format("Labels Names: %s", engine.getProgramLabelsNames()));
-        for(Instruction instruction : engine.getInstructions())
+        for(InstructionOld instruction : engine.getInstructions())
         {
             System.out.print(String.format("#%d ", i));
             System.out.println(instruction);

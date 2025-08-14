@@ -1,22 +1,23 @@
-package model;
+package logic.model.instruction;
 
-import exceptions.UnknownLabelReferenceExeption;
+import logic.exceptions.UnknownLabelReferenceExeption;
+import logic.model.variable.VariableOld;
 
 import java.util.*;
 
 public class Instructions {
-    private final List<Instruction> instructions;
+    private final List<InstructionOld> instructions;
     private Set<String> instructionsLabels;
-    private Set<Variable> instructionsInputs;
+    private Set<VariableOld> instructionsInputs;
 
-    public Instructions(List<Instruction> instructions) {
+    public Instructions(List<InstructionOld> instructions) {
         this.instructions = instructions;
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         boolean isExitLabelReferenceExist = false;
 
-        for(Instruction instruction : instructions){
-            Variable variable = instruction.getVariable();
+        for(InstructionOld instruction : instructions){
+            VariableOld variable = instruction.getVariable();
             Map<InstructionArgument, String> arguments = instruction.getArguments();
             if(variable.isInputVariable()){
                 this.instructionsInputs.add(variable);
@@ -26,7 +27,7 @@ public class Instructions {
                 for(InstructionArgument argument : arguments.keySet())
                 {
                     if(argument.getType().equals("variable")){
-                        Variable argumentVariable = Variable.parse(arguments.get(argument));
+                        VariableOld argumentVariable = VariableOld.parse(arguments.get(argument));
                         if(argumentVariable.isInputVariable()){
                             this.instructionsInputs.add(argumentVariable);
                         }
@@ -50,9 +51,9 @@ public class Instructions {
         throwExceptionIfLabelsArgumentsInvalid();
     }
 
-    public void add(Instruction instruction) {
+    public void add(InstructionOld instruction) {
         this.instructions.add(instruction);
-        Variable variable = instruction.getVariable();
+        VariableOld variable = instruction.getVariable();
 
         if(variable.isInputVariable()){
             this.instructionsInputs.add(variable);
@@ -67,16 +68,16 @@ public class Instructions {
         return instructionsLabels;
     }
 
-    public Set<Variable> getInputs() {
+    public Set<VariableOld> getInputs() {
         return instructionsInputs;
     }
 
-    public List<Instruction> getInstructionsList() {
+    public List<InstructionOld> getInstructionsList() {
         return instructions;
     }
 
     private void throwExceptionIfLabelsArgumentsInvalid() {
-        for(Instruction instruction : instructions) {
+        for(InstructionOld instruction : instructions) {
             Map<InstructionArgument, String> arguments = instruction.getArguments();
             if(arguments != null){
                 for(InstructionArgument instructionArgument : arguments.keySet()){

@@ -1,15 +1,13 @@
-package model.mappers;
+package logic.model.mappers;
 
-import model.Instruction;
-import model.InstructionArgument;
-import model.InstructionDetails;
-import model.Variable;
-import model.generated.SInstruction;
-import model.generated.SInstructionArgument;
-import model.generated.SInstructionArguments;
+import logic.model.instruction.InstructionOld;
+import logic.model.instruction.InstructionArgument;
+import logic.model.instruction.InstructionData;
+import logic.model.variable.VariableOld;
+import logic.model.generated.SInstruction;
+import logic.model.generated.SInstructionArgument;
+import logic.model.generated.SInstructionArguments;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +16,17 @@ import java.util.Map;
 
 public class InstructionMapper{
 
-    public static Instruction toDomain(SInstruction jaxbInstruction) {
+    public static InstructionOld toDomain(SInstruction jaxbInstruction) {
         if (jaxbInstruction == null) {
             return null;
         }
 
-        InstructionDetails details = InstructionDetails.fromNameAndType(
+        InstructionData details = InstructionData.fromNameAndType(
                 jaxbInstruction.getName(),
                 jaxbInstruction.getType());
 
         try{
-            Variable variable = Variable.parse(jaxbInstruction.getSVariable());
+            VariableOld variable = VariableOld.parse(jaxbInstruction.getSVariable());
             SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
             Map<InstructionArgument, String> arguments = null;
 
@@ -39,7 +37,7 @@ public class InstructionMapper{
 //            if (jaxbInstruction.getSInstructionArguments().getSInstructionArgument() != null) {
 //                arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
 //            }
-            Instruction domainInstruction = new Instruction(
+            InstructionOld domainInstruction = new InstructionOld(
                     details,
                     variable,
                     jaxbInstruction.getSLabel(),

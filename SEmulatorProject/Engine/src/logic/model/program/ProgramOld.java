@@ -1,13 +1,15 @@
-package model;
+package logic.model.program;
 
-import java.util.List;
+import logic.model.variable.VariableOld;
+import logic.model.instruction.Instructions;
+
 import java.util.Set;
 
-public class Program {
+public class ProgramOld {
     private String name;
     private Instructions instructions;
 
-    public Program(String name, Instructions instructions) {
+    public ProgramOld(String name, Instructions instructions) {
         this.name = name;
         this.instructions = instructions;
     }
@@ -20,7 +22,7 @@ public class Program {
         return instructions.getLabels();
     }
 
-    public Set<Variable> getAllInputsNames(){
+    public Set<VariableOld> getAllInputsNames(){
         return instructions.getInputs();
     }
 

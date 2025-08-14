@@ -1,4 +1,4 @@
-package engine;
+package logic.engine;
 
 import jakarta.xml.bind.JAXBException;
 

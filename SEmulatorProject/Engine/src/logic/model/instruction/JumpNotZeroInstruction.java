@@ -6,9 +6,12 @@ import logic.model.label.FixedLabel;
 import logic.model.label.Label;
 import logic.model.variable.Variable;
 
-public class JumpNotZeroInstruction extends AbstractInstruction {
+import java.util.HashMap;
+import java.util.Map;
 
-    private final Label jnzLabel;
+public class JumpNotZeroInstruction extends AbstractInstruction implements InstructionWithArguments {
+    Map<InstructionArgument, Argument> arguments;
+//    private final Label jnzLabel;
 
     public JumpNotZeroInstruction(Variable variable, Argument jnzLabel) {
         this(variable, jnzLabel, FixedLabel.EMPTY);
@@ -16,7 +19,9 @@ public class JumpNotZeroInstruction extends AbstractInstruction {
 
     public JumpNotZeroInstruction(Variable variable, Argument jnzLabel, Label label) {
         super(InstructionData.JUMP_NOT_ZERO, variable, label);
-        this.jnzLabel = (Label)jnzLabel;
+        arguments = new HashMap<>();
+        arguments.put(InstructionArgument.JNZ_LABEL, jnzLabel);
+//        this.jnzLabel = (Label)jnzLabel;
     }
 
     @Override
@@ -24,13 +29,20 @@ public class JumpNotZeroInstruction extends AbstractInstruction {
         long variableValue = context.getVariableValue(getVariable());
 
         if (variableValue != 0) {
-            return jnzLabel;
+            return (Label) arguments.get(InstructionArgument.JNZ_LABEL);
         }
+
         return FixedLabel.EMPTY;
     }
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("IF %s != 0 GOTO %s", getVariable().getRepresentation(), jnzLabel.getLabelRepresentation());
+        return String.format("IF %s != 0 GOTO %s", getVariable().getRepresentation(),
+                arguments.get(InstructionArgument.JNZ_LABEL).getArgumentString());
+    }
+
+    @Override
+    public Map<InstructionArgument, Argument> getArguments() {
+        return arguments;
     }
 }

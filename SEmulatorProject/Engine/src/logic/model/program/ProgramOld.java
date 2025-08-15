@@ -1,5 +1,7 @@
 package logic.model.program;
 
+import logic.model.label.Label;
+import logic.model.variable.Variable;
 import logic.model.variable.VariableOld;
 import logic.model.instruction.Instructions;
 
@@ -18,11 +20,11 @@ public class ProgramOld {
         return name;
     }
 
-    public Set<String> getAllInstructionsLabels(){
+    public Set<Label> getAllInstructionsLabels(){
         return instructions.getLabels();
     }
 
-    public Set<VariableOld> getAllInputsNames(){
+    public Set<Variable> getAllInputsNames(){
         return instructions.getInputs();
     }
 

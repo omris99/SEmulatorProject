@@ -96,27 +96,14 @@ public class InstructionMapper{
             case "DECREASE" -> new DecreaseInstruction(variable);
             case "JUMP_NOT_ZERO" -> new JumpNotZeroInstruction(variable, arguments.get(InstructionArgument.JNZ_LABEL) ,label);
             case "NEUTRAL" -> new NeutralInstruction(variable);
-            //            case "ZERO_VARIABLE":
-//                instructionDisplayFormat = String.format("%s <- 0", variable);
-//                break;
-//            case "GOTO_LABEL":
-//                instructionDisplayFormat = String.format("GOTO %s", arguments.get(InstructionArgument.GOTO_LABEL));
-//                break;
-//            case "ASSIGNMENT":
-//                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(InstructionArgument.ASSIGNED_VARIABLE));
-//                break;
-//            case "CONSTANT_ASSIGNMENT":
-//                instructionDisplayFormat = String.format("%s <- %s", variable, arguments.get(InstructionArgument.CONSTANT_VALUE));
-//                break;
-//            case "JUMP_ZERO":
-//                instructionDisplayFormat = String.format("IF %s = 0 GOTO %s", variable, arguments.get(InstructionArgument.JZ_LABEL));
-//                break;
-//            case "JUMP_EQUAL_CONSTANT":
-//                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE));
-//                break;
-//            case "JUMP_EQUAL_VARIABLE":
-//                instructionDisplayFormat = String.format("IF %s = %s GOTO %s", variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME));
-//                break;
+            case "ZERO_VARIABLE" -> new ZeroVariableInstruction(variable);
+            case "GOTO_LABEL" -> new GoToLabelInstruction(variable, arguments.get(InstructionArgument.GOTO_LABEL));
+            case "ASSIGNMENT" -> new AssignmentInstruction(variable, arguments.get(InstructionArgument.ASSIGNED_VARIABLE));
+            case "CONSTANT_ASSIGNMENT" -> new ConstantAssignmentInstruction(variable, arguments.get(InstructionArgument.CONSTANT_VALUE));
+            case "JUMP_ZERO" -> new JumpZeroInstruction(variable, arguments.get(InstructionArgument.JZ_LABEL));
+            case "JUMP_EQUAL_CONSTANT" -> new JumpEqualConstantInstruction(variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE));
+            case "JUMP_EQUAL_VARIABLE" -> new JumpEqualVariableInstruction(variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME));
+
             default -> throw new IllegalArgumentException("Unknown instruction: " + name);
         };
     }

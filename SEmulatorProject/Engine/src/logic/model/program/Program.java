@@ -1,6 +1,7 @@
 package logic.model.program;
 
 import logic.model.instruction.Instruction;
+import logic.model.label.Label;
 import logic.model.variable.Variable;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public interface Program {
     String getName();
     void addInstruction(Instruction instruction);
     List<Instruction> getInstructions();
-    Set<String> getAllInstructionsLabels();
-    Set<Variable> getAllInputsNames();
+    Set<Label> getAllInstructionsLabels();
+    Set<String> getAllInputsNames();
     boolean validate();
     int calculateMaxDegree();
     int calculateCycles();

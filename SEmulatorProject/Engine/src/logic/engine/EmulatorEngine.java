@@ -7,6 +7,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionOld;
+import logic.model.label.Label;
 import logic.model.program.Program;
 import logic.model.program.ProgramImpl;
 import logic.model.variable.Variable;
@@ -25,10 +26,10 @@ public class EmulatorEngine implements Engine {
         return program.getName();
     }
 
-    public Set<String> getProgramLabelsNames() {
+    public Set<Label> getProgramLabelsNames() {
         return program.getAllInstructionsLabels();
     }
-    public Set<Variable> getProgramInputsNames() {
+    public Set<String> getProgramInputsNames() {
         return program.getAllInputsNames();
     }
 

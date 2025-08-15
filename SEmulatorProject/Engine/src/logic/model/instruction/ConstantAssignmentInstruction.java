@@ -1,0 +1,44 @@
+package logic.model.instruction;
+
+import logic.model.Argument;
+import logic.model.execution.ExecutionContext;
+import logic.model.label.FixedLabel;
+import logic.model.label.Label;
+import logic.model.variable.Variable;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ConstantAssignmentInstruction extends AbstractInstruction implements InstructionWithArguments {
+    Map<InstructionArgument, Argument> arguments;
+
+    public ConstantAssignmentInstruction(Variable variable, Argument constantValue) {
+        this(variable, constantValue, FixedLabel.EMPTY);
+    }
+
+    public ConstantAssignmentInstruction(Variable variable, Argument constantValue, Label label) {
+        super(InstructionData.CONSTANT_ASSIGNMENT, variable, label);
+        arguments = new HashMap<>();
+        arguments.put(InstructionArgument.CONSTANT_VALUE, constantValue);
+//        this.jnzLabel = (Label)jnzLabel;
+    }
+
+    @Override
+    public Label execute(ExecutionContext context) {
+//        long variableValue = context.getVariableValue(getVariable());
+//        variableValue = 0;
+//        context.updateVariable(getVariable(), variableValue);
+
+        return null;
+    }
+
+    @Override
+    public String getInstructionDisplayFormat() {
+        return String.format("%s <- %s", getVariable(), arguments.get(InstructionArgument.CONSTANT_VALUE));
+    }
+
+    @Override
+    public Map<InstructionArgument, Argument> getArguments() {
+        return arguments;
+    }
+}

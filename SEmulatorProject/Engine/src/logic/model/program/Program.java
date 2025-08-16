@@ -15,6 +15,7 @@ public interface Program {
     List<Instruction> getInstructions();
     Set<Label> getAllInstructionsLabels();
     Set<Variable> getAllInstructionsInputs();
+    Set<Variable> getAllInstructionsWorkVariables();
     void validate() throws UnknownLabelReferenceExeption;
     int calculateMaxDegree();
     int calculateCycles();

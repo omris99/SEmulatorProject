@@ -54,25 +54,28 @@ public class ProgramImpl implements Program {
         }
     }
 
-        @Override
-        public int calculateMaxDegree () {
-            // traverse all commands and find maximum degree
-            return 0;
-        }
-
-        @Override
-        public int calculateCycles () {
-            // traverse all commands and calculate cycles
-            return 0;
-        }
-
-        public Set<Label> getAllInstructionsLabels () {
-            return instructions.getLabels();
-        }
-
-        public Set<Variable> getAllInstructionsInputs() {
-            return instructions.getInputs();
-     }
-
-
+    @Override
+    public int calculateMaxDegree() {
+        // traverse all commands and find maximum degree
+        return 0;
     }
+
+    @Override
+    public int calculateCycles() {
+        // traverse all commands and calculate cycles
+        return 0;
+    }
+
+    public Set<Label> getAllInstructionsLabels() {
+        return instructions.getLabels();
+    }
+
+    public Set<Variable> getAllInstructionsInputs() {
+        return instructions.getInputs();
+    }
+
+    public Set<Variable> getAllInstructionsWorkVariables() {
+        return instructions.getWorkVariables();
+    }
+
+}

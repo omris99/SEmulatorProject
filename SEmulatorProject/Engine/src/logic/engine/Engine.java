@@ -7,6 +7,6 @@ import java.io.FileNotFoundException;
 public interface Engine {
     public void loadProgram(String xmlPath) throws FileNotFoundException, JAXBException;
     public void getProgramDetails();
-    public void runLoadedProgram(int degree, String input);
+    public long runLoadedProgram(int degree, String input);
     public void getHistory();
 }

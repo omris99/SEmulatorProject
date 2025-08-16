@@ -12,11 +12,14 @@ public class Instructions {
     private final List<Instruction> instructions;
     private Set<Label> instructionsLabels;
     private Set<Variable> instructionsInputs;
+    private Set<Variable> instructionsWorkVariables;
+
 
     public Instructions() {
         this.instructions = new ArrayList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
+        this.instructionsWorkVariables = new LinkedHashSet<>();
 
 //        boolean isExitLabelReferenceExist = false;
 //        for(Instruction instruction : instructions){
@@ -61,6 +64,9 @@ public class Instructions {
         if (variable.getType() == VariableType.INPUT) {
             this.instructionsInputs.add(variable);
         }
+        else if (variable.getType() == VariableType.WORK) {
+            this.instructionsWorkVariables.add(variable);
+        }
 
         if (instruction.getLabel() != FixedLabel.EMPTY) {
             this.instructionsLabels.add(instruction.getLabel());
@@ -89,6 +95,10 @@ public class Instructions {
 
     public Set<Variable> getInputs() {
         return instructionsInputs;
+    }
+
+    public Set<Variable> getWorkVariables() {
+        return instructionsWorkVariables;
     }
 
     public List<Instruction> getInstructionsList() {

@@ -4,6 +4,7 @@ import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
+import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
 
 import java.io.FileNotFoundException;
@@ -34,7 +35,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/minus.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/badic.xml";
 
         try{
             engine.loadProgram(xmlPath);
@@ -74,24 +75,24 @@ public class ConsoleUI implements UI
     @Override
     public void runLoadedProgram() {
 //        int maximalDegree = engine.getProgramMaximalDegree();
-//
 //        System.out.println("Maximal Degree: ", maximalDegree);
-        System.out.println("Please Enter Desired running degree: ");
-        int runningDegree = inputScanner.nextInt();
+//        System.out.println("Please Enter Desired running degree: ");
+//        int runningDegree = inputScanner.nextInt();
 
-        System.out.println("Available program inputs: ");
-        System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
-        System.out.println("Enter input values separated by commas (e.g., 5,10,15): ");
+        System.out.print("Available program inputs: ");
+        System.out.println(String.format("%s", engine.getProgramInputsNames()));
+        System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
         String inputs = inputScanner.next();
         System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
 
-        engine.runLoadedProgram(0, inputs);
+        System.out.println(String.format("The Result is: y = %d", engine.runLoadedProgram(0, inputs)));
     }
 
     @Override
     public void run() {
         loadProgram();
         showProgramDetails();
+        runLoadedProgram();
     }
 
     @Override

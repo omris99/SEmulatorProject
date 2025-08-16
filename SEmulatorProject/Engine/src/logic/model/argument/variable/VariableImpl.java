@@ -2,6 +2,8 @@ package logic.model.argument.variable;
 
 import logic.model.argument.Argument;
 
+import java.util.Objects;
+
 public class VariableImpl implements Variable, Argument {
 
     private final VariableType type;
@@ -86,4 +88,15 @@ public class VariableImpl implements Variable, Argument {
         return index >= 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        VariableImpl variable = (VariableImpl) o;
+        return number == variable.number && type == variable.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, number);
+    }
 }

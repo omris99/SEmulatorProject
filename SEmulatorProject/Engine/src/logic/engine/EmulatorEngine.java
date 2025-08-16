@@ -8,6 +8,7 @@ import jakarta.xml.bind.Unmarshaller;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
+import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
 import logic.model.argument.label.FixedLabel;
 import logic.model.program.Program;
@@ -15,6 +16,7 @@ import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,10 +73,15 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public void runLoadedProgram(int degree, String input) {
+    public long runLoadedProgram(int degree, String input) {
         ProgramExecutor executor = new ProgramExecutorImpl(program);
 
+        Long[] inputs = Arrays.stream(input.split(","))
+                .map(String::trim)
+                .map(Long::parseLong)
+                .toArray(Long[]::new);
 
+        return executor.run(inputs);
     }
 
     @Override

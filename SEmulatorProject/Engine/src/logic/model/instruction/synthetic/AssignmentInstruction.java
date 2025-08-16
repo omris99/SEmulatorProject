@@ -29,11 +29,9 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
 
     @Override
     public Label execute(ExecutionContext context) {
-//        long variableValue = context.getVariableValue(getVariable());
-//        variableValue = 0;
-//        context.updateVariable(getVariable(), variableValue);
+        context.updateVariable(getVariable(), context.getVariableValue((Variable) arguments.get(InstructionArgument.ASSIGNED_VARIABLE)));
 
-        return null;
+        return FixedLabel.EMPTY;
     }
 
     @Override

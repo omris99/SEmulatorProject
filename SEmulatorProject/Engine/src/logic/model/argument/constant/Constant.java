@@ -13,4 +13,8 @@ public class Constant implements Argument {
     public String getRepresentation() {
         return Integer.toString(value);
     }
+
+    public int getValue() {
+        return value;
+    }
 }

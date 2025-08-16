@@ -2,6 +2,7 @@ package logic.model.instruction.synthetic;
 
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
+import logic.model.argument.constant.Constant;
 import logic.model.instruction.AbstractInstruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionData;
@@ -29,14 +30,13 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
 
     @Override
     public Label execute(ExecutionContext context) {
-//        long variableValue = context.getVariableValue(getVariable());
-//
-//        if (variableValue == 0) {
-//            return (Label) arguments.get(InstructionArgument.JZ_LABEL);
-//        }
-//
-//        return FixedLabel.EMPTY;
-        return null;
+        long variableValue = context.getVariableValue(getVariable());
+
+        if (variableValue == ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue()) {
+            return (Label) arguments.get(InstructionArgument.JE_CONSTANT_LABEL);
+        }
+
+        return FixedLabel.EMPTY;
     }
 
     @Override

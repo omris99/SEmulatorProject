@@ -99,4 +99,9 @@ public class VariableImpl implements Variable, Argument {
     public int hashCode() {
         return Objects.hash(type, number);
     }
+
+    @Override
+    public int getNumber() {
+        return number;
+    }
 }

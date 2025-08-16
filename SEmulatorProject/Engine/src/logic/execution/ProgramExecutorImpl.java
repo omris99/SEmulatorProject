@@ -16,14 +16,16 @@ public class ProgramExecutorImpl implements ProgramExecutor{
 
     private final Program program;
     private InstructionsQueue instructionsQueue;
+    private int cyclesCount;
 
     public ProgramExecutorImpl(Program program) {
         this.program = program;
         instructionsQueue = new InstructionsQueue(program.getInstructions());
+        cyclesCount = 0;
     }
 
     @Override
-    public long run(Long... input) {
+    public Map<Variable, Long> run(Long... input) {
         ExecutionContext context = new ExecutionContextImpl(program.getAllInstructionsInputs(),
                 program.getAllInstructionsWorkVariables(), input);
         Instruction currentInstruction = instructionsQueue.getFirstInQueue();
@@ -31,6 +33,7 @@ public class ProgramExecutorImpl implements ProgramExecutor{
 
         do {
             nextLabel = currentInstruction.execute(context);
+            cyclesCount += currentInstruction.getCycles();
 
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstruction = instructionsQueue.next();
@@ -40,7 +43,11 @@ public class ProgramExecutorImpl implements ProgramExecutor{
             }
         } while (nextLabel != FixedLabel.EXIT && currentInstruction != null);
 
-        return context.getVariableValue(Variable.RESULT);
+        return context.getVariablesStatus();
+    }
+
+    public int getCyclesCount(){
+        return cyclesCount;
     }
 
     @Override

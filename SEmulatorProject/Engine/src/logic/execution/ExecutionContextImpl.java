@@ -35,4 +35,9 @@ public class ExecutionContextImpl implements ExecutionContext {
 
         variablesStatus.put(v, value);
     }
+
+    @Override
+    public Map<Variable, Long> getVariablesStatus() {
+        return variablesStatus;
+    }
 }

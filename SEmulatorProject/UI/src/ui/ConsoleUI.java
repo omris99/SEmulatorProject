@@ -4,11 +4,13 @@ import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
+import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
 
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
@@ -82,10 +84,11 @@ public class ConsoleUI implements UI
         System.out.print("Available program inputs: ");
         System.out.println(String.format("%s", engine.getProgramInputsNames()));
         System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
-        String inputs = inputScanner.next();
+        String inputs = inputScanner.nextLine();
         System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
+        showProgramRunResults(engine.runLoadedProgram(0, inputs));
 
-        System.out.println(String.format("The Result is: y = %d", engine.runLoadedProgram(0, inputs)));
+//        System.out.println(String.format("The Result is: y = %d", engine.runLoadedProgram(0, inputs)));
     }
 
     @Override
@@ -98,10 +101,64 @@ public class ConsoleUI implements UI
     @Override
     public void showHistory() {
 
+
     }
 
     @Override
     public void quitProgram() {
 
+    }
+
+    private void showProgramRunResults(Map<Variable, Long> results) {
+        long yValue = 0L;
+        Map<Variable, Long> inputVariables = new LinkedHashMap<>();
+        Map<Variable, Long> workVariables = new LinkedHashMap<>();
+
+        for(Map.Entry<Variable, Long> entry : results.entrySet()){
+            switch(entry.getKey().getType()){
+                case INPUT:
+                    inputVariables.put(entry.getKey(), entry.getValue());
+                    break;
+                case WORK:
+                    workVariables.put(entry.getKey(), entry.getValue());
+                    break;
+                case RESULT:
+                    yValue = entry.getValue();
+                    break;
+            }
+        }
+
+        inputVariables = sortVariablesByTheirNumber(inputVariables);
+        workVariables = sortVariablesByTheirNumber(workVariables);
+        System.out.println("**********************");
+        System.out.println("Program Run Results:");
+        System.out.println("----------------------");
+        System.out.println(String.format("y = %d ", yValue));
+
+        for(Variable variable : inputVariables.keySet()){
+            System.out.println(String.format("%s = %d ", variable.getRepresentation(), inputVariables.get(variable)));
+        }
+
+        for(Variable variable : workVariables.keySet()){
+            System.out.println(String.format("%s = %d ", variable.getRepresentation(), workVariables.get(variable)));
+        }
+
+        System.out.println(String.format("Cycles Count = %d ", engine.getLastExecutionCycles()));
+
+        System.out.println("**********************");
+    }
+
+    private Map<Variable, Long> sortVariablesByTheirNumber(Map<Variable, Long> variables) {
+        Map<Variable, Long> sortedVariables = variables.entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+        return sortedVariables;
     }
 }

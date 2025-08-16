@@ -2,6 +2,7 @@ package logic.model.instruction.synthetic;
 
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
+import logic.model.argument.constant.Constant;
 import logic.model.instruction.AbstractInstruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionData;
@@ -29,11 +30,9 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
 
     @Override
     public Label execute(ExecutionContext context) {
-//        long variableValue = context.getVariableValue(getVariable());
-//        variableValue = 0;
-//        context.updateVariable(getVariable(), variableValue);
+        context.updateVariable(getVariable(),((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue());
 
-        return null;
+        return FixedLabel.EMPTY;
     }
 
     @Override

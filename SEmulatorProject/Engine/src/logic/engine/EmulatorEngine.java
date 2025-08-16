@@ -5,6 +5,7 @@ import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import logic.execution.ExecutionRecord;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
@@ -18,10 +19,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     Program program;
+    ProgramExecutor executor;
+    List<ExecutionRecord> history;
 
     public String getProgramName() {
         return program.getName();
@@ -73,15 +77,22 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public long runLoadedProgram(int degree, String input) {
-        ProgramExecutor executor = new ProgramExecutorImpl(program);
+    public Map<Variable, Long> runLoadedProgram(int degree, String input) {
+        executor = new ProgramExecutorImpl(program);
 
         Long[] inputs = Arrays.stream(input.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
 
-        return executor.run(inputs);
+        Map<Variable, Long> finalVariablesResult = executor.run(inputs);
+
+        ExecutionRecord record = new ExecutionRecord(degree,
+                finalVariablesResult,
+                finalVariablesResult.get(Variable.RESULT),
+                executor.getCyclesCount());
+
+        return finalVariablesResult;
     }
 
     @Override
@@ -89,4 +100,7 @@ public class EmulatorEngine implements Engine {
 
     }
 
+    public int getLastExecutionCycles() {
+        return executor.getCyclesCount();
+    }
 }

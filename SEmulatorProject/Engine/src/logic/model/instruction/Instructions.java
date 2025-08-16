@@ -16,7 +16,7 @@ public class Instructions {
 
 
     public Instructions() {
-        this.instructions = new ArrayList<>();
+        this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         this.instructionsWorkVariables = new LinkedHashSet<>();
@@ -103,6 +103,12 @@ public class Instructions {
 
     public List<Instruction> getInstructionsList() {
         return instructions;
+    }
+
+    public void expand(int degree) {
+        for(Instruction instruction : instructions) {
+
+        }
     }
 }
 

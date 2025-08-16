@@ -89,7 +89,7 @@ public class EmulatorEngine implements Engine {
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
 
-        Map<Variable, Long> finalVariablesResult = executor.run(inputs);
+        Map<Variable, Long> finalVariablesResult = executor.run(degree, inputs);
 
 
         ExecutionRecord record = new ExecutionRecord(degree,

@@ -13,6 +13,7 @@ public interface Program {
     String getName();
     void addInstruction(Instruction instruction);
     List<Instruction> getInstructions();
+    void expand(int degree);
     Set<Label> getAllInstructionsLabels();
     Set<Variable> getAllInstructionsInputs();
     Set<Variable> getAllInstructionsWorkVariables();

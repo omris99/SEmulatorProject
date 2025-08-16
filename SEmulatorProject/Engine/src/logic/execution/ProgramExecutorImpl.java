@@ -7,10 +7,7 @@ import logic.model.program.Program;
 import logic.model.argument.variable.Variable;
 
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class ProgramExecutorImpl implements ProgramExecutor{
 
@@ -25,9 +22,11 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     }
 
     @Override
-    public Map<Variable, Long> run(Long... input) {
+    public Map<Variable, Long> run(int degree, Long... input) {
         ExecutionContext context = new ExecutionContextImpl(program.getAllInstructionsInputs(),
                 program.getAllInstructionsWorkVariables(), input);
+        program.expand(degree);
+        instructionsQueue = new InstructionsQueue(program.getInstructions());
         Instruction currentInstruction = instructionsQueue.getFirstInQueue();
         Label nextLabel;
 

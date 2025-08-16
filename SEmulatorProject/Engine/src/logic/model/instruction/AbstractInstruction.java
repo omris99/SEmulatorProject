@@ -51,4 +51,8 @@ public abstract class AbstractInstruction implements Instruction {
         return variable;
     }
 
+    public int getDegree() {
+        return 0;
+    }
+
 }

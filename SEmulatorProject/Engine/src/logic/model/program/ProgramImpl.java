@@ -78,4 +78,12 @@ public class ProgramImpl implements Program {
         return instructions.getWorkVariables();
     }
 
+    @Override
+    public void expand(int degree) {
+        if(degree == 0){
+            return;
+        }
+
+        instructions.expand(degree);
+    }
 }

@@ -1,19 +1,19 @@
-package logic.model.label;
+package logic.model.argument.label;
 
 public enum FixedLabel implements Label {
     EXIT {
         @Override
-        public String getLabelRepresentation() {
+        public String getRepresentation() {
             return "EXIT";
         }
     },
     EMPTY {
         @Override
-        public String getLabelRepresentation() {
+        public String getRepresentation() {
             return "";
         }
     };
 
     @Override
-    public abstract String getLabelRepresentation();
+    public abstract String getRepresentation();
 }

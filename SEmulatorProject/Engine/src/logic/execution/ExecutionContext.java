@@ -1,6 +1,6 @@
-package logic.model.execution;
+package logic.execution;
 
-import logic.model.variable.Variable;
+import logic.model.argument.variable.Variable;
 
 public interface ExecutionContext {
 

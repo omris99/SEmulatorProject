@@ -1,6 +1,8 @@
-package logic.model.variable;
+package logic.model.argument.variable;
 
-public interface Variable {
+import logic.model.argument.Argument;
+
+public interface Variable extends Argument {
     VariableType getType();
     String getRepresentation();
 

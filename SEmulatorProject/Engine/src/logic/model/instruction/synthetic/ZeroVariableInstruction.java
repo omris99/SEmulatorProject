@@ -1,9 +1,11 @@
-package logic.model.instruction;
+package logic.model.instruction.synthetic;
 
-import logic.model.execution.ExecutionContext;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.execution.ExecutionContext;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.InstructionData;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 public class ZeroVariableInstruction extends AbstractInstruction {
     public ZeroVariableInstruction(Variable variable) {
@@ -24,6 +26,8 @@ public class ZeroVariableInstruction extends AbstractInstruction {
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("%s <- 0", getVariable().getRepresentation());
+        String displayFormat = String.format("%s <- 0", getVariable().getRepresentation());
+
+        return super.getInstructionDisplayFormat(displayFormat);
     }
 }

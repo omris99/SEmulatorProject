@@ -5,9 +5,9 @@ import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
 import logic.model.instruction.Instruction;
-import logic.model.variable.Variable;
 
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
@@ -18,20 +18,15 @@ import java.io.FileNotFoundException;
 public class ConsoleUI implements UI
 {
     EmulatorEngine engine;
+    Scanner inputScanner;
 
     public ConsoleUI()
     {
         engine = new EmulatorEngine();
+        inputScanner = new Scanner(System.in);
     }
 
     public static void main(String[] args) {
-//        List<SInstruction> instructions = new ArrayList<SInstruction>();
-//        SInstruction instruction1 = new SInstruction(
-//                InstructionType.basic,
-//                InstructionName.DECREASE,
-//                new SVariable("x",1),
-//                new );
-//        SProgram program = new SProgram("Sanity-basic", instructions);
         UI ui = new ConsoleUI();
         ui.run();
     }
@@ -39,7 +34,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/minus.xml";
 
         try{
             engine.loadProgram(xmlPath);
@@ -78,7 +73,19 @@ public class ConsoleUI implements UI
 
     @Override
     public void runLoadedProgram() {
+//        int maximalDegree = engine.getProgramMaximalDegree();
+//
+//        System.out.println("Maximal Degree: ", maximalDegree);
+        System.out.println("Please Enter Desired running degree: ");
+        int runningDegree = inputScanner.nextInt();
 
+        System.out.println("Available program inputs: ");
+        System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
+        System.out.println("Enter input values separated by commas (e.g., 5,10,15): ");
+        String inputs = inputScanner.next();
+        System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
+
+        engine.runLoadedProgram(0, inputs);
     }
 
     @Override

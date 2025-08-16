@@ -1,4 +1,4 @@
-package logic.model.variable;
+package logic.model.argument.variable;
 
 import java.util.Objects;
 

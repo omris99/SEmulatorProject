@@ -1,6 +1,6 @@
 package logic.model.instruction;
 
-import logic.model.variable.VariableOld;
+import logic.model.argument.variable.VariableOld;
 
 import java.util.Map;
 

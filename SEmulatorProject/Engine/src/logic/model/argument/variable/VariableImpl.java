@@ -1,16 +1,16 @@
-package logic.model.variable;
+package logic.model.argument.variable;
 
-import logic.model.Argument;
+import logic.model.argument.Argument;
 
 public class VariableImpl implements Variable, Argument {
 
     private final VariableType type;
     private final int number;
 
-    @Override
-    public String getArgumentString() {
-        return getRepresentation();
-    }
+//    @Override
+//    public String getArgumentString() {
+//        return getRepresentation();
+//    }
 
     public static VariableImpl parse(String stringVariable)
     {

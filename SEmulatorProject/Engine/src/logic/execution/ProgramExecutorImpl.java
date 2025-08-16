@@ -1,10 +1,10 @@
-package logic.model.execution;
+package logic.execution;
 
 import logic.model.instruction.Instruction;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
 import logic.model.program.Program;
-import logic.model.variable.Variable;
+import logic.model.argument.variable.Variable;
 
 
 import java.util.Map;

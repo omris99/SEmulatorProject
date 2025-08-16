@@ -1,8 +1,7 @@
 package logic.model.program;
 
-import logic.model.label.Label;
-import logic.model.variable.Variable;
-import logic.model.variable.VariableOld;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instructions;
 
 import java.util.Set;

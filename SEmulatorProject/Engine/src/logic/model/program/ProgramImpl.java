@@ -1,16 +1,16 @@
 package logic.model.program;
 
-import logic.model.Argument;
+import logic.exceptions.UnknownLabelReferenceExeption;
+import logic.model.argument.Argument;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionWithArguments;
 import logic.model.instruction.Instructions;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProgramImpl implements Program {
     private final String name;
@@ -37,7 +37,7 @@ public class ProgramImpl implements Program {
     }
 
     @Override
-    public boolean validate() {
+    public void validate() throws UnknownLabelReferenceExeption {
         Set<Label> labels = instructions.getLabels();
 
         for (Instruction instruction : instructions.getInstructionsList()) {
@@ -46,14 +46,12 @@ public class ProgramImpl implements Program {
                 for (Argument argument : arguments.values()) {
                     if (argument instanceof Label) {
                         if (!(labels.contains(argument) || argument.equals(FixedLabel.EXIT))) {
-                            return false;
+                            throw new UnknownLabelReferenceExeption(argument.getRepresentation());
                         }
                     }
                 }
             }
         }
-
-        return true;
     }
 
         @Override
@@ -72,11 +70,9 @@ public class ProgramImpl implements Program {
             return instructions.getLabels();
         }
 
-        public Set<String> getAllInputsNames () {
-            Set<Variable> inputVariables = instructions.getInputs();
-
-            return inputVariables.stream().map(Variable::getRepresentation).collect(Collectors.toSet());
-        }
+        public Set<Variable> getAllInstructionsInputs() {
+            return instructions.getInputs();
+     }
 
 
     }

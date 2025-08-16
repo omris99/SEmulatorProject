@@ -9,7 +9,7 @@ public enum InstructionArgument {
     CONSTANT_VALUE("constant", "constantValue"),
     JZ_LABEL("label", "JZLabel"),
     JE_CONSTANT_LABEL("label",  "JEConstantLabel"),
-    VARIABLE_NAME("variableName", "variableName"),
+    VARIABLE_NAME("variable", "variableName"),
     JE_VARIABLE_LABEL("label",  "JEVariableLabel"),;
 
     private final String type;

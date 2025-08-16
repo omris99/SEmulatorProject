@@ -1,10 +1,14 @@
-package logic.model.instruction;
+package logic.model.instruction.basic;
 
-import logic.model.Argument;
-import logic.model.execution.ExecutionContext;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.model.argument.Argument;
+import logic.execution.ExecutionContext;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.InstructionArgument;
+import logic.model.instruction.InstructionData;
+import logic.model.instruction.InstructionWithArguments;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +41,10 @@ public class JumpNotZeroInstruction extends AbstractInstruction implements Instr
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("IF %s != 0 GOTO %s", getVariable().getRepresentation(),
-                arguments.get(InstructionArgument.JNZ_LABEL).getArgumentString());
+        String displayFormat = String.format("IF %s != 0 GOTO %s", getVariable().getRepresentation(),
+                arguments.get(InstructionArgument.JNZ_LABEL).getRepresentation());
+
+        return super.getInstructionDisplayFormat(displayFormat);
     }
 
     @Override

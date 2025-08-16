@@ -1,10 +1,14 @@
-package logic.model.instruction;
+package logic.model.instruction.synthetic;
 
-import logic.model.Argument;
-import logic.model.execution.ExecutionContext;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.model.argument.Argument;
+import logic.execution.ExecutionContext;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.InstructionArgument;
+import logic.model.instruction.InstructionData;
+import logic.model.instruction.InstructionWithArguments;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +38,9 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("%s <- %s", getVariable(), arguments.get(InstructionArgument.CONSTANT_VALUE));
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
+
+        return super.getInstructionDisplayFormat(displayFormat);
     }
 
     @Override

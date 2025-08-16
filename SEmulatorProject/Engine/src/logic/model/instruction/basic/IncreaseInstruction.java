@@ -1,11 +1,13 @@
-package logic.model.instruction;
+package logic.model.instruction.basic;
 
-import logic.model.execution.ExecutionContext;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.execution.ExecutionContext;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.InstructionData;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
-public class IncreaseInstruction extends AbstractInstruction{
+public class IncreaseInstruction extends AbstractInstruction {
 
     public IncreaseInstruction(Variable variable) {
         super(InstructionData.INCREASE, variable);
@@ -27,6 +29,8 @@ public class IncreaseInstruction extends AbstractInstruction{
 
     @Override
     public String getInstructionDisplayFormat() {
-        return String.format("%s <- %s + 1", getVariable().getRepresentation(), getVariable().getRepresentation());
+        String displayFormat = String.format("%s <- %s + 1", getVariable().getRepresentation(), getVariable().getRepresentation());
+
+        return super.getInstructionDisplayFormat(displayFormat);
     }
 }

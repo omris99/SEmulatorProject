@@ -1,11 +1,10 @@
 package logic.model.instruction;
 
-import logic.exceptions.UnknownLabelReferenceExeption;
-import logic.model.Argument;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
-import logic.model.variable.VariableType;
+import logic.model.argument.Argument;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableType;
 
 import java.util.*;
 
@@ -59,12 +58,28 @@ public class Instructions {
         this.instructions.add(instruction);
         Variable variable = instruction.getVariable();
 
-        if(variable.getType() == VariableType.INPUT){
+        if (variable.getType() == VariableType.INPUT) {
             this.instructionsInputs.add(variable);
         }
 
-        if(instruction.getLabel() != FixedLabel.EMPTY) {
+        if (instruction.getLabel() != FixedLabel.EMPTY) {
             this.instructionsLabels.add(instruction.getLabel());
+        }
+
+        if (instruction instanceof InstructionWithArguments) {
+            Collection<Argument> arguments = ((InstructionWithArguments) instruction).getArguments().values();
+            for (Argument argument : arguments) {
+                if (argument instanceof Variable) {
+                    if (((Variable) argument).getType() == VariableType.INPUT) {
+                        this.instructionsInputs.add((Variable) argument);
+                    }
+                }
+                else if (argument instanceof Label) {
+                    if(argument == FixedLabel.EXIT) {
+                        this.instructionsLabels.add((Label) argument);
+                    }
+                }
+            }
         }
     }
 

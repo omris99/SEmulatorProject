@@ -1,16 +1,21 @@
 package logic.model.mappers;
 
-import logic.model.Argument;
+import logic.model.argument.Argument;
+import logic.model.argument.constant.Constant;
 import logic.model.instruction.*;
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.label.LabelImpl;
-import logic.model.variable.Variable;
+import logic.model.instruction.basic.DecreaseInstruction;
+import logic.model.instruction.basic.IncreaseInstruction;
+import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.instruction.basic.NeutralInstruction;
+import logic.model.instruction.synthetic.*;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.label.LabelImpl;
+import logic.model.argument.variable.Variable;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SInstructionArgument;
 import logic.model.generated.SInstructionArguments;
-import logic.model.variable.VariableImpl;
-import logic.model.variable.VariableOld;
+import logic.model.argument.variable.VariableImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,16 +54,7 @@ public class InstructionMapper{
                 arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
             }
 
-//            if (jaxbInstruction.getSInstructionArguments().getSInstructionArgument() != null) {
-//                arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
-//            }
             Instruction domainInstruction = createInstruction(details.name(), variable, instructionLabel, arguments);
-
-//            Instruction domainInstruction = new Instruction(
-//                    details,
-//                    variable,
-//                    jaxbInstruction.getSLabel(),
-//                    arguments);
 
             return domainInstruction;
 
@@ -79,12 +75,19 @@ public class InstructionMapper{
             String argumentName = jaxbInstructionArgument.getName();
             InstructionArgument argumentType = InstructionArgument.fromXmlNameFormat(argumentName);
             if(argumentType.getType().equals("label")) {
-                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
+                if(jaxbInstructionArgument.getValue().equals("EXIT")) {
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
+                }
+                else {
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
+                }
             }
             else if(argumentType.getType().equals("variable")) {
                 domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
             }
-
+            else if(argumentType.getType().equals("constant")) {
+                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
+            }
         }
 
         return domainArguments;
@@ -92,17 +95,17 @@ public class InstructionMapper{
 
     private static Instruction createInstruction(String name, Variable variable, Label label, Map<InstructionArgument, Argument> arguments) {
         return switch (name) {
-            case "INCREASE" -> new IncreaseInstruction(variable);
-            case "DECREASE" -> new DecreaseInstruction(variable);
+            case "INCREASE" -> new IncreaseInstruction(variable, label);
+            case "DECREASE" -> new DecreaseInstruction(variable, label);
             case "JUMP_NOT_ZERO" -> new JumpNotZeroInstruction(variable, arguments.get(InstructionArgument.JNZ_LABEL) ,label);
-            case "NEUTRAL" -> new NeutralInstruction(variable);
-            case "ZERO_VARIABLE" -> new ZeroVariableInstruction(variable);
-            case "GOTO_LABEL" -> new GoToLabelInstruction(variable, arguments.get(InstructionArgument.GOTO_LABEL));
-            case "ASSIGNMENT" -> new AssignmentInstruction(variable, arguments.get(InstructionArgument.ASSIGNED_VARIABLE));
-            case "CONSTANT_ASSIGNMENT" -> new ConstantAssignmentInstruction(variable, arguments.get(InstructionArgument.CONSTANT_VALUE));
-            case "JUMP_ZERO" -> new JumpZeroInstruction(variable, arguments.get(InstructionArgument.JZ_LABEL));
-            case "JUMP_EQUAL_CONSTANT" -> new JumpEqualConstantInstruction(variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE));
-            case "JUMP_EQUAL_VARIABLE" -> new JumpEqualVariableInstruction(variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME));
+            case "NEUTRAL" -> new NeutralInstruction(variable, label);
+            case "ZERO_VARIABLE" -> new ZeroVariableInstruction(variable, label);
+            case "GOTO_LABEL" -> new GoToLabelInstruction(variable, arguments.get(InstructionArgument.GOTO_LABEL), label);
+            case "ASSIGNMENT" -> new AssignmentInstruction(variable, arguments.get(InstructionArgument.ASSIGNED_VARIABLE), label);
+            case "CONSTANT_ASSIGNMENT" -> new ConstantAssignmentInstruction(variable, arguments.get(InstructionArgument.CONSTANT_VALUE), label);
+            case "JUMP_ZERO" -> new JumpZeroInstruction(variable, arguments.get(InstructionArgument.JZ_LABEL), label);
+            case "JUMP_EQUAL_CONSTANT" -> new JumpEqualConstantInstruction(variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE), label);
+            case "JUMP_EQUAL_VARIABLE" -> new JumpEqualVariableInstruction(variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME), label);
 
             default -> throw new IllegalArgumentException("Unknown instruction: " + name);
         };

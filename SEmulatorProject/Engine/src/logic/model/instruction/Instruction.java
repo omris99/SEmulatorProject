@@ -1,11 +1,8 @@
 package logic.model.instruction;
 
-import logic.model.Argument;
-import logic.model.execution.ExecutionContext;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
-
-import java.util.Map;
+import logic.execution.ExecutionContext;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 public interface Instruction {
     String getName();

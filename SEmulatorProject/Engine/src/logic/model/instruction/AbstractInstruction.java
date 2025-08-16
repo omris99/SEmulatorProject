@@ -1,8 +1,8 @@
 package logic.model.instruction;
 
-import logic.model.label.FixedLabel;
-import logic.model.label.Label;
-import logic.model.variable.Variable;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 
 public abstract class AbstractInstruction implements Instruction {
     private final InstructionData instructionData;
@@ -17,6 +17,18 @@ public abstract class AbstractInstruction implements Instruction {
         this.instructionData = instructionData;
         this.label = label;
         this.variable = variable;
+    }
+
+    public String getType(){
+        return instructionData.getType();
+    }
+
+    public String getInstructionDisplayFormat(String instructionDisplayFormat) {
+        return String.format("(%s) [ %-4s] %s (%d)",
+                getType().equals("basic") ? "B" : "S",
+                label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "",
+                instructionDisplayFormat,
+                getCycles());
     }
 
     @Override

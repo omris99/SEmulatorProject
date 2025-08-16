@@ -5,19 +5,18 @@ import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import logic.execution.ProgramExecutor;
+import logic.execution.ProgramExecutorImpl;
+import logic.model.argument.Argument;
 import logic.model.instruction.Instruction;
-import logic.model.instruction.InstructionOld;
-import logic.model.label.Label;
+import logic.model.argument.label.FixedLabel;
 import logic.model.program.Program;
-import logic.model.program.ProgramImpl;
-import logic.model.variable.Variable;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     Program program;
@@ -26,11 +25,20 @@ public class EmulatorEngine implements Engine {
         return program.getName();
     }
 
-    public Set<Label> getProgramLabelsNames() {
-        return program.getAllInstructionsLabels();
+    public List<String> getProgramLabelsNames() {
+        List<String> programLabelsNames = program.getAllInstructionsLabels().stream()
+                .filter(label -> !label.equals(FixedLabel.EXIT))
+                .map(Argument::getRepresentation)
+                .collect(Collectors.toList());
+
+        if (program.getAllInstructionsLabels().contains(FixedLabel.EXIT)) {
+            programLabelsNames.add(FixedLabel.EXIT.getRepresentation());
+        }
+
+        return programLabelsNames;
     }
-    public Set<String> getProgramInputsNames() {
-        return program.getAllInputsNames();
+    public List<String> getProgramInputsNames() {
+        return program.getAllInstructionsInputs().stream().map(Argument::getRepresentation).collect(Collectors.toList());
     }
 
     public List<Instruction> getInstructions() {
@@ -51,7 +59,9 @@ public class EmulatorEngine implements Engine {
         JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
-        program = ProgramMapper.toDomain(sProgram);
+        Program loadedProgram = ProgramMapper.toDomain(sProgram);
+        loadedProgram.validate();
+        program = loadedProgram;
 //        System.out.println(sProgram);
     }
 
@@ -61,7 +71,9 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public void runLoadedProgram() {
+    public void runLoadedProgram(int degree, String input) {
+        ProgramExecutor executor = new ProgramExecutorImpl(program);
+
 
     }
 

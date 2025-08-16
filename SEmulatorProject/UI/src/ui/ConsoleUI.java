@@ -74,16 +74,12 @@ public class ConsoleUI implements UI
 
     @Override
     public void expand() {
-
+//        System.out.println("Maximal Degree: %d", engine.getMaximalDegree);
+        engine.expand(4);
     }
 
     @Override
     public void runLoadedProgram() {
-//        int maximalDegree = engine.getProgramMaximalDegree();
-//        System.out.println("Maximal Degree: ", maximalDegree);
-//        System.out.println("Please Enter Desired running degree: ");
-//        int runningDegree = inputScanner.nextInt();
-
         System.out.print("Available program inputs: ");
         System.out.println(String.format("%s", engine.getProgramInputsNames()));
         System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
@@ -98,6 +94,7 @@ public class ConsoleUI implements UI
     public void run() {
         loadProgram();
         showProgramDetails();
+        expand();
         runLoadedProgram();
         showHistory();
     }

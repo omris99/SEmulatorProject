@@ -4,10 +4,15 @@ import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class AbstractInstruction implements Instruction {
     private final InstructionData instructionData;
     private final Label label;
     private final Variable variable;
+//    private final int degree;
+//    private final List<Instruction> expandedInstructions;
 
     public AbstractInstruction(InstructionData instructionData, Variable variable) {
         this(instructionData, variable, FixedLabel.EMPTY);
@@ -17,10 +22,8 @@ public abstract class AbstractInstruction implements Instruction {
         this.instructionData = instructionData;
         this.label = label;
         this.variable = variable;
-    }
-
-    public String getType(){
-        return instructionData.getType();
+//        this.degree = computeDegree();
+//        expandedInstructions = new ArrayList<>();
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
@@ -42,6 +45,11 @@ public abstract class AbstractInstruction implements Instruction {
     }
 
     @Override
+    public String getType() {
+        return instructionData.getType();
+    }
+
+    @Override
     public Label getLabel() {
         return label;
     }
@@ -51,7 +59,30 @@ public abstract class AbstractInstruction implements Instruction {
         return variable;
     }
 
+    @Override
+    public int computeDegree() {
+//        int maxChildInstuctionDegree = 0;
+//        int currentChildInstuctionDegree;
+//
+//        for(Instruction instruction : expandedInstructions) {
+//            if(instruction.getType().equals("basic")){
+//                return 1;
+//            }
+//            else{
+//                currentChildInstuctionDegree = instruction.computeDegree();
+//                if(currentChildInstuctionDegree > maxChildInstuctionDegree){
+//                    maxChildInstuctionDegree = currentChildInstuctionDegree;
+//                }
+//            }
+//        }
+//
+//        return maxChildInstuctionDegree;
+        return 0;
+    }
+
+    @Override
     public int getDegree() {
+//        return degree;
         return 0;
     }
 

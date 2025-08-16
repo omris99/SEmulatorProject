@@ -1,13 +1,19 @@
 package logic.model.instruction.synthetic;
 
 import logic.execution.ExecutionContext;
-import logic.model.instruction.AbstractInstruction;
-import logic.model.instruction.InstructionData;
+import logic.model.argument.label.LabelImpl;
+import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.basic.DecreaseInstruction;
+import logic.model.instruction.basic.JumpNotZeroInstruction;
 
-public class ZeroVariableInstruction extends AbstractInstruction {
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class ZeroVariableInstruction extends AbstractInstruction implements ExpandableInstruction {
     public ZeroVariableInstruction(Variable variable) {
         super(InstructionData.ZERO_VARIABLE, variable, FixedLabel.EMPTY);
     }
@@ -27,5 +33,16 @@ public class ZeroVariableInstruction extends AbstractInstruction {
         String displayFormat = String.format("%s <- 0", getVariable().getRepresentation());
 
         return super.getInstructionDisplayFormat(displayFormat);
+    }
+
+    @Override
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+        List<Instruction> expandedInstructions = new LinkedList<>();
+        Label freeLabel = instructionLabel.equals(FixedLabel.EMPTY) ? new LabelImpl(maxLabelIndex + 1) : instructionLabel;
+
+        expandedInstructions.add(new DecreaseInstruction(getVariable(), freeLabel));
+        expandedInstructions.add(new JumpNotZeroInstruction(getVariable(), freeLabel));
+
+        return expandedInstructions;
     }
 }

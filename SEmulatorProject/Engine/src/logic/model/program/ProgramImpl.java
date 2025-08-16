@@ -83,7 +83,10 @@ public class ProgramImpl implements Program {
         if(degree == 0){
             return;
         }
-
-        instructions.expand(degree);
+        else {
+            for(int i = 0; i < degree; i++){
+                instructions.expand();
+            }
+        }
     }
 }

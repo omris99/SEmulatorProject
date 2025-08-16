@@ -11,4 +11,8 @@ public interface Instruction {
     Label getLabel();
     Variable getVariable();
     String getInstructionDisplayFormat();
+    String getType();
+    int getDegree();
+    int computeDegree();
+
 }

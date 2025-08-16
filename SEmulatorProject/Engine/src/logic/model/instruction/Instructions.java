@@ -56,9 +56,8 @@ public class Instructions {
 //        }
 //        throwExceptionIfLabelsArgumentsInvalid();
     }
-
-    public void add(Instruction instruction) {
-        this.instructions.add(instruction);
+    public void add(Instruction instruction, int indexToAdd) {
+        this.instructions.add(indexToAdd, instruction);
         Variable variable = instruction.getVariable();
 
         if (variable.getType() == VariableType.INPUT) {
@@ -89,6 +88,19 @@ public class Instructions {
         }
     }
 
+    public void add(Instruction instruction) {
+        add(instruction, instructions.size());
+    }
+
+    public void addListOfInstructions(List<Instruction> instructions, int index) {
+        this.instructions.remove(index);
+        int indexToAdd = index;
+        for (Instruction instruction : instructions) {
+            add(instruction, indexToAdd);
+            indexToAdd++;
+        }
+    }
+
     public Set<Label> getLabels() {
         return instructionsLabels;
     }
@@ -105,10 +117,33 @@ public class Instructions {
         return instructions;
     }
 
-    public void expand(int degree) {
-        for(Instruction instruction : instructions) {
+    public void expand() {
 
+        for (int i = 0; i < instructions.size(); i++) {
+            Instruction instruction = instructions.get(i);
+            if (instruction instanceof ExpandableInstruction) {
+                List<Instruction> expanded = ((ExpandableInstruction) instruction)
+                        .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+
+                addListOfInstructions(expanded, i);
+                i += expanded.size() - 1; // skip over newly added
+            }
         }
+
+//        for(Instruction instruction : instructions) {
+//            if(instruction instanceof ExpandableInstruction){
+//                List<Instruction> expanded = ((ExpandableInstruction) instruction).expand(getMaxLabelIndex(), getMaxWorkVariableIndex());
+//                addListOfInstructions(expanded, instructions.indexOf(instruction));
+//            }
+//        }
+    }
+
+    private int getMaxLabelIndex() {
+        return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();
+    }
+
+    private int getMaxWorkVariableIndex() {
+        return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();
     }
 }
 

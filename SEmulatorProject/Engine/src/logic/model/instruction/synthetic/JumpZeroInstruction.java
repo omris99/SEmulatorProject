@@ -2,18 +2,23 @@ package logic.model.instruction.synthetic;
 
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
-import logic.model.instruction.AbstractInstruction;
-import logic.model.instruction.InstructionArgument;
-import logic.model.instruction.InstructionData;
-import logic.model.instruction.InstructionWithArguments;
+import logic.model.argument.label.LabelImpl;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
+import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.basic.DecreaseInstruction;
+import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.instruction.basic.NeutralInstruction;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-public class JumpZeroInstruction extends AbstractInstruction implements InstructionWithArguments {
+public class JumpZeroInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
 
     public JumpZeroInstruction(Variable variable, Argument jzLabel) {
@@ -48,5 +53,18 @@ public class JumpZeroInstruction extends AbstractInstruction implements Instruct
     @Override
     public Map<InstructionArgument, Argument> getArguments() {
         return arguments;
+    }
+
+    @Override
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+        List<Instruction> expandedInstructions = new LinkedList<>();
+        Label freeLabel = instructionLabel.equals(FixedLabel.EMPTY) ? new LabelImpl(maxLabelIndex + 1) : instructionLabel;
+        Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
+
+        expandedInstructions.add(new JumpNotZeroInstruction(getVariable(), freeLabel));
+        expandedInstructions.add(new GoToLabelInstruction(workVariable, arguments.get(InstructionArgument.JZ_LABEL)));
+        expandedInstructions.add(new NeutralInstruction(Variable.RESULT, freeLabel));
+
+        return expandedInstructions;
     }
 }

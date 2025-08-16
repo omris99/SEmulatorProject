@@ -17,4 +17,9 @@ public class Constant implements Argument {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public int getIndex() {
+        return 0;
+    }
 }

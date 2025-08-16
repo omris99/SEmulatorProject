@@ -102,6 +102,10 @@ public class EmulatorEngine implements Engine {
         return finalVariablesResult;
     }
 
+    public void expand(int degree){
+        program.expand(degree);
+    }
+
     @Override
     public List<ExecutionRecord> getHistory() {
         return history;

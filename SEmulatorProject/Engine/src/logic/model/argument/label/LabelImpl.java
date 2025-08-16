@@ -4,9 +4,15 @@ import java.util.Objects;
 
 public class LabelImpl implements Label {
     private final String label;
+    private final int index;
 
     public LabelImpl(int number) {
         label = "L" + number;
+        this.index = number;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     @Override

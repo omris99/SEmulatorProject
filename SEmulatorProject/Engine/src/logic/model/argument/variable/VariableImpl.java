@@ -14,6 +14,12 @@ public class VariableImpl implements Variable, Argument {
 //        return getRepresentation();
 //    }
 
+
+    @Override
+    public int getIndex() {
+        return number;
+    }
+
     public static VariableImpl parse(String stringVariable)
     {
         if (stringVariable == null || stringVariable.isEmpty()) {

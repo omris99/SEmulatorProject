@@ -3,18 +3,23 @@ package logic.model.instruction.synthetic;
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
 import logic.model.argument.constant.Constant;
-import logic.model.instruction.AbstractInstruction;
-import logic.model.instruction.InstructionArgument;
-import logic.model.instruction.InstructionData;
-import logic.model.instruction.InstructionWithArguments;
+import logic.model.argument.label.LabelImpl;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
+import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.basic.DecreaseInstruction;
+import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.instruction.basic.NeutralInstruction;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-public class JumpEqualConstantInstruction extends AbstractInstruction implements InstructionWithArguments {
+public class JumpEqualConstantInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
 
     public JumpEqualConstantInstruction(Variable variable, Argument jeConstantLabel, Argument constantValue) {
@@ -51,5 +56,22 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
     @Override
     public Map<InstructionArgument, Argument> getArguments() {
         return arguments;
+    }
+
+    @Override
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+        List<Instruction> expandedInstructions = new LinkedList<>();
+        Label freeLabel = new LabelImpl(maxLabelIndex + 1);
+        Variable workVariable1 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 1);
+        Variable workVariable2 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 2);
+
+        expandedInstructions.add(new AssignmentInstruction(workVariable1, getVariable(), instructionLabel));
+        expandedInstructions.add(new JumpZeroInstruction(workVariable1, freeLabel));
+        expandedInstructions.add(new DecreaseInstruction(workVariable1));
+        expandedInstructions.add(new JumpNotZeroInstruction(workVariable1, freeLabel));
+        expandedInstructions.add(new GoToLabelInstruction(workVariable2, arguments.get(InstructionArgument.JE_CONSTANT_LABEL)));
+        expandedInstructions.add(new NeutralInstruction(Variable.RESULT, freeLabel));
+
+        return expandedInstructions;
     }
 }

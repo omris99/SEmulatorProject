@@ -16,4 +16,20 @@ public class ExecutionRecord {
         this.yValue = yValue;
         this.totalCycles = totalCycles;
     }
+
+    public int getDegree() {
+        return degree;
+    }
+
+    public Map<Variable, Long> getInputVariables(){
+        return inputVariables;
+    }
+
+    public long getY() {
+        return yValue;
+    }
+
+    public int getTotalCycles() {
+        return totalCycles;
+    }
 }

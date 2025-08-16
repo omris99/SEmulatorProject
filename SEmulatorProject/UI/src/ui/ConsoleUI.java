@@ -4,9 +4,12 @@ import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
+import logic.execution.ExecutionRecord;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
+import logic.utils.Utils;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -37,7 +40,7 @@ public class ConsoleUI implements UI
     @Override
     public void loadProgram() {
         //needs to ask for path from user and than send it to engine...now its only example.
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/badic.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
 
         try{
             engine.loadProgram(xmlPath);
@@ -96,12 +99,32 @@ public class ConsoleUI implements UI
         loadProgram();
         showProgramDetails();
         runLoadedProgram();
+        showHistory();
     }
 
     @Override
     public void showHistory() {
+        int i = 1;
+        List<ExecutionRecord> history = engine.getHistory();
+        System.out.println("**********************");
+        System.out.println("Execution History:");
+        System.out.println("**********************");
 
+        for(ExecutionRecord executionRecord : history){
+            System.out.println(String.format("\nExecution #%d ", i));
+            System.out.println("----------------------");
 
+            System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
+            System.out.println("\n- Input Values:");
+            for(Variable variable : executionRecord.getInputVariables().keySet()){
+                System.out.println(String.format("  %s = %d ", variable.getRepresentation(), executionRecord.getInputVariables().get(variable)));
+            }
+
+            System.out.println(String.format("\n- y Result: %d", executionRecord.getY()));
+            System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCycles()));
+        }
+
+        System.out.println("**********************");
     }
 
     @Override
@@ -110,23 +133,9 @@ public class ConsoleUI implements UI
     }
 
     private void showProgramRunResults(Map<Variable, Long> results) {
-        long yValue = 0L;
-        Map<Variable, Long> inputVariables = new LinkedHashMap<>();
-        Map<Variable, Long> workVariables = new LinkedHashMap<>();
-
-        for(Map.Entry<Variable, Long> entry : results.entrySet()){
-            switch(entry.getKey().getType()){
-                case INPUT:
-                    inputVariables.put(entry.getKey(), entry.getValue());
-                    break;
-                case WORK:
-                    workVariables.put(entry.getKey(), entry.getValue());
-                    break;
-                case RESULT:
-                    yValue = entry.getValue();
-                    break;
-            }
-        }
+        long yValue = results.get(Variable.RESULT);
+        Map<Variable, Long> inputVariables = Utils.extractVariablesTypesFromMap(results, VariableType.INPUT);
+        Map<Variable, Long> workVariables = Utils.extractVariablesTypesFromMap(results, VariableType.WORK);
 
         inputVariables = sortVariablesByTheirNumber(inputVariables);
         workVariables = sortVariablesByTheirNumber(workVariables);

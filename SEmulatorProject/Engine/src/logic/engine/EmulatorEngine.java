@@ -10,16 +10,17 @@ import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
 import logic.model.argument.label.FixedLabel;
 import logic.model.program.Program;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
+import logic.utils.Utils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
@@ -27,6 +28,9 @@ public class EmulatorEngine implements Engine {
     ProgramExecutor executor;
     List<ExecutionRecord> history;
 
+    public EmulatorEngine() {
+        history = new LinkedList<>();
+    }
     public String getProgramName() {
         return program.getName();
     }
@@ -87,16 +91,20 @@ public class EmulatorEngine implements Engine {
 
         Map<Variable, Long> finalVariablesResult = executor.run(inputs);
 
+
         ExecutionRecord record = new ExecutionRecord(degree,
-                finalVariablesResult,
+                Utils.createInputVariablesMap(program.getAllInstructionsInputs(), inputs),
                 finalVariablesResult.get(Variable.RESULT),
                 executor.getCyclesCount());
+
+        history.add(record);
 
         return finalVariablesResult;
     }
 
     @Override
-    public void getHistory() {
+    public List<ExecutionRecord> getHistory() {
+        return history;
 
     }
 

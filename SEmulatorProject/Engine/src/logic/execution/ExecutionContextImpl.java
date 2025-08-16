@@ -1,6 +1,7 @@
 package logic.execution;
 
 import logic.model.argument.variable.Variable;
+import logic.utils.Utils;
 
 import java.util.*;
 
@@ -8,14 +9,15 @@ public class ExecutionContextImpl implements ExecutionContext {
     private Map<Variable, Long> variablesStatus;
 
     public ExecutionContextImpl(Set<Variable> programInputVariables, Set<Variable> programWorkVariables, Long... inputs) {
-        variablesStatus = new LinkedHashMap<>();
-        int i = 0;
-
-        for (Variable inputVariable : programInputVariables) {
-            long value = (i < inputs.length) ? inputs[i] : 0L;
-            variablesStatus.put(inputVariable, value);
-            i++;
-        }
+//        variablesStatus = new LinkedHashMap<>();
+//        int i = 0;
+//
+//        for (Variable inputVariable : programInputVariables) {
+//            long value = (i < inputs.length) ? inputs[i] : 0L;
+//            variablesStatus.put(inputVariable, value);
+//            i++;
+//        }
+        variablesStatus = Utils.createInputVariablesMap(programInputVariables, inputs);
 
         variablesStatus.put(Variable.RESULT, 0L);
 

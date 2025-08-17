@@ -115,4 +115,8 @@ public class EmulatorEngine implements Engine {
     public int getLastExecutionCycles() {
         return executor.getCyclesCount();
     }
+
+    public int getMaximalDegree(){
+        return program.getMaximalDegree();
+    }
 }

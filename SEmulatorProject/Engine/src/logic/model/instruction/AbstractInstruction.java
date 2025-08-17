@@ -11,6 +11,7 @@ public abstract class AbstractInstruction implements Instruction {
     private final InstructionData instructionData;
     private final Label label;
     private final Variable variable;
+    private Instruction parentInstruction;
 //    private final int degree;
 //    private final List<Instruction> expandedInstructions;
 
@@ -22,16 +23,27 @@ public abstract class AbstractInstruction implements Instruction {
         this.instructionData = instructionData;
         this.label = label;
         this.variable = variable;
+        parentInstruction = this;
 //        this.degree = computeDegree();
 //        expandedInstructions = new ArrayList<>();
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
-        return String.format("(%s) [ %-4s] %s (%d)",
+        String instructionFormatted = String.format("(%s) [ %-4s] %s (%d)",
                 getType().equals("basic") ? "B" : "S",
                 label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "",
                 instructionDisplayFormat,
                 getCycles());
+
+        if(parentInstruction != this){
+            instructionFormatted = instructionFormatted.concat(" <<< " + parentInstruction.getInstructionDisplayFormat());
+        }
+
+        return instructionFormatted;
+    }
+
+    public void setParentInstruction(Instruction parentInstruction) {
+        this.parentInstruction = parentInstruction;
     }
 
     @Override
@@ -82,8 +94,7 @@ public abstract class AbstractInstruction implements Instruction {
 
     @Override
     public int getDegree() {
-//        return degree;
-        return 0;
+        return instructionData.getDegree();
     }
 
 }

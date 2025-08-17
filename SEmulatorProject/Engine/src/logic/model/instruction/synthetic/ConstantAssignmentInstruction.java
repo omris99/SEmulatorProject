@@ -42,6 +42,7 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
 
+
         return super.getInstructionDisplayFormat(displayFormat);
     }
 

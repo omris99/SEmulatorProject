@@ -1,5 +1,6 @@
 package logic.model.program;
 
+import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import logic.model.argument.Argument;
 import logic.model.instruction.Instruction;
@@ -80,7 +81,10 @@ public class ProgramImpl implements Program {
 
     @Override
     public void expand(int degree) {
-        if(degree == 0){
+        if(degree > getMaximalDegree()){
+            throw new NumberNotInRangeException(degree);
+        }
+        else if(degree == 0){
             return;
         }
         else {
@@ -88,5 +92,10 @@ public class ProgramImpl implements Program {
                 instructions.expand();
             }
         }
+    }
+
+    @Override
+    public int getMaximalDegree(){
+        return instructions.getMaximalDegree();
     }
 }

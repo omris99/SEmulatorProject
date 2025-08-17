@@ -117,6 +117,12 @@ public class Instructions {
         return instructions;
     }
 
+    public int getMaximalDegree(){
+        int maximalDegree = instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
+
+        return maximalDegree;
+    }
+
     public void expand() {
 
         for (int i = 0; i < instructions.size(); i++) {

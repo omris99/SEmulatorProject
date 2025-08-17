@@ -2,6 +2,7 @@ package ui;
 
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
+import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
 import logic.execution.ExecutionRecord;
@@ -19,15 +20,14 @@ import java.util.stream.Collectors;
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
  *  2. ensure that every exception message is fully detailed.
  *  3. improve the implemetntation of VariableImpl class (parse)
+ *  4. handle if user type bigger degree than maximal in expand
  */
 
-public class ConsoleUI implements UI
-{
+public class ConsoleUI implements UI {
     EmulatorEngine engine;
     Scanner inputScanner;
 
-    public ConsoleUI()
-    {
+    public ConsoleUI() {
         engine = new EmulatorEngine();
         inputScanner = new Scanner(System.in);
     }
@@ -42,7 +42,7 @@ public class ConsoleUI implements UI
         //needs to ask for path from user and than send it to engine...now its only example.
         String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
 
-        try{
+        try {
             engine.loadProgram(xmlPath);
             System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");
         } catch (InvalidXmlFileException e) {
@@ -64,8 +64,7 @@ public class ConsoleUI implements UI
         System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
 
         System.out.println(String.format("Labels Names: %s", engine.getProgramLabelsNames()));
-        for(Instruction instruction : engine.getInstructions())
-        {
+        for (Instruction instruction : engine.getInstructions()) {
             System.out.print(String.format("#%d ", i));
             System.out.println(instruction.getInstructionDisplayFormat());
             i++;
@@ -74,8 +73,21 @@ public class ConsoleUI implements UI
 
     @Override
     public void expand() {
-//        System.out.println("Maximal Degree: %d", engine.getMaximalDegree);
-        engine.expand(4);
+        int maximalDegree = engine.getMaximalDegree();
+        System.out.println(String.format("\nMaximal Degree: %d", maximalDegree));
+        System.out.println(String.format("Enter expand degree (0 - %d): ", maximalDegree));
+        String userInput = inputScanner.nextLine();
+
+        try {
+            int expandDegree = Integer.parseInt(userInput);
+            engine.expand(expandDegree);
+            System.out.println(String.format("Program expanded successfully to degree %s.", userInput));
+        } catch (NumberFormatException | NumberNotInRangeException e) {
+            System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", maximalDegree));
+            System.out.println("Please Try Again.");
+            expand();
+        }
+
     }
 
     @Override
@@ -85,7 +97,11 @@ public class ConsoleUI implements UI
         System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
         String inputs = inputScanner.nextLine();
         System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
-        showProgramRunResults(engine.runLoadedProgram(0, inputs));
+        try {
+            showProgramRunResults(engine.runLoadedProgram(0, inputs));
+        } catch (NumberFormatException e){
+            System.out.println("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
+        }
 
 //        System.out.println(String.format("The Result is: y = %d", engine.runLoadedProgram(0, inputs)));
     }
@@ -107,13 +123,13 @@ public class ConsoleUI implements UI
         System.out.println("Execution History:");
         System.out.println("**********************");
 
-        for(ExecutionRecord executionRecord : history){
+        for (ExecutionRecord executionRecord : history) {
             System.out.println(String.format("\nExecution #%d ", i));
             System.out.println("----------------------");
 
             System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
             System.out.println("\n- Input Values:");
-            for(Variable variable : executionRecord.getInputVariables().keySet()){
+            for (Variable variable : executionRecord.getInputVariables().keySet()) {
                 System.out.println(String.format("  %s = %d ", variable.getRepresentation(), executionRecord.getInputVariables().get(variable)));
             }
 
@@ -141,11 +157,11 @@ public class ConsoleUI implements UI
         System.out.println("----------------------");
         System.out.println(String.format("y = %d ", yValue));
 
-        for(Variable variable : inputVariables.keySet()){
+        for (Variable variable : inputVariables.keySet()) {
             System.out.println(String.format("%s = %d ", variable.getRepresentation(), inputVariables.get(variable)));
         }
 
-        for(Variable variable : workVariables.keySet()){
+        for (Variable variable : workVariables.keySet()) {
             System.out.println(String.format("%s = %d ", variable.getRepresentation(), workVariables.get(variable)));
         }
 

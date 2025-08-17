@@ -20,4 +20,5 @@ public interface Program {
     void validate() throws UnknownLabelReferenceExeption;
     int calculateMaxDegree();
     int calculateCycles();
+    int getMaximalDegree();
 }

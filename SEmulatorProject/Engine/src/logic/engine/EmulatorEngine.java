@@ -123,4 +123,9 @@ public class EmulatorEngine implements Engine {
     public boolean isProgramLoaded() {
         return !(program == null);
     }
+
+    @Override
+    public void quit(){
+        System.exit(0);
+    }
 }

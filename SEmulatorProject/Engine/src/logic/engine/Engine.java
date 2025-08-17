@@ -13,4 +13,5 @@ public interface Engine {
     public void getProgramDetails();
     public Map<Variable, Long> runLoadedProgram(int degree, String input);
     public List<ExecutionRecord> getHistory();
+    public void quit();
 }

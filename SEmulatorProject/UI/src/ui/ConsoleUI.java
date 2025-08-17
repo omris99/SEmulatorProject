@@ -46,7 +46,7 @@ public class ConsoleUI implements UI {
     {
         List<MenuOption> options = new ArrayList<>();
         options.addAll(Arrays.asList(MainMenuOption.values()));
-        return new MainMenu(options);
+        return new MainMenu(options, "S-Emulator");
     }
 
     @Override
@@ -56,8 +56,10 @@ public class ConsoleUI implements UI {
     }
 
     private void executeMainMenuOption(MenuOption option) {
-        boolean isProgramLoaded = engine.isProgramLoaded();
-        if(!(isProgramLoaded || option.equals(MainMenuOption.LOAD_PROGRAM))) {
+        boolean isCanExecuteBeforeProgramLoading = (engine.isProgramLoaded() || option.equals(MainMenuOption.LOAD_PROGRAM)
+                || option.equals(MainMenuOption.EXIT));
+
+        if(!isCanExecuteBeforeProgramLoading) {
             System.out.println("Error: Program Not Loaded yet.");
         }
         else{
@@ -67,7 +69,7 @@ public class ConsoleUI implements UI {
                 case MainMenuOption.EXPAND_PROGRAM -> expand();
                 case MainMenuOption.RUN_PROGRAM -> runLoadedProgram();
                 case MainMenuOption.SHOW_HISTORY ->  showHistory();
-                case MainMenuOption.EXIT_PROGRAM -> quitProgram();
+                case MainMenuOption.EXIT -> quitProgram();
                 default -> throw new IllegalStateException("Unexpected value: " + option);
             }
         }
@@ -147,7 +149,7 @@ public class ConsoleUI implements UI {
                 inputScanner.nextLine();
             }
 
-            expansionDegree = Integer.parseInt(inputScanner.nextLine());
+            expansionDegree = inputScanner.nextInt();
         }
 
         return expansionDegree;
@@ -166,6 +168,8 @@ public class ConsoleUI implements UI {
             showProgramRunResults(engine.runLoadedProgram(expansionDegree, inputs));
         } catch (NumberFormatException e){
             System.out.println("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
+        } catch (NumberNotInRangeException e) {
+            System.out.println(String.format("Invalid Input: expansion degree must be in range (0 - %d)", engine.getMaximalDegree()));
         }
     }
 
@@ -173,7 +177,7 @@ public class ConsoleUI implements UI {
     public void run() {
         while (true) {
             showMainMenuAndExecuteUserChoice();
-            System.out.println("\n*** Press Any Key To Return Main Menu... ***");
+            System.out.println("\n*** Press 'Enter' Key To Return Main Menu... ***");
             inputScanner.nextLine();
         }
 //
@@ -211,7 +215,8 @@ public class ConsoleUI implements UI {
 
     @Override
     public void quitProgram() {
-
+        System.out.println("GOOD BYE !");
+        engine.quit();
     }
 
     private void showProgramRunResults(Map<Variable, Long> results) {

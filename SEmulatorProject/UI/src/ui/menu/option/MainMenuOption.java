@@ -7,7 +7,8 @@ public enum MainMenuOption implements MenuOption {
     EXPAND_PROGRAM("Expand Loaded Program Instructions"),
     RUN_PROGRAM("Run Loaded Program"),
     SHOW_HISTORY("Show Loaded Program History"),
-    EXIT_PROGRAM("Exit Program");
+    EXIT("Exit S-Emulator");
+
 
     private final String menuDisplay;
 

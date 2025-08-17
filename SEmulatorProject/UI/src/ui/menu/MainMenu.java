@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MainMenu extends AbstractMenu{
 
-    public MainMenu(List<MenuOption> options) {
-        super("S-Emulator Main Menu","*", options);
+    public MainMenu(List<MenuOption> options, String programName) {
+        super(programName + " Main Menu","*", options);
     }
 }

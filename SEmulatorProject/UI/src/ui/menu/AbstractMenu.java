@@ -39,10 +39,12 @@ public abstract class AbstractMenu implements Menu{
                 }
                 else {
                     System.out.printf("Invalid choice. Must be between 1 and %d.%n", menuOptions.size());
+                    System.out.print("Try again: ");
                 }
             }
             else {
                 System.out.println("Invalid input. Please enter a number only.");
+                System.out.print("Try again: ");
                 scanner.nextLine();
             }
         }

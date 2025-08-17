@@ -150,6 +150,7 @@ public class ConsoleUI implements UI {
             }
 
             expansionDegree = inputScanner.nextInt();
+            inputScanner.nextLine();
         }
 
         return expansionDegree;
@@ -192,12 +193,13 @@ public class ConsoleUI implements UI {
     public void showHistory() {
         int i = 1;
         List<ExecutionRecord> history = engine.getHistory();
-        System.out.println("**********************");
-        System.out.println("Execution History:");
-        System.out.println("**********************");
+        System.out.println("\n***********************************************");
+        System.out.println("               Execution History:");
+        System.out.println("***********************************************");
 
         for (ExecutionRecord executionRecord : history) {
-            System.out.println(String.format("\nExecution #%d ", i++));
+            System.out.println("\n----------------------");
+            System.out.println(String.format("Execution #%d ", i++));
             System.out.println("----------------------");
 
             System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
@@ -210,7 +212,9 @@ public class ConsoleUI implements UI {
             System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCycles()));
         }
 
-        System.out.println("**********************");
+        System.out.println("\n******************** E N D ********************");
+        System.out.println("***********************************************");
+
     }
 
     @Override

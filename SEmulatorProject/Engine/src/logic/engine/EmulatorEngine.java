@@ -89,14 +89,14 @@ public class EmulatorEngine implements Engine {
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
 
-        Map<Variable, Long> finalVariablesResult = executor.run(degree, inputs);
+        expand(degree);
+        Map<Variable, Long> finalVariablesResult = executor.run(inputs);
 
 
         ExecutionRecord record = new ExecutionRecord(degree,
                 Utils.createInputVariablesMap(program.getAllInstructionsInputs(), inputs),
                 finalVariablesResult.get(Variable.RESULT),
                 executor.getCyclesCount());
-
         history.add(record);
 
         return finalVariablesResult;
@@ -118,5 +118,9 @@ public class EmulatorEngine implements Engine {
 
     public int getMaximalDegree(){
         return program.getMaximalDegree();
+    }
+
+    public boolean isProgramLoaded() {
+        return !(program == null);
     }
 }

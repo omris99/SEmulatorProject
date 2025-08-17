@@ -1,6 +1,7 @@
 package ui;
 
 public interface UI {
+    public void showMainMenuAndExecuteUserChoice();
     public void loadProgram();
     public void showProgramDetails();
     public void expand();

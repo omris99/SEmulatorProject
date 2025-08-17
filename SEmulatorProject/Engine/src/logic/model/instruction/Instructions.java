@@ -13,6 +13,7 @@ public class Instructions {
     private Set<Label> instructionsLabels;
     private Set<Variable> instructionsInputs;
     private Set<Variable> instructionsWorkVariables;
+    private int expandLevel;
 
 
     public Instructions() {
@@ -136,6 +137,8 @@ public class Instructions {
             }
         }
 
+        expandLevel++;
+
 //        for(Instruction instruction : instructions) {
 //            if(instruction instanceof ExpandableInstruction){
 //                List<Instruction> expanded = ((ExpandableInstruction) instruction).expand(getMaxLabelIndex(), getMaxWorkVariableIndex());
@@ -150,6 +153,10 @@ public class Instructions {
 
     private int getMaxWorkVariableIndex() {
         return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();
+    }
+
+    public int getExpandLevel() {
+        return expandLevel;
     }
 }
 

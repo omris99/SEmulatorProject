@@ -60,7 +60,7 @@ public class ConsoleUI implements UI {
                 || option.equals(MainMenuOption.EXIT));
 
         if(!isCanExecuteBeforeProgramLoading) {
-            System.out.println("Error: Program Not Loaded yet.");
+            System.out.println("Error: Cant invoke '" + option.getMenuDisplay() + "' Because Program Not Loaded yet.");
         }
         else{
             switch (option) {

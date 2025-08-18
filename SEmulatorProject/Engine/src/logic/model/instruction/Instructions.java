@@ -137,6 +137,8 @@ public class Instructions {
                 addListOfInstructions(expanded, i);
                 i += expanded.size() - 1; // skip over newly added
             }
+
+            resetIndexes();
         }
 
         expandLevel++;
@@ -160,6 +162,15 @@ public class Instructions {
 
     public int getExpandLevel() {
         return expandLevel;
+    }
+
+    public void resetIndexes() {
+        int index = 1;
+
+        for (Instruction instruction : instructions) {
+            instruction.setIndex(index);
+            index++;
+        }
     }
 }
 

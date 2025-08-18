@@ -36,7 +36,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         this.instructionData = instructionData;
         this.label = label;
         this.variable = variable;
-        parentInstruction = this;
+        parentInstruction = null;
 //        this.degree = computeDegree();
 //        expandedInstructions = new ArrayList<>();
     }
@@ -48,7 +48,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
                 instructionDisplayFormat,
                 getCycles());
 
-        if(parentInstruction != this){
+        if(parentInstruction != null){
             instructionFormatted = instructionFormatted.concat(" <<< " + parentInstruction.getInstructionDisplayFormat());
         }
 

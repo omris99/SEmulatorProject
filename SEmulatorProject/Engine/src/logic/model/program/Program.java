@@ -14,7 +14,7 @@ public interface Program {
     String getName();
     void addInstruction(Instruction instruction);
     List<Instruction> getInstructions();
-    DTO expand(int degree);
+    Program expand(int degree);
     Set<Label> getAllInstructionsLabels();
     Set<Variable> getAllInstructionsInputs();
     Set<Variable> getAllInstructionsWorkVariables();

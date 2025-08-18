@@ -2,7 +2,6 @@ package logic.engine;
 
 
 import dto.DTO;
-import dto.ProgramDTO;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -10,11 +9,8 @@ import jakarta.xml.bind.Unmarshaller;
 import logic.execution.ExecutionRecord;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
-import logic.model.argument.Argument;
 import logic.model.argument.variable.Variable;
-import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
-import logic.model.argument.label.FixedLabel;
 import logic.model.program.Program;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
@@ -23,7 +19,6 @@ import logic.utils.Utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     Program program;
@@ -69,14 +64,14 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public Map<Variable, Long> runLoadedProgram(int degree, String input) {
-        executor = new ProgramExecutorImpl(program);
+        executor = new ProgramExecutorImpl(program.expand(degree));
 
         Long[] inputs = Arrays.stream(input.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
 
-        expand(degree);
+        getExpandedProgramDTO(degree);
         Map<Variable, Long> finalVariablesResult = executor.run(inputs);
 
 
@@ -89,8 +84,8 @@ public class EmulatorEngine implements Engine {
         return finalVariablesResult;
     }
 
-    public DTO expand(int degree){
-        return program.expand(degree);
+    public DTO getExpandedProgramDTO(int degree){
+        return program.expand(degree).createDTO();
     }
 
     @Override

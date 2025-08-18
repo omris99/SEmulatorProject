@@ -1,6 +1,5 @@
 package ui;
 
-import dto.DTO;
 import dto.ProgramDTO;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
@@ -10,7 +9,6 @@ import jakarta.xml.bind.JAXBException;
 import logic.execution.ExecutionRecord;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
-import logic.model.instruction.Instruction;
 import logic.utils.Utils;
 import ui.menu.MainMenu;
 import ui.menu.Menu;
@@ -114,7 +112,7 @@ public class ConsoleUI implements UI {
         int expansionDegree = getUserDesiredExpansionDegree();
 
         try{
-            showProgramDetails((ProgramDTO) engine.expand(expansionDegree));
+            showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
             System.out.println(String.format("Program expanded successfully to degree %s.", expansionDegree));
         } catch (NumberNotInRangeException e) {
             System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", engine.getMaximalDegree()));

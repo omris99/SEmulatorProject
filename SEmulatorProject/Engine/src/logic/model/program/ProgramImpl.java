@@ -96,13 +96,13 @@ public class ProgramImpl implements Program {
 //    }
 
     @Override
-    public DTO expand(int degree) {
+    public Program expand(int degree) {
 
         if(degree > getMaximalDegree()){
             throw new NumberNotInRangeException(degree);
         }
         else if(degree == 0){
-            return createDTO();
+            return this;
         }
         else {
             ProgramImpl expandedProgram = new ProgramImpl(name);
@@ -114,7 +114,7 @@ public class ProgramImpl implements Program {
                 expandedProgram.instructions.expand();
             }
 
-            return expandedProgram.createDTO();
+            return expandedProgram;
         }
     }
 

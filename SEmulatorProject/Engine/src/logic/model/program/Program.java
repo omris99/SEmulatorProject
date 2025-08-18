@@ -1,5 +1,6 @@
 package logic.model.program;
 
+import dto.DTO;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import logic.model.instruction.Instruction;
 import logic.model.argument.label.Label;
@@ -21,4 +22,5 @@ public interface Program {
     int calculateMaxDegree();
     int calculateCycles();
     int getMaximalDegree();
+    DTO createDTO();
 }

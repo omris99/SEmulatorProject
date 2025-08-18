@@ -1,5 +1,7 @@
 package ui;
 
+import dto.DTO;
+import dto.ProgramDTO;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
@@ -94,16 +96,17 @@ public class ConsoleUI implements UI {
         }
     }
 
+
     @Override
     public void showProgramDetails() {
-        System.out.println(String.format("Program Name: %s", engine.getProgramName()));
-        System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
+        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        System.out.println(String.format("Program Name: %s", loadedProgramDTO.getName()));
+        System.out.println(String.format("Inputs Names: %s", loadedProgramDTO.getInputNames()));
 
-        System.out.println(String.format("Labels Names: %s", engine.getProgramLabelsNames()));
-        for (Instruction instruction : engine.getInstructions()) {
-            System.out.println(instruction.getInstructionDisplayFormat());
+        System.out.println(String.format("Labels Names: %s", loadedProgramDTO.getLabelsNames()));
+        for (String instruction : loadedProgramDTO.getInstructionsInDisplayFormat()) {
+            System.out.println(instruction);
         }
-
     }
 
     @Override
@@ -155,9 +158,11 @@ public class ConsoleUI implements UI {
     @Override
     public void runLoadedProgram() {
         int expansionDegree = getUserDesiredExpansionDegree();
+        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+
 
         System.out.print("Available program inputs: ");
-        System.out.println(String.format("%s", engine.getProgramInputsNames()));
+        System.out.println(String.format("%s", loadedProgramDTO.getInputNames()));
         System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
         String inputs = inputScanner.nextLine();
         System.out.println("\nRunning program with the following inputs: " + inputs + "\n");

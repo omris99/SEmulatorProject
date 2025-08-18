@@ -1,6 +1,8 @@
 package logic.engine;
 
 
+import dto.DTO;
+import dto.ProgramDTO;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -35,21 +37,6 @@ public class EmulatorEngine implements Engine {
         return program.getName();
     }
 
-    public List<String> getProgramLabelsNames() {
-        List<String> programLabelsNames = program.getAllInstructionsLabels().stream()
-                .filter(label -> !label.equals(FixedLabel.EXIT))
-                .map(Argument::getRepresentation)
-                .collect(Collectors.toList());
-
-        if (program.getAllInstructionsLabels().contains(FixedLabel.EXIT)) {
-            programLabelsNames.add(FixedLabel.EXIT.getRepresentation());
-        }
-
-        return programLabelsNames;
-    }
-    public List<String> getProgramInputsNames() {
-        return program.getAllInstructionsInputs().stream().map(Argument::getRepresentation).collect(Collectors.toList());
-    }
 
     public List<Instruction> getInstructions() {
         return program.getInstructions();
@@ -76,8 +63,8 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public void getProgramDetails() {
-
+    public DTO getLoadedProgramDTO() {
+        return program.createDTO();
     }
 
     @Override
@@ -102,8 +89,9 @@ public class EmulatorEngine implements Engine {
         return finalVariablesResult;
     }
 
-    public void expand(int degree){
-        program.expand(degree);
+    public ProgramDTO expand(int degree){
+        return program.expand(degree);
+
     }
 
     @Override

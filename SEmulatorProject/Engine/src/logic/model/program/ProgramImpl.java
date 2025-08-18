@@ -1,5 +1,7 @@
 package logic.model.program;
 
+import dto.DTO;
+import dto.ProgramDTO;
 import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.UnknownLabelReferenceExeption;
 import logic.model.argument.Argument;
@@ -12,6 +14,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProgramImpl implements Program {
     private final String name;
@@ -79,23 +82,63 @@ public class ProgramImpl implements Program {
         return instructions.getWorkVariables();
     }
 
+    private Program expandProgram(int degree){
+        ProgramImpl expandedProgram = new ProgramImpl(name);
+        for (Instruction instruction : instructions.getInstructionsList()) {
+            expandedProgram.addInstruction(instruction.clone());
+        }
+
+        for(int i = 0; i < degree; i++){
+            expandedProgram.instructions.expand();
+        }
+    }
+
     @Override
-    public void expand(int degree) {
+    public DTO expand(int degree) {
+        Program expandedProgram = expandProgram();
+
         if(degree > getMaximalDegree()){
             throw new NumberNotInRangeException(degree);
         }
         else if(degree == 0){
-            return;
+            return createDTO();
         }
         else {
             for(int i = 0; i < degree; i++){
-                instructions.expand();
+                Instructions expandedInstructions = instructions.expand();
             }
         }
+        return null;
     }
 
     @Override
     public int getMaximalDegree(){
         return instructions.getMaximalDegree();
+    }
+
+    @Override
+    public DTO createDTO() {
+        return new ProgramDTO(
+                name,
+                getProgramInputsNames(),
+                getProgramLabelsNames(),
+                getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()));
+    }
+
+
+    private List<String> getProgramLabelsNames() {
+        List<String> programLabelsNames = getAllInstructionsLabels().stream()
+                .filter(label -> !label.equals(FixedLabel.EXIT))
+                .map(Argument::getRepresentation)
+                .collect(Collectors.toList());
+
+        if (getAllInstructionsLabels().contains(FixedLabel.EXIT)) {
+            programLabelsNames.add(FixedLabel.EXIT.getRepresentation());
+        }
+
+        return programLabelsNames;
+    }
+    private List<String> getProgramInputsNames() {
+        return getAllInstructionsInputs().stream().map(Argument::getRepresentation).collect(Collectors.toList());
     }
 }

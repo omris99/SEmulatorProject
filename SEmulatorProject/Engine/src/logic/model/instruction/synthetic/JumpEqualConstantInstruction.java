@@ -74,4 +74,11 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
 
         return expandedInstructions;
     }
+
+    @Override
+    public Instruction clone() {
+        JumpEqualConstantInstruction copy = (JumpEqualConstantInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

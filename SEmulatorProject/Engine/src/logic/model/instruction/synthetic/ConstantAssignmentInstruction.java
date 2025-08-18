@@ -63,4 +63,11 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
 
         return expandedInstructions;
     }
+
+    @Override
+    public Instruction clone() {
+        ConstantAssignmentInstruction copy = (ConstantAssignmentInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

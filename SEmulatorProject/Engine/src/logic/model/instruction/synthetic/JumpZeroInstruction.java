@@ -67,4 +67,12 @@ public class JumpZeroInstruction extends AbstractInstruction implements Instruct
 
         return expandedInstructions;
     }
+
+
+    @Override
+    public Instruction clone() {
+        JumpZeroInstruction copy = (JumpZeroInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

@@ -76,4 +76,11 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
 
         return expandedInstructions;
     }
+
+    @Override
+    public Instruction clone() {
+        AssignmentInstruction copy = (AssignmentInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

@@ -15,7 +15,6 @@ public class Instructions {
     private Set<Variable> instructionsWorkVariables;
     private int expandLevel;
 
-
     public Instructions() {
         this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
@@ -59,6 +58,8 @@ public class Instructions {
     }
     public void add(Instruction instruction, int indexToAdd) {
         this.instructions.add(indexToAdd, instruction);
+        instruction.setIndex(indexToAdd + 1);
+
         Variable variable = instruction.getVariable();
 
         if (variable.getType() == VariableType.INPUT) {
@@ -125,12 +126,14 @@ public class Instructions {
     }
 
     public void expand() {
-
         for (int i = 0; i < instructions.size(); i++) {
             Instruction instruction = instructions.get(i);
+            Instruction newIns;
+            newIns = instruction.clone();
             if (instruction instanceof ExpandableInstruction) {
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
                         .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+                expanded.stream().forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);
                 i += expanded.size() - 1; // skip over newly added
@@ -146,6 +149,7 @@ public class Instructions {
 //            }
 //        }
     }
+
 
     private int getMaxLabelIndex() {
         return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();

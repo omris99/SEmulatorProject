@@ -54,4 +54,11 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
 
         return expandedInstructions;
     }
+
+    @Override
+    public Instruction clone() {
+        GoToLabelInstruction copy = (GoToLabelInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

@@ -7,13 +7,26 @@ import logic.model.argument.variable.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractInstruction implements Instruction {
+public abstract class AbstractInstruction implements Instruction, Cloneable {
+    private int index;
     private final InstructionData instructionData;
     private final Label label;
     private final Variable variable;
     private Instruction parentInstruction;
 //    private final int degree;
 //    private final List<Instruction> expandedInstructions;
+
+
+    @Override
+    public Instruction clone() {
+        try {
+            AbstractInstruction copy = (AbstractInstruction) super.clone();
+            copy.parentInstruction = this.parentInstruction; // שמירה על ה־parent (או null אם רוצים להתחלה נקייה)
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public AbstractInstruction(InstructionData instructionData, Variable variable) {
         this(instructionData, variable, FixedLabel.EMPTY);
@@ -29,8 +42,8 @@ public abstract class AbstractInstruction implements Instruction {
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
-        String instructionFormatted = String.format("(%s) [ %-4s] %s (%d)",
-                getType().equals("basic") ? "B" : "S",
+        String instructionFormatted = String.format("#%d (%s) [ %-4s] %s (%d)",
+                index, getType().equals("basic") ? "B" : "S",
                 label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "",
                 instructionDisplayFormat,
                 getCycles());
@@ -97,4 +110,18 @@ public abstract class AbstractInstruction implements Instruction {
         return instructionData.getDegree();
     }
 
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public int getIndex() {
+        return index;
+    }
+
+    @Override
+    public void setParent(Instruction parent) {
+        this.parentInstruction = parent;
+    }
 }

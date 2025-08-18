@@ -80,4 +80,12 @@ public class JumpEqualVariableInstruction extends AbstractInstruction implements
 
         return expandedInstructions;
     }
+
+
+    @Override
+    public Instruction clone() {
+        JumpEqualVariableInstruction copy = (JumpEqualVariableInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
+    }
 }

@@ -96,16 +96,12 @@ public class ConsoleUI implements UI {
 
     @Override
     public void showProgramDetails() {
-        int i = 1;
-
         System.out.println(String.format("Program Name: %s", engine.getProgramName()));
         System.out.println(String.format("Inputs Names: %s", engine.getProgramInputsNames()));
 
         System.out.println(String.format("Labels Names: %s", engine.getProgramLabelsNames()));
         for (Instruction instruction : engine.getInstructions()) {
-            System.out.print(String.format("#%d ", i));
             System.out.println(instruction.getInstructionDisplayFormat());
-            i++;
         }
 
     }

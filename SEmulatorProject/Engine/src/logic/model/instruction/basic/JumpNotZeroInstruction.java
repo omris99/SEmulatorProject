@@ -2,10 +2,7 @@ package logic.model.instruction.basic;
 
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
-import logic.model.instruction.AbstractInstruction;
-import logic.model.instruction.InstructionArgument;
-import logic.model.instruction.InstructionData;
-import logic.model.instruction.InstructionWithArguments;
+import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -50,5 +47,12 @@ public class JumpNotZeroInstruction extends AbstractInstruction implements Instr
     @Override
     public Map<InstructionArgument, Argument> getArguments() {
         return arguments;
+    }
+
+    @Override
+    public Instruction clone() {
+        JumpNotZeroInstruction copy = (JumpNotZeroInstruction) super.clone();
+        copy.arguments = new HashMap<>(this.arguments);
+        return copy;
     }
 }

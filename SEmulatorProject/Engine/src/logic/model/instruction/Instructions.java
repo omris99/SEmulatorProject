@@ -137,10 +137,9 @@ public class Instructions {
                 addListOfInstructions(expanded, i);
                 i += expanded.size() - 1; // skip over newly added
             }
-
-            resetIndexes();
         }
 
+        resetIndexes();
         expandLevel++;
 
 //        for(Instruction instruction : instructions) {

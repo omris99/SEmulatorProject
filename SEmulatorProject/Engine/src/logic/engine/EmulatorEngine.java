@@ -89,9 +89,8 @@ public class EmulatorEngine implements Engine {
         return finalVariablesResult;
     }
 
-    public ProgramDTO expand(int degree){
+    public DTO expand(int degree){
         return program.expand(degree);
-
     }
 
     @Override

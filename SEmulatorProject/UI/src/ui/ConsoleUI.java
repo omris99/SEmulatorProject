@@ -67,7 +67,7 @@ public class ConsoleUI implements UI {
         else{
             switch (option) {
                 case MainMenuOption.LOAD_PROGRAM -> loadProgram();
-                case MainMenuOption.SHOW_PROGRAM -> showProgramDetails();
+                case MainMenuOption.SHOW_PROGRAM -> showProgramDetails((ProgramDTO) engine.getLoadedProgramDTO());
                 case MainMenuOption.EXPAND_PROGRAM -> expand();
                 case MainMenuOption.RUN_PROGRAM -> runLoadedProgram();
                 case MainMenuOption.SHOW_HISTORY ->  showHistory();
@@ -98,13 +98,13 @@ public class ConsoleUI implements UI {
 
 
     @Override
-    public void showProgramDetails() {
-        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-        System.out.println(String.format("Program Name: %s", loadedProgramDTO.getName()));
-        System.out.println(String.format("Inputs Names: %s", loadedProgramDTO.getInputNames()));
+    public void showProgramDetails(ProgramDTO programDetails) {
+//        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        System.out.println(String.format("Program Name: %s", programDetails.getName()));
+        System.out.println(String.format("Inputs Names: %s", programDetails.getInputNames()));
 
-        System.out.println(String.format("Labels Names: %s", loadedProgramDTO.getLabelsNames()));
-        for (String instruction : loadedProgramDTO.getInstructionsInDisplayFormat()) {
+        System.out.println(String.format("Labels Names: %s", programDetails.getLabelsNames()));
+        for (String instruction : programDetails.getInstructionsInDisplayFormat()) {
             System.out.println(instruction);
         }
     }
@@ -114,7 +114,7 @@ public class ConsoleUI implements UI {
         int expansionDegree = getUserDesiredExpansionDegree();
 
         try{
-            engine.expand(expansionDegree);
+            showProgramDetails((ProgramDTO) engine.expand(expansionDegree));
             System.out.println(String.format("Program expanded successfully to degree %s.", expansionDegree));
         } catch (NumberNotInRangeException e) {
             System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", engine.getMaximalDegree()));

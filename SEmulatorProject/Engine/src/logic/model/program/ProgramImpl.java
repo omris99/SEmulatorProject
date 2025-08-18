@@ -82,20 +82,21 @@ public class ProgramImpl implements Program {
         return instructions.getWorkVariables();
     }
 
-    private Program expandProgram(int degree){
-        ProgramImpl expandedProgram = new ProgramImpl(name);
-        for (Instruction instruction : instructions.getInstructionsList()) {
-            expandedProgram.addInstruction(instruction.clone());
-        }
-
-        for(int i = 0; i < degree; i++){
-            expandedProgram.instructions.expand();
-        }
-    }
+//    private Program expandProgram(int degree){
+//        ProgramImpl expandedProgram = new ProgramImpl(name);
+//        for (Instruction instruction : instructions.getInstructionsList()) {
+//            expandedProgram.addInstruction(instruction.clone());
+//        }
+//
+//        for(int i = 0; i < degree; i++){
+//            expandedProgram.instructions.expand();
+//        }
+//
+//        return expandedProgram;
+//    }
 
     @Override
     public DTO expand(int degree) {
-        Program expandedProgram = expandProgram();
 
         if(degree > getMaximalDegree()){
             throw new NumberNotInRangeException(degree);
@@ -104,11 +105,17 @@ public class ProgramImpl implements Program {
             return createDTO();
         }
         else {
-            for(int i = 0; i < degree; i++){
-                Instructions expandedInstructions = instructions.expand();
+            ProgramImpl expandedProgram = new ProgramImpl(name);
+            for (Instruction instruction : instructions.getInstructionsList()) {
+                expandedProgram.addInstruction(instruction.clone());
             }
+
+            for(int i = 0; i < degree; i++){
+                expandedProgram.instructions.expand();
+            }
+
+            return expandedProgram.createDTO();
         }
-        return null;
     }
 
     @Override

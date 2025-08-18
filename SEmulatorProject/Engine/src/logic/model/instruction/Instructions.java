@@ -125,28 +125,21 @@ public class Instructions {
         return maximalDegree;
     }
 
-    public Instructions expand() {
-        Instructions expandedInstructions = new Instructions();
+    public void expand() {
 
-        for(Instruction instruction : instructions) {
-            expandedInstructions.add(instruction.clone());
-        }
-
-        List<Instruction> expandedInstructionsList = expandedInstructions.instructions;
-
-        for (int i = 0; i < expandedInstructionsList.size(); i++) {
-            Instruction instruction = expandedInstructionsList.get(i);
+        for (int i = 0; i < instructions.size(); i++) {
+            Instruction instruction = instructions.get(i);
             if (instruction instanceof ExpandableInstruction) {
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
                         .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
                 expanded.stream().forEach(newInstruction -> newInstruction.setParent(instruction));
 
-                expandedInstructions.addListOfInstructions(expanded, i);
+                addListOfInstructions(expanded, i);
                 i += expanded.size() - 1; // skip over newly added
             }
         }
 
-        expandedInstructions.expandLevel++;
+        expandLevel++;
 
 //        for(Instruction instruction : instructions) {
 //            if(instruction instanceof ExpandableInstruction){
@@ -154,7 +147,6 @@ public class Instructions {
 //                addListOfInstructions(expanded, instructions.indexOf(instruction));
 //            }
 //        }
-        return expandedInstructions;
     }
 
 

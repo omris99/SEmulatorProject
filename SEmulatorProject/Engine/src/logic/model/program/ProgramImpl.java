@@ -3,7 +3,6 @@ package logic.model.program;
 import dto.DTO;
 import dto.ProgramDTO;
 import logic.exceptions.NumberNotInRangeException;
-import logic.exceptions.UnknownLabelReferenceExeption;
 import logic.model.argument.Argument;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
@@ -82,19 +81,6 @@ public class ProgramImpl implements Program {
     public Set<Variable> getAllInstructionsWorkVariables() {
         return instructions.getWorkVariables();
     }
-
-//    private Program expandProgram(int degree){
-//        ProgramImpl expandedProgram = new ProgramImpl(name);
-//        for (Instruction instruction : instructions.getInstructionsList()) {
-//            expandedProgram.addInstruction(instruction.clone());
-//        }
-//
-//        for(int i = 0; i < degree; i++){
-//            expandedProgram.instructions.expand();
-//        }
-//
-//        return expandedProgram;
-//    }
 
     @Override
     public Program getExpandedProgram(int degree) {

@@ -1,7 +1,7 @@
 package logic.exceptions;
 
 public class InvalidXmlFileException extends Exception {
-    private XmlErrorType errorType;
+    private final XmlErrorType errorType;
     private final String filePath;
     private final String element;
 

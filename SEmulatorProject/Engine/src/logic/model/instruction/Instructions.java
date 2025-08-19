@@ -141,7 +141,7 @@ public class Instructions {
 
         resetIndexes();
         expandLevel++;
-
+//
 //        for(Instruction instruction : instructions) {
 //            if(instruction instanceof ExpandableInstruction){
 //                List<Instruction> expanded = ((ExpandableInstruction) instruction).expand(getMaxLabelIndex(), getMaxWorkVariableIndex());

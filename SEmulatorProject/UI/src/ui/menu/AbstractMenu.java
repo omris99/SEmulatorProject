@@ -49,6 +49,7 @@ public abstract class AbstractMenu implements Menu{
             }
         }
 
+        System.out.println();
         return menuOptions.get(choice - 1);
     }
 

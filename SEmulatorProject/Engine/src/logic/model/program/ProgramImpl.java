@@ -41,7 +41,7 @@ public class ProgramImpl implements Program {
     }
 
     @Override
-    public void validate() throws UnknownLabelReferenceExeption {
+    public Label validate(){
         Set<Label> labels = instructions.getLabels();
 
         for (Instruction instruction : instructions.getInstructionsList()) {
@@ -50,12 +50,13 @@ public class ProgramImpl implements Program {
                 for (Argument argument : arguments.values()) {
                     if (argument instanceof Label) {
                         if (!(labels.contains(argument) || argument.equals(FixedLabel.EXIT))) {
-                            throw new UnknownLabelReferenceExeption(argument.getRepresentation());
+                            return (Label) argument;
                         }
                     }
                 }
             }
         }
+        return FixedLabel.EMPTY;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class ProgramImpl implements Program {
 //    }
 
     @Override
-    public Program expand(int degree) {
+    public Program getExpandedProgram(int degree) {
 
         if(degree > getMaximalDegree()){
             throw new NumberNotInRangeException(degree);

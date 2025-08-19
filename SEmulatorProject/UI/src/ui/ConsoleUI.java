@@ -3,8 +3,6 @@ package ui;
 import dto.ProgramDTO;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
-import logic.exceptions.NumberNotInRangeException;
-import logic.exceptions.UnknownLabelReferenceExeption;
 import jakarta.xml.bind.JAXBException;
 import logic.execution.ExecutionRecord;
 import logic.model.argument.variable.Variable;
@@ -14,22 +12,20 @@ import ui.menu.MainMenu;
 import ui.menu.Menu;
 import ui.menu.option.MainMenuOption;
 import ui.menu.option.MenuOption;
-
-import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 /*
  * TODO:
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
  *  2. ensure that every exception message is fully detailed.
  *  3. improve the implemetntation of VariableImpl class (parse)
- *  4. handle if user type bigger degree than maximal in expand
  */
 
 public class ConsoleUI implements UI {
-    EmulatorEngine engine;
-    Scanner inputScanner;
-    Menu mainMenu;
+    private final EmulatorEngine engine;
+    private final Scanner inputScanner;
+    private final Menu mainMenu;
 
     public ConsoleUI() {
         engine = new EmulatorEngine();
@@ -42,8 +38,7 @@ public class ConsoleUI implements UI {
         ui.run();
     }
 
-    private Menu buildMainMenu()
-    {
+    private Menu buildMainMenu() {
         List<MenuOption> options = new ArrayList<>();
         options.addAll(Arrays.asList(MainMenuOption.values()));
         return new MainMenu(options, "S-Emulator");
@@ -59,16 +54,15 @@ public class ConsoleUI implements UI {
         boolean isCanExecuteBeforeProgramLoading = (engine.isProgramLoaded() || option.equals(MainMenuOption.LOAD_PROGRAM)
                 || option.equals(MainMenuOption.EXIT));
 
-        if(!isCanExecuteBeforeProgramLoading) {
+        if (!isCanExecuteBeforeProgramLoading) {
             System.out.println("Error: Cant invoke '" + option.getMenuDisplay() + "' Because Program Not Loaded yet.");
-        }
-        else{
+        } else {
             switch (option) {
                 case MainMenuOption.LOAD_PROGRAM -> loadProgram();
                 case MainMenuOption.SHOW_PROGRAM -> showProgramDetails((ProgramDTO) engine.getLoadedProgramDTO());
                 case MainMenuOption.EXPAND_PROGRAM -> expand();
                 case MainMenuOption.RUN_PROGRAM -> runLoadedProgram();
-                case MainMenuOption.SHOW_HISTORY ->  showHistory();
+                case MainMenuOption.SHOW_HISTORY -> showHistory();
                 case MainMenuOption.EXIT -> quitProgram();
                 default -> throw new IllegalStateException("Unexpected value: " + option);
             }
@@ -77,30 +71,41 @@ public class ConsoleUI implements UI {
 
     @Override
     public void loadProgram() {
-        //needs to ask for path from user and than send it to engine...now its only example.
         String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
-
         try {
             engine.loadProgram(xmlPath);
             System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");
         } catch (InvalidXmlFileException e) {
-            System.out.println(e.getMessage());
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
+            switch (e.getType()) {
+                case FILE_MISSING:
+                    printError("File not found: " + e.getFilePath());
+                    break;
+                case INVALID_EXTENSION:
+                    printError("Invalid file type: " + e.getFilePath() + " must be .xml");
+                    break;
+                case UNKNOWN_LABEL:
+                    printError("Unknown label in file " + e.getFilePath() + ": " + e.getElement());
+                    break;
+                case INVALID_ELEMENT:
+                    printError("Unrecognized Label in file " + e.getFilePath() + ". " + "\nLabel: " + e.getElement());
+                    break;
+            }
         } catch (JAXBException e) {
-            System.out.println("Error reading XML: " + e.getMessage());
-        } catch (UnknownLabelReferenceExeption e) {
-            System.out.println(e.getMessage());
+            printError("Can't read XML File: " + e.getMessage());
         }
+    }
+
+    private void printError(String message) {
+        System.out.println("\n------ ERROR! ------");
+        System.out.println(message);
+        System.out.println();
     }
 
 
     @Override
     public void showProgramDetails(ProgramDTO programDetails) {
-//        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         System.out.println(String.format("Program Name: %s", programDetails.getName()));
         System.out.println(String.format("Inputs Names: %s", programDetails.getInputNames()));
-
         System.out.println(String.format("Labels Names: %s", programDetails.getLabelsNames()));
         for (String instruction : programDetails.getInstructionsInDisplayFormat()) {
             System.out.println(instruction);
@@ -111,43 +116,37 @@ public class ConsoleUI implements UI {
     public void expand() {
         int expansionDegree = getUserDesiredExpansionDegree();
 
-        try{
-            showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
-            System.out.println(String.format("Program expanded successfully to degree %s.", expansionDegree));
-        } catch (NumberNotInRangeException e) {
-            System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", engine.getMaximalDegree()));
-            System.out.println("Please Try Again.");
-            expand();
-        }
-//
-//        try {
-//            int expandDegree = Integer.parseInt(userInput);
-//            engine.expand(expandDegree);
-//            System.out.println(String.format("Program expanded successfully to degree %s.", userInput));
-//        } catch (NumberFormatException | NumberNotInRangeException e) {
-//            System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", maximalDegree));
-//            System.out.println("Please Try Again.");
-//            expand();
-//        }
+        showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+        System.out.println(String.format("Program expanded successfully to degree %s.", expansionDegree));
+
     }
 
     private int getUserDesiredExpansionDegree() {
-        int expansionDegree = 0;
         int maximalDegree = engine.getMaximalDegree();
-        System.out.println(String.format("\nMaximal Degree: %d", maximalDegree));
+        int expansionDegree = 0;
+
+        System.out.println(String.format("Maximal Degree: %d", maximalDegree));
         if (maximalDegree == 0) {
             System.out.println("All instructions are basic. Nothing to expand.");
         }
-        else{
-            System.out.println(String.format("Enter expand degree (0 - %d): ", maximalDegree));
-            while(!inputScanner.hasNextInt()) {
-                System.out.println(String.format("Invalid Input: Please enter an Integer number in range (0 - %d)", maximalDegree));
-                System.out.println("Please Try Again.");
-                inputScanner.nextLine();
-            }
+        else {
+            while (true) {
+                System.out.print(String.format("Enter expand degree (0 - %d): ", maximalDegree));
+                if (!inputScanner.hasNextInt()) {
+                    printError(String.format("Invalid input: Please enter an integer number.", maximalDegree));
+                    inputScanner.nextLine();
+                    continue;
+                }
 
-            expansionDegree = inputScanner.nextInt();
-            inputScanner.nextLine();
+                expansionDegree = inputScanner.nextInt();
+                inputScanner.nextLine();
+
+                if (expansionDegree >= 0 && expansionDegree <= maximalDegree) {
+                    break;
+                } else {
+                    printError(String.format("Invalid input: Number out of range. Please enter an integer number in range (0 - %d).", maximalDegree));
+                }
+            }
         }
 
         return expansionDegree;
@@ -158,7 +157,6 @@ public class ConsoleUI implements UI {
         int expansionDegree = getUserDesiredExpansionDegree();
         ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
 
-
         System.out.print("Available program inputs: ");
         System.out.println(String.format("%s", loadedProgramDTO.getInputNames()));
         System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
@@ -166,10 +164,8 @@ public class ConsoleUI implements UI {
         System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
         try {
             showProgramRunResults(engine.runLoadedProgram(expansionDegree, inputs));
-        } catch (NumberFormatException e){
-            System.out.println("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
-        } catch (NumberNotInRangeException e) {
-            System.out.println(String.format("Invalid Input: expansion degree must be in range (0 - %d)", engine.getMaximalDegree()));
+        } catch (NumberFormatException e) {
+            printError("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
         }
     }
 
@@ -180,12 +176,6 @@ public class ConsoleUI implements UI {
             System.out.println("\n*** Press 'Enter' Key To Return Main Menu... ***");
             inputScanner.nextLine();
         }
-//
-//        loadProgram();
-//        showProgramDetails();
-//        expand();
-//        runLoadedProgram();
-//        showHistory();
     }
 
     @Override
@@ -213,7 +203,6 @@ public class ConsoleUI implements UI {
 
         System.out.println("\n******************** E N D ********************");
         System.out.println("***********************************************");
-
     }
 
     @Override
@@ -229,11 +218,10 @@ public class ConsoleUI implements UI {
 
         inputVariables = sortVariablesByTheirNumber(inputVariables);
         workVariables = sortVariablesByTheirNumber(workVariables);
-        System.out.println("**********************");
-        System.out.println("Program Run Results:");
-        System.out.println("----------------------");
+        System.out.println("\n***********************************************");
+        System.out.println("              Program Run Results:");
+        System.out.println("***********************************************\n");
         System.out.println(String.format("y = %d ", yValue));
-
         for (Variable variable : inputVariables.keySet()) {
             System.out.println(String.format("%s = %d ", variable.getRepresentation(), inputVariables.get(variable)));
         }
@@ -243,8 +231,8 @@ public class ConsoleUI implements UI {
         }
 
         System.out.println(String.format("Cycles Count = %d ", engine.getLastExecutionCycles()));
-
-        System.out.println("**********************");
+        System.out.println("\n******************** E N D ********************");
+        System.out.println("***********************************************");
     }
 
     private Map<Variable, Long> sortVariablesByTheirNumber(Map<Variable, Long> variables) {

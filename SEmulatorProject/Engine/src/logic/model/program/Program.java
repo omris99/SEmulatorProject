@@ -1,7 +1,6 @@
 package logic.model.program;
 
 import dto.DTO;
-import logic.exceptions.UnknownLabelReferenceExeption;
 import logic.model.instruction.Instruction;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -14,11 +13,11 @@ public interface Program {
     String getName();
     void addInstruction(Instruction instruction);
     List<Instruction> getInstructions();
-    Program expand(int degree);
+    Program getExpandedProgram(int degree);
     Set<Label> getAllInstructionsLabels();
     Set<Variable> getAllInstructionsInputs();
     Set<Variable> getAllInstructionsWorkVariables();
-    void validate() throws UnknownLabelReferenceExeption;
+    Label validate();
     int calculateMaxDegree();
     int calculateCycles();
     int getMaximalDegree();

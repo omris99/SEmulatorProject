@@ -264,7 +264,7 @@ public class ConsoleUI implements UI {
             SerializationManager.save(engine, path);
             System.out.println("System State successfully saved in :" + path + ".ser");
         } catch (IOException e) {
-            printError("Save state try failed:" + e.getMessage());
+            printError("Failed to save system state: " + e.getMessage());
         }
     }
 
@@ -275,9 +275,9 @@ public class ConsoleUI implements UI {
         try {
             EmulatorEngine loadedEngine = SerializationManager.load(path, EmulatorEngine.class);
             this.engine = loadedEngine;
-            System.out.println("System State successfully saved from :" + path + ".ser");
+            System.out.println("System state successfully loaded from: " + path + ".ser");
         } catch (IOException | ClassNotFoundException e) {
-            printError("Load state try failed:" + e.getMessage());
+            printError("Failed to load system state: " + e.getMessage());
         }
     }
 }

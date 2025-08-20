@@ -9,12 +9,6 @@ public class VariableImpl implements Variable, Argument {
     private final VariableType type;
     private final int number;
 
-//    @Override
-//    public String getArgumentString() {
-//        return getRepresentation();
-//    }
-
-
     @Override
     public int getIndex() {
         return number;

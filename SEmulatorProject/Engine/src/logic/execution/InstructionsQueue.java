@@ -3,10 +3,11 @@ package logic.execution;
 import logic.model.argument.label.Label;
 import logic.model.instruction.Instruction;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InstructionsQueue {
+public class InstructionsQueue implements Serializable {
     private List<Instruction> allInstructions;
     private List<Instruction> queue;
     private int currentInstructionIndex;

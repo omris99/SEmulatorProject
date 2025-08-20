@@ -5,10 +5,11 @@ import logic.model.instruction.Instruction;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public interface Program {
+public interface Program extends Serializable {
 
     String getName();
     void addInstruction(Instruction instruction);

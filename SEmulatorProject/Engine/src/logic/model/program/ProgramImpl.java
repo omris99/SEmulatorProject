@@ -12,6 +12,7 @@ import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -8,10 +8,13 @@ import logic.execution.ExecutionRecord;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
 import logic.utils.Utils;
+import logic.utils.serialization.SerializationManager;
 import ui.menu.MainMenu;
 import ui.menu.Menu;
 import ui.menu.option.MainMenuOption;
 import ui.menu.option.MenuOption;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
  */
 
 public class ConsoleUI implements UI {
-    private final EmulatorEngine engine;
+    private EmulatorEngine engine;
     private final Scanner inputScanner;
     private final Menu mainMenu;
 
@@ -52,7 +55,7 @@ public class ConsoleUI implements UI {
 
     private void executeMainMenuOption(MenuOption option) {
         boolean isCanExecuteBeforeProgramLoading = (engine.isProgramLoaded() || option.equals(MainMenuOption.LOAD_PROGRAM)
-                || option.equals(MainMenuOption.EXIT));
+                || option.equals(MainMenuOption.EXIT) || option.equals(MainMenuOption.LOAD_SYSTEM) || option.equals(MainMenuOption.SAVE_SYSTEM));
 
         if (!isCanExecuteBeforeProgramLoading) {
             printError("Error: Cant invoke '" + option.getMenuDisplay() + "' Because Program Not Loaded yet.");
@@ -63,6 +66,8 @@ public class ConsoleUI implements UI {
                 case MainMenuOption.EXPAND_PROGRAM -> expand();
                 case MainMenuOption.RUN_PROGRAM -> runLoadedProgram();
                 case MainMenuOption.SHOW_HISTORY -> showHistory();
+                case MainMenuOption.SAVE_SYSTEM -> saveSystemState();
+                case MainMenuOption.LOAD_SYSTEM -> loadSystemState();
                 case MainMenuOption.EXIT -> quitProgram();
                 default -> throw new IllegalStateException("Unexpected value: " + option);
             }
@@ -71,7 +76,9 @@ public class ConsoleUI implements UI {
 
     @Override
     public void loadProgram() {
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/custom-1.xml";
+        System.out.print("Please enter program full path: ");
+        String xmlPath = inputScanner.nextLine();
+//        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/custom-1.xml";
         try {
             engine.loadProgram(xmlPath);
             System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");
@@ -247,5 +254,30 @@ public class ConsoleUI implements UI {
                 ));
 
         return sortedVariables;
+    }
+
+    private void saveSystemState() {
+        System.out.print("Enter full path (without file extension): ");
+        String path = inputScanner.nextLine();
+
+        try {
+            SerializationManager.save(engine, path);
+            System.out.println("System State successfully saved in :" + path + ".ser");
+        } catch (IOException e) {
+            printError("Save state try failed:" + e.getMessage());
+        }
+    }
+
+    private void loadSystemState() {
+        System.out.print("Enter full path (without file extension): ");
+        String path = inputScanner.nextLine();
+
+        try {
+            EmulatorEngine loadedEngine = SerializationManager.load(path, EmulatorEngine.class);
+            this.engine = loadedEngine;
+            System.out.println("System State successfully saved from :" + path + ".ser");
+        } catch (IOException | ClassNotFoundException e) {
+            printError("Load state try failed:" + e.getMessage());
+        }
     }
 }

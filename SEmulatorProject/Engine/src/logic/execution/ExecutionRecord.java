@@ -2,13 +2,14 @@ package logic.execution;
 
 import logic.model.argument.variable.Variable;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class ExecutionRecord {
-    int degree;
-    Map<Variable, Long> inputVariables;
-    long yValue;
-    int totalCycles;
+public class ExecutionRecord implements Serializable {
+    private int degree;
+    private Map<Variable, Long> inputVariables;
+    private long yValue;
+    private int totalCycles;
 
     public ExecutionRecord(int degree, Map<Variable, Long> inputVariables, long yValue, int totalCycles) {
         this.degree = degree;

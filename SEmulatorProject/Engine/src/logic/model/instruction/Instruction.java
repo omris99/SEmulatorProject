@@ -4,7 +4,9 @@ import logic.execution.ExecutionContext;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
-public interface Instruction extends Cloneable{
+import java.io.Serializable;
+
+public interface Instruction extends Cloneable, Serializable {
     String getName();
     Label execute(ExecutionContext context);
     int getCycles();

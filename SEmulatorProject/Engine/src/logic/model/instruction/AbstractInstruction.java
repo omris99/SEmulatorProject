@@ -13,9 +13,6 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     private final Label label;
     private final Variable variable;
     private Instruction parentInstruction;
-//    private final int degree;
-//    private final List<Instruction> expandedInstructions;
-
 
     @Override
     public Instruction clone() {
@@ -86,6 +83,12 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
 
     @Override
     public int computeDegree() {
+//        if(instructionData.getType().equals("basic")){
+//            return 0;
+//        }
+//        else {
+//            for(Instruction childInstruction : ins)
+//        }
 //        int maxChildInstuctionDegree = 0;
 //        int currentChildInstuctionDegree;
 //

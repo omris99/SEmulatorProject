@@ -17,6 +17,7 @@ import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
 import logic.utils.Utils;
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 
 /*
@@ -27,7 +28,7 @@ import java.util.*;
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
-    private ProgramExecutor executor;
+    private transient ProgramExecutor executor;
     private final List<ExecutionRecord> history;
 
     public EmulatorEngine() {
@@ -55,6 +56,7 @@ public class EmulatorEngine implements Engine {
         }
 
         currentLoadedProgram = loadedProgram;
+        history.clear();
     }
 
     @Override
@@ -109,4 +111,5 @@ public class EmulatorEngine implements Engine {
     public void quit(){
         System.exit(0);
     }
+
 }

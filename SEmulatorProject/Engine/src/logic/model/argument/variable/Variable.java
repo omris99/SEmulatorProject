@@ -2,7 +2,9 @@ package logic.model.argument.variable;
 
 import logic.model.argument.Argument;
 
-public interface Variable extends Argument {
+import java.io.Serializable;
+
+public interface Variable extends Argument, Serializable {
     VariableType getType();
     String getRepresentation();
     int getNumber();

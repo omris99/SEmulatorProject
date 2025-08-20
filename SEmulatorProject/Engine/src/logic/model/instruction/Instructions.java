@@ -6,9 +6,10 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Instructions {
+public class Instructions implements Serializable {
     private final List<Instruction> instructions;
     private final Set<Label> instructionsLabels;
     private final Set<Variable> instructionsInputs;

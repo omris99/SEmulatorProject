@@ -55,7 +55,7 @@ public class ConsoleUI implements UI {
                 || option.equals(MainMenuOption.EXIT));
 
         if (!isCanExecuteBeforeProgramLoading) {
-            System.out.println("Error: Cant invoke '" + option.getMenuDisplay() + "' Because Program Not Loaded yet.");
+            printError("Error: Cant invoke '" + option.getMenuDisplay() + "' Because Program Not Loaded yet.");
         } else {
             switch (option) {
                 case MainMenuOption.LOAD_PROGRAM -> loadProgram();
@@ -71,7 +71,7 @@ public class ConsoleUI implements UI {
 
     @Override
     public void loadProgram() {
-        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/synthetic.xml";
+        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/custom-1.xml";
         try {
             engine.loadProgram(xmlPath);
             System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");

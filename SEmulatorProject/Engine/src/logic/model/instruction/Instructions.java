@@ -110,11 +110,11 @@ public class Instructions {
 
 
     private int getMaxLabelIndex() {
-        return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();
+        return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 
     private int getMaxWorkVariableIndex() {
-        return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).get();
+        return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 
     public void resetIndexes() {

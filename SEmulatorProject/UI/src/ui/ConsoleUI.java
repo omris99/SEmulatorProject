@@ -6,10 +6,6 @@ import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBException;
 import logic.exceptions.NumberNotInRangeException;
-import logic.execution.ExecutionRecord;
-import logic.model.argument.variable.Variable;
-import logic.model.argument.variable.VariableType;
-import logic.utils.Utils;
 import logic.utils.serialization.SerializationManager;
 import ui.menu.MainMenu;
 import ui.menu.Menu;
@@ -18,7 +14,6 @@ import ui.menu.option.MenuOption;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /*
  * TODO:
@@ -126,7 +121,7 @@ public class ConsoleUI implements UI {
         int expansionDegree = getUserDesiredExpansionDegree();
 
         showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
-        System.out.println(String.format("Program expanded successfully to degree %s.", expansionDegree));
+        System.out.printf("Program expanded successfully to degree %s.%n", expansionDegree);
 
     }
 
@@ -142,7 +137,7 @@ public class ConsoleUI implements UI {
             while (true) {
                 System.out.print(String.format("Enter expand degree (0 - %d): ", maximalDegree));
                 if (!inputScanner.hasNextInt()) {
-                    printError(String.format("Invalid input: Please enter an integer number.", maximalDegree));
+                    printError(String.format("Invalid input: Please enter an integer number."));
                     inputScanner.nextLine();
                     continue;
                 }
@@ -201,7 +196,7 @@ public class ConsoleUI implements UI {
     @Override
     public void showHistory() {
         int i = 1;
-        List<ExecutionRecord> history = engine.getHistory();
+        List<RunResultsDTO> history = engine.getHistory();
         if (history.isEmpty()) {
             System.out.println("Nothing to show yet. Try running a program first.");
         }
@@ -210,19 +205,19 @@ public class ConsoleUI implements UI {
             System.out.println("               Execution History:");
             System.out.println("***********************************************");
 
-            for (ExecutionRecord executionRecord : history) {
+            for (RunResultsDTO executionRecord : history) {
                 System.out.println("\n----------------------");
                 System.out.println(String.format("Execution #%d ", i++));
                 System.out.println("----------------------");
 
                 System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
                 System.out.println("\n- Input Values:");
-                for (Variable variable : executionRecord.getInputVariables().keySet()) {
-                    System.out.println(String.format("  %s = %d ", variable.getRepresentation(), executionRecord.getInputVariables().get(variable)));
+                for (String variable : executionRecord.getInputVariablesAsEntered().keySet()) {
+                    System.out.println(String.format("  %s = %d ", variable, executionRecord.getInputVariablesAsEntered().get(variable)));
                 }
 
-                System.out.println(String.format("\n- y Result: %d", executionRecord.getY()));
-                System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCycles()));
+                System.out.println(String.format("\n- y Result: %d", executionRecord.getYValue()));
+                System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCyclesCount()));
             }
 
             System.out.println("\n******************** E N D ********************");
@@ -237,12 +232,6 @@ public class ConsoleUI implements UI {
     }
 
     private void showProgramRunResults(RunResultsDTO results) {
-//        long yValue = results.get(Variable.RESULT);
-//        Map<Variable, Long> inputVariables = Utils.extractVariablesTypesFromMap(results, VariableType.INPUT);
-//        Map<Variable, Long> workVariables = Utils.extractVariablesTypesFromMap(results, VariableType.WORK);
-
-//        inputVariables = sortVariablesByTheirNumber(inputVariables);
-//        workVariables = sortVariablesByTheirNumber(workVariables);
         System.out.println("\n***********************************************");
         System.out.println("              Program Run Results:");
         System.out.println("***********************************************\n");
@@ -256,23 +245,9 @@ public class ConsoleUI implements UI {
             System.out.println(String.format("%s = %d ", variableName, results.getWorkVariablesValues().get(variableName)));
         }
 
-        System.out.println(String.format("Cycles Count = %d ", engine.getLastExecutionCycles()));
+        System.out.println(String.format("Cycles Count = %d ", results.getTotalCyclesCount()));
         System.out.println("\n******************** E N D ********************");
         System.out.println("***********************************************");
-    }
-
-    private Map<Variable, Long> sortVariablesByTheirNumber(Map<Variable, Long> variables) {
-        Map<Variable, Long> sortedVariables = variables.entrySet()
-                .stream()
-                .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-
-        return sortedVariables;
     }
 
     private void saveSystemState() {

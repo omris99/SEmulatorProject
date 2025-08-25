@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RunResultsDTO implements DTO{
+    private final int degree;
     private final Long yValue;
     private final Map<String, Long> inputVariablesAsEntered;
     private final Map<String, Long> workVariablesValues;
     private final int totalCyclesCount;
 
-    public RunResultsDTO(Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
+    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
+        this.degree = degree;
         this.yValue = yValue;
         this.inputVariablesAsEntered = convertKeyToStringAndSortVariablesMap(inputVariablesAsEntered);
         this.workVariablesValues = convertKeyToStringAndSortVariablesMap(workVariablesValues);
@@ -34,6 +36,10 @@ public class RunResultsDTO implements DTO{
 
     public int getTotalCyclesCount() {
         return totalCyclesCount;
+    }
+
+    public int getDegree() {
+        return degree;
     }
 
     private Map<String, Long> convertKeyToStringAndSortVariablesMap(Map<Variable, Long> variablesMap) {

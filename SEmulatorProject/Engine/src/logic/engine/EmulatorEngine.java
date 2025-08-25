@@ -8,7 +8,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.XmlErrorType;
-import logic.execution.ExecutionRecord;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
@@ -23,7 +22,6 @@ import logic.model.mappers.ProgramMapper;
 import logic.utils.Utils;
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /*
 * TODO:
@@ -33,8 +31,7 @@ import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
-    private transient ProgramExecutor executor;
-    private final List<ExecutionRecord> history;
+    private final List<RunResultsDTO> history;
 
     public EmulatorEngine() {
         history = new LinkedList<>();
@@ -71,7 +68,7 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public DTO runLoadedProgram(int degree, String input) {
-        executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
+        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
 
         Long[] inputs = Arrays.stream(input.split(","))
                 .map(String::trim)
@@ -88,18 +85,15 @@ public class EmulatorEngine implements Engine {
 
         Map<Variable, Long> finalVariablesResult = executor.run(new LinkedHashMap<>(programUseInitialInputVariablesMap));
 
-
-        ExecutionRecord record = new ExecutionRecord(degree,
-                userInputToVariablesMap,
-                finalVariablesResult.get(Variable.RESULT),
-                executor.getCyclesCount());
-        history.add(record);
-
-        return new RunResultsDTO(
+        RunResultsDTO runResults = new RunResultsDTO(
+                degree,
                 finalVariablesResult.get(Variable.RESULT),
                 userInputToVariablesMap,
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
+        history.add(runResults);
+
+        return runResults;
     }
 
     private Set<Variable> getProgramInputVariablesFromOneToN(){
@@ -136,12 +130,8 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public List<ExecutionRecord> getHistory() {
+    public List<RunResultsDTO> getHistory() {
         return history;
-    }
-
-    public int getLastExecutionCycles() {
-        return executor.getCyclesCount();
     }
 
     public int getMaximalDegree(){

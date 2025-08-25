@@ -5,6 +5,7 @@ import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.XmlErrorType;
 import logic.execution.ExecutionRecord;
 import logic.execution.ProgramExecutor;
@@ -72,8 +73,13 @@ public class EmulatorEngine implements Engine {
                 .map(String::trim)
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
+        for(Long number : inputs){
+            if(number < 0){
+                throw new NumberNotInRangeException(Integer.parseInt(number.toString()));
+            }
+        }
 
-        getExpandedProgramDTO(degree);
+//        getExpandedProgramDTO(degree);
         Map<Variable, Long> finalVariablesResult = executor.run(inputs);
 
 

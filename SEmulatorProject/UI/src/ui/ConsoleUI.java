@@ -4,6 +4,7 @@ import dto.ProgramDTO;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBException;
+import logic.exceptions.NumberNotInRangeException;
 import logic.execution.ExecutionRecord;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
@@ -162,17 +163,28 @@ public class ConsoleUI implements UI {
     @Override
     public void runLoadedProgram() {
         int expansionDegree = getUserDesiredExpansionDegree();
-        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        boolean isInputOk = false;
 
+        ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         System.out.print("Available program inputs: ");
         System.out.println(String.format("%s", loadedProgramDTO.getInputNames()));
-        System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
-        String inputs = inputScanner.nextLine();
-        System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
-        try {
-            showProgramRunResults(engine.runLoadedProgram(expansionDegree, inputs));
-        } catch (NumberFormatException e) {
-            printError("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
+        while (!isInputOk) {
+            System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
+            String inputs = inputScanner.nextLine();
+            System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
+            try {
+                showProgramRunResults(engine.runLoadedProgram(expansionDegree, inputs));
+                isInputOk = true;
+            }
+            catch (NumberFormatException e) {
+                printError("Invalid input. Use integers separated by commas, e.g. 1,2,3.");
+            } catch (NumberNotInRangeException e) {
+                printError("Invalid input. You entered the number: " + e.getNumber() + " which is not positive.");
+            }
+
+            if(!isInputOk) {
+                System.out.println("- Try again -");
+            }
         }
     }
 
@@ -189,27 +201,32 @@ public class ConsoleUI implements UI {
     public void showHistory() {
         int i = 1;
         List<ExecutionRecord> history = engine.getHistory();
-        System.out.println("\n***********************************************");
-        System.out.println("               Execution History:");
-        System.out.println("***********************************************");
+        if (history.isEmpty()) {
+            System.out.println("Nothing to show yet. Try running a program first.");
+        }
+        else{
+            System.out.println("\n***********************************************");
+            System.out.println("               Execution History:");
+            System.out.println("***********************************************");
 
-        for (ExecutionRecord executionRecord : history) {
-            System.out.println("\n----------------------");
-            System.out.println(String.format("Execution #%d ", i++));
-            System.out.println("----------------------");
+            for (ExecutionRecord executionRecord : history) {
+                System.out.println("\n----------------------");
+                System.out.println(String.format("Execution #%d ", i++));
+                System.out.println("----------------------");
 
-            System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
-            System.out.println("\n- Input Values:");
-            for (Variable variable : executionRecord.getInputVariables().keySet()) {
-                System.out.println(String.format("  %s = %d ", variable.getRepresentation(), executionRecord.getInputVariables().get(variable)));
+                System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
+                System.out.println("\n- Input Values:");
+                for (Variable variable : executionRecord.getInputVariables().keySet()) {
+                    System.out.println(String.format("  %s = %d ", variable.getRepresentation(), executionRecord.getInputVariables().get(variable)));
+                }
+
+                System.out.println(String.format("\n- y Result: %d", executionRecord.getY()));
+                System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCycles()));
             }
 
-            System.out.println(String.format("\n- y Result: %d", executionRecord.getY()));
-            System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCycles()));
+            System.out.println("\n******************** E N D ********************");
+            System.out.println("***********************************************");
         }
-
-        System.out.println("\n******************** E N D ********************");
-        System.out.println("***********************************************");
     }
 
     @Override

@@ -8,6 +8,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.instruction.basic.NeutralInstruction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +40,9 @@ public class ZeroVariableInstruction extends AbstractInstruction implements Expa
     @Override
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
         List<Instruction> expandedInstructions = new LinkedList<>();
-        Label freeLabel = instructionLabel.equals(FixedLabel.EMPTY) ? new LabelImpl(maxLabelIndex + 1) : instructionLabel;
+        Label freeLabel = new LabelImpl(maxLabelIndex + 1);
 
+        expandedInstructions.add(new NeutralInstruction(Variable.RESULT, instructionLabel));
         expandedInstructions.add(new DecreaseInstruction(getVariable(), freeLabel));
         expandedInstructions.add(new JumpNotZeroInstruction(getVariable(), freeLabel));
 

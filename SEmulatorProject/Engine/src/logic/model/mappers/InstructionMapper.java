@@ -40,6 +40,7 @@ public class InstructionMapper{
             Label instructionLabel = FixedLabel.EMPTY;
 
             if (instructionLabelOnXml != null) {
+                instructionLabelOnXml = instructionLabelOnXml.toUpperCase();
                 if(!instructionLabelOnXml.startsWith("L")) {
                     throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
                 }
@@ -76,7 +77,7 @@ public class InstructionMapper{
             String argumentName = jaxbInstructionArgument.getName();
             InstructionArgument argumentType = InstructionArgument.fromXmlNameFormat(argumentName);
             if(argumentType.getType().equals("label")) {
-                if(jaxbInstructionArgument.getValue().equals("EXIT")) {
+                if(jaxbInstructionArgument.getValue().toUpperCase().equals("EXIT")) {
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
                 }
                 else {

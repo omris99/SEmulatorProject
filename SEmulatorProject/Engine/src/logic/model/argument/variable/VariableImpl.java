@@ -67,7 +67,7 @@ public class VariableImpl implements Variable, Argument {
 
     private static VariableType stringVarTypeToVariableType(String type) {
         VariableType variableType;
-        switch (type) {
+        switch (type.toLowerCase()) {
             case "x":
                 variableType = VariableType.INPUT;
                 break;

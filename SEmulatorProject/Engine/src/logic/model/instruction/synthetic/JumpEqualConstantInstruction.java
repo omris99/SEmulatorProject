@@ -72,6 +72,7 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
             expandedInstructions.add(new JumpZeroInstruction(workVariable1, freeLabel));
             expandedInstructions.add(new DecreaseInstruction(workVariable1));
         }
+
         expandedInstructions.add(new JumpNotZeroInstruction(workVariable1, freeLabel));
         expandedInstructions.add(new GoToLabelInstruction(workVariable2, arguments.get(InstructionArgument.JE_CONSTANT_LABEL)));
         expandedInstructions.add(new NeutralInstruction(Variable.RESULT, freeLabel));

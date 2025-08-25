@@ -1,6 +1,7 @@
 package ui;
 
 import dto.ProgramDTO;
+import dto.RunResultsDTO;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBException;
@@ -173,7 +174,7 @@ public class ConsoleUI implements UI {
             String inputs = inputScanner.nextLine();
             System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
             try {
-                showProgramRunResults(engine.runLoadedProgram(expansionDegree, inputs));
+                showProgramRunResults((RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs));
                 isInputOk = true;
             }
             catch (NumberFormatException e) {
@@ -235,23 +236,24 @@ public class ConsoleUI implements UI {
         engine.quit();
     }
 
-    private void showProgramRunResults(Map<Variable, Long> results) {
-        long yValue = results.get(Variable.RESULT);
-        Map<Variable, Long> inputVariables = Utils.extractVariablesTypesFromMap(results, VariableType.INPUT);
-        Map<Variable, Long> workVariables = Utils.extractVariablesTypesFromMap(results, VariableType.WORK);
+    private void showProgramRunResults(RunResultsDTO results) {
+//        long yValue = results.get(Variable.RESULT);
+//        Map<Variable, Long> inputVariables = Utils.extractVariablesTypesFromMap(results, VariableType.INPUT);
+//        Map<Variable, Long> workVariables = Utils.extractVariablesTypesFromMap(results, VariableType.WORK);
 
-        inputVariables = sortVariablesByTheirNumber(inputVariables);
-        workVariables = sortVariablesByTheirNumber(workVariables);
+//        inputVariables = sortVariablesByTheirNumber(inputVariables);
+//        workVariables = sortVariablesByTheirNumber(workVariables);
         System.out.println("\n***********************************************");
         System.out.println("              Program Run Results:");
         System.out.println("***********************************************\n");
-        System.out.println(String.format("y = %d ", yValue));
-        for (Variable variable : inputVariables.keySet()) {
-            System.out.println(String.format("%s = %d ", variable.getRepresentation(), inputVariables.get(variable)));
+        System.out.println(String.format("y = %d ", results.getYValue()));
+        System.out.println(String.format("y = %d ", results.getYValue()));
+        for (String variableName : results.getInputVariablesAsEntered().keySet()) {
+            System.out.println(String.format("%s = %d ", variableName, results.getInputVariablesAsEntered().get(variableName)));
         }
 
-        for (Variable variable : workVariables.keySet()) {
-            System.out.println(String.format("%s = %d ", variable.getRepresentation(), workVariables.get(variable)));
+        for (String variableName : results.getWorkVariablesValues().keySet()) {
+            System.out.println(String.format("%s = %d ", variableName, results.getWorkVariablesValues().get(variableName)));
         }
 
         System.out.println(String.format("Cycles Count = %d ", engine.getLastExecutionCycles()));

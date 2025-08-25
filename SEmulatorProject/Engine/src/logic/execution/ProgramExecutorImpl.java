@@ -22,9 +22,9 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     }
 
     @Override
-    public Map<Variable, Long> run(Long... input) {
-        ExecutionContext context = new ExecutionContextImpl(program.getAllInstructionsInputs(),
-                program.getAllInstructionsWorkVariables(), input);
+    public Map<Variable, Long> run(Map<Variable, Long> inputVariablesMap) {
+        ExecutionContext context = new ExecutionContextImpl(inputVariablesMap,
+                program.getAllInstructionsWorkVariables());
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         Instruction currentInstruction = instructionsQueue.getFirstInQueue();
         Label nextLabel;

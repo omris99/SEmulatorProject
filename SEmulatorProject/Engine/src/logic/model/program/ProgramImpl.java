@@ -133,7 +133,12 @@ public class ProgramImpl implements Program {
 
         return programLabelsNames;
     }
+
     private List<String> getProgramInputsNames() {
         return getAllInstructionsInputs().stream().map(Argument::getRepresentation).collect(Collectors.toList());
+    }
+
+    public int getMaxInputVariableNumber(){
+        return instructions.getMaxInputVariableIndex();
     }
 }

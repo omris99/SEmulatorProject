@@ -1,6 +1,7 @@
 package logic.engine;
 
 import dto.DTO;
+import dto.RunResultsDTO;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -10,16 +11,19 @@ import logic.exceptions.XmlErrorType;
 import logic.execution.ExecutionRecord;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
+import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
 import logic.model.program.Program;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
 import logic.utils.Utils;
 import java.io.File;
-import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
 * TODO:
@@ -66,7 +70,7 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public Map<Variable, Long> runLoadedProgram(int degree, String input) {
+    public DTO runLoadedProgram(int degree, String input) {
         executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
 
         Long[] inputs = Arrays.stream(input.split(","))
@@ -79,17 +83,52 @@ public class EmulatorEngine implements Engine {
             }
         }
 
-//        getExpandedProgramDTO(degree);
-        Map<Variable, Long> finalVariablesResult = executor.run(inputs);
+        Map<Variable, Long> userInputToVariablesMap = mapUserInputToVariables(inputs);
+        Map<Variable, Long> programUseInitialInputVariablesMap = createProgramUseInitialVariablesMap(inputs);
+
+        Map<Variable, Long> finalVariablesResult = executor.run(new LinkedHashMap<>(programUseInitialInputVariablesMap));
 
 
         ExecutionRecord record = new ExecutionRecord(degree,
-                Utils.createInputVariablesMap(currentLoadedProgram.getAllInstructionsInputs(), inputs),
+                userInputToVariablesMap,
                 finalVariablesResult.get(Variable.RESULT),
                 executor.getCyclesCount());
         history.add(record);
 
-        return finalVariablesResult;
+        return new RunResultsDTO(
+                finalVariablesResult.get(Variable.RESULT),
+                userInputToVariablesMap,
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                executor.getCyclesCount());
+    }
+
+    private Set<Variable> getProgramInputVariablesFromOneToN(){
+        Set<Variable> inputVariables = new LinkedHashSet<>();
+
+        int maxInputIndex = currentLoadedProgram.getAllInstructionsInputs().stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
+        for(int i = 1; i <= maxInputIndex; i++){
+            inputVariables.add(new VariableImpl(VariableType.INPUT, i));
+        }
+
+        return inputVariables;
+    }
+
+    private Map<Variable, Long> mapUserInputToVariables(Long... input){
+        int i = 1;
+        Map<Variable, Long> userInputToVariablesMap = new LinkedHashMap<>();
+
+        for(long value : input){
+            userInputToVariablesMap.put(new VariableImpl(VariableType.INPUT, i), value);
+            i++;
+        }
+
+        return userInputToVariablesMap;
+    }
+
+    private Map<Variable, Long> createProgramUseInitialVariablesMap(Long... inputs){
+        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
+
+        return Utils.createInputVariablesMap(programActualInputVariables, inputs);
     }
 
     public DTO getExpandedProgramDTO(int degree){

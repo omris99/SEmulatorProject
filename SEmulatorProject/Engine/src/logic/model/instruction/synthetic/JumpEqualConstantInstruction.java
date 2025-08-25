@@ -62,12 +62,16 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
+        int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();
+
         Variable workVariable1 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 1);
         Variable workVariable2 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 2);
 
         expandedInstructions.add(new AssignmentInstruction(workVariable1, getVariable(), instructionLabel));
-        expandedInstructions.add(new JumpZeroInstruction(workVariable1, freeLabel));
-        expandedInstructions.add(new DecreaseInstruction(workVariable1));
+        for (int i = 0; i < constantValue; i++) {
+            expandedInstructions.add(new JumpZeroInstruction(workVariable1, freeLabel));
+            expandedInstructions.add(new DecreaseInstruction(workVariable1));
+        }
         expandedInstructions.add(new JumpNotZeroInstruction(workVariable1, freeLabel));
         expandedInstructions.add(new GoToLabelInstruction(workVariable2, arguments.get(InstructionArgument.JE_CONSTANT_LABEL)));
         expandedInstructions.add(new NeutralInstruction(Variable.RESULT, freeLabel));

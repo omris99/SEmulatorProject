@@ -262,7 +262,7 @@ public class ConsoleUI implements UI {
 
         try {
             SerializationManager.save(engine, path);
-            System.out.println("System State successfully saved in :" + path + ".ser");
+            System.out.println("System State successfully saved in: " + path + ".ser");
         } catch (IOException e) {
             printError("Failed to save system state: " + e.getMessage());
         }

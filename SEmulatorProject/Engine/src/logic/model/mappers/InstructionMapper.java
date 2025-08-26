@@ -2,7 +2,6 @@ package logic.model.mappers;
 
 import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
-import logic.exceptions.XmlErrorType;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
 import logic.model.argument.constant.Constant;
@@ -24,8 +23,6 @@ import logic.model.argument.variable.VariableImpl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-//TODO: 1. HANDLE EXCEPTION
 
 public class InstructionMapper{
 

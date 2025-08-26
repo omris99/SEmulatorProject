@@ -16,13 +16,6 @@ import ui.menu.option.MenuOption;
 import java.io.IOException;
 import java.util.*;
 
-/*
- * TODO:
- *  2. ensure that every exception message is fully detailed.
- *  4. clean redundant imports
- *  5. Check on windows!
- */
-
 public class ConsoleUI implements UI {
     private EmulatorEngine engine;
     private final Scanner inputScanner;
@@ -173,7 +166,6 @@ public class ConsoleUI implements UI {
         while (!isInputOk) {
             System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
             String inputs = inputScanner.nextLine();
-//            System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
             try {
                 RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs);
                 System.out.println("\n***********************************************");

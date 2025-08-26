@@ -19,8 +19,6 @@ public interface Program extends Serializable {
     Set<Variable> getAllInstructionsInputs();
     Set<Variable> getAllInstructionsWorkVariables();
     Label validate();
-    int calculateMaxDegree();
-    int calculateCycles();
     int getMaximalDegree();
     DTO createDTO();
 }

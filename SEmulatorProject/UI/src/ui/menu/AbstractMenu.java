@@ -28,6 +28,7 @@ public abstract class AbstractMenu implements Menu{
         for(MenuOption option : menuOptions){
             System.out.println(String.format("%d. %s", i++, option.getMenuDisplay()));
         }
+
         System.out.print(String.format("\nPlease Enter Your Choice (%d - %d): ", 1, menuOptions.size()));
         Scanner scanner = new Scanner(System.in);
         while(!validInput){

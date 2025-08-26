@@ -3,12 +3,12 @@ package ui;
 import dto.ProgramDTO;
 
 public interface UI {
-    public void showMainMenuAndExecuteUserChoice();
-    public void loadProgram();
-    public void showProgramDetails(ProgramDTO programDetails);
-    public void expand();
-    public void runLoadedProgram();
-    public void showHistory();
-    public void quitProgram();
-    public void run();
+    void showMainMenuAndExecuteUserChoice();
+    void loadProgram();
+    void showProgramDetails(ProgramDTO programDetails);
+    void expand();
+    void runLoadedProgram();
+    void showHistory();
+    void quitProgram();
+    void run();
 }

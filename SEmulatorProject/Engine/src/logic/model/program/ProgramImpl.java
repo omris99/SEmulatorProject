@@ -12,7 +12,6 @@ import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,19 +55,8 @@ public class ProgramImpl implements Program {
                 }
             }
         }
+
         return FixedLabel.EMPTY;
-    }
-
-    @Override
-    public int calculateMaxDegree() {
-        // traverse all commands and find maximum degree
-        return 0;
-    }
-
-    @Override
-    public int calculateCycles() {
-        // traverse all commands and calculate cycles
-        return 0;
     }
 
     public Set<Label> getAllInstructionsLabels() {
@@ -135,7 +123,8 @@ public class ProgramImpl implements Program {
     }
 
     private List<String> getProgramInputsNames() {
-        return getAllInstructionsInputs().stream().sorted(Comparator.comparingInt(Variable::getNumber)).map(Argument::getRepresentation).collect(Collectors.toList());
+        return getAllInstructionsInputs().stream()
+                .sorted(Comparator.comparingInt(Variable::getNumber))
+                .map(Argument::getRepresentation).collect(Collectors.toList());
     }
-
 }

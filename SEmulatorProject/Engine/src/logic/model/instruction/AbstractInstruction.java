@@ -47,10 +47,6 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         return instructionFormatted;
     }
 
-    public void setParentInstruction(Instruction parentInstruction) {
-        this.parentInstruction = parentInstruction;
-    }
-
     @Override
     public String getName() {
         return instructionData.name();

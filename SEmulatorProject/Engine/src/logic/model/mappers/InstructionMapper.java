@@ -4,6 +4,7 @@ import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.XmlErrorType;
 import logic.model.argument.Argument;
+import logic.model.argument.ArgumentType;
 import logic.model.argument.constant.Constant;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.DecreaseInstruction;
@@ -71,7 +72,7 @@ public class InstructionMapper{
         for (SInstructionArgument jaxbInstructionArgument : jaxbInstructionsArguments) {
             String argumentName = jaxbInstructionArgument.getName();
             InstructionArgument argumentType = InstructionArgument.fromXmlNameFormat(argumentName);
-            if(argumentType.getType().equals("label")) {
+            if(argumentType.getType().equals(ArgumentType.LABEL)) {
                 if(jaxbInstructionArgument.getValue().toUpperCase().equals("EXIT")) {
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
                 }
@@ -82,10 +83,10 @@ public class InstructionMapper{
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
                 }
             }
-            else if(argumentType.getType().equals("variable")) {
+            else if(argumentType.getType().equals(ArgumentType.VARIABLE)) {
                 domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
             }
-            else if(argumentType.getType().equals("constant")) {
+            else if(argumentType.getType().equals(ArgumentType.CONSTANT)) {
                 try{
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
                 } catch(NumberFormatException e){

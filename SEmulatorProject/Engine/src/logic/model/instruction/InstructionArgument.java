@@ -1,24 +1,26 @@
 package logic.model.instruction;
 
-public enum InstructionArgument {
-    JNZ_LABEL("label", "JNZLabel"),
-    GOTO_LABEL("label", "gotoLabel"),
-    ASSIGNED_VARIABLE("variable", "assignedVariable"),
-    CONSTANT_VALUE("constant", "constantValue"),
-    JZ_LABEL("label", "JZLabel"),
-    JE_CONSTANT_LABEL("label",  "JEConstantLabel"),
-    VARIABLE_NAME("variable", "variableName"),
-    JE_VARIABLE_LABEL("label",  "JEVariableLabel"),;
+import logic.model.argument.ArgumentType;
 
-    private final String type;
+public enum InstructionArgument {
+    JNZ_LABEL(ArgumentType.LABEL, "JNZLabel"),
+    GOTO_LABEL(ArgumentType.LABEL, "gotoLabel"),
+    ASSIGNED_VARIABLE(ArgumentType.VARIABLE, "assignedVariable"),
+    CONSTANT_VALUE(ArgumentType.CONSTANT, "constantValue"),
+    JZ_LABEL(ArgumentType.LABEL, "JZLabel"),
+    JE_CONSTANT_LABEL(ArgumentType.LABEL,  "JEConstantLabel"),
+    VARIABLE_NAME(ArgumentType.VARIABLE, "variableName"),
+    JE_VARIABLE_LABEL(ArgumentType.LABEL,  "JEVariableLabel"),;
+
+    private final ArgumentType type;
     private final String nameInXml;
 
-    InstructionArgument(String type, String nameInXML){
+    InstructionArgument(ArgumentType type, String nameInXML){
         this.type = type;
         this.nameInXml = nameInXML;
     }
 
-    public String getType(){
+    public ArgumentType getType(){
         return type;
     }
 

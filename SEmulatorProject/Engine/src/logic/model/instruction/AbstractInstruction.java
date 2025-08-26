@@ -4,9 +4,6 @@ import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class AbstractInstruction implements Instruction, Cloneable {
     private int index;
     private final InstructionData instructionData;
@@ -18,7 +15,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     public Instruction clone() {
         try {
             AbstractInstruction copy = (AbstractInstruction) super.clone();
-            copy.parentInstruction = this.parentInstruction; // שמירה על ה־parent (או null אם רוצים להתחלה נקייה)
+            copy.parentInstruction = this.parentInstruction;
             return copy;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -34,13 +31,11 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         this.label = label;
         this.variable = variable;
         parentInstruction = null;
-//        this.degree = computeDegree();
-//        expandedInstructions = new ArrayList<>();
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
         String instructionFormatted = String.format("#%d (%s) [ %-4s] %s (%d)",
-                index, getType().equals("basic") ? "B" : "S",
+                index, getType().equals(InstructionType.BASIC) ? "B" : "S",
                 label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "",
                 instructionDisplayFormat,
                 getCycles());
@@ -67,7 +62,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     }
 
     @Override
-    public String getType() {
+    public InstructionType getType() {
         return instructionData.getType();
     }
 

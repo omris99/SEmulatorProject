@@ -13,7 +13,7 @@ public interface Instruction extends Cloneable, Serializable {
     Label getLabel();
     Variable getVariable();
     String getInstructionDisplayFormat();
-    String getType();
+    InstructionType getType();
     int getDegree();
     int computeDegree();
     void setIndex(int index);

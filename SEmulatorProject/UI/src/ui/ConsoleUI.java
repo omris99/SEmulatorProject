@@ -248,7 +248,9 @@ public class ConsoleUI implements UI {
         System.out.println("\n***********************************************");
         System.out.println("              Program Run Results:");
         System.out.println("***********************************************\n");
+        System.out.println("--- Y-RESULT ---");
         System.out.println(String.format("y = %d ", results.getYValue()));
+        System.out.println("--- PROGRAM VARIABLES ---");
         System.out.println(String.format("y = %d ", results.getYValue()));
         for (String variableName : results.getInputVariablesAsEntered().keySet()) {
             System.out.println(String.format("%s = %d ", variableName, results.getInputVariablesAsEntered().get(variableName)));

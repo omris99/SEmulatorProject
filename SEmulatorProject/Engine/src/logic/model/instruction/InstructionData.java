@@ -1,29 +1,29 @@
 package logic.model.instruction;
 
 public enum InstructionData {
-    NEUTRAL("basic", 0, 0),
-    INCREASE("basic", 1, 0),
-    DECREASE("basic", 1, 0),
-    JUMP_NOT_ZERO("basic", 2, 0),
-    ZERO_VARIABLE("synthetic", 1, 1),
-    ASSIGNMENT("synthetic", 4, 2),
-    GOTO_LABEL("synthetic", 1, 1),
-    CONSTANT_ASSIGNMENT("synthetic", 2, 2),
-    JUMP_ZERO("synthetic", 2, 2),
-    JUMP_EQUAL_CONSTANT("synthetic", 2, 3),
-    JUMP_EQUAL_VARIABLE("synthetic", 2, 3);
+    NEUTRAL(InstructionType.BASIC, 0, 0),
+    INCREASE(InstructionType.BASIC, 1, 0),
+    DECREASE(InstructionType.BASIC, 1, 0),
+    JUMP_NOT_ZERO(InstructionType.BASIC, 2, 0),
+    ZERO_VARIABLE(InstructionType.SYNTHETIC, 1, 1),
+    ASSIGNMENT(InstructionType.SYNTHETIC, 4, 2),
+    GOTO_LABEL(InstructionType.SYNTHETIC, 1, 1),
+    CONSTANT_ASSIGNMENT(InstructionType.SYNTHETIC, 2, 2),
+    JUMP_ZERO(InstructionType.SYNTHETIC, 2, 2),
+    JUMP_EQUAL_CONSTANT(InstructionType.SYNTHETIC, 2, 3),
+    JUMP_EQUAL_VARIABLE(InstructionType.SYNTHETIC, 2, 3);
 
-    private final String type;
+    private final InstructionType type;
     private final int cycles;
     private final int degree;
 
-    InstructionData(String type, int cycles, int degree) {
+    InstructionData(InstructionType type, int cycles, int degree) {
         this.type = type;
         this.cycles = cycles;
         this.degree = degree;
     }
 
-    public String getType() {
+    public InstructionType getType() {
         return type;
     }
 
@@ -36,16 +36,16 @@ public enum InstructionData {
     }
 
     public boolean isBasic() {
-        return "basic".equals(type);
+        return type == InstructionType.BASIC;
     }
 
     public boolean isSynthetic() {
-        return "synthetic".equals(type);
+        return type == InstructionType.SYNTHETIC;
     }
 
     public static InstructionData fromNameAndType(String name, String type) {
         for (InstructionData detail : values()) {
-            if (detail.name().equals(name) && detail.type.equals(type)) {
+            if (detail.name().equals(name) && (type.equals(detail.type.toString().toLowerCase()))) {
                 return detail;
             }
         }

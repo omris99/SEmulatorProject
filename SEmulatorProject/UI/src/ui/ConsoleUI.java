@@ -3,6 +3,7 @@ package ui;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import logic.engine.EmulatorEngine;
+import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBException;
 import logic.exceptions.NumberNotInRangeException;
@@ -74,12 +75,13 @@ public class ConsoleUI implements UI {
 
     @Override
     public void loadProgram() {
+        boolean isLoadingSuccessful = false;
         System.out.print("Please enter program full path: ");
         String xmlPath = inputScanner.nextLine();
 //        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/custom-1.xml";
         try {
             engine.loadProgram(xmlPath);
-            System.out.println("XML FILE: " + xmlPath + " Loaded successfully.");
+            isLoadingSuccessful = true;
         } catch (InvalidXmlFileException e) {
             switch (e.getType()) {
                 case FILE_MISSING:
@@ -89,17 +91,19 @@ public class ConsoleUI implements UI {
                     printError("Invalid file type: " + e.getFilePath() + " must be .xml");
                     break;
                 case UNKNOWN_LABEL:
-                    printError("Unknown label in file " + e.getFilePath() + ": " + e.getElement());
-                    break;
-                case INVALID_ELEMENT:
-                    printError("Unrecognized Label in file " + e.getFilePath() + ". " + "\nLabel: " + e.getElement());
+                    printError("Unknown label in file " + e.getFilePath() + ". " + "\nThe Label is: " + e.getElement());
                     break;
             }
         } catch (JAXBException e) {
             printError("Can't read XML File: " + e.getMessage());
-        } catch (IllegalArgumentException e){
+        } catch (InvalidArgumentException e){
+            printError(String.format("%s.  \nError %s: %s \nin file %s",
+                    e.getErrorType().getUserMessage(), e.getErrorType().getArgumentType(), e.getArgumentName(), xmlPath));
+        }
+        catch (IllegalArgumentException e){
             printError("Invalid XML File: " + e.getMessage());
         }
+        System.out.println(isLoadingSuccessful ? ("XML FILE: " + xmlPath + " Loaded successfully.") : ("Program loading failed."));
     }
 
     private void printError(String message) {

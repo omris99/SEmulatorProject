@@ -2,6 +2,7 @@ package logic.engine;
 
 import dto.DTO;
 import dto.RunResultsDTO;
+import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -51,10 +52,11 @@ public class EmulatorEngine implements Engine {
         JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
+
         Program loadedProgram = ProgramMapper.toDomain(sProgram);
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
-            throw new InvalidXmlFileException(xmlPath, XmlErrorType.INVALID_ELEMENT,  problemLabel.getRepresentation());
+            throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL,  problemLabel.getRepresentation());
         }
 
         currentLoadedProgram = loadedProgram;

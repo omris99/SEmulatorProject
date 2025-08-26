@@ -1,5 +1,7 @@
 package logic.model.argument.variable;
 
+import logic.exceptions.ArgumentErrorType;
+import logic.exceptions.InvalidArgumentException;
 import logic.model.argument.Argument;
 
 import java.util.Objects;
@@ -22,17 +24,20 @@ public class VariableImpl implements Variable, Argument {
 
         String varKind = stringVariable.substring(0, 1);
         VariableType varType = stringVarTypeToVariableType(varKind);
+        if(varType == null){
+            throw new InvalidArgumentException(stringVariable, ArgumentErrorType.VARIABLE_PREFIX_INVALID);
+        }
 
         if (varType.equals(VariableType.RESULT)) {
             if (stringVariable.length() != 1) {
-                throw new IllegalArgumentException("Variable of kind 'y' must not have an index");
+                throw new InvalidArgumentException(stringVariable, ArgumentErrorType.Y_VARIABLE_HAS_INDEX);
             }
 
             return new VariableImpl(VariableType.RESULT, 0);
         }
 
         if (stringVariable.length() < 2) {
-            throw new IllegalArgumentException("Variable missing index");
+            throw new InvalidArgumentException(stringVariable, ArgumentErrorType.VARIABLE_INDEX_MISSING);
         }
 
         int varIndex;
@@ -40,11 +45,11 @@ public class VariableImpl implements Variable, Argument {
         try {
             varIndex = Integer.parseInt(stringVariable.substring(1));
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid index format in variable: " + stringVariable, e);
+            throw new InvalidArgumentException(stringVariable, ArgumentErrorType.VARIABLE_INDEX_CANT_PARSE_TO_NUMBER);
         }
 
-        if (!isStringVariableIndexValid(varIndex)) {
-            throw new IllegalArgumentException("Invalid index");
+        if (!isStringVariableIndexIsPositive(varIndex)) {
+            throw new InvalidArgumentException(stringVariable, ArgumentErrorType.VARIABLE_INDEX_IS_NEGATIVE);
         }
 
         return new VariableImpl(varType, varIndex);
@@ -78,13 +83,14 @@ public class VariableImpl implements Variable, Argument {
                 variableType = VariableType.WORK;
                 break;
             default:
-                throw new IllegalArgumentException("Invalid variable type: " + type);
+                variableType = null;
+                break;
         }
+
         return variableType;
-//        return kind.equals("x") || kind.equals("y") || kind.equals("z");
     }
 
-    private static boolean isStringVariableIndexValid(int index) {
+    private static boolean isStringVariableIndexIsPositive(int index) {
         return index >= 0;
     }
 

@@ -1,5 +1,6 @@
 package logic.model.mappers;
 
+import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.XmlErrorType;
 import logic.model.argument.Argument;
@@ -42,7 +43,8 @@ public class InstructionMapper{
         if (instructionLabelOnXml != null) {
             instructionLabelOnXml = instructionLabelOnXml.toUpperCase();
             if(!instructionLabelOnXml.startsWith("L")) {
-                throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
+                throw new InvalidArgumentException(instructionLabelOnXml, ArgumentErrorType.LABEL_MUST_START_WITH_L);
+//                throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
             }
 
             instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));
@@ -76,7 +78,7 @@ public class InstructionMapper{
                 }
                 else {
                     if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
-                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), XmlErrorType.LABEL_MUST_START_WITH_L);
+                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_MUST_START_WITH_L);
                     }
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
                 }
@@ -85,7 +87,11 @@ public class InstructionMapper{
                 domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
             }
             else if(argumentType.getType().equals("constant")) {
-                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
+                try{
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
+                } catch(NumberFormatException e){
+                    throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.CONSTANT_MUST_BE_A_NUMBER);
+                }
             }
         }
 

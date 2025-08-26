@@ -2,9 +2,9 @@ package logic.exceptions;
 
 public class InvalidArgumentException extends RuntimeException {
   private String argumentName;
-  private XmlErrorType errorType;
+  private ArgumentErrorType errorType;
 
-    public InvalidArgumentException(String argumentName, XmlErrorType errorType) {
+    public InvalidArgumentException(String argumentName, ArgumentErrorType errorType) {
         super("Invalid argument");
         this.argumentName = argumentName;
         this.errorType = errorType;
@@ -14,7 +14,7 @@ public class InvalidArgumentException extends RuntimeException {
     return argumentName;
   }
 
-  public XmlErrorType getErrorType() {
+  public ArgumentErrorType getErrorType() {
       return errorType;
   }
 }

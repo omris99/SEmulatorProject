@@ -1,7 +1,5 @@
 package logic.model.instruction;
 
-//TODO; IMPLMENT THIS
-
 public enum InstructionArgument {
     JNZ_LABEL("label", "JNZLabel"),
     GOTO_LABEL("label", "gotoLabel"),

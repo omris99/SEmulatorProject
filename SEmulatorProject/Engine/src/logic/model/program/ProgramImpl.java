@@ -123,7 +123,7 @@ public class ProgramImpl implements Program {
 
     private List<String> getProgramLabelsNames() {
         List<String> programLabelsNames = getAllInstructionsLabels().stream()
-                .filter(label -> !label.equals(FixedLabel.EXIT))
+                .filter(label -> !label.equals(FixedLabel.EXIT)).sorted(Comparator.comparingInt(Label::getIndex))
                 .map(Argument::getRepresentation)
                 .collect(Collectors.toList());
 
@@ -135,10 +135,7 @@ public class ProgramImpl implements Program {
     }
 
     private List<String> getProgramInputsNames() {
-        return getAllInstructionsInputs().stream().map(Argument::getRepresentation).collect(Collectors.toList());
+        return getAllInstructionsInputs().stream().sorted(Comparator.comparingInt(Variable::getNumber)).map(Argument::getRepresentation).collect(Collectors.toList());
     }
 
-    public int getMaxInputVariableNumber(){
-        return instructions.getMaxInputVariableIndex();
-    }
 }

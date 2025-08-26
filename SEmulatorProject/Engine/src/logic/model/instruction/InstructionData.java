@@ -44,7 +44,6 @@ public enum InstructionData {
     }
 
     public static InstructionData fromNameAndType(String name, String type) {
-        // אם רוצים לוודא התאמה מלאה
         for (InstructionData detail : values()) {
             if (detail.name().equals(name) && detail.type.equals(type)) {
                 return detail;

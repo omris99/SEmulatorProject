@@ -20,6 +20,7 @@ import java.util.*;
  *  1. search for xml application errors and make sure the errors exceptions corrrectly
  *  2. ensure that every exception message is fully detailed.
  *  3. improve the implemetntation of VariableImpl class (parse)
+ *  4. clean redundant imports
  */
 
 public class ConsoleUI implements UI {
@@ -96,6 +97,8 @@ public class ConsoleUI implements UI {
             }
         } catch (JAXBException e) {
             printError("Can't read XML File: " + e.getMessage());
+        } catch (IllegalArgumentException e){
+            printError("Invalid XML File: " + e.getMessage());
         }
     }
 
@@ -167,9 +170,14 @@ public class ConsoleUI implements UI {
         while (!isInputOk) {
             System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
             String inputs = inputScanner.nextLine();
-            System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
+//            System.out.println("\nRunning program with the following inputs: " + inputs + "\n");
             try {
-                showProgramRunResults((RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs));
+                RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs);
+                System.out.println("\n***********************************************");
+                System.out.println("               Executed Program: ");
+                System.out.println("***********************************************");
+                showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+                showProgramRunResults(runResults);
                 isInputOk = true;
             }
             catch (NumberFormatException e) {

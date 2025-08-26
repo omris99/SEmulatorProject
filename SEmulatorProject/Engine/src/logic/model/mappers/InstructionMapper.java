@@ -1,5 +1,7 @@
 package logic.model.mappers;
 
+import logic.exceptions.InvalidArgumentException;
+import logic.exceptions.XmlErrorType;
 import logic.model.argument.Argument;
 import logic.model.argument.constant.Constant;
 import logic.model.instruction.*;
@@ -33,37 +35,29 @@ public class InstructionMapper{
         InstructionData details = InstructionData.fromNameAndType(
                 jaxbInstruction.getName(),
                 jaxbInstruction.getType());
+        Variable variable = VariableImpl.parse(jaxbInstruction.getSVariable());
+        String instructionLabelOnXml = jaxbInstruction.getSLabel();
+        Label instructionLabel = FixedLabel.EMPTY;
 
-        try{
-            Variable variable = VariableImpl.parse(jaxbInstruction.getSVariable());
-            String instructionLabelOnXml = jaxbInstruction.getSLabel();
-            Label instructionLabel = FixedLabel.EMPTY;
-
-            if (instructionLabelOnXml != null) {
-                instructionLabelOnXml = instructionLabelOnXml.toUpperCase();
-                if(!instructionLabelOnXml.startsWith("L")) {
-                    throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
-                }
-
-                instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));
+        if (instructionLabelOnXml != null) {
+            instructionLabelOnXml = instructionLabelOnXml.toUpperCase();
+            if(!instructionLabelOnXml.startsWith("L")) {
+                throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
             }
 
-            SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
-            Map<InstructionArgument, Argument> arguments = null;
-
-            if(sInstructionArguments != null){
-                arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
-            }
-
-            Instruction domainInstruction = createInstruction(details.name(), variable, instructionLabel, arguments);
-
-            return domainInstruction;
-
-        }catch (Exception e){
-            System.out.println("take care of it");
+            instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));
         }
 
-        return null;
+        SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();
+        Map<InstructionArgument, Argument> arguments = null;
+
+        if(sInstructionArguments != null){
+            arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
+        }
+
+        Instruction domainInstruction = createInstruction(details.name(), variable, instructionLabel, arguments);
+
+        return domainInstruction;
     }
 
 
@@ -81,6 +75,9 @@ public class InstructionMapper{
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
                 }
                 else {
+                    if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
+                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), XmlErrorType.LABEL_MUST_START_WITH_L);
+                    }
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
                 }
             }

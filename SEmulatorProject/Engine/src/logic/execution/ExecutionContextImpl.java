@@ -1,12 +1,10 @@
 package logic.execution;
 
 import logic.model.argument.variable.Variable;
-import logic.utils.Utils;
-
 import java.util.*;
 
 public class ExecutionContextImpl implements ExecutionContext {
-    private Map<Variable, Long> variablesStatus;
+    private final Map<Variable, Long> variablesStatus;
 
     public ExecutionContextImpl(Map<Variable, Long> inputVariablesMap, Set<Variable> programWorkVariables) {
         variablesStatus = inputVariablesMap;

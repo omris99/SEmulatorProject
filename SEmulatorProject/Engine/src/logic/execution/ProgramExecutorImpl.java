@@ -47,9 +47,4 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     public int getCyclesCount(){
         return cyclesCount;
     }
-
-    @Override
-    public Map<Variable, Long> variableState() {
-        return Map.of();
-    }
 }

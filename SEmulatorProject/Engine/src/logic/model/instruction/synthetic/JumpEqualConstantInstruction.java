@@ -63,7 +63,6 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
         int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();
-
         Variable workVariable1 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 1);
         Variable workVariable2 = new VariableImpl(VariableType.WORK ,maxWorkVariableIndex + 2);
 

@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class JumpNotZeroInstruction extends AbstractInstruction implements InstructionWithArguments {
     Map<InstructionArgument, Argument> arguments;
-//    private final Label jnzLabel;
 
     public JumpNotZeroInstruction(Variable variable, Argument jnzLabel) {
         this(variable, jnzLabel, FixedLabel.EMPTY);
@@ -22,7 +21,6 @@ public class JumpNotZeroInstruction extends AbstractInstruction implements Instr
         super(InstructionData.JUMP_NOT_ZERO, variable, label);
         arguments = new HashMap<>();
         arguments.put(InstructionArgument.JNZ_LABEL, jnzLabel);
-//        this.jnzLabel = (Label)jnzLabel;
     }
 
     @Override

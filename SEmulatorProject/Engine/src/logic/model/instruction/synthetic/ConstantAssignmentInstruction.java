@@ -3,14 +3,11 @@ package logic.model.instruction.synthetic;
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
 import logic.model.argument.constant.Constant;
-import logic.model.argument.label.LabelImpl;
 import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
-import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
-import logic.model.instruction.basic.JumpNotZeroInstruction;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +25,6 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
         super(InstructionData.CONSTANT_ASSIGNMENT, variable, label);
         arguments = new HashMap<>();
         arguments.put(InstructionArgument.CONSTANT_VALUE, constantValue);
-//        this.jnzLabel = (Label)jnzLabel;
     }
 
     @Override
@@ -41,7 +37,6 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
     @Override
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
-
 
         return super.getInstructionDisplayFormat(displayFormat);
     }

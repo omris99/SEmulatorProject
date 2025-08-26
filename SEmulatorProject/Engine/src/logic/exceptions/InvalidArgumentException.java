@@ -1,8 +1,8 @@
 package logic.exceptions;
 
 public class InvalidArgumentException extends RuntimeException {
-  private String argumentName;
-  private ArgumentErrorType errorType;
+  private final String argumentName;
+  private final ArgumentErrorType errorType;
 
     public InvalidArgumentException(String argumentName, ArgumentErrorType errorType) {
         super("Invalid argument");

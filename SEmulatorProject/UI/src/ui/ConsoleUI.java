@@ -18,10 +18,9 @@ import java.util.*;
 
 /*
  * TODO:
- *  1. search for xml application errors and make sure the errors exceptions corrrectly
  *  2. ensure that every exception message is fully detailed.
- *  3. improve the implemetntation of VariableImpl class (parse)
  *  4. clean redundant imports
+ *  5. Check on windows!
  */
 
 public class ConsoleUI implements UI {
@@ -78,7 +77,6 @@ public class ConsoleUI implements UI {
         boolean isLoadingSuccessful = false;
         System.out.print("Please enter program full path: ");
         String xmlPath = inputScanner.nextLine();
-//        String xmlPath = "/Users/omrishtruzer/Documents/SEmulatorProject/Test XMLFiles/custom-1.xml";
         try {
             engine.loadProgram(xmlPath);
             isLoadingSuccessful = true;

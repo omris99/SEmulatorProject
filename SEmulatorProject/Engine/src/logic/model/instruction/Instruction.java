@@ -15,7 +15,6 @@ public interface Instruction extends Cloneable, Serializable {
     String getInstructionDisplayFormat();
     InstructionType getType();
     int getDegree();
-    int computeDegree();
     void setIndex(int index);
     int getIndex();
     void setParent(Instruction parent);

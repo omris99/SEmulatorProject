@@ -77,33 +77,6 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     }
 
     @Override
-    public int computeDegree() {
-//        if(instructionData.getType().equals("basic")){
-//            return 0;
-//        }
-//        else {
-//            for(Instruction childInstruction : ins)
-//        }
-//        int maxChildInstuctionDegree = 0;
-//        int currentChildInstuctionDegree;
-//
-//        for(Instruction instruction : expandedInstructions) {
-//            if(instruction.getType().equals("basic")){
-//                return 1;
-//            }
-//            else{
-//                currentChildInstuctionDegree = instruction.computeDegree();
-//                if(currentChildInstuctionDegree > maxChildInstuctionDegree){
-//                    maxChildInstuctionDegree = currentChildInstuctionDegree;
-//                }
-//            }
-//        }
-//
-//        return maxChildInstuctionDegree;
-        return 0;
-    }
-
-    @Override
     public int getDegree() {
         return instructionData.getDegree();
     }

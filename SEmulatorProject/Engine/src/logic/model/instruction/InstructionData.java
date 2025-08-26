@@ -49,6 +49,7 @@ public enum InstructionData {
                 return detail;
             }
         }
+
         throw new IllegalArgumentException("Unknown instruction: name=" + name + ", type=" + type);
     }
 }

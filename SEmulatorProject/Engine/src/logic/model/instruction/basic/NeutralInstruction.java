@@ -20,7 +20,6 @@ public class NeutralInstruction extends AbstractInstruction {
     @Override
     public Label execute(ExecutionContext context) {
         return FixedLabel.EMPTY;
-
     }
 
     @Override

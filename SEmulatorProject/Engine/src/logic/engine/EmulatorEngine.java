@@ -2,7 +2,6 @@ package logic.engine;
 
 import dto.DTO;
 import dto.RunResultsDTO;
-import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -23,12 +22,6 @@ import logic.model.mappers.ProgramMapper;
 import logic.utils.Utils;
 import java.io.File;
 import java.util.*;
-
-/*
-* TODO:
-*  1. CREATE A RunResultsDTO
-*
-* */
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;

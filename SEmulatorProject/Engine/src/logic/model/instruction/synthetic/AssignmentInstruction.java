@@ -30,7 +30,6 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
         super(InstructionData.ASSIGNMENT, variable, label);
         arguments = new HashMap<>();
         arguments.put(InstructionArgument.ASSIGNED_VARIABLE, assignedVariable);
-//        this.jnzLabel = (Label)jnzLabel;
     }
 
     @Override
@@ -62,6 +61,7 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
         Variable assignedVariable = (Variable) arguments.get(InstructionArgument.ASSIGNED_VARIABLE);
 
         List<Instruction> expandedInstructions = new LinkedList<>();
+
         expandedInstructions.add(new ZeroVariableInstruction(getVariable(), instructionLabel));
         expandedInstructions.add(new JumpNotZeroInstruction(assignedVariable, freeLabel1));
         expandedInstructions.add(new GoToLabelInstruction(variableForGoTo, freeLabel3));

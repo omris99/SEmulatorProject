@@ -2,14 +2,12 @@ package logic.model.instruction.synthetic;
 
 import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
-import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
-import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 
@@ -49,6 +47,7 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
         Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
         List<Instruction> expandedInstructions = new LinkedList<>();
+
         expandedInstructions.add(new IncreaseInstruction(workVariable, instructionLabel));
         expandedInstructions.add(new JumpNotZeroInstruction(workVariable, arguments.get(InstructionArgument.GOTO_LABEL)));
 

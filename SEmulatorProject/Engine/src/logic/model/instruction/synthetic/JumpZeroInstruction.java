@@ -9,7 +9,6 @@ import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
-import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
 
@@ -58,10 +57,10 @@ public class JumpZeroInstruction extends AbstractInstruction implements Instruct
     @Override
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
         List<Instruction> expandedInstructions = new LinkedList<>();
-        Label freeLabel = instructionLabel.equals(FixedLabel.EMPTY) ? new LabelImpl(maxLabelIndex + 1) : instructionLabel;
+        Label freeLabel = new LabelImpl(maxLabelIndex + 1);
         Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
 
-        expandedInstructions.add(new JumpNotZeroInstruction(getVariable(), freeLabel));
+        expandedInstructions.add(new JumpNotZeroInstruction(getVariable(), freeLabel, instructionLabel));
         expandedInstructions.add(new GoToLabelInstruction(workVariable, arguments.get(InstructionArgument.JZ_LABEL)));
         expandedInstructions.add(new NeutralInstruction(Variable.RESULT, freeLabel));
 

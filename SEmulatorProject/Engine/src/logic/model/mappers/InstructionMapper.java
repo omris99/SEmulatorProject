@@ -44,7 +44,6 @@ public class InstructionMapper{
             instructionLabelOnXml = instructionLabelOnXml.toUpperCase();
             if(!instructionLabelOnXml.startsWith("L")) {
                 throw new InvalidArgumentException(instructionLabelOnXml, ArgumentErrorType.LABEL_MUST_START_WITH_L);
-//                throw new IllegalArgumentException("Label: " + instructionLabelOnXml + " is invalid. Every Label Must Start With 'L" );
             }
 
             instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));

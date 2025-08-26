@@ -103,6 +103,7 @@ public class ConsoleUI implements UI {
         catch (IllegalArgumentException e){
             printError("Invalid XML File: " + e.getMessage());
         }
+
         System.out.println(isLoadingSuccessful ? ("XML FILE: " + xmlPath + " Loaded successfully.") : ("Program loading failed."));
     }
 

@@ -46,7 +46,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
                 getCycles());
 
         if(parentInstruction != null){
-            instructionFormatted = instructionFormatted.concat(" <<< " + parentInstruction.getInstructionDisplayFormat());
+            instructionFormatted = instructionFormatted.concat(" >>> " + parentInstruction.getInstructionDisplayFormat());
         }
 
         return instructionFormatted;

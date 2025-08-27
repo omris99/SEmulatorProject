@@ -20,7 +20,7 @@ public class ProgramImpl implements Program {
     private final Instructions instructions;
 
     public ProgramImpl(String name) {
-        this.name = name;
+        this.name = name.trim();
         this.instructions = new Instructions();
     }
 

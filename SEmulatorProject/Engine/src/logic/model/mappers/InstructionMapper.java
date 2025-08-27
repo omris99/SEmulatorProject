@@ -43,8 +43,11 @@ public class InstructionMapper{
             if(!instructionLabelOnXml.startsWith("L")) {
                 throw new InvalidArgumentException(instructionLabelOnXml, ArgumentErrorType.LABEL_MUST_START_WITH_L);
             }
-
-            instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));
+            try{
+                instructionLabel = new LabelImpl(Integer.parseInt(instructionLabelOnXml.substring(1)));
+            } catch(NumberFormatException e) {
+                throw new InvalidArgumentException(instructionLabelOnXml, ArgumentErrorType.LABEL_INDEX_CANT_PARSE_TO_NUMBER);
+            }
         }
 
         SInstructionArguments sInstructionArguments = jaxbInstruction.getSInstructionArguments();

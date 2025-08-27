@@ -8,6 +8,7 @@ public enum ArgumentErrorType {
     Y_VARIABLE_HAS_INDEX("Y Variable cannot have an index", ArgumentType.VARIABLE),
     VARIABLE_INDEX_MISSING("Variable index is missing", ArgumentType.VARIABLE),
     VARIABLE_INDEX_CANT_PARSE_TO_NUMBER("Variable index must be an integer number", ArgumentType.VARIABLE),
+    LABEL_INDEX_CANT_PARSE_TO_NUMBER("Label index must be an integer number", ArgumentType.LABEL),
     VARIABLE_INDEX_IS_NEGATIVE("Variable index cannot be negative", ArgumentType.VARIABLE),
     CONSTANT_MUST_BE_A_NUMBER("Constant must be a numeric value", ArgumentType.CONSTANT);
 

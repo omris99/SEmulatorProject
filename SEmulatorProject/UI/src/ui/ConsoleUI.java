@@ -250,7 +250,8 @@ public class ConsoleUI implements UI {
             System.out.println(String.format("%s = %d ", variableName, results.getWorkVariablesValues().get(variableName)));
         }
 
-        System.out.println(String.format("Cycles Count = %d ", results.getTotalCyclesCount()));
+        System.out.println("--- TOTAL CYCLES COUNT ---");
+        System.out.println(String.format("%d Cycles", results.getTotalCyclesCount()));
         System.out.println("\n******************** E N D ********************");
         System.out.println("***********************************************");
     }

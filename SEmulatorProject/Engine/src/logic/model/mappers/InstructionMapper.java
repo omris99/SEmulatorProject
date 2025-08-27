@@ -80,7 +80,11 @@ public class InstructionMapper{
                     if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
                         throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_MUST_START_WITH_L);
                     }
-                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
+                    try {
+                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_INDEX_CANT_PARSE_TO_NUMBER);
+                    }
                 }
             }
             else if(argumentType.getType().equals(ArgumentType.VARIABLE)) {

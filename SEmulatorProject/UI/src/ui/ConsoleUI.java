@@ -82,7 +82,7 @@ public class ConsoleUI implements UI {
                     printError("Invalid file type: " + e.getFilePath() + " must be .xml");
                     break;
                 case UNKNOWN_LABEL:
-                    printError("Unknown label in file " + e.getFilePath() + ". " + "\nThe Label is: " + e.getElement());
+                    printError(String.format("No instruction labeled as %s exists in the program.\nin file %s", e.getElement(), e.getFilePath()));
                     break;
             }
         } catch (JAXBException e) {

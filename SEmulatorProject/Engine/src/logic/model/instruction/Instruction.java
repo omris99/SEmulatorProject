@@ -1,0 +1,22 @@
+package logic.model.instruction;
+
+import logic.execution.ExecutionContext;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
+
+import java.io.Serializable;
+
+public interface Instruction extends Cloneable, Serializable {
+    String getName();
+    Label execute(ExecutionContext context);
+    int getCycles();
+    Label getLabel();
+    Variable getVariable();
+    String getInstructionDisplayFormat();
+    InstructionType getType();
+    int getDegree();
+    void setIndex(int index);
+    int getIndex();
+    void setParent(Instruction parent);
+    Instruction clone();
+}

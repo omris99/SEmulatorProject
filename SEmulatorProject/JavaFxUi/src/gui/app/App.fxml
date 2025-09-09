@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="765.0" prefWidth="1259.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <Label text="footer" BorderPane.alignment="CENTER" />
+   </bottom>
+   <left>
+      <VBox alignment="CENTER" prefHeight="625.0" prefWidth="618.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="15.0" prefWidth="156.0" text="Instructions Table" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <fx:include source="../instructionstable/InstructionsTable.fxml" />
+            <fx:include source="../summaryline/SummaryLine.fxml" />
+            <Label prefHeight="15.0" prefWidth="279.0" text="Selected Instruction History Chain" underline="true">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <fx:include source="../instructionstable/InstructionsTable.fxml" />
+         </children>
+         <BorderPane.margin>
+            <Insets left="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <right>
+      <VBox alignment="TOP_CENTER" prefHeight="742.0" prefWidth="601.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Execution Window" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <fx:include source="../debuggerwindow/DebuggerWindow.fxml" BorderPane.alignment="TOP_CENTER" />
+            <Label layoutX="232.0" layoutY="10.0" text="History" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </Label>
+            <fx:include source="../historywindow/HistoryWindow.fxml" />
+         </children>
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+   <top>
+      <VBox alignment="CENTER" prefHeight="140.0" prefWidth="1259.0" BorderPane.alignment="CENTER">
+         <children>
+            <fx:include source="../header/header.fxml" BorderPane.alignment="CENTER" />
+            <Separator prefHeight="19.0" prefWidth="606.0" />
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <Separator orientation="VERTICAL" prefHeight="686.0" prefWidth="5.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

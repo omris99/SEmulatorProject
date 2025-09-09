@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <ScrollPane minWidth="-Infinity" BorderPane.alignment="CENTER">
+         <content>
+            <TableView prefHeight="398.0" prefWidth="600.0">
+              <columns>
+                <TableColumn prefWidth="40.0" text="#" />
+                <TableColumn prefWidth="139.0" text="Basic / Synthetic" />
+                  <TableColumn prefWidth="53.0" text="Label" />
+                  <TableColumn prefWidth="277.0" text="Instruction" />
+                  <TableColumn prefWidth="90.0" text="Cycles" />
+              </columns>
+            </TableView>
+         </content>
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
+      </ScrollPane>
+   </center>
+</BorderPane>

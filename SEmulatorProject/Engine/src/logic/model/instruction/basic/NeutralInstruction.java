@@ -1,11 +1,11 @@
 package logic.model.instruction.basic;
 
 import logic.execution.ExecutionContext;
-import logic.model.instruction.AbstractInstruction;
-import logic.model.instruction.InstructionData;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.InstructionData;
 
 public class NeutralInstruction extends AbstractInstruction {
 

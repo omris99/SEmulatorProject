@@ -1,13 +1,12 @@
 package logic.execution;
 
-import logic.model.instruction.Instruction;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
-import logic.model.program.Program;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.Instruction;
+import logic.model.program.Program;
 
-
-import java.util.*;
+import java.util.Map;
 
 public class ProgramExecutorImpl implements ProgramExecutor{
 

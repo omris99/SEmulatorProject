@@ -1,9 +1,9 @@
 package logic.model.program;
 
 import dto.DTO;
-import logic.model.instruction.Instruction;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.Instruction;
 
 import java.io.Serializable;
 import java.util.List;

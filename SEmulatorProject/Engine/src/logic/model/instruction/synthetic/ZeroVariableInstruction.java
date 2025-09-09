@@ -1,11 +1,14 @@
 package logic.model.instruction.synthetic;
 
 import logic.execution.ExecutionContext;
-import logic.model.argument.label.LabelImpl;
-import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
+import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.AbstractInstruction;
+import logic.model.instruction.ExpandableInstruction;
+import logic.model.instruction.Instruction;
+import logic.model.instruction.InstructionData;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;

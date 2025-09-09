@@ -4,15 +4,18 @@ import dto.DTO;
 import dto.ProgramDTO;
 import logic.exceptions.NumberNotInRangeException;
 import logic.model.argument.Argument;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionWithArguments;
 import logic.model.instruction.Instructions;
-import logic.model.argument.label.FixedLabel;
-import logic.model.argument.label.Label;
-import logic.model.argument.variable.Variable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ProgramImpl implements Program {

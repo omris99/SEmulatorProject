@@ -1,11 +1,11 @@
 package logic.model.instruction.basic;
 
-import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
-import logic.model.instruction.*;
+import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.*;
 
 import java.util.HashMap;
 import java.util.Map;

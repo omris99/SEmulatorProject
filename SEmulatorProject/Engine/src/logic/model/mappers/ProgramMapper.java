@@ -1,8 +1,8 @@
 package logic.model.mappers;
 
-import logic.model.program.Program;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SProgram;
+import logic.model.program.Program;
 import logic.model.program.ProgramImpl;
 
 public class ProgramMapper {

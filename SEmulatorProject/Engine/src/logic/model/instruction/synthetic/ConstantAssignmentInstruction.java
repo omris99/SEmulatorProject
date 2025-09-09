@@ -1,12 +1,12 @@
 package logic.model.instruction.synthetic;
 
-import logic.model.argument.Argument;
 import logic.execution.ExecutionContext;
+import logic.model.argument.Argument;
 import logic.model.argument.constant.Constant;
-import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
 
 import java.util.HashMap;

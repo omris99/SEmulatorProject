@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
@@ -39,6 +40,14 @@ public class JumpZeroInstruction extends AbstractInstruction implements Instruct
         }
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format(String.format("IF %s = 0 GOTO %s", getVariable().getRepresentation(),
+                arguments.get(InstructionArgument.JZ_LABEL).getRepresentation()));
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

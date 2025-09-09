@@ -1,5 +1,6 @@
 package logic.model.instruction.basic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -24,6 +25,13 @@ public class DecreaseInstruction extends AbstractInstruction {
         context.updateVariable(getVariable(), variableValue);
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s - 1", getVariable().getRepresentation(), getVariable().getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

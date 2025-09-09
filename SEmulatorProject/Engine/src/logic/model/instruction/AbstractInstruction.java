@@ -1,5 +1,6 @@
 package logic.model.instruction;
 
+import dto.InstructionDTO;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -31,6 +32,10 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         this.label = label;
         this.variable = variable;
         parentInstruction = null;
+    }
+
+    public InstructionDTO getInstructionDTO(String instructionDisplayFormat) {
+        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles());
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {

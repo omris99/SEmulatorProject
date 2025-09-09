@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
@@ -40,6 +41,15 @@ public class JumpEqualVariableInstruction extends AbstractInstruction implements
         }
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("IF %s = %s GOTO %s",
+                getVariable().getRepresentation(), arguments.get(InstructionArgument.VARIABLE_NAME).getRepresentation(),
+                arguments.get(InstructionArgument.JE_VARIABLE_LABEL).getRepresentation());
+
+        return getInstructionDTO(displayFormat);
     }
 
     @Override

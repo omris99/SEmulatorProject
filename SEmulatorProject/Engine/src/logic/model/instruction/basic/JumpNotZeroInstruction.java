@@ -1,5 +1,6 @@
 package logic.model.instruction.basic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
@@ -32,6 +33,14 @@ public class JumpNotZeroInstruction extends AbstractInstruction implements Instr
         }
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("IF %s != 0 GOTO %s", getVariable().getRepresentation(),
+                arguments.get(InstructionArgument.JNZ_LABEL).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
@@ -32,6 +33,13 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     @Override
     public Label execute(ExecutionContext context) {
         return (Label) arguments.get(InstructionArgument.GOTO_LABEL);
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("GOTO %s", arguments.get(InstructionArgument.GOTO_LABEL).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

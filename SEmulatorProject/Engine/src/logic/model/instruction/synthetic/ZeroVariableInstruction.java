@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -29,6 +30,13 @@ public class ZeroVariableInstruction extends AbstractInstruction implements Expa
         context.updateVariable(getVariable(), 0);
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- 0", getVariable().getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

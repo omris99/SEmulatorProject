@@ -108,7 +108,8 @@ public class ProgramImpl implements Program {
                 name,
                 getProgramInputsNames(),
                 getProgramLabelsNames(),
-                getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()));
+                getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),
+                getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()));
     }
 
 

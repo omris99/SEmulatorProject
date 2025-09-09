@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.constant.Constant;
@@ -32,6 +33,13 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
         context.updateVariable(getVariable(),((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue());
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

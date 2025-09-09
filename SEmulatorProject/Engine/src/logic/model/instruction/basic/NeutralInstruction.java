@@ -1,5 +1,6 @@
 package logic.model.instruction.basic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -20,6 +21,13 @@ public class NeutralInstruction extends AbstractInstruction {
     @Override
     public Label execute(ExecutionContext context) {
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), getVariable().getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

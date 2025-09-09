@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
@@ -38,6 +39,14 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
 
         return FixedLabel.EMPTY;
     }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.ASSIGNED_VARIABLE).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
+    }
+
 
     @Override
     public String getInstructionDisplayFormat() {

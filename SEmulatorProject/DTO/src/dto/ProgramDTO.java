@@ -7,12 +7,14 @@ public class ProgramDTO implements DTO{
     private final List<String> inputNames;
     private final List<String> labelsNames;
     private final List<String> instructionsInDisplayFormat;
+    private final List<InstructionDTO> instructionsDTO;
 
-    public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames, List<String> instructionsInDisplayFormat) {
+    public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames, List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO) {
         this.name = name;
         this.inputNames = inputNames;
         this.labelsNames = labelsNames;
         this.instructionsInDisplayFormat = instructionsInDisplayFormat;
+        this.instructionsDTO = instructionsDTO;
     }
 
     public String getName() {
@@ -29,5 +31,9 @@ public class ProgramDTO implements DTO{
 
     public List<String> getInstructionsInDisplayFormat() {
         return instructionsInDisplayFormat;
+    }
+
+    public List<InstructionDTO> getInstructionsDTO() {
+        return instructionsDTO;
     }
 }

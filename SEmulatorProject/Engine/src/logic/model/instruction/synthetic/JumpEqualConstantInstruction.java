@@ -1,5 +1,6 @@
 package logic.model.instruction.synthetic;
 
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.constant.Constant;
@@ -42,6 +43,15 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
         }
 
         return FixedLabel.EMPTY;
+    }
+
+    @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("IF %s = %s GOTO %s",
+                getVariable().getRepresentation(), (arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation()),
+                (arguments.get(InstructionArgument.JE_CONSTANT_LABEL).getRepresentation()));
+
+        return super.getInstructionDTO(displayFormat);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package dto;
 
+import logic.model.instruction.InstructionType;
+
 import java.util.List;
+import java.util.Map;
 
 public class ProgramDTO implements DTO{
     private final String name;
@@ -8,13 +11,15 @@ public class ProgramDTO implements DTO{
     private final List<String> labelsNames;
     private final List<String> instructionsInDisplayFormat;
     private final List<InstructionDTO> instructionsDTO;
+    private final Map<InstructionType, Integer> instructionsTypeCount;
 
-    public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames, List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO) {
+    public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames, List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO, Map<InstructionType, Integer> instructionsTypeCount) {
         this.name = name;
         this.inputNames = inputNames;
         this.labelsNames = labelsNames;
         this.instructionsInDisplayFormat = instructionsInDisplayFormat;
         this.instructionsDTO = instructionsDTO;
+        this.instructionsTypeCount = instructionsTypeCount;
     }
 
     public String getName() {
@@ -35,5 +40,9 @@ public class ProgramDTO implements DTO{
 
     public List<InstructionDTO> getInstructionsDTO() {
         return instructionsDTO;
+    }
+
+    public  Map<InstructionType, Integer> getInstructionsTypeCount() {
+        return instructionsTypeCount;
     }
 }

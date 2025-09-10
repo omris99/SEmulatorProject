@@ -59,7 +59,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <fx:include source="../components/debuggerwindow/DebuggerWindow.fxml" />
+                  <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                   <Separator prefWidth="200.0" />
                   <Label layoutX="232.0" layoutY="10.0" text="History" textAlignment="CENTER" underline="true">
                      <font>

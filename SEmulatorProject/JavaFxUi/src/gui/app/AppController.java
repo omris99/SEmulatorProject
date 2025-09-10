@@ -1,6 +1,7 @@
 package gui.app;
 
 import dto.ProgramDTO;
+import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import jakarta.xml.bind.JAXBException;
@@ -9,14 +10,13 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import logic.engine.EmulatorEngine;
-import logic.engine.Engine;
 import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 
 import java.io.File;
 
 public class AppController {
-    private final Engine emulatorEngine;
+    private final EmulatorEngine engine;
 
     @FXML
     private LoadFileBarController loadFileBarController;
@@ -25,12 +25,16 @@ public class AppController {
     private InstructionWindowController instructionWindowController;
 
     @FXML
+    private DebuggerWindowController debuggerWindowController;
+
+    @FXML
     private void initialize() {
         loadFileBarController.setAppController(this);
+        debuggerWindowController.setAppController(this);
     }
 
     public AppController() {
-        this.emulatorEngine = new EmulatorEngine();
+        this.engine = new EmulatorEngine();
     }
 
     public void loadProgramWithProgress(File selectedFile) {
@@ -38,14 +42,16 @@ public class AppController {
             @Override
             protected Void call() throws Exception {
                 try{
-                    updateMessage("Loading program...");
-                    emulatorEngine.loadProgram(selectedFile.getAbsolutePath());
+                    updateProgress(15,100);
+//                    updateMessage("Loading program...");
+                    engine.loadProgram(selectedFile.getAbsolutePath());
 
                     updateProgress(50, 100);
                     Thread.sleep(100);
 
-                    ProgramDTO programDTO = (ProgramDTO) emulatorEngine.getLoadedProgramDTO();
-                    instructionWindowController.setInstructionsTableData(programDTO.getInstructionsDTO());
+                    ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+                    instructionWindowController.setInstructionsTableData(programDTO);
+                    debuggerWindowController.clearInputVariablesTable();
 
                     updateProgress(100, 100);
                     updateMessage(selectedFile.getAbsolutePath());
@@ -84,7 +90,9 @@ public class AppController {
                         alert.showAndWait();
                     });
 
-                    updateMessage("Failed to load file.");
+                    if(!engine.isProgramLoaded()) {
+                        updateMessage(String.format("Failed to load File: %s", selectedFile.getName()));
+                    }
                     updateProgress(0,100);
                 }
 
@@ -95,6 +103,10 @@ public class AppController {
         loadFileBarController.bindTaskToUI(loadTask);
 
         new Thread(loadTask).start();
+    }
+
+    public void newRunState(){
+        debuggerWindowController.setProgramInputVariablesInTable((ProgramDTO)engine.getLoadedProgramDTO());
     }
 
 }

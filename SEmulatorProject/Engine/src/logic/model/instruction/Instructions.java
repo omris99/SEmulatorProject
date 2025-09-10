@@ -15,12 +15,16 @@ public class Instructions implements Serializable {
     private final Set<Variable> instructionsInputs;
     private final Set<Variable> instructionsWorkVariables;
     private int expandLevel;
+    private final Map<InstructionType, Integer> instructionsTypeCount;
 
     public Instructions() {
         this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         this.instructionsWorkVariables = new LinkedHashSet<>();
+        this.instructionsTypeCount = new HashMap<>();
+        this.instructionsTypeCount.put(InstructionType.BASIC, 0);
+        this.instructionsTypeCount.put(InstructionType.SYNTHETIC, 0);
     }
 
 
@@ -60,6 +64,9 @@ public class Instructions implements Serializable {
                 }
             }
         }
+
+        instructionsTypeCount.put(instruction.getType(),
+                instructionsTypeCount.get(instruction.getType()) + 1);
     }
 
     public void addListOfInstructions(List<Instruction> instructions, int index) {
@@ -122,7 +129,6 @@ public class Instructions implements Serializable {
         return instructionsInputs.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 
-
     public void resetIndexes() {
         int index = 1;
 
@@ -130,5 +136,9 @@ public class Instructions implements Serializable {
             instruction.setIndex(index);
             index++;
         }
+    }
+
+    public Map<InstructionType, Integer> getInstructionsTypeCount() {
+        return instructionsTypeCount;
     }
 }

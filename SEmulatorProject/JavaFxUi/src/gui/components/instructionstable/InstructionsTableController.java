@@ -1,6 +1,7 @@
 package gui.components.instructionstable;
 
 import dto.InstructionDTO;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +34,8 @@ public class InstructionsTableController {
     }
 
     public void setInstructions(List<InstructionDTO> instructions) {
-        data.setAll(instructions);
+        Platform.runLater(() -> {
+            data.setAll(instructions);
+        });
     }
 }

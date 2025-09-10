@@ -2,11 +2,10 @@
 
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="289.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionWindowController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="289.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionWindowController">
    <children>
       <fx:include source="../toolbar/ToolBar.fxml" />
-      <fx:include source="../instructionstable/InstructionsTable.fxml" fx:id="instructionsTable"/>
-      <fx:include source="../summaryline/SummaryLine.fxml" />
+      <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
+      <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
    </children>
 </VBox>

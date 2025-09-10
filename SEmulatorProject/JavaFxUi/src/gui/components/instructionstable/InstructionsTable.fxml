@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstable.InstructionsTableController">
    <children>
       <TableView fx:id="InstructionsTable" prefHeight="224.0" prefWidth="600.0">
@@ -19,6 +18,9 @@
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </VBox>

@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -17,6 +18,10 @@ public class LoadFileBarController {
 
     @FXML
     private Button LoadFileButton;
+
+    @FXML
+    private ProgressBar ProgressBar;
+
 
     public void setAppController(AppController appController) {
         this.appController = appController;
@@ -34,23 +39,11 @@ public class LoadFileBarController {
             return;
         }
 
-        Task<Void> loadFileTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    appController.loadProgram(selectedFile.getAbsolutePath());
-                    updateMessage(selectedFile.getAbsolutePath());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    updateMessage(e.getMessage());
-                }
+        appController.loadProgramWithProgress(selectedFile);
+    }
 
-                return null;
-            }
-        };
-
-        FilePathTextField.textProperty().bind(loadFileTask.messageProperty());
-
-        new Thread(loadFileTask).start();
+    public void bindTaskToUI(Task<?> task) {
+        ProgressBar.progressProperty().bind(task.progressProperty());
+        FilePathTextField.textProperty().bind(task.messageProperty());
     }
 }

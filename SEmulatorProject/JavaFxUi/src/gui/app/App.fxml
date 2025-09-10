@@ -14,10 +14,10 @@
             <Font name="System Bold Italic" size="20.0" />
          </font>
          <VBox.margin>
-            <Insets bottom="10.0" top="10.0" />
+            <Insets bottom="5.0" top="10.0" />
          </VBox.margin>
       </Label>
-      <fx:include source="../components/loadfilebar/LoadFileBar.fxml" fx:id="loadFileBar"/>
+      <fx:include fx:id="loadFileBar" source="../components/loadfilebar/LoadFileBar.fxml" />
       <Separator prefHeight="19.0" prefWidth="606.0" />
       <HBox alignment="TOP_CENTER" prefHeight="753.0" prefWidth="1259.0">
          <children>
@@ -31,7 +31,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <fx:include source="../components/instructionswindow/InstructionWindow.fxml" fx:id="instructionWindow"/>
+                  <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionWindow.fxml" />
                   <Separator prefWidth="200.0" />
                   <Label prefHeight="15.0" prefWidth="279.0" text="Selected Instruction History Chain" underline="true">
                      <font>

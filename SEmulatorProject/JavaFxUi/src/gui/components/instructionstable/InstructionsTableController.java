@@ -32,7 +32,6 @@ public class InstructionsTableController {
         InstructionsTable.setItems(data);
     }
 
-    /** מתודה לעדכון התוכן של הטבלה */
     public void setInstructions(List<InstructionDTO> instructions) {
         data.setAll(instructions);
     }

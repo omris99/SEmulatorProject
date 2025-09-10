@@ -1,17 +1,12 @@
 package gui.components.loadfilebar;
 
 import gui.app.AppController;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import logic.engine.EmulatorEngine;
-import logic.exceptions.InvalidXmlFileException;
-
-import jakarta.xml.bind.JAXBException;
 import java.io.File;
 
 public class LoadFileBarController {
@@ -44,7 +39,6 @@ public class LoadFileBarController {
             protected Void call() throws Exception {
                 try {
                     appController.loadProgram(selectedFile.getAbsolutePath());
-//                    engine.loadProgram(selectedFile.getAbsolutePath());
                     updateMessage(selectedFile.getAbsolutePath());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());

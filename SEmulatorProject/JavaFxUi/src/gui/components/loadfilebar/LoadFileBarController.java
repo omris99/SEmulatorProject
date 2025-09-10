@@ -1,5 +1,6 @@
 package gui.components.loadfilebar;
 
+import gui.app.AppController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import jakarta.xml.bind.JAXBException;
 import java.io.File;
 
 public class LoadFileBarController {
+    private AppController appController;
 
     @FXML
     private TextField FilePathTextField;
@@ -21,10 +23,8 @@ public class LoadFileBarController {
     @FXML
     private Button LoadFileButton;
 
-    private EmulatorEngine engine = new EmulatorEngine();
-
-    public void setEngine(EmulatorEngine engine) {
-        this.engine = engine;
+    public void setAppController(AppController appController) {
+        this.appController = appController;
     }
 
     @FXML
@@ -43,7 +43,8 @@ public class LoadFileBarController {
             @Override
             protected Void call() throws Exception {
                 try {
-                    engine.loadProgram(selectedFile.getAbsolutePath());
+                    appController.loadProgram(selectedFile.getAbsolutePath());
+//                    engine.loadProgram(selectedFile.getAbsolutePath());
                     updateMessage(selectedFile.getAbsolutePath());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());

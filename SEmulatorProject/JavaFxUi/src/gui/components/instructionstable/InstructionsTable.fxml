@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstable.InstructionsTableController">
-   <content>
+
+<VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstable.InstructionsTableController">
+   <children>
       <TableView fx:id="InstructionsTable" prefHeight="224.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="ColIndex" prefWidth="40.0" text="#" />
@@ -19,5 +20,5 @@
             <Insets />
          </opaqueInsets>
       </TableView>
-   </content>
-</ScrollPane>
+   </children>
+</VBox>

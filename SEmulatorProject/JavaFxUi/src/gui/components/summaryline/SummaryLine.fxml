@@ -18,7 +18,7 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Label text="Basic Instructions:" />
-            <TextField fx:id="basicInstructionsCount" disable="true" editable="false" prefHeight="0.0" prefWidth="27.0" />
+            <TextField fx:id="basicInstructionsCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0">
                <HBox.margin>
                   <Insets left="25.0" right="25.0" />
@@ -29,7 +29,7 @@
                   <Insets />
                </HBox.margin>
             </Label>
-            <TextField fx:id="syntheticInstructionsCount" disable="true" editable="false" layoutX="209.0" layoutY="24.0" prefHeight="0.0" prefWidth="27.0" />
+            <TextField fx:id="syntheticInstructionsCount" disable="true" editable="false" layoutX="209.0" layoutY="24.0" prefHeight="26.0" prefWidth="50.0" />
          </children>
       </HBox>
    </children>

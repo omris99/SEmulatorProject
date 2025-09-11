@@ -13,8 +13,6 @@ public class ExpandationLevelWindowController {
 
     @FXML
     private ChoiceBox<Integer> currentDegreeChoiceBox;
-    @FXML
-    private VBox expandationLevelWindow;
 
     @FXML
     private Label maximalDegreeLabel;
@@ -30,32 +28,17 @@ public class ExpandationLevelWindowController {
         });
     }
 
-    public void setMaximalDegree(int maximalDegree) {
-        currentDegreeChoiceBox.getItems().clear();
-        for (int i = 0; i <= maximalDegree; i++) {
-            currentDegreeChoiceBox.getItems().add(i);
-        }
-
-        maximalDegreeLabel.setText(String.valueOf(maximalDegree));
-    }
-
     public void setInstructionsWindowToolbarController(InstructionsWindowToolbarController instructionsWindowToolbarController) {
         this.instructionsWindowToolbarController = instructionsWindowToolbarController;
     }
 
-    public void setDegree(int degree) {
-        currentDegreeChoiceBox.setValue(degree);
-//        currentDegreeField.setText(String.valueOf(currentExpandationLevel));
-    }
-
     public void onProgramLoaded(int maximalDegree) {
         currentDegreeChoiceBox.getItems().clear();
+        currentDegreeChoiceBox.setValue(0);
         for (int i = 0; i <= maximalDegree; i++) {
             currentDegreeChoiceBox.getItems().add(i);
         }
 
         maximalDegreeLabel.setText(String.valueOf(maximalDegree));
-
     }
-
 }

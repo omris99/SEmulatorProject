@@ -42,7 +42,7 @@ public class DebuggerWindowController {
         for (String name : names) {
             try {
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("../inputrow/InputRow.fxml")
+                        getClass().getResource("/gui/components/inputrow/InputRow.fxml")
                 );
                 Node rowNode = loader.load();
                 InputRowController rowController = loader.getController();

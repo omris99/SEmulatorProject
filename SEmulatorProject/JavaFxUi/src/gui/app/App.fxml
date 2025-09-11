@@ -31,7 +31,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionWindow.fxml" />
+                  <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                </children>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="588.0" prefWidth="15.0">

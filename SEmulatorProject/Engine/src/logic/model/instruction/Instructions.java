@@ -141,4 +141,8 @@ public class Instructions implements Serializable {
     public Map<InstructionType, Integer> getInstructionsTypeCount() {
         return instructionsTypeCount;
     }
+
+    public int getExpandLevel() {
+        return expandLevel;
+    }
 }

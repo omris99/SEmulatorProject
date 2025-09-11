@@ -34,9 +34,7 @@ public class InstructionsTableController {
     }
 
     public void setInstructions(List<InstructionDTO> instructions) {
-        Platform.runLater(() -> {
             data.setAll(instructions);
-        });
     }
 
     public TableView<InstructionDTO> getTable() {

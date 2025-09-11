@@ -13,10 +13,8 @@ public class SummaryLineController {
     private TextField syntheticInstructionsCount;
 
     public void setSummaryLineValues(int basicInstructionsCount, int syntheticInstructionsCount) {
-        Platform.runLater(() -> {
             this.basicInstructionsCount.setText(String.valueOf(basicInstructionsCount));
             this.syntheticInstructionsCount.setText(String.valueOf(syntheticInstructionsCount));
-        });
     }
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="expandationLevelWindow" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.expandationlevelwindow.ExpandationLevelWindowController">
+   <children>
+      <Label alignment="CENTER" prefHeight="17.0" prefWidth="263.0" style="-fx-background-color: gray;" text="Expendation Level" textFill="WHITE" />
+      <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">
+         <children>
+            <TextField fx:id="currentDegreeField" alignment="CENTER" prefHeight="35.0" prefWidth="60.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label prefHeight="30.0" prefWidth="13.0" text="/">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="maximalDegreeLabel" layoutX="79.0" layoutY="10.0" prefHeight="30.0" prefWidth="13.0" text="-">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>

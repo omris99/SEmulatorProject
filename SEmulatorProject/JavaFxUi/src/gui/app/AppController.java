@@ -2,7 +2,7 @@ package gui.app;
 
 import dto.ProgramDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
-import gui.components.instructionswindow.InstructionWindowController;
+import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import jakarta.xml.bind.JAXBException;
 import javafx.application.Platform;
@@ -22,7 +22,7 @@ public class AppController {
     private LoadFileBarController loadFileBarController;
 
     @FXML
-    private InstructionWindowController instructionWindowController;
+    private InstructionsWindowController instructionWindowController;
 
     @FXML
     private DebuggerWindowController debuggerWindowController;

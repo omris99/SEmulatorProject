@@ -4,6 +4,8 @@ import dto.InstructionDTO;
 import dto.ProgramDTO;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.summaryline.SummaryLineController;
+import gui.components.toolbar.InstructionsWindowToolbarController;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -12,9 +14,12 @@ import logic.model.instruction.InstructionType;
 import java.util.List;
 import java.util.Map;
 
-public class InstructionWindowController {
+public class InstructionsWindowController {
     @FXML
     private InstructionsTableController instructionsTableController;
+
+    @FXML
+    private InstructionsWindowToolbarController instructionsWindowToolbarController;
 
     @FXML
     private InstructionsTableController instructionHistoryChainTableController;
@@ -44,9 +49,19 @@ public class InstructionWindowController {
 
 
     public void setInstructionsTableData(ProgramDTO programDTO) {
-        instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
-        Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
-        summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
-                instructionsTypeCount.get(InstructionType.SYNTHETIC));
+        Platform.runLater(() -> {
+            instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
+            Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
+            summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
+                    instructionsTypeCount.get(InstructionType.SYNTHETIC));
+            instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO);
+        });
+//        instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
+//        Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
+//        summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
+//                instructionsTypeCount.get(InstructionType.SYNTHETIC));
+//        instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO);
     }
+
+
 }

@@ -110,7 +110,9 @@ public class ProgramImpl implements Program {
                 getProgramLabelsNames(),
                 getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),
                 getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()),
-                instructions.getInstructionsTypeCount());
+                instructions.getInstructionsTypeCount(),
+                instructions.getExpandLevel(),
+                instructions.getMaximalDegree());
     }
 
 

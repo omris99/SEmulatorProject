@@ -38,4 +38,8 @@ public class InstructionsTableController {
             data.setAll(instructions);
         });
     }
+
+    public TableView<InstructionDTO> getTable() {
+        return InstructionsTable;
+    }
 }

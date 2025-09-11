@@ -26,6 +26,7 @@ import java.util.*;
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
+    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
 
     public EmulatorEngine() {
@@ -54,6 +55,13 @@ public class EmulatorEngine implements Engine {
         }
 
         currentLoadedProgram = loadedProgram;
+
+        //try
+        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
+        for (int i = 0; i <= currentLoadedProgram.getMaximalDegree(); i++) {
+            loadedProgramExpendations[i] = currentLoadedProgram.getExpandedProgram(i);
+        }
+
         history.clear();
     }
 

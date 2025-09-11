@@ -2,6 +2,7 @@ package gui.components.instructionswindow;
 
 import dto.InstructionDTO;
 import dto.ProgramDTO;
+import gui.app.AppController;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.summaryline.SummaryLineController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class InstructionsWindowController {
+    private AppController appController;
+
     @FXML
     private InstructionsTableController instructionsTableController;
 
@@ -29,6 +32,7 @@ public class InstructionsWindowController {
 
     @FXML
     public void initialize() {
+        instructionsWindowToolbarController.setInstructionsWindowController(this);
         instructionsTableController.getTable().getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<InstructionDTO>() {
                     @Override
@@ -48,20 +52,32 @@ public class InstructionsWindowController {
     }
 
 
-    public void setInstructionsTableData(ProgramDTO programDTO) {
+    public void onProgramLoaded(ProgramDTO programDTO) {
         Platform.runLater(() -> {
-            instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
-            Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
-            summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
-                    instructionsTypeCount.get(InstructionType.SYNTHETIC));
-            instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO);
+            updateInstructionsTableAndSummaryLine(programDTO);
+            instructionsWindowToolbarController.onProgramLoaded(programDTO.getMaximalDegree());
         });
-//        instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
-//        Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
-//        summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
-//                instructionsTypeCount.get(InstructionType.SYNTHETIC));
-//        instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO);
     }
 
+    public void onExpandationLevelChanged(ProgramDTO programDTO) {
+        instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO.getExpandLevelDegree());
+        updateInstructionsTableAndSummaryLine(programDTO);
+    }
+
+    private void updateInstructionsTableAndSummaryLine(ProgramDTO programDTO) {
+        instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
+        Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
+        summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
+                instructionsTypeCount.get(InstructionType.SYNTHETIC));
+    }
+
+    public void onDegreeChoice(int newDegree) {
+        appController.expandProgram(newDegree);
+
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
 
 }

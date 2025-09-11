@@ -21,4 +21,6 @@ public interface Instruction extends Cloneable, Serializable {
     int getIndex();
     void setParent(Instruction parent);
     Instruction clone();
+
+    Instruction getParent();
 }

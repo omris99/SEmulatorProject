@@ -31,6 +31,7 @@ public class AppController {
     private void initialize() {
         loadFileBarController.setAppController(this);
         debuggerWindowController.setAppController(this);
+        instructionWindowController.setAppController(this);
     }
 
     public AppController() {
@@ -50,7 +51,7 @@ public class AppController {
                     Thread.sleep(100);
 
                     ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-                    instructionWindowController.setInstructionsTableData(programDTO);
+                    instructionWindowController.onProgramLoaded(programDTO);
                     debuggerWindowController.clearInputVariablesTable();
 
                     updateProgress(100, 100);
@@ -108,6 +109,12 @@ public class AppController {
 
     public void prepareDebuggerForNewRun(){
         debuggerWindowController.prepareForNewRun(((ProgramDTO)engine.getLoadedProgramDTO()).getInputNames());
+    }
+
+    public void expandProgram(int degree){
+        engine.changeCurrentProgramDegree(degree);
+        ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        instructionWindowController.onExpandationLevelChanged(programDTO);
     }
 
 }

@@ -39,8 +39,10 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
 
     public InstructionDTO getInstructionDTO(String instructionDisplayFormat) {
         List<InstructionDTO> parentInstructions = new LinkedList<>();
-        if(parentInstruction != null){
-            parentInstructions.add(parentInstruction.getInstructionDTO());
+        Instruction currentParentInstruction = parentInstruction;
+        while(currentParentInstruction != null){
+            parentInstructions.add(currentParentInstruction.getInstructionDTO());
+            currentParentInstruction = currentParentInstruction.getParent();
         }
 
         return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions);
@@ -103,5 +105,10 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     @Override
     public void setParent(Instruction parent) {
         this.parentInstruction = parent;
+    }
+
+    @Override
+    public Instruction getParent() {
+        return parentInstruction;
     }
 }

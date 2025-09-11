@@ -15,16 +15,12 @@ public class Instructions implements Serializable {
     private final Set<Variable> instructionsInputs;
     private final Set<Variable> instructionsWorkVariables;
     private int expandLevel;
-    private final Map<InstructionType, Integer> instructionsTypeCount;
 
     public Instructions() {
         this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         this.instructionsWorkVariables = new LinkedHashSet<>();
-        this.instructionsTypeCount = new HashMap<>();
-        this.instructionsTypeCount.put(InstructionType.BASIC, 0);
-        this.instructionsTypeCount.put(InstructionType.SYNTHETIC, 0);
     }
 
 
@@ -40,8 +36,7 @@ public class Instructions implements Serializable {
 
         if (variable.getType() == VariableType.INPUT) {
             this.instructionsInputs.add(variable);
-        }
-        else if (variable.getType() == VariableType.WORK) {
+        } else if (variable.getType() == VariableType.WORK) {
             this.instructionsWorkVariables.add(variable);
         }
 
@@ -56,17 +51,13 @@ public class Instructions implements Serializable {
                     if (((Variable) argument).getType() == VariableType.INPUT) {
                         this.instructionsInputs.add((Variable) argument);
                     }
-                }
-                else if (argument instanceof Label) {
-                    if(argument == FixedLabel.EXIT) {
+                } else if (argument instanceof Label) {
+                    if (argument == FixedLabel.EXIT) {
                         this.instructionsLabels.add((Label) argument);
                     }
                 }
             }
         }
-
-        instructionsTypeCount.put(instruction.getType(),
-                instructionsTypeCount.get(instruction.getType()) + 1);
     }
 
     public void addListOfInstructions(List<Instruction> instructions, int index) {
@@ -94,7 +85,7 @@ public class Instructions implements Serializable {
         return instructions;
     }
 
-    public int getMaximalDegree(){
+    public int getMaximalDegree() {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
@@ -139,6 +130,18 @@ public class Instructions implements Serializable {
     }
 
     public Map<InstructionType, Integer> getInstructionsTypeCount() {
+        Map<InstructionType, Integer> instructionsTypeCount = new HashMap<>();
+        instructionsTypeCount.put(InstructionType.BASIC, 0);
+        instructionsTypeCount.put(InstructionType.SYNTHETIC, 0);
+        for (Instruction instruction : instructions) {
+            if (instruction.getType() == InstructionType.BASIC) {
+                instructionsTypeCount.put(InstructionType.BASIC, instructionsTypeCount.get(InstructionType.BASIC) + 1);
+            }
+            else {
+                instructionsTypeCount.put(InstructionType.SYNTHETIC, instructionsTypeCount.get(InstructionType.SYNTHETIC) + 1);
+            }
+        }
+
         return instructionsTypeCount;
     }
 

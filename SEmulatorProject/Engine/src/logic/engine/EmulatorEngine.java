@@ -146,6 +146,10 @@ public class EmulatorEngine implements Engine {
         return !(currentLoadedProgram == null);
     }
 
+    public void changeCurrentProgramDegree(int degree) {
+        currentLoadedProgram = loadedProgramExpendations[degree];
+    }
+
     @Override
     public void quit(){
         System.exit(0);

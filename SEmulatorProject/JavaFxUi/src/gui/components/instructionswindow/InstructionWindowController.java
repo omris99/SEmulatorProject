@@ -15,7 +15,11 @@ public class InstructionWindowController {
     private InstructionsTableController instructionsTableController;
 
     @FXML
+    private InstructionsTableController instructionHistoryChainTableController;
+
+    @FXML
     private SummaryLineController summaryLineController;
+
 
     public void setInstructionsTableData(ProgramDTO programDTO) {
         instructionsTableController.setInstructions(programDTO.getInstructionsDTO());

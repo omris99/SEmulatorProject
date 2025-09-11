@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="289.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionWindowController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionWindowController">
    <children>
       <fx:include source="../toolbar/ToolBar.fxml" />
       <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
       <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="695.0" style="-fx-background-color: gray;" text="Instruction History Chain" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Label>
+      <fx:include fx:id="instructionHistoryChainTable" source="../instructionstable/InstructionsTable.fxml" />
    </children>
 </VBox>

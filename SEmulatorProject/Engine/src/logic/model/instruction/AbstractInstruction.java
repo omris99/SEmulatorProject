@@ -5,6 +5,9 @@ import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class AbstractInstruction implements Instruction, Cloneable {
     private int index;
     private final InstructionData instructionData;
@@ -35,7 +38,12 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     }
 
     public InstructionDTO getInstructionDTO(String instructionDisplayFormat) {
-        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles());
+        List<InstructionDTO> parentInstructions = new LinkedList<>();
+        if(parentInstruction != null){
+            parentInstructions.add(parentInstruction.getInstructionDTO());
+        }
+
+        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions);
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {

@@ -1,19 +1,16 @@
 package gui.components.debuggerwindow;
 
-import dto.ProgramDTO;
 import gui.app.AppController;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import gui.components.inputrow.InputRowController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import gui.components.debuggercommandsbar.debuggerCommandsBarController ;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DebuggerWindowController {
@@ -23,111 +20,62 @@ public class DebuggerWindowController {
     private debuggerCommandsBarController debuggerCommandsBarController;
 
     @FXML
-    private TableView<?> variablesDisplayTable; // תוכל למלא בהמשך
+    private VBox inputVariablesContainer;
 
-    @FXML
-    private TableColumn<?, ?> colVariable;
-
-    @FXML
-    private TableColumn<?, ?> colVariableValue;
-
-    @FXML
-    private TableView<Row> inputVariablesTable;
-
-    @FXML
-    private TableColumn<Row, String> colInputVariable;
-
-    @FXML
-    private TableColumn<Row, String> colInputVariableValue;
-
-    private final ObservableList<Row> inputRows = FXCollections.observableArrayList();
+    private final List<InputRowController> inputVariableRows = new ArrayList<>();
 
     @FXML
     private void initialize() {
         debuggerCommandsBarController.setDebuggerWindowController(this);
-
-        // עמודת שם המשתנה (לא ניתנת לעריכה)
-        colInputVariable.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-
-        // עמודת Value – editable עם TextFieldTableCell
-        colInputVariableValue.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
-
-        // שימוש ב-TextFieldTableCell עם StringConverter
-        colInputVariableValue.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        // מיישר את הערכים לימין
-        colInputVariableValue.setStyle("-fx-alignment: CENTER-RIGHT;");
-
-        // מאזין לעריכה – מעדכן את המודל
-        colInputVariableValue.setOnEditCommit(event -> {
-            Row row = event.getRowValue();
-            row.setValue(event.getNewValue());
-        });
-
-        // הפיכת הטבלה לעריכה
-        inputVariablesTable.setEditable(true);
-
-        // אתחול הנתונים
-        inputVariablesTable.setItems(inputRows);
     }
 
-
-
-    /**
-     * טוען לתוך הטבלה את שמות המשתנים מתוך ProgramDTO
-     */
-    public void loadProgram(ProgramDTO programDTO) {
-        setInputVariables(programDTO.getInputNames());
+    private void reset(){
+        inputVariablesContainer.getChildren().clear();
+        inputVariableRows.clear();
+        debuggerCommandsBarController.reset();
     }
 
-    /**
-     * ממלא את השמות בשורות
-     */
-    public void setInputVariables(List<String> names) {
-        inputRows.clear();
+    public void prepareForNewRun(List<String> names) {
+        inputVariablesContainer.getChildren().clear();
+        inputVariableRows.clear();
+
         for (String name : names) {
-            inputRows.add(new Row(name, "0"));
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("../inputrow/InputRow.fxml")
+                );
+                Node rowNode = loader.load();
+                InputRowController rowController = loader.getController();
+                rowController.setName(name);
+                rowController.setValue("0");
+
+                inputVariablesContainer.getChildren().add(rowNode);
+                inputVariableRows.add(rowController);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        debuggerCommandsBarController.enableExecutionButtons();
     }
+
 
     public void clearInputVariablesTable() {
-        inputRows.clear();
+        inputVariableRows.clear();
     }
 
-    /**
-     * מחזיר את הערכים שהמשתמש הקליד
-     */
-    public List<Row> getInputValues() {
-        return inputRows;
-    }
     public void onNewRunClick() {
-        appController.newRunState();
-    }
-
-    public void setProgramInputVariablesInTable(ProgramDTO programDTO) {
-        setInputVariables(programDTO.getInputNames());
+        appController.prepareDebuggerForNewRun();
     }
 
     public void setAppController(AppController appController) {
         this.appController = appController;
     }
 
-    // מודל פנימי ל"שורה" של הטבלה
-    public static class Row {
-        private final StringProperty name;
-        private final StringProperty value;
-
-        public Row(String name, String value) {
-            this.name = new SimpleStringProperty(name);
-            this.value = new SimpleStringProperty(value);
-        }
-
-        public String getName() { return name.get(); }
-        public void setName(String n) { name.set(n); }
-        public StringProperty nameProperty() { return name; }
-
-        public String getValue() { return value.get(); }
-        public void setValue(String v) { value.set(v); }
-        public StringProperty valueProperty() { return value; }
+    public void onProgramLoaded() {
+        Platform.runLater(() -> {
+            reset();
+            debuggerCommandsBarController.enableNewRunButton();
+        });
     }
 }

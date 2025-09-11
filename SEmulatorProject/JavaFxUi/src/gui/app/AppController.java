@@ -55,6 +55,7 @@ public class AppController {
 
                     updateProgress(100, 100);
                     updateMessage(selectedFile.getAbsolutePath());
+                    debuggerWindowController.onProgramLoaded();
                 }
 
 
@@ -105,8 +106,8 @@ public class AppController {
         new Thread(loadTask).start();
     }
 
-    public void newRunState(){
-        debuggerWindowController.setProgramInputVariablesInTable((ProgramDTO)engine.getLoadedProgramDTO());
+    public void prepareDebuggerForNewRun(){
+        debuggerWindowController.prepareForNewRun(((ProgramDTO)engine.getLoadedProgramDTO()).getInputNames());
     }
 
 }

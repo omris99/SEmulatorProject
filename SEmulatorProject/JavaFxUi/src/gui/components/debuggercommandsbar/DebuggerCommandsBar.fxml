@@ -29,15 +29,15 @@
           <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="startButton" mnemonicParsing="false" onAction="#startButtonAction" prefHeight="27.0" prefWidth="112.0" text="START" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button fx:id="debugButton" mnemonicParsing="false" onAction="#debugButtonAction" prefHeight="82.0" prefWidth="71.0" text="DEBUG" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopButtonAction" prefHeight="57.0" prefWidth="57.0" text="STOP !" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" wrapText="true" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <Button fx:id="resumeButton" mnemonicParsing="false" onAction="#resumeButtonAction" prefHeight="57.0" prefWidth="80.0" text="RESUME" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-            <Button fx:id="stepOverButton" mnemonicParsing="false" onAction="#stepOverButtonAction" prefHeight="57.0" prefWidth="89.0" text="Step Over" GridPane.columnIndex="8" GridPane.rowIndex="1" />
-            <Button fx:id="stepBackwardButton" mnemonicParsing="false" onAction="#stepBackwardButtonAction" prefHeight="570.0" prefWidth="931.0" text="Step Backward" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="9" GridPane.rowIndex="1" />
+            <Button fx:id="startButton" disable="true" mnemonicParsing="false" onAction="#startButtonAction" prefHeight="27.0" prefWidth="112.0" text="START" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="debugButton" disable="true" mnemonicParsing="false" onAction="#debugButtonAction" prefHeight="82.0" prefWidth="71.0" text="DEBUG" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Button fx:id="stopButton" disable="true" mnemonicParsing="false" onAction="#stopButtonAction" prefHeight="57.0" prefWidth="57.0" text="STOP !" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" wrapText="true" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Button fx:id="resumeButton" disable="true" mnemonicParsing="false" onAction="#resumeButtonAction" prefHeight="57.0" prefWidth="80.0" text="RESUME" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <Button fx:id="stepOverButton" disable="true" mnemonicParsing="false" onAction="#stepOverButtonAction" prefHeight="57.0" prefWidth="89.0" text="Step Over" GridPane.columnIndex="8" GridPane.rowIndex="1" />
+            <Button fx:id="stepBackwardButton" disable="true" mnemonicParsing="false" onAction="#stepBackwardButtonAction" prefHeight="570.0" prefWidth="931.0" text="Step Backward" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="9" GridPane.rowIndex="1" />
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="300.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="6.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-            <Button fx:id="newRunButton" mnemonicParsing="false" onAction="#newRunButtonAction" text="New Run" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="newRunButton" disable="true" mnemonicParsing="false" onAction="#newRunButtonAction" text="New Run" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>

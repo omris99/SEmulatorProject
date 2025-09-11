@@ -1,6 +1,5 @@
 package gui.components.debuggercommandsbar;
 
-import gui.app.AppController;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,6 +66,25 @@ public class debuggerCommandsBarController {
 
     public void setDebuggerWindowController(DebuggerWindowController debuggerWindowController) {
         this.debuggerWindowController = debuggerWindowController;
+    }
+
+    public void enableNewRunButton(){
+        newRunButton.setDisable(false);
+    }
+
+    public void enableExecutionButtons(){
+        startButton.setDisable(false);
+        debugButton.setDisable(false);
+    }
+
+    public void reset(){
+        startButton.setDisable(true);
+        debugButton.setDisable(true);
+        resumeButton.setDisable(true);
+        stepOverButton.setDisable(true);
+        stepBackwardButton.setDisable(true);
+        stopButton.setDisable(true);
+        newRunButton.setDisable(true);
     }
 
 }

@@ -32,16 +32,6 @@
                      </VBox.margin>
                   </Label>
                   <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionWindow.fxml" />
-                  <Separator prefWidth="200.0" />
-                  <Label prefHeight="15.0" prefWidth="279.0" text="Selected Instruction History Chain" underline="true">
-                     <font>
-                        <Font size="19.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <fx:include source="../components/instructionstable/InstructionsTable.fxml" />
                </children>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="588.0" prefWidth="15.0">

@@ -4,6 +4,7 @@ import dto.ProgramDTO;
 import gui.components.expandationlevelwindow.ExpandationLevelWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class InstructionsWindowToolbarController {
     private InstructionsWindowController instructionsWindowController;
@@ -12,21 +13,15 @@ public class InstructionsWindowToolbarController {
     private ExpandationLevelWindowController expandationLevelWindowController;
 
     @FXML
+    private Button expandButton;
+
+    @FXML
     public void initialize() {
         expandationLevelWindowController.setInstructionsWindowToolbarController(this);
-    }
-    public void updateExpandationLevelWindow(int maximalDegree) {
-//        int currentExpandationLevel = programDTO.getExpandLevelDegree();
-//        int maximalExpandationLevel = programDTO.getMaximalDegree();
-//        expandationLevelWindowController.setMaximalDegree(maximalDegree);
-//        expandationLevelWindowController.currentDegreeField.setText(String.valueOf(currentExpandationLevel));
-
     }
 
     public void onDegreeChoice(int newDegree) {
         instructionsWindowController.onDegreeChoice(newDegree);
-        System.out.println("New expandation level set to: " + newDegree);
-        // Further actions to handle the change in expandation level can be implemented here
     }
 
     public void setInstructionsWindowController(InstructionsWindowController instructionsWindowToolbarController) {
@@ -35,6 +30,21 @@ public class InstructionsWindowToolbarController {
 
     public void onProgramLoaded(int maximalDegree) {
         expandationLevelWindowController.onProgramLoaded(maximalDegree);
+    }
+
+    public void onExpandButtonClick() {
+        if(expandationLevelWindowController.getMaximalDegree() > expandationLevelWindowController.getCurrentDegree()) {
+
+            onDegreeChoice(expandationLevelWindowController.getCurrentDegree() + 1);
+            expandationLevelWindowController.setDegree(expandationLevelWindowController.getCurrentDegree() + 1);
+        }
+    }
+
+    public void onCollapseButtonClick() {
+        if (expandationLevelWindowController.getCurrentDegree() > 0) {
+            onDegreeChoice(expandationLevelWindowController.getCurrentDegree() - 1);
+            expandationLevelWindowController.setDegree(expandationLevelWindowController.getCurrentDegree() - 1);
+        }
     }
 
 }

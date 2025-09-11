@@ -41,4 +41,18 @@ public class ExpandationLevelWindowController {
 
         maximalDegreeLabel.setText(String.valueOf(maximalDegree));
     }
+
+    public int getCurrentDegree() {
+        Integer value = currentDegreeChoiceBox.getValue();
+        return value == null ? 0 : value;
+    }
+
+    public void setDegree(int degree) {
+        currentDegreeChoiceBox.setValue(degree);
+    }
+
+    public int getMaximalDegree() {
+        String text = maximalDegreeLabel.getText();
+        return Integer.parseInt(text);
+    }
 }

@@ -60,7 +60,6 @@ public class InstructionsWindowController {
     }
 
     public void onExpandationLevelChanged(ProgramDTO programDTO) {
-        instructionsWindowToolbarController.updateExpandationLevelWindow(programDTO.getExpandLevelDegree());
         updateInstructionsTableAndSummaryLine(programDTO);
     }
 

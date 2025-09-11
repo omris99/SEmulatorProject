@@ -12,7 +12,7 @@
       <Label alignment="CENTER" prefHeight="17.0" prefWidth="263.0" style="-fx-background-color: gray;" text="Expendation Level" textFill="WHITE" />
       <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">
          <children>
-            <ChoiceBox fx:id="currentDegreeChoiceBox" prefHeight="26.0" prefWidth="89.0" />
+            <ChoiceBox fx:id="currentDegreeChoiceBox" prefHeight="26.0" prefWidth="59.0" />
             <Label prefHeight="30.0" prefWidth="13.0" text="/">
                <font>
                   <Font size="30.0" />
@@ -23,7 +23,7 @@
             </Label>
             <Label fx:id="maximalDegreeLabel" layoutX="79.0" layoutY="10.0" prefHeight="30.0" prefWidth="13.0" text="-">
                <font>
-                  <Font size="22.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
          </children>

@@ -2,9 +2,14 @@ package gui.components.toolbar;
 
 import dto.ProgramDTO;
 import gui.components.expandationlevelwindow.ExpandationLevelWindowController;
+import gui.components.highlightselection.HighlightSelectionController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import logic.model.argument.variable.Variable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstructionsWindowToolbarController {
     private InstructionsWindowController instructionsWindowController;
@@ -13,11 +18,16 @@ public class InstructionsWindowToolbarController {
     private ExpandationLevelWindowController expandationLevelWindowController;
 
     @FXML
+    private HighlightSelectionController highlightSelectionController;
+
+
+    @FXML
     private Button expandButton;
 
     @FXML
     public void initialize() {
         expandationLevelWindowController.setInstructionsWindowToolbarController(this);
+        highlightSelectionController.setInstructionsWindowToolbarController(this);
     }
 
     public void onDegreeChoice(int newDegree) {
@@ -28,13 +38,13 @@ public class InstructionsWindowToolbarController {
         this.instructionsWindowController = instructionsWindowToolbarController;
     }
 
-    public void onProgramLoaded(int maximalDegree) {
-        expandationLevelWindowController.onProgramLoaded(maximalDegree);
+    public void onProgramLoaded(ProgramDTO programDTO) {
+        expandationLevelWindowController.updateExpandationLevelChoiceBoxAndMaximalDegree(programDTO.getMaximalDegree());
+        updateHighlightOptions(programDTO);
     }
 
     public void onExpandButtonClick() {
-        if(expandationLevelWindowController.getMaximalDegree() > expandationLevelWindowController.getCurrentDegree()) {
-
+        if (expandationLevelWindowController.getMaximalDegree() > expandationLevelWindowController.getCurrentDegree()) {
             onDegreeChoice(expandationLevelWindowController.getCurrentDegree() + 1);
             expandationLevelWindowController.setDegree(expandationLevelWindowController.getCurrentDegree() + 1);
         }
@@ -46,5 +56,18 @@ public class InstructionsWindowToolbarController {
             expandationLevelWindowController.setDegree(expandationLevelWindowController.getCurrentDegree() - 1);
         }
     }
+
+    public void onHighlightSelectionChange(String selection) {
+        instructionsWindowController.onHighlightSelectionChange(selection);
+    }
+
+    public void updateHighlightOptions(ProgramDTO programDTO) {
+        List<String> highlightOptions = new ArrayList<>();
+        highlightOptions.addAll(programDTO.getLabelsNames());
+        highlightOptions.addAll(programDTO.getInputNames());
+        highlightOptions.addAll(programDTO.getWorkVariables().stream().map(Variable::getRepresentation).toList());
+        highlightSelectionController.updateOptions(highlightOptions);
+    }
+
 
 }

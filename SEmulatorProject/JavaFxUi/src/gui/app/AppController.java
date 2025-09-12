@@ -117,4 +117,7 @@ public class AppController {
         instructionWindowController.onExpandationLevelChanged(programDTO);
     }
 
+    public void highLightInstructionsWithSelection(String selection) {
+    }
+
 }

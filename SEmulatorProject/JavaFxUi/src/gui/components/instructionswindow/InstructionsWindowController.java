@@ -55,12 +55,13 @@ public class InstructionsWindowController {
     public void onProgramLoaded(ProgramDTO programDTO) {
         Platform.runLater(() -> {
             updateInstructionsTableAndSummaryLine(programDTO);
-            instructionsWindowToolbarController.onProgramLoaded(programDTO.getMaximalDegree());
+            instructionsWindowToolbarController.onProgramLoaded(programDTO);
         });
     }
 
     public void onExpandationLevelChanged(ProgramDTO programDTO) {
         updateInstructionsTableAndSummaryLine(programDTO);
+        instructionsWindowToolbarController.updateHighlightOptions(programDTO);
     }
 
     private void updateInstructionsTableAndSummaryLine(ProgramDTO programDTO) {
@@ -77,6 +78,11 @@ public class InstructionsWindowController {
 
     public void setAppController(AppController appController) {
         this.appController = appController;
+    }
+
+    public void onHighlightSelectionChange(String selection) {
+        instructionsTableController.highlightInstructionsWithSelection(selection);
+//        appController.highLightInstructionsWithSelection(selection);
     }
 
 }

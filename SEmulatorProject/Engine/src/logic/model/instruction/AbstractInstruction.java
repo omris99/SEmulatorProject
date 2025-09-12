@@ -1,6 +1,7 @@
 package logic.model.instruction;
 
 import dto.InstructionDTO;
+import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -45,7 +46,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             currentParentInstruction = currentParentInstruction.getParent();
         }
 
-        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions);
+        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels());
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
@@ -110,5 +111,22 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     @Override
     public Instruction getParent() {
         return parentInstruction;
+    }
+
+    private List<String> getAssociatedArgumentsAndLabels() {
+        List<String> associatedArgumentsAndLabels = new LinkedList<>();
+        associatedArgumentsAndLabels.add(variable.getRepresentation());
+        if (label != FixedLabel.EMPTY) {
+            associatedArgumentsAndLabels.add(label.getRepresentation());
+        }
+
+        if(this instanceof InstructionWithArguments){
+            InstructionWithArguments instructionWithArguments = (InstructionWithArguments) this;
+            for(Argument argument : instructionWithArguments.getArguments().values()){
+                associatedArgumentsAndLabels.add(argument.getRepresentation());
+            }
+        }
+
+        return associatedArgumentsAndLabels;
     }
 }

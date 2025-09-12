@@ -24,7 +24,7 @@
             <Button mnemonicParsing="false" prefHeight="57.0" prefWidth="120.0" text="Program / function selector" textAlignment="CENTER" wrapText="true" />
             <Button fx:id="collapseButton" mnemonicParsing="false" onAction="#onCollapseButtonClick" prefHeight="105.0" prefWidth="104.0" text="Collapse" GridPane.columnIndex="1" />
             <Button fx:id="expandButton" mnemonicParsing="false" onAction="#onExpandButtonClick" prefHeight="110.0" prefWidth="165.0" text="Expand" GridPane.columnIndex="3" />
-            <Button mnemonicParsing="false" prefHeight="134.0" prefWidth="380.0" text="Highlight selection" GridPane.columnIndex="4" />
+            <fx:include fx:id="highlightSelection" source="../highlightselection/HighlightSelection.fxml" GridPane.columnIndex="4" />
             <fx:include fx:id="expandationLevelWindow" source="../expandationlevelwindow/ExpandationLevelWindow.fxml" GridPane.columnIndex="2" />
          </children>
       </GridPane>

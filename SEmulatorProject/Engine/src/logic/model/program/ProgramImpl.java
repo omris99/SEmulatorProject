@@ -112,7 +112,9 @@ public class ProgramImpl implements Program {
                 getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()),
                 instructions.getInstructionsTypeCount(),
                 instructions.getExpandLevel(),
-                instructions.getMaximalDegree());
+                instructions.getMaximalDegree(),
+                getAllInstructionsWorkVariables()
+        );
     }
 
 

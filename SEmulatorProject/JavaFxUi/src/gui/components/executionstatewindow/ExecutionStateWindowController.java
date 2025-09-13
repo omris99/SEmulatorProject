@@ -21,4 +21,9 @@ public class ExecutionStateWindowController {
         variablesValueTableController.updateTable(runResultsDTO);
         cyclesCounter.setText(String.format("%d", runResultsDTO.getTotalCyclesCount()));
     }
+
+    public void reset() {
+        variablesValueTableController.reset();
+        cyclesCounter.setText("-");
+    }
 }

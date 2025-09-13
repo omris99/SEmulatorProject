@@ -62,4 +62,8 @@ public class VariablesValueTableController {
         variablesDisplayTable.setItems(rows);
     }
 
+    public void reset() {
+        variablesDisplayTable.getItems().clear();
+    }
+
 }

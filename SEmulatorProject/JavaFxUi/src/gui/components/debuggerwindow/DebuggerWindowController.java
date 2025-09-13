@@ -36,10 +36,12 @@ public class DebuggerWindowController {
         debuggerCommandsBarController.setDebuggerWindowController(this);
     }
 
-    private void reset() {
+    public void reset() {
         inputVariablesContainer.getChildren().clear();
         inputVariableRows.clear();
         debuggerCommandsBarController.reset();
+        executionStateWindowController.reset();
+        debuggerCommandsBarController.enableNewRunButton();
     }
 
     public void prepareForNewRun(List<String> names) {
@@ -77,13 +79,6 @@ public class DebuggerWindowController {
 
     public void setAppController(AppController appController) {
         this.appController = appController;
-    }
-
-    public void onProgramLoaded() {
-        Platform.runLater(() -> {
-            reset();
-            debuggerCommandsBarController.enableNewRunButton();
-        });
     }
 
     public void onStartClick() {

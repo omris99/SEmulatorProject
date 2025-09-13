@@ -3,6 +3,7 @@ package gui.components.historywindow;
 import dto.RunResultsDTO;
 import gui.app.AppController;
 import gui.popups.showallvariables.ShowAllVariablesController;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -94,5 +95,9 @@ public class HistoryWindowController {
 
     public void setAppController(AppController appController) {
         this.appController = appController;
+    }
+
+    public void reset(){
+            historyTable.getItems().clear();
     }
 }

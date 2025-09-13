@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import java.util.Objects;
+
 public class Main extends Application {
     @Override
     public void start(javafx.stage.Stage primaryStage) throws Exception {
@@ -12,8 +14,11 @@ public class Main extends Application {
 
         Parent load = FXMLLoader.load(getClass().getResource("App.fxml"));
         Scene scene = new Scene(load, 1259, 765);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("app.css")).toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {

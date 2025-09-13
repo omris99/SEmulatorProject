@@ -53,10 +53,8 @@ public class InstructionsWindowController {
 
 
     public void onProgramLoaded(ProgramDTO programDTO) {
-        Platform.runLater(() -> {
-            updateInstructionsTableAndSummaryLine(programDTO);
-            instructionsWindowToolbarController.onProgramLoaded(programDTO);
-        });
+        updateInstructionsTableAndSummaryLine(programDTO);
+        instructionsWindowToolbarController.onProgramLoaded(programDTO);
     }
 
     public void onExpandationLevelChanged(ProgramDTO programDTO) {
@@ -85,7 +83,7 @@ public class InstructionsWindowController {
 //        appController.highLightInstructionsWithSelection(selection);
     }
 
-    public int getDegreeChoice(){
+    public int getDegreeChoice() {
         return instructionsWindowToolbarController.getDegreeChoice();
     }
 

@@ -56,17 +56,17 @@ public class AppController {
                     updateProgress(15,100);
 //                    updateMessage("Loading program...");
                     engine.loadProgram(selectedFile.getAbsolutePath());
-
                     updateProgress(50, 100);
                     Thread.sleep(100);
 
                     ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-                    instructionWindowController.onProgramLoaded(programDTO);
-                    debuggerWindowController.clearInputVariablesTable();
+                    Platform.runLater(() -> {
+                        instructionWindowController.onProgramLoaded(programDTO);
+                        resetComponents();
+                    });
 
-                    updateProgress(100, 100);
                     updateMessage(selectedFile.getAbsolutePath());
-                    debuggerWindowController.onProgramLoaded();
+                    updateProgress(100, 100);
                 }
 
 
@@ -155,6 +155,12 @@ public class AppController {
 
     public void reRunSelectedHistory(RunResultsDTO selectedRun){
         debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesAsEntered());
+    }
+
+    private void resetComponents(){
+        debuggerWindowController.clearInputVariablesTable();
+        debuggerWindowController.reset();
+        historyWindowController.reset();
     }
 
 }

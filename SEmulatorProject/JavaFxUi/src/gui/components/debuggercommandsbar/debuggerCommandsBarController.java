@@ -46,7 +46,9 @@ public class debuggerCommandsBarController {
 
     @FXML
     void startButtonAction(ActionEvent event) {
+        startButton.setDisable(true);
         debuggerWindowController.onStartClick();
+        startButton.setDisable(false);
     }
 
     @FXML

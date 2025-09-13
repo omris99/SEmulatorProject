@@ -1,6 +1,7 @@
 package gui.components.historywindow;
 
 import dto.RunResultsDTO;
+import gui.app.AppController;
 import gui.popups.showallvariables.ShowAllVariablesController;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class HistoryWindowController {
+    private AppController appController;
 
     @FXML
     private TableColumn<RunResultsDTO, Integer> colDegree;
@@ -79,5 +81,18 @@ public class HistoryWindowController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onReRunButtonClick() {
+        RunResultsDTO selected = historyTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
+
+        appController.reRunSelectedHistory(selected);
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
     }
 }

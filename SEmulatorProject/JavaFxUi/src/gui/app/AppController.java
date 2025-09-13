@@ -41,6 +41,7 @@ public class AppController {
         loadFileBarController.setAppController(this);
         debuggerWindowController.setAppController(this);
         instructionWindowController.setAppController(this);
+        historyWindowController.setAppController(this);
     }
 
     public AppController() {
@@ -150,6 +151,10 @@ public class AppController {
 
     private void updateHistoryWindow(List<RunResultsDTO> history){
         historyWindowController.updateHistoryTable(history);
+    }
+
+    public void reRunSelectedHistory(RunResultsDTO selectedRun){
+        debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesAsEntered());
     }
 
 }

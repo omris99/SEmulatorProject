@@ -41,7 +41,7 @@
         </rowConstraints>
          <children>
             <Button fx:id="showButton" mnemonicParsing="false" onAction="#onShowButtonClick" prefHeight="33.0" prefWidth="143.0" text="Show" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button fx:id="reRunButton" mnemonicParsing="false" prefHeight="56.0" prefWidth="142.0" text="Re-Run" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="reRunButton" mnemonicParsing="false" onAction="#onReRunButtonClick" prefHeight="56.0" prefWidth="142.0" text="Re-Run" GridPane.columnIndex="2" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>

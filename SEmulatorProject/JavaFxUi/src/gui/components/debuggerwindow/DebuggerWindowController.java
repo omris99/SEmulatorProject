@@ -99,4 +99,12 @@ public class DebuggerWindowController {
     public void updateRunResults(RunResultsDTO results) {
         executionStateWindowController.updateTableAndCycles(results);
     }
+
+    public void setInputVariablesValues(Map<String, Long> inputs){
+        for(InputRowController row : inputVariableRows){
+            if(inputs.containsKey(row.getName())){
+                row.setValue(String.valueOf(inputs.get(row.getName())));
+            }
+        }
+    }
 }

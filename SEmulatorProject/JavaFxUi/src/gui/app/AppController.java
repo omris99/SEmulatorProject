@@ -1,6 +1,8 @@
 package gui.app;
 
+import dto.DTO;
 import dto.ProgramDTO;
+import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
@@ -12,8 +14,10 @@ import javafx.scene.control.Alert;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
+import logic.exceptions.NumberNotInRangeException;
 
 import java.io.File;
+import java.util.Map;
 
 public class AppController {
     private final EmulatorEngine engine;
@@ -117,7 +121,25 @@ public class AppController {
         instructionWindowController.onExpandationLevelChanged(programDTO);
     }
 
-    public void highLightInstructionsWithSelection(String selection) {
+    public void startProgramExecution(Map<String,String> inputVariables) {
+
+        try{
+            DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(0, inputVariables);
+            debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Starting Execution");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("The input is invalid. Please enter integers only.");
+            alert.showAndWait();
+        } catch (NumberNotInRangeException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Starting Execution");
+            alert.setHeaderText("Negative Number Submitted");
+            alert.setContentText("You entered the number: " + e.getNumber() + " which is not positive.\n" +
+                    "Please enter only Positive Numbers.");
+            alert.showAndWait();
+        }
     }
 
 }

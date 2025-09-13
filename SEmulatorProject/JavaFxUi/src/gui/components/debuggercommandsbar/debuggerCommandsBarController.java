@@ -46,7 +46,7 @@ public class debuggerCommandsBarController {
 
     @FXML
     void startButtonAction(ActionEvent event) {
-
+        debuggerWindowController.onStartClick();
     }
 
     @FXML

@@ -13,7 +13,7 @@ import java.util.List;
 public interface Engine extends Serializable {
     void loadProgram(String xmlPath) throws FileNotFoundException, JAXBException, InvalidXmlFileException;
     DTO getLoadedProgramDTO();
-    DTO runLoadedProgram(int degree, String input);
+    DTO runLoadedProgramWithCommaSeperatedInput(int degree, String input);
     List<RunResultsDTO> getHistory();
     void quit();
 }

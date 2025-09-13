@@ -7,6 +7,7 @@ import gui.components.instructionswindow.InstructionsWindowController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ public class InstructionsWindowToolbarController {
     public void updateHighlightOptions(ProgramDTO programDTO) {
         List<String> highlightOptions = new ArrayList<>();
         highlightOptions.addAll(programDTO.getLabelsNames());
+        highlightOptions.add("y");
         highlightOptions.addAll(programDTO.getInputNames());
         highlightOptions.addAll(programDTO.getWorkVariables().stream().map(Variable::getRepresentation).toList());
         highlightSelectionController.updateOptions(highlightOptions);

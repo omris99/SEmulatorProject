@@ -24,6 +24,9 @@ import logic.utils.Utils;
 import java.io.File;
 import java.util.*;
 
+//TODO:
+// 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
+
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
     private Program[] loadedProgramExpendations;
@@ -71,7 +74,7 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public DTO runLoadedProgram(int degree, String input) {
+    public DTO runLoadedProgramWithCommaSeperatedInput(int degree, String input) {
         ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
 
         Long[] inputs = Arrays.stream(input.split(","))
@@ -93,6 +96,31 @@ public class EmulatorEngine implements Engine {
                 degree,
                 finalVariablesResult.get(Variable.RESULT),
                 userInputToVariablesMap,
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                executor.getCyclesCount());
+        history.add(runResults);
+
+        return runResults;
+    }
+
+    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
+        Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
+        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
+
+        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
+
+        Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
+        for(Variable inputVariable : programActualInputVariables){
+            programInitialInputVariablesMap.put(
+                    inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
+        }
+
+        Map<Variable, Long> finalVariablesResult = executor.run(new LinkedHashMap<>(programInitialInputVariablesMap));
+
+        RunResultsDTO runResults = new RunResultsDTO(
+                degree,
+                finalVariablesResult.get(Variable.RESULT),
+                userInputToVariablesMapConverted,
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         history.add(runResults);
@@ -155,4 +183,17 @@ public class EmulatorEngine implements Engine {
         System.exit(0);
     }
 
+    private Map<Variable, Long> convertGuiVariablesMapToDomainVariablesMap(Map<String, String> guiVariablesMap) {
+        Map<Variable, Long> userInputToVariablesMapConverted = new LinkedHashMap<>();
+        for(Map.Entry<String, String> entry : guiVariablesMap.entrySet()){
+            long value = Long.parseLong(entry.getValue());
+            if(value < 0){
+                throw new NumberNotInRangeException(Integer.parseInt(Long.toString(value)));
+            }
+
+            userInputToVariablesMapConverted.put(VariableImpl.parse(entry.getKey()), value);
+        }
+
+        return userInputToVariablesMapConverted;
+    }
 }

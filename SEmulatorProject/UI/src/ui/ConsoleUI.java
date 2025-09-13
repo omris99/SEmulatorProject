@@ -167,7 +167,7 @@ public class ConsoleUI implements UI {
             System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
             String inputs = inputScanner.nextLine();
             try {
-                RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs);
+                RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgramWithCommaSeperatedInput(expansionDegree, inputs);
                 System.out.println("\n***********************************************");
                 System.out.println("               Executed Program: ");
                 System.out.println("***********************************************");

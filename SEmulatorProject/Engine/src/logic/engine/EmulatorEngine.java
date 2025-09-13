@@ -26,6 +26,7 @@ import java.util.*;
 
 //TODO:
 // 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
+// 2.runLoadedProgramWithDebuggerWindowInput fixed degree 0 problem
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
@@ -105,7 +106,8 @@ public class EmulatorEngine implements Engine {
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
+        //Implement this better!! i dont like that i give it 0 hardcoded.
+        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(0));
 
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 

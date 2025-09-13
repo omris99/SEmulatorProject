@@ -3,6 +3,7 @@ package gui.components.debuggerwindow;
 import dto.RunResultsDTO;
 import gui.app.AppController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
+import gui.components.historywindow.HistoryWindowController;
 import gui.components.inputrow.InputRowController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

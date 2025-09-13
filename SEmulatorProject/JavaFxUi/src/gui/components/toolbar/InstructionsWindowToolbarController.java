@@ -71,5 +71,9 @@ public class InstructionsWindowToolbarController {
         highlightSelectionController.updateOptions(highlightOptions);
     }
 
+    public int getDegreeChoice() {
+        return expandationLevelWindowController.getCurrentDegree();
+    }
+
 
 }

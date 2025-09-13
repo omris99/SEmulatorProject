@@ -5,8 +5,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionsWindowController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="608.0" style="-fx-border-color: blue;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionsWindowController">
    <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="745.0" style="-fx-background-color: blue;" text="Instructions Window" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
       <fx:include fx:id="instructionsWindowToolbar" source="../toolbar/InstructionsWindowToolbar.fxml" />
       <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
       <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
@@ -20,4 +25,7 @@
       </Label>
       <fx:include fx:id="instructionHistoryChainTable" source="../instructionstable/InstructionsTable.fxml" />
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </VBox>

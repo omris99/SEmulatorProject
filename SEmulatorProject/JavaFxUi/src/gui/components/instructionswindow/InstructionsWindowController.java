@@ -85,4 +85,8 @@ public class InstructionsWindowController {
 //        appController.highLightInstructionsWithSelection(selection);
     }
 
+    public int getDegreeChoice(){
+        return instructionsWindowToolbarController.getDegreeChoice();
+    }
+
 }

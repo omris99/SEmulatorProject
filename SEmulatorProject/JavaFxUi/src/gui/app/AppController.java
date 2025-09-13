@@ -4,6 +4,7 @@ import dto.DTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
+import gui.components.historywindow.HistoryWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import jakarta.xml.bind.JAXBException;
@@ -17,6 +18,7 @@ import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 public class AppController {
@@ -27,6 +29,9 @@ public class AppController {
 
     @FXML
     private InstructionsWindowController instructionWindowController;
+
+    @FXML
+    private HistoryWindowController historyWindowController;
 
     @FXML
     private DebuggerWindowController debuggerWindowController;
@@ -122,10 +127,11 @@ public class AppController {
     }
 
     public void startProgramExecution(Map<String,String> inputVariables) {
-
         try{
-            DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(0, inputVariables);
+            int runDegree = instructionWindowController.getDegreeChoice();
+            DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
+            updateHistoryWindow(engine.getHistory());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Starting Execution");
@@ -140,6 +146,10 @@ public class AppController {
                     "Please enter only Positive Numbers.");
             alert.showAndWait();
         }
+    }
+
+    private void updateHistoryWindow(List<RunResultsDTO> history){
+        historyWindowController.updateHistoryTable(history);
     }
 
 }

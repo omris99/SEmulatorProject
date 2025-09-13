@@ -23,14 +23,6 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="606.0" prefWidth="602.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="15.0" prefWidth="156.0" text="Instructions Table" textAlignment="CENTER" underline="true">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
                   <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                </children>
             </VBox>
@@ -41,25 +33,9 @@
             </Separator>
             <VBox alignment="TOP_CENTER" prefHeight="742.0" prefWidth="601.0">
                <children>
-                  <Label text="Execution Window" textAlignment="CENTER" underline="true">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
                   <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                   <Separator prefWidth="200.0" />
-                  <Label layoutX="232.0" layoutY="10.0" text="History" textAlignment="CENTER" underline="true">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="10.0" />
-                     </padding>
-                  </Label>
-                  <fx:include source="../components/historywindow/HistoryWindow.fxml" />
+                  <fx:include fx:id="historyWindow" source="../components/historywindow/HistoryWindow.fxml" />
                </children>
             </VBox>
          </children>

@@ -87,19 +87,6 @@ public class DebuggerWindowController {
     }
 
     public void onStartClick() {
-        Map<String, Long> inputVariablesValues = inputVariableRows.stream()
-                .collect(
-                        java.util.stream.Collectors.toMap(
-                                InputRowController::getName,
-                                row -> {
-                                    try {
-                                        return Long.parseLong(row.getValue());
-                                    } catch (NumberFormatException e) {
-                                        return 0L; // Default value if parsing fails
-                                    }
-                                }
-                        )
-                );
         appController.startProgramExecution(getInputVariablesValues());
     }
 

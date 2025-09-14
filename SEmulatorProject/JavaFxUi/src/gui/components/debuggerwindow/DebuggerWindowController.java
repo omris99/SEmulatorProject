@@ -131,6 +131,7 @@ public class DebuggerWindowController {
         debuggerCommandsBarController.disableNewRunButton(false);
         debuggerCommandsBarController.disableDebuggerControlButtons(true);
         disableInputFields(false);
+        executionStateWindowController.unmarkHighlightedLines();
     }
 
     public void startExecutionMode() {

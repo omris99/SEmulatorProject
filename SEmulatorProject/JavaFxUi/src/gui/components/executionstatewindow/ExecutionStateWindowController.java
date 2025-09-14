@@ -26,4 +26,8 @@ public class ExecutionStateWindowController {
         variablesValueTableController.reset();
         cyclesCounter.setText("-");
     }
+
+    public void unmarkHighlightedLines(){
+        variablesValueTableController.unmarkHighlightedLines();
+    }
 }

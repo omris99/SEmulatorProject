@@ -10,6 +10,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
+import java.util.function.BiConsumer;
+
 public class VariablesValueTableController {
     @FXML
     private TableColumn<VariableValueRow, String> colVariable;
@@ -40,7 +42,9 @@ public class VariablesValueTableController {
                 }
 
                 boolean isChanged = item.getPreviousValue() != null && !item.getPreviousValue().equals(item.getValue());
-                if (isChanged) {
+                item.isHighlighted = isChanged;
+
+                if(item.isHighlighted) {
                     getStyleClass().add("value-changed");
                 }
             }
@@ -52,6 +56,7 @@ public class VariablesValueTableController {
         private final String variableName;
         private Long value;
         private Long previousValue;
+        private boolean isHighlighted;
 
         public VariableValueRow(String variableName, Long value) {
             this.variableName = variableName;
@@ -64,7 +69,7 @@ public class VariablesValueTableController {
 
         public Long getValue() { return value; }
         public void setValue(Long newValue) {
-            this.previousValue = this.value; // קודם נשמור את הקודם
+            this.previousValue = this.value;
             this.value = newValue;
         }
         public Long getPreviousValue() { return previousValue; }
@@ -74,37 +79,41 @@ public class VariablesValueTableController {
     public void updateTable(RunResultsDTO runResultsDTO) {
         ObservableList<VariableValueRow> items = variablesDisplayTable.getItems();
 
-        if (items.isEmpty()) {
-            items.add(new VariableValueRow("Y-RESULT", runResultsDTO.getYValue()));
-            runResultsDTO.getInputVariablesValueResult().forEach(
-                    (name, value) -> items.add(new VariableValueRow(name, value))
-            );
-            runResultsDTO.getWorkVariablesValues().forEach(
-                    (name, value) -> items.add(new VariableValueRow(name, value))
-            );
-        } else {
-            for (VariableValueRow row : items) {
-                Long newValue = null;
+        BiConsumer<String, Long> addOrUpdate = (name, value) -> {
+            VariableValueRow row = items.stream()
+                    .filter(r -> r.getVariableName().equals(name))
+                    .findFirst()
+                    .orElse(null);
 
-                if (row.getVariableName().equals("Y-RESULT")) {
-                    newValue = runResultsDTO.getYValue();
-                } else if (runResultsDTO.getInputVariablesValueResult().containsKey(row.getVariableName())) {
-                    newValue = runResultsDTO.getInputVariablesValueResult().get(row.getVariableName());
-                } else if (runResultsDTO.getWorkVariablesValues().containsKey(row.getVariableName())) {
-                    newValue = runResultsDTO.getWorkVariablesValues().get(row.getVariableName());
-                }
-
-                if (newValue != null) {
-                    row.setValue(newValue);
-                }
+            if (row != null) {
+                row.setValue(value);
+            } else {
+                items.add(new VariableValueRow(name, value));
             }
-        }
+        };
+
+        addOrUpdate.accept("Y-RESULT", runResultsDTO.getYValue());
+
+        runResultsDTO.getInputVariablesValueResult()
+                .forEach(addOrUpdate);
+
+        runResultsDTO.getWorkVariablesValues()
+                .forEach(addOrUpdate);
 
         variablesDisplayTable.refresh();
     }
 
     public void reset() {
         variablesDisplayTable.getItems().clear();
+    }
+
+    public void unmarkHighlightedLines() {
+        for (VariableValueRow row : variablesDisplayTable.getItems()) {
+            row.isHighlighted = false;
+            row.previousValue = null;
+        }
+
+        variablesDisplayTable.refresh();
     }
 
 }

@@ -214,6 +214,5 @@ public class AppController {
         debuggerWindowController.finishExecutionMode();
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
-        debuggerWindowController.disableInputFields(false);
     }
 }

@@ -17,25 +17,17 @@ public class HighlightSelectionController {
     @FXML
     public void initialize() {
         highlightSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) {
-                return;
-            }
-
             instructionsWindowToolbarController.onHighlightSelectionChange(newVal);
         });
     }
 
     public void updateOptions(List<String> highlightOptions) {
+        highlightSelector.getSelectionModel().clearSelection();
         highlightSelector.getItems().clear();
         highlightSelector.getItems().addAll(highlightOptions);
     }
 
     public void setInstructionsWindowToolbarController(InstructionsWindowToolbarController instructionsWindowToolbarController) {
         this.instructionsWindowToolbarController = instructionsWindowToolbarController;
-    }
-
-    public void resetSelection() {
-        highlightSelector.getSelectionModel().clearSelection();
-        highlightSelector.setPromptText("Select Label/Variable");
     }
 }

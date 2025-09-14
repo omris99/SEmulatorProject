@@ -64,7 +64,6 @@ public class InstructionsWindowController {
     private void updateInstructionsTableAndSummaryLine(ProgramDTO programDTO) {
         instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
         stopHighlightingNextInstructionToExecute();
-        instructionsWindowToolbarController.resetHighlightSelection();
         Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
         summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
                 instructionsTypeCount.get(InstructionType.SYNTHETIC));

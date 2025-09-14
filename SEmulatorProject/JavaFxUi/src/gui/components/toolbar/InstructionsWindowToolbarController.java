@@ -83,8 +83,4 @@ public class InstructionsWindowToolbarController {
         collapseButton.setDisable(disable);
         expandationLevelWindowController.disableDegreeChoiceBox(disable);
     }
-
-    public void resetHighlightSelection(){
-        highlightSelectionController.resetSelection();
-    }
 }

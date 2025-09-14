@@ -102,6 +102,7 @@ public class ProgramImpl implements Program {
         return instructions.getMaximalDegree();
     }
 
+
     @Override
     public DTO createDTO() {
         return new ProgramDTO(

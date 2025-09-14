@@ -24,24 +24,20 @@ public class DebuggerExecutor implements ProgramExecutor{
 
     @Override
     public Map<Variable, Long> run(Map<Variable, Long> inputVariablesMap) {
-        context = new ExecutionContextImpl(inputVariablesMap,
-                program.getAllInstructionsWorkVariables());
-        instructionsQueue = new InstructionsQueue(program.getInstructions());
-        Instruction currentInstruction = instructionsQueue.getFirstInQueue();
         Label nextLabel;
 
         do {
-            nextLabel = currentInstruction.execute(context);
-            cyclesCount += currentInstruction.getCycles();
+            nextLabel = currentInstructionToExecute.execute(context);
+            cyclesCount += currentInstructionToExecute.getCycles();
 
             if (nextLabel == FixedLabel.EMPTY) {
-                currentInstruction = instructionsQueue.next();
+                currentInstructionToExecute = instructionsQueue.next();
             } else if (nextLabel != FixedLabel.EXIT) {
                 instructionsQueue.setQueueBegin(nextLabel);
-                currentInstruction = instructionsQueue.getFirstInQueue();
+                currentInstructionToExecute = instructionsQueue.getFirstInQueue();
             }
-        } while (nextLabel != FixedLabel.EXIT && currentInstruction != null);
-
+        } while (nextLabel != FixedLabel.EXIT && currentInstructionToExecute != null);
+        stop();
         return context.getVariablesStatus();
     }
 
@@ -65,19 +61,25 @@ public class DebuggerExecutor implements ProgramExecutor{
     }
 
     public Map<Variable, Long> stepOver(){
-        Label nextLabel = currentInstructionToExecute.execute(context);
-        cyclesCount += currentInstructionToExecute.getCycles();
-        if(nextLabel != FixedLabel.EXIT && currentInstructionToExecute != null){
-            previousInstructionExecuted = currentInstructionToExecute;
-            if (nextLabel == FixedLabel.EMPTY) {
-                currentInstructionToExecute = instructionsQueue.next();
-            } else if (nextLabel != FixedLabel.EXIT) {
-                instructionsQueue.setQueueBegin(nextLabel);
-                currentInstructionToExecute = instructionsQueue.getFirstInQueue();
-            }
+
+        if(currentInstructionToExecute == null){
+            stop();
         }
         else{
-            isFinished = true;
+            Label nextLabel = currentInstructionToExecute.execute(context);
+            cyclesCount += currentInstructionToExecute.getCycles();
+            if(nextLabel != FixedLabel.EXIT){
+                previousInstructionExecuted = currentInstructionToExecute;
+                if (nextLabel == FixedLabel.EMPTY) {
+                    currentInstructionToExecute = instructionsQueue.next();
+                } else {
+                    instructionsQueue.setQueueBegin(nextLabel);
+                    currentInstructionToExecute = instructionsQueue.getFirstInQueue();
+                }
+            }
+            else{
+                stop();
+            }
         }
 
         return context.getVariablesStatus();
@@ -85,5 +87,9 @@ public class DebuggerExecutor implements ProgramExecutor{
 
     public boolean isFinished() {
         return isFinished;
+    }
+
+    public void stop(){
+        isFinished = true;
     }
 }

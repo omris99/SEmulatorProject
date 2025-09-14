@@ -1,7 +1,6 @@
 package gui.app;
 
 import dto.DTO;
-import dto.DebugResultsDTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
@@ -132,7 +131,7 @@ public class AppController {
         try{
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
-            debuggerWindowController.updateRunResults((DebugResultsDTO) runResultsDTO);
+            debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
             updateHistoryWindow(engine.getHistory());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -168,7 +167,7 @@ public class AppController {
         try{
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO initialState = engine.initDebuggingSession(runDegree, inputVariables);
-            debuggerWindowController.updateRunResults((DebugResultsDTO) initialState);
+            debuggerWindowController.updateRunResults((RunResultsDTO) initialState);
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Starting Execution");
@@ -186,8 +185,21 @@ public class AppController {
     }
 
     public void executeNextDebugStep(){
-        DTO context = engine.stepOver();
-        debuggerWindowController.updateRunResults((DebugResultsDTO) context);
+        RunResultsDTO context = (RunResultsDTO) engine.stepOver();
+        debuggerWindowController.updateRunResults(context);
+        if(context.isFinished()){
+            updateHistoryWindow(engine.getHistory());
+        }
+    }
+
+    public void stopDebuggingSession(){
+        engine.stopDebuggingSession();
+    }
+
+    public void resumeDebuggerExecution(){
+        DTO context = engine.resumeDebuggingSession();
+        debuggerWindowController.updateRunResults((RunResultsDTO) context);
+        updateHistoryWindow(engine.getHistory());
     }
 
 }

@@ -1,7 +1,6 @@
 package logic.engine;
 
 import dto.DTO;
-import dto.DebugResultsDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -28,7 +27,8 @@ import java.util.*;
 
 //TODO:
 // 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
-// 2.runLoadedProgramWithDebuggerWindowInput fixed degree 0 problem
+// 2. runLoadedProgramWithDebuggerWindowInput fixed degree 0 problem
+// 3. make sure that current degree add to history (in debug mode - resume..)
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
@@ -218,7 +218,7 @@ public class EmulatorEngine implements Engine {
         debuggerExecutor = new DebuggerExecutor(currentLoadedProgram.getExpandedProgram(0), new LinkedHashMap<>(programInitialInputVariablesMap));
 
 
-        return new DebugResultsDTO(
+        return new RunResultsDTO(
                 degree,
                 programInitialInputVariablesMap.get(Variable.RESULT),
                 userInputToVariablesMapConverted,
@@ -234,13 +234,41 @@ public class EmulatorEngine implements Engine {
 
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
 
-        return new DebugResultsDTO(
+        RunResultsDTO debugResults = new RunResultsDTO(
                 0,
                 finalVariablesResult.get(Variable.RESULT),
-                new LinkedHashMap<>(),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished()
         );
+        if(debuggerExecutor.isFinished()){
+            history.add(debugResults);
+        }
+
+        return debugResults;
+    }
+
+    public void stopDebuggingSession(){
+        debuggerExecutor.stop();
+    }
+
+    public DTO resumeDebuggingSession(){
+        if(debuggerExecutor == null){
+            throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
+        }
+
+        Map<Variable, Long> finalVariablesResult = debuggerExecutor.run(new LinkedHashMap<>());
+
+        RunResultsDTO debugResults = new RunResultsDTO(
+                0,
+                finalVariablesResult.get(Variable.RESULT),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.isFinished());
+        history.add(debugResults);
+
+        return debugResults;
     }
 }

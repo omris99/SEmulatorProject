@@ -13,16 +13,23 @@ public class RunResultsDTO implements DTO{
     private final Map<String, Long> inputVariablesAsEntered;
     private final Map<String, Long> workVariablesValues;
     private final int totalCyclesCount;
+    private boolean isFinished = false;
 
     public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
+        this(degree, yValue, inputVariablesAsEntered, workVariablesValues, totalCyclesCount, false);
+    }
+
+    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount, boolean isFinished) {
         this.degree = degree;
         this.yValue = yValue;
         this.inputVariablesAsEntered = convertKeyToStringAndSortVariablesMap(inputVariablesAsEntered);
         this.workVariablesValues = convertKeyToStringAndSortVariablesMap(workVariablesValues);
         this.totalCyclesCount = totalCyclesCount;
+        this.isFinished = isFinished;
     }
 
-    public Long getYValue() {
+
+        public Long getYValue() {
         return yValue;
     }
 
@@ -51,5 +58,9 @@ public class RunResultsDTO implements DTO{
                         (e1, e2) -> e1,
                         LinkedHashMap::new
                 ));
+    }
+
+    public boolean isFinished(){
+        return isFinished;
     }
 }

@@ -1,12 +1,9 @@
 package gui.components.debuggerwindow;
 
-import dto.DebugResultsDTO;
 import dto.RunResultsDTO;
 import gui.app.AppController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
-import gui.components.historywindow.HistoryWindowController;
 import gui.components.inputrow.InputRowController;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -92,11 +89,11 @@ public class DebuggerWindowController {
                         InputRowController::getValue));
     }
 
-    public void updateRunResults(DebugResultsDTO results) {
+    public void updateRunResults(RunResultsDTO results) {
         executionStateWindowController.updateTableAndCycles(results);
         if(results.isFinished()){
                 debuggerCommandsBarController.enableNewRunButton();
-                debuggerCommandsBarController.disableExecutionButtons();
+                debuggerCommandsBarController.disableDebuggerControlButtons();
         }
     }
 
@@ -114,5 +111,15 @@ public class DebuggerWindowController {
 
     public void onStepOverClick(){
         appController.executeNextDebugStep();
+    }
+
+    public void onStopButtonClick(){
+        appController.stopDebuggingSession();
+        debuggerCommandsBarController.enableNewRunButton();
+        debuggerCommandsBarController.disableDebuggerControlButtons();
+    }
+
+    public void onResumeClick(){
+        appController.resumeDebuggerExecution();
     }
 }

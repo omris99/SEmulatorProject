@@ -47,6 +47,7 @@ public class debuggerCommandsBarController {
 
     @FXML
     void resumeButtonAction(ActionEvent event) {
+        debuggerWindowController.onResumeClick();
 
     }
 
@@ -69,7 +70,7 @@ public class debuggerCommandsBarController {
 
     @FXML
     void stopButtonAction(ActionEvent event) {
-
+        debuggerWindowController.onStopButtonClick();
     }
 
     public void setDebuggerWindowController(DebuggerWindowController debuggerWindowController) {
@@ -95,7 +96,7 @@ public class debuggerCommandsBarController {
         newRunButton.setDisable(true);
     }
 
-    public void disableExecutionButtons(){
+    public void disableDebuggerControlButtons(){
         startButton.setDisable(false);
         debugButton.setDisable(false);
         resumeButton.setDisable(true);

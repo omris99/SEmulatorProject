@@ -1,5 +1,6 @@
 package gui.components.debuggerwindow;
 
+import dto.DebugResultsDTO;
 import dto.RunResultsDTO;
 import gui.app.AppController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
@@ -91,8 +92,12 @@ public class DebuggerWindowController {
                         InputRowController::getValue));
     }
 
-    public void updateRunResults(RunResultsDTO results) {
+    public void updateRunResults(DebugResultsDTO results) {
         executionStateWindowController.updateTableAndCycles(results);
+        if(results.isFinished()){
+                debuggerCommandsBarController.enableNewRunButton();
+                debuggerCommandsBarController.disableExecutionButtons();
+        }
     }
 
     public void setInputVariablesValues(Map<String, Long> inputs){
@@ -101,5 +106,13 @@ public class DebuggerWindowController {
                 row.setValue(String.valueOf(inputs.get(row.getName())));
             }
         }
+    }
+
+    public void onDebugButtonClick(){
+        appController.startDebuggingSession(getInputVariablesValues());
+    }
+
+    public void onStepOverClick(){
+        appController.executeNextDebugStep();
     }
 }

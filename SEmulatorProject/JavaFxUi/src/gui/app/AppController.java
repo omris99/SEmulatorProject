@@ -1,6 +1,7 @@
 package gui.app;
 
 import dto.DTO;
+import dto.DebugResultsDTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
@@ -131,7 +132,7 @@ public class AppController {
         try{
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
-            debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
+            debuggerWindowController.updateRunResults((DebugResultsDTO) runResultsDTO);
             updateHistoryWindow(engine.getHistory());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -161,6 +162,32 @@ public class AppController {
         debuggerWindowController.clearInputVariablesTable();
         debuggerWindowController.reset();
         historyWindowController.reset();
+    }
+
+    public void startDebuggingSession(Map<String,String> inputVariables){
+        try{
+            int runDegree = instructionWindowController.getDegreeChoice();
+            DTO initialState = engine.initDebuggingSession(runDegree, inputVariables);
+            debuggerWindowController.updateRunResults((DebugResultsDTO) initialState);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Starting Execution");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("The input is invalid. Please enter integers only.");
+            alert.showAndWait();
+        } catch (NumberNotInRangeException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Starting Execution");
+            alert.setHeaderText("Negative Number Submitted");
+            alert.setContentText("You entered the number: " + e.getNumber() + " which is not positive.\n" +
+                    "Please enter only Positive Numbers.");
+            alert.showAndWait();
+        }
+    }
+
+    public void executeNextDebugStep(){
+        DTO context = engine.stepOver();
+        debuggerWindowController.updateRunResults((DebugResultsDTO) context);
     }
 
 }

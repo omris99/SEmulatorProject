@@ -1,6 +1,7 @@
 package logic.engine;
 
 import dto.DTO;
+import dto.DebugResultsDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -8,6 +9,7 @@ import jakarta.xml.bind.Unmarshaller;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
 import logic.exceptions.XmlErrorType;
+import logic.execution.DebuggerExecutor;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
@@ -32,6 +34,7 @@ public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
     private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
+    private DebuggerExecutor debuggerExecutor;
 
     public EmulatorEngine() {
         history = new LinkedList<>();
@@ -197,5 +200,47 @@ public class EmulatorEngine implements Engine {
         }
 
         return userInputToVariablesMapConverted;
+    }
+
+    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
+        Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
+        //Implement this better!! i dont like that i give it 0 hardcoded.
+
+        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
+
+        Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
+        for(Variable inputVariable : programActualInputVariables){
+            programInitialInputVariablesMap.put(
+                    inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
+        }
+        programInitialInputVariablesMap.put(Variable.RESULT, 0L);
+
+        debuggerExecutor = new DebuggerExecutor(currentLoadedProgram.getExpandedProgram(0), new LinkedHashMap<>(programInitialInputVariablesMap));
+
+
+        return new DebugResultsDTO(
+                degree,
+                programInitialInputVariablesMap.get(Variable.RESULT),
+                userInputToVariablesMapConverted,
+                Utils.extractVariablesTypesFromMap(programInitialInputVariablesMap, VariableType.WORK),
+                debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.isFinished());
+    }
+
+    public DTO stepOver(){
+        if(debuggerExecutor == null){
+            throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
+        }
+
+        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
+
+        return new DebugResultsDTO(
+                0,
+                finalVariablesResult.get(Variable.RESULT),
+                new LinkedHashMap<>(),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.isFinished()
+        );
     }
 }

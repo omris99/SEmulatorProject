@@ -10,19 +10,21 @@ import java.util.stream.Collectors;
 public class RunResultsDTO implements DTO{
     private final int degree;
     private final Long yValue;
-    private final Map<String, Long> inputVariablesAsEntered;
+    private final Map<String, Long> inputVariablesInitialValues;
+    private final Map<String, Long> inputVariablesValueResult;
     private final Map<String, Long> workVariablesValues;
     private final int totalCyclesCount;
     private boolean isFinished = false;
 
-    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
-        this(degree, yValue, inputVariablesAsEntered, workVariablesValues, totalCyclesCount, false);
+    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesInitialValues, Map<Variable, Long> inputVariablesValueResult, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
+        this(degree, yValue, inputVariablesInitialValues, inputVariablesValueResult, workVariablesValues, totalCyclesCount, false);
     }
 
-    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesAsEntered, Map<Variable, Long> workVariablesValues, int totalCyclesCount, boolean isFinished) {
+    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesInitialValues, Map<Variable, Long> inputVariablesValueResult,Map<Variable, Long> workVariablesValues, int totalCyclesCount, boolean isFinished) {
         this.degree = degree;
         this.yValue = yValue;
-        this.inputVariablesAsEntered = convertKeyToStringAndSortVariablesMap(inputVariablesAsEntered);
+        this.inputVariablesInitialValues = convertKeyToStringAndSortVariablesMap(inputVariablesInitialValues);
+        this.inputVariablesValueResult = convertKeyToStringAndSortVariablesMap(inputVariablesValueResult);
         this.workVariablesValues = convertKeyToStringAndSortVariablesMap(workVariablesValues);
         this.totalCyclesCount = totalCyclesCount;
         this.isFinished = isFinished;
@@ -33,8 +35,12 @@ public class RunResultsDTO implements DTO{
         return yValue;
     }
 
-    public Map<String, Long> getInputVariablesAsEntered() {
-        return inputVariablesAsEntered;
+    public Map<String, Long> getInputVariablesInitialValues() {
+        return inputVariablesInitialValues;
+    }
+
+    public  Map<String, Long> getInputVariablesValueResult() {
+        return inputVariablesValueResult;
     }
 
     public Map<String, Long> getWorkVariablesValues() {

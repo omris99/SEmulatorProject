@@ -121,7 +121,7 @@ public class AppController {
         debuggerWindowController.prepareForNewRun(((ProgramDTO)engine.getLoadedProgramDTO()).getInputNames());
     }
 
-    public void expandProgram(int degree){
+    public void showExpandedProgram(int degree){
         instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.getExpandedProgramDTO(degree));
     }
 
@@ -152,7 +152,7 @@ public class AppController {
     }
 
     public void reRunSelectedHistory(RunResultsDTO selectedRun){
-        debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesAsEntered());
+        debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesInitialValues());
     }
 
     private void resetComponents(){
@@ -199,5 +199,10 @@ public class AppController {
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
         updateHistoryWindow(engine.getHistory());
     }
+
+//    private void finishExecutionMode(){
+//        updateHistoryWindow(engine.getHistory());
+//        debuggerWindowController.finishExecutionMode();
+//    }
 
 }

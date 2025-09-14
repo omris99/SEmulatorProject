@@ -1,7 +1,6 @@
 package gui.components.variablesvaluetable;
 
 import dto.RunResultsDTO;
-import gui.components.executionstatewindow.ExecutionStateWindowController;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -51,7 +50,7 @@ public class VariablesValueTableController {
 
         rows.add(new VariableValueRow("Y-RESULT", runResultsDTO.getYValue()));
 
-        runResultsDTO.getInputVariablesAsEntered().forEach(
+        runResultsDTO.getInputVariablesValueResult().forEach(
                 (name, value) -> rows.add(new VariableValueRow(name, value))
         );
 

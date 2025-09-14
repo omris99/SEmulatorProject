@@ -31,7 +31,7 @@ import java.util.*;
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
-    private Program[] loadedProgramExpendations;
+//    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
 
@@ -62,10 +62,10 @@ public class EmulatorEngine implements Engine {
 
         currentLoadedProgram = loadedProgram;
 
-        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
-        for (int i = 0; i <= currentLoadedProgram.getMaximalDegree(); i++) {
-            loadedProgramExpendations[i] = currentLoadedProgram.getExpandedProgram(i);
-        }
+//        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
+//        for (int i = 0; i <= currentLoadedProgram.getMaximalDegree(); i++) {
+//            loadedProgramExpendations[i] = currentLoadedProgram.getExpandedProgram(i);
+//        }
 
         history.clear();
     }
@@ -98,6 +98,7 @@ public class EmulatorEngine implements Engine {
                 degree,
                 finalVariablesResult.get(Variable.RESULT),
                 userInputToVariablesMap,
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         history.add(runResults);
@@ -122,7 +123,8 @@ public class EmulatorEngine implements Engine {
         RunResultsDTO runResults = new RunResultsDTO(
                 degree,
                 finalVariablesResult.get(Variable.RESULT),
-                userInputToVariablesMapConverted,
+                programInitialInputVariablesMap,
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         history.add(runResults);
@@ -218,6 +220,7 @@ public class EmulatorEngine implements Engine {
                 degree,
                 programInitialInputVariablesMap.get(Variable.RESULT),
                 userInputToVariablesMapConverted,
+                userInputToVariablesMapConverted,
                 Utils.extractVariablesTypesFromMap(programInitialInputVariablesMap, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished());
@@ -233,6 +236,7 @@ public class EmulatorEngine implements Engine {
         RunResultsDTO debugResults = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
+                debuggerExecutor.getInitialInputVariablesMap(),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
@@ -259,6 +263,7 @@ public class EmulatorEngine implements Engine {
         RunResultsDTO debugResults = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
+                debuggerExecutor.getInitialInputVariablesMap(),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),

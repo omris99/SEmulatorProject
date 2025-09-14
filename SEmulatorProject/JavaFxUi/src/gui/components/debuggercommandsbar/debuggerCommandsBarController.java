@@ -103,6 +103,8 @@ public class debuggerCommandsBarController {
         stepOverButton.setDisable(true);
         stepBackwardButton.setDisable(true);
         stopButton.setDisable(true);
+
+
     }
 
 }

@@ -6,7 +6,6 @@ import gui.app.AppController;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.summaryline.SummaryLineController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -70,7 +69,7 @@ public class InstructionsWindowController {
     }
 
     public void onDegreeChoice(int newDegree) {
-        appController.expandProgram(newDegree);
+        appController.showExpandedProgram(newDegree);
 
     }
 

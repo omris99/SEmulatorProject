@@ -6,12 +6,14 @@ import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
 import logic.model.program.Program;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DebuggerExecutor implements ProgramExecutor{
     private Program program;
     private ExecutionContext context;
     private InstructionsQueue instructionsQueue;
+    private final Map<Variable, Long> initialInputVariablesMap;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
     private Instruction nextInstructionToExecute;
@@ -19,6 +21,7 @@ public class DebuggerExecutor implements ProgramExecutor{
     private boolean isFinished = false;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap) {
+        this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
     }
 
@@ -95,5 +98,9 @@ public class DebuggerExecutor implements ProgramExecutor{
 
     public int getProgramDegree(){
         return program.getDegree();
+    }
+
+    public Map<Variable, Long> getInitialInputVariablesMap(){
+        return initialInputVariablesMap;
     }
 }

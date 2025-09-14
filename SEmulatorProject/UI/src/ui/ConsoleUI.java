@@ -215,8 +215,8 @@ public class ConsoleUI implements UI {
 
                 System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
                 System.out.println("\n- Input Values:");
-                for (String variable : executionRecord.getInputVariablesAsEntered().keySet()) {
-                    System.out.println(String.format("  %s = %d ", variable, executionRecord.getInputVariablesAsEntered().get(variable)));
+                for (String variable : executionRecord.getInputVariablesInitialValues().keySet()) {
+                    System.out.println(String.format("  %s = %d ", variable, executionRecord.getInputVariablesInitialValues().get(variable)));
                 }
 
                 System.out.println(String.format("\n- y Result: %d", executionRecord.getYValue()));
@@ -242,8 +242,8 @@ public class ConsoleUI implements UI {
         System.out.println(String.format("y = %d ", results.getYValue()));
         System.out.println("--- PROGRAM VARIABLES ---");
         System.out.println(String.format("y = %d ", results.getYValue()));
-        for (String variableName : results.getInputVariablesAsEntered().keySet()) {
-            System.out.println(String.format("%s = %d ", variableName, results.getInputVariablesAsEntered().get(variableName)));
+        for (String variableName : results.getInputVariablesInitialValues().keySet()) {
+            System.out.println(String.format("%s = %d ", variableName, results.getInputVariablesInitialValues().get(variableName)));
         }
 
         for (String variableName : results.getWorkVariablesValues().keySet()) {

@@ -91,35 +91,47 @@ public class DebuggerWindowController {
 
     public void updateRunResults(RunResultsDTO results) {
         executionStateWindowController.updateTableAndCycles(results);
-        if(results.isFinished()){
-                debuggerCommandsBarController.enableNewRunButton();
-                debuggerCommandsBarController.disableDebuggerControlButtons();
+        if (results.isFinished()) {
+            finishExecutionMode();
         }
     }
 
-    public void setInputVariablesValues(Map<String, Long> inputs){
-        for(InputRowController row : inputVariableRows){
-            if(inputs.containsKey(row.getName())){
+    public void setInputVariablesValues(Map<String, Long> inputs) {
+        for (InputRowController row : inputVariableRows) {
+            if (inputs.containsKey(row.getName())) {
                 row.setValue(String.valueOf(inputs.get(row.getName())));
             }
         }
     }
 
-    public void onDebugButtonClick(){
+    public void onDebugButtonClick() {
+        disableInputFields(true);
         appController.startDebuggingSession(getInputVariablesValues());
     }
 
-    public void onStepOverClick(){
+    public void onStepOverClick() {
         appController.executeNextDebugStep();
     }
 
-    public void onStopButtonClick(){
+    public void onStopButtonClick() {
         appController.stopDebuggingSession();
-        debuggerCommandsBarController.enableNewRunButton();
-        debuggerCommandsBarController.disableDebuggerControlButtons();
+        finishExecutionMode();
     }
 
-    public void onResumeClick(){
+    public void onResumeClick() {
         appController.resumeDebuggerExecution();
+    }
+
+    private void disableInputFields(boolean disable) {
+        for (InputRowController row : inputVariableRows) {
+            row.disableInputFields(disable);
+        }
+    }
+
+    public void finishExecutionMode() {
+        debuggerCommandsBarController.enableNewRunButton();
+        debuggerCommandsBarController.disableDebuggerControlButtons();
+        disableInputFields(false);
+
     }
 }

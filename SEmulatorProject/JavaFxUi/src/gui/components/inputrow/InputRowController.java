@@ -27,4 +27,8 @@ public class InputRowController {
     public String getValue() {
         return variableValueTextField.getText();
     }
+
+    public void disableInputFields(boolean disable){
+        variableValueTextField.setDisable(disable);
+    }
 }

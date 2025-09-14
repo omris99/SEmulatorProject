@@ -103,4 +103,8 @@ public class DebuggerExecutor implements ProgramExecutor{
     public Map<Variable, Long> getInitialInputVariablesMap(){
         return initialInputVariablesMap;
     }
+
+    public Instruction getCurrentInstructionToExecute(){
+        return currentInstructionToExecute;
+    }
 }

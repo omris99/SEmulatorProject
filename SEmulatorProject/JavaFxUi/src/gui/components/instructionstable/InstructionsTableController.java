@@ -15,14 +15,21 @@ import java.util.List;
 
 public class InstructionsTableController {
 
-    @FXML private TableView<InstructionDTO> InstructionsTable;
-    @FXML private TableColumn<InstructionDTO, Integer> ColIndex;
-    @FXML private TableColumn<InstructionDTO, String> colInstructionType;
-    @FXML private TableColumn<InstructionDTO, String> colLabel;
-    @FXML private TableColumn<InstructionDTO, String> colInstructionDisplayFormat;
-    @FXML private TableColumn<InstructionDTO, Integer> colCycle;
+    @FXML
+    private TableView<InstructionDTO> InstructionsTable;
+    @FXML
+    private TableColumn<InstructionDTO, Integer> ColIndex;
+    @FXML
+    private TableColumn<InstructionDTO, String> colInstructionType;
+    @FXML
+    private TableColumn<InstructionDTO, String> colLabel;
+    @FXML
+    private TableColumn<InstructionDTO, String> colInstructionDisplayFormat;
+    @FXML
+    private TableColumn<InstructionDTO, Integer> colCycle;
 
     private String highlightedSelection;
+    private int nextInstructionToExecuteIndex;
     private final ObservableList<InstructionDTO> data = FXCollections.observableArrayList();
 
     @FXML
@@ -40,24 +47,29 @@ public class InstructionsTableController {
             protected void updateItem(InstructionDTO item, boolean empty) {
                 super.updateItem(item, empty);
 
+                getStyleClass().removeAll("highlighted", "next-instruction");
+
                 if (item == null || empty) {
-                    getStyleClass().remove("highlighted");
-                } else {
-                    if (highlightedSelection != null &&
-                            item.getAssociatedArgumentsAndLabels().contains(highlightedSelection)) {
-                        if (!getStyleClass().contains("highlighted")) {
-                            getStyleClass().add("highlighted");
-                        }
-                    } else {
-                        getStyleClass().remove("highlighted");
-                    }
+                    return;
+                }
+
+                boolean isHighlighted = highlightedSelection != null &&
+                        item.getAssociatedArgumentsAndLabels().contains(highlightedSelection);
+
+                boolean isNextInstruction = nextInstructionToExecuteIndex > 0 &&
+                        item.getIndex() == nextInstructionToExecuteIndex;
+
+                if (isNextInstruction) {
+                    getStyleClass().add("next-instruction");
+                } else if (isHighlighted) {
+                    getStyleClass().add("highlighted");
                 }
             }
         });
     }
 
     public void setInstructions(List<InstructionDTO> instructions) {
-            data.setAll(instructions);
+        data.setAll(instructions);
     }
 
     public TableView<InstructionDTO> getTable() {
@@ -69,4 +81,13 @@ public class InstructionsTableController {
         InstructionsTable.refresh();
     }
 
+    public void highlightNextInstructionToExecute(int index) {
+        this.nextInstructionToExecuteIndex = index;
+        InstructionsTable.refresh();
+    }
+
+    public void stopHighlightingNextInstructionToExecute(){
+        this.nextInstructionToExecuteIndex = 0;
+        InstructionsTable.refresh();
+    }
 }

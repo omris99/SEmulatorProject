@@ -53,4 +53,8 @@ public class ExpandationLevelWindowController {
         String text = maximalDegreeLabel.getText();
         return Integer.parseInt(text);
     }
+
+    public void disableDegreeChoiceBox(boolean disable) {
+        currentDegreeChoiceBox.setDisable(disable);
+    }
 }

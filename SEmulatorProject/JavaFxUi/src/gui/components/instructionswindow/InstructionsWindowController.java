@@ -63,6 +63,8 @@ public class InstructionsWindowController {
 
     private void updateInstructionsTableAndSummaryLine(ProgramDTO programDTO) {
         instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
+        stopHighlightingNextInstructionToExecute();
+        instructionsWindowToolbarController.resetHighlightSelection();
         Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
         summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
                 instructionsTypeCount.get(InstructionType.SYNTHETIC));
@@ -84,6 +86,18 @@ public class InstructionsWindowController {
 
     public int getDegreeChoice() {
         return instructionsWindowToolbarController.getDegreeChoice();
+    }
+
+    public void highlightNextInstructionToExecute(InstructionDTO instruction){
+        instructionsTableController.highlightNextInstructionToExecute(instruction.getIndex());
+    }
+
+    public void stopHighlightingNextInstructionToExecute(){
+        instructionsTableController.stopHighlightingNextInstructionToExecute();
+    }
+
+    public void disableDegreeChoiceControls(boolean disable) {
+        instructionsWindowToolbarController.disableDegreeChoiceControls(disable);
     }
 
 }

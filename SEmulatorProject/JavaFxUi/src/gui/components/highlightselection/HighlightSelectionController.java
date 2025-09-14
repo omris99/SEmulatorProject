@@ -33,4 +33,9 @@ public class HighlightSelectionController {
     public void setInstructionsWindowToolbarController(InstructionsWindowToolbarController instructionsWindowToolbarController) {
         this.instructionsWindowToolbarController = instructionsWindowToolbarController;
     }
+
+    public void resetSelection() {
+        highlightSelector.getSelectionModel().clearSelection();
+        highlightSelector.setPromptText("Select Label/Variable");
+    }
 }

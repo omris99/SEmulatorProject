@@ -39,7 +39,7 @@ public class DebuggerWindowController {
         inputVariableRows.clear();
         debuggerCommandsBarController.reset();
         executionStateWindowController.reset();
-        debuggerCommandsBarController.enableNewRunButton();
+        debuggerCommandsBarController.disableNewRunButton(false);
     }
 
     public void prepareForNewRun(List<String> names) {
@@ -105,7 +105,6 @@ public class DebuggerWindowController {
     }
 
     public void onDebugButtonClick() {
-        disableInputFields(true);
         appController.startDebuggingSession(getInputVariablesValues());
     }
 
@@ -122,16 +121,21 @@ public class DebuggerWindowController {
         appController.resumeDebuggerExecution();
     }
 
-    private void disableInputFields(boolean disable) {
+    public void disableInputFields(boolean disable) {
         for (InputRowController row : inputVariableRows) {
             row.disableInputFields(disable);
         }
     }
 
     public void finishExecutionMode() {
-        debuggerCommandsBarController.enableNewRunButton();
-        debuggerCommandsBarController.disableDebuggerControlButtons();
+        debuggerCommandsBarController.disableNewRunButton(false);
+        debuggerCommandsBarController.disableDebuggerControlButtons(true);
         disableInputFields(false);
+    }
 
+    public void startExecutionMode() {
+        debuggerCommandsBarController.disableNewRunButton(true);
+        debuggerCommandsBarController.disableDebuggerControlButtons(false);
+        disableInputFields(true);
     }
 }

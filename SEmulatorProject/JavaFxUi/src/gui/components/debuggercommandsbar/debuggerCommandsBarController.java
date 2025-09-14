@@ -31,12 +31,6 @@ public class debuggerCommandsBarController {
 
     @FXML
     void debugButtonAction(ActionEvent event) {
-        newRunButton.setDisable(true);
-        startButton.setDisable(true);
-        debugButton.setDisable(true);
-        stopButton.setDisable(false);
-        stepOverButton.setDisable(false);
-        resumeButton.setDisable(false);
         debuggerWindowController.onDebugButtonClick();
     }
 
@@ -77,8 +71,8 @@ public class debuggerCommandsBarController {
         this.debuggerWindowController = debuggerWindowController;
     }
 
-    public void enableNewRunButton(){
-        newRunButton.setDisable(false);
+    public void disableNewRunButton(boolean disable) {
+        newRunButton.setDisable(disable);
     }
 
     public void enableExecutionButtons(){
@@ -96,15 +90,14 @@ public class debuggerCommandsBarController {
         newRunButton.setDisable(true);
     }
 
-    public void disableDebuggerControlButtons(){
-        startButton.setDisable(false);
-        debugButton.setDisable(false);
-        resumeButton.setDisable(true);
-        stepOverButton.setDisable(true);
-        stepBackwardButton.setDisable(true);
-        stopButton.setDisable(true);
-
-
+    public void disableDebuggerControlButtons(boolean disable){
+        startButton.setDisable(!disable);
+        debugButton.setDisable(!disable);
+        resumeButton.setDisable(disable);
+        stepOverButton.setDisable(disable);
+        stepBackwardButton.setDisable(disable);
+        stopButton.setDisable(disable);
     }
+
 
 }

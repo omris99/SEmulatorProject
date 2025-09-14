@@ -26,6 +26,9 @@ public class InstructionsWindowToolbarController {
     private Button expandButton;
 
     @FXML
+    private Button collapseButton;
+
+    @FXML
     public void initialize() {
         expandationLevelWindowController.setInstructionsWindowToolbarController(this);
         highlightSelectionController.setInstructionsWindowToolbarController(this);
@@ -75,5 +78,13 @@ public class InstructionsWindowToolbarController {
         return expandationLevelWindowController.getCurrentDegree();
     }
 
+    public void disableDegreeChoiceControls(boolean disable) {
+        expandButton.setDisable(disable);
+        collapseButton.setDisable(disable);
+        expandationLevelWindowController.disableDegreeChoiceBox(disable);
+    }
 
+    public void resetHighlightSelection(){
+        highlightSelectionController.resetSelection();
+    }
 }

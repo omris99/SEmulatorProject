@@ -7,3 +7,9 @@
 .table-row-cell.highlighted:selected {
     -fx-background-color: rgb(0, 166, 255);
 }
+
+.table-row-cell.next-instruction{
+    -fx-background-color: rgba(0, 255, 0, 0.3);
+    -fx-border-color: #ff0000;
+    -fx-border-width: 1;
+}

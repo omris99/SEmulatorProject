@@ -1,6 +1,7 @@
 package logic.engine;
 
 import dto.DTO;
+import dto.InstructionDTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
@@ -271,5 +272,9 @@ public class EmulatorEngine implements Engine {
         history.add(debugResults);
 
         return debugResults;
+    }
+
+    public DTO getNextInstructionToExecute(){
+        return debuggerExecutor.getCurrentInstructionToExecute().getInstructionDTO();
     }
 }

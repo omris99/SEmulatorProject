@@ -1,6 +1,7 @@
 package gui.app;
 
 import dto.DTO;
+import dto.InstructionDTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
@@ -130,7 +131,7 @@ public class AppController {
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
-            updateHistoryWindow(engine.getHistory());
+            finishExecutionMode();
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Starting Execution");
@@ -165,7 +166,10 @@ public class AppController {
         try{
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO initialState = engine.initDebuggingSession(runDegree, inputVariables);
+            debuggerWindowController.startExecutionMode();
             debuggerWindowController.updateRunResults((RunResultsDTO) initialState);
+            instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
+            instructionWindowController.disableDegreeChoiceControls(true);
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Starting Execution");
@@ -185,24 +189,31 @@ public class AppController {
     public void executeNextDebugStep(){
         RunResultsDTO context = (RunResultsDTO) engine.stepOver();
         debuggerWindowController.updateRunResults(context);
+        instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         if(context.isFinished()){
-            updateHistoryWindow(engine.getHistory());
+            finishExecutionMode();
         }
     }
 
     public void stopDebuggingSession(){
         engine.stopDebuggingSession();
+//        instructionWindowController.stopHighlightingNextInstructionToExecute();
+        finishExecutionMode();
     }
 
     public void resumeDebuggerExecution(){
         DTO context = engine.resumeDebuggingSession();
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
-        updateHistoryWindow(engine.getHistory());
+//        instructionWindowController.stopHighlightingNextInstructionToExecute();
+//        updateHistoryWindow(engine.getHistory());
+        finishExecutionMode();
     }
 
-//    private void finishExecutionMode(){
-//        updateHistoryWindow(engine.getHistory());
-//        debuggerWindowController.finishExecutionMode();
-//    }
-
+    private void finishExecutionMode(){
+        updateHistoryWindow(engine.getHistory());
+        debuggerWindowController.finishExecutionMode();
+        instructionWindowController.stopHighlightingNextInstructionToExecute();
+        instructionWindowController.disableDegreeChoiceControls(false);
+        debuggerWindowController.disableInputFields(false);
+    }
 }

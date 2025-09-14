@@ -122,9 +122,7 @@ public class AppController {
     }
 
     public void expandProgram(int degree){
-        engine.changeCurrentProgramDegree(degree);
-        ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-        instructionWindowController.onExpandationLevelChanged(programDTO);
+        instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.getExpandedProgramDTO(degree));
     }
 
     public void startProgramExecution(Map<String,String> inputVariables) {

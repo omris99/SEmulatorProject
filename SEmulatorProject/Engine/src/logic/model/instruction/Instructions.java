@@ -14,7 +14,7 @@ public class Instructions implements Serializable {
     private final Set<Label> instructionsLabels;
     private final Set<Variable> instructionsInputs;
     private final Set<Variable> instructionsWorkVariables;
-    private int expandLevel;
+    private int degree;
 
     public Instructions() {
         this.instructions = new LinkedList<>();
@@ -104,7 +104,7 @@ public class Instructions implements Serializable {
         }
 
         resetIndexes();
-        expandLevel++;
+        degree++;
     }
 
 
@@ -145,7 +145,7 @@ public class Instructions implements Serializable {
         return instructionsTypeCount;
     }
 
-    public int getExpandLevel() {
-        return expandLevel;
+    public int getDegree() {
+        return degree;
     }
 }

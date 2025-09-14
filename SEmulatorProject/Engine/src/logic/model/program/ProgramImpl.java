@@ -112,7 +112,7 @@ public class ProgramImpl implements Program {
                 getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),
                 getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()),
                 instructions.getInstructionsTypeCount(),
-                instructions.getExpandLevel(),
+                instructions.getDegree(),
                 instructions.getMaximalDegree(),
                 getAllInstructionsWorkVariables()
         );
@@ -136,5 +136,9 @@ public class ProgramImpl implements Program {
         return getAllInstructionsInputs().stream()
                 .sorted(Comparator.comparingInt(Variable::getNumber))
                 .map(Argument::getRepresentation).collect(Collectors.toList());
+    }
+
+    public int getDegree(){
+        return instructions.getDegree();
     }
 }

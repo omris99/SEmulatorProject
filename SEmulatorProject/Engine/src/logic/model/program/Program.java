@@ -21,4 +21,5 @@ public interface Program extends Serializable {
     Label validate();
     int getMaximalDegree();
     DTO createDTO();
+    int getDegree();
 }

@@ -92,4 +92,8 @@ public class DebuggerExecutor implements ProgramExecutor{
     public void stop(){
         isFinished = true;
     }
+
+    public int getProgramDegree(){
+        return program.getDegree();
+    }
 }

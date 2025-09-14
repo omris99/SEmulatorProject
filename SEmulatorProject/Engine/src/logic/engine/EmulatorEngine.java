@@ -1,6 +1,7 @@
 package logic.engine;
 
 import dto.DTO;
+import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -27,8 +28,6 @@ import java.util.*;
 
 //TODO:
 // 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
-// 2. runLoadedProgramWithDebuggerWindowInput fixed degree 0 problem
-// 3. make sure that current degree add to history (in debug mode - resume..)
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;
@@ -63,7 +62,6 @@ public class EmulatorEngine implements Engine {
 
         currentLoadedProgram = loadedProgram;
 
-        //try
         loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
         for (int i = 0; i <= currentLoadedProgram.getMaximalDegree(); i++) {
             loadedProgramExpendations[i] = currentLoadedProgram.getExpandedProgram(i);
@@ -109,8 +107,7 @@ public class EmulatorEngine implements Engine {
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        //Implement this better!! i dont like that i give it 0 hardcoded.
-        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(0));
+        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
 
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
@@ -178,10 +175,11 @@ public class EmulatorEngine implements Engine {
     public boolean isProgramLoaded() {
         return !(currentLoadedProgram == null);
     }
+//
+//    public void changeCurrentProgramDegree(int degree) {
+//        currentLoadedProgram = loadedProgramExpendations[degree];
+//    }
 
-    public void changeCurrentProgramDegree(int degree) {
-        currentLoadedProgram = loadedProgramExpendations[degree];
-    }
 
     @Override
     public void quit(){
@@ -204,8 +202,6 @@ public class EmulatorEngine implements Engine {
 
     public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        //Implement this better!! i dont like that i give it 0 hardcoded.
-
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
         Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
@@ -215,7 +211,7 @@ public class EmulatorEngine implements Engine {
         }
         programInitialInputVariablesMap.put(Variable.RESULT, 0L);
 
-        debuggerExecutor = new DebuggerExecutor(currentLoadedProgram.getExpandedProgram(0), new LinkedHashMap<>(programInitialInputVariablesMap));
+        debuggerExecutor = new DebuggerExecutor(currentLoadedProgram.getExpandedProgram(degree), new LinkedHashMap<>(programInitialInputVariablesMap));
 
 
         return new RunResultsDTO(
@@ -235,7 +231,7 @@ public class EmulatorEngine implements Engine {
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
 
         RunResultsDTO debugResults = new RunResultsDTO(
-                0,
+                debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
@@ -261,7 +257,7 @@ public class EmulatorEngine implements Engine {
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.run(new LinkedHashMap<>());
 
         RunResultsDTO debugResults = new RunResultsDTO(
-                0,
+                debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),

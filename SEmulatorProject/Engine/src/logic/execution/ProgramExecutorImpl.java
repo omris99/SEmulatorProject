@@ -13,11 +13,13 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     private final Program program;
     private InstructionsQueue instructionsQueue;
     private int cyclesCount;
+    private int degree;
 
     public ProgramExecutorImpl(Program program) {
         this.program = program;
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         cyclesCount = 0;
+        this.degree = program.getDegree();
     }
 
     @Override

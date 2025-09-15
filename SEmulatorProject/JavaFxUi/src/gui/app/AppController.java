@@ -155,6 +155,7 @@ public class AppController {
     }
 
     public void reRunSelectedHistory(RunResultsDTO selectedRun){
+        instructionWindowController.setProgramDegree(selectedRun.getDegree());
         debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesInitialValues());
     }
 
@@ -216,4 +217,5 @@ public class AppController {
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
     }
+
 }

@@ -104,4 +104,8 @@ public class InstructionsWindowController {
         instructionsWindowToolbarController.disableDegreeChoiceControls(disable);
     }
 
+    public void setProgramDegree(int degree){
+        instructionsWindowToolbarController.setProgramDegree(degree);
+    }
+
 }

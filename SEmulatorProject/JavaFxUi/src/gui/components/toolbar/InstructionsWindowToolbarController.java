@@ -54,6 +54,10 @@ public class InstructionsWindowToolbarController {
         }
     }
 
+    public void setProgramDegree(int degree) {
+        expandationLevelWindowController.setDegree(degree);
+    }
+
     public void onCollapseButtonClick() {
         if (expandationLevelWindowController.getCurrentDegree() > 0) {
             onDegreeChoice(expandationLevelWindowController.getCurrentDegree() - 1);

@@ -1,16 +1,15 @@
 package gui.components.variablesvaluetable;
 
-import dto.InstructionDTO;
 import dto.RunResultsDTO;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-
-import java.util.function.BiConsumer;
 
 public class VariablesValueTableController {
     @FXML
@@ -22,6 +21,10 @@ public class VariablesValueTableController {
     @FXML
     private TableView<VariableValueRow> variablesDisplayTable;
 
+    private final ObservableList<VariableValueRow> data = FXCollections.observableArrayList();
+
+
+
     @FXML
     public void initialize() {
         colVariable.setCellValueFactory(cellData ->
@@ -29,6 +32,8 @@ public class VariablesValueTableController {
 
         colVariableValue.setCellValueFactory(cellData ->
                 new SimpleObjectProperty<>(cellData.getValue().getValue()));
+
+        variablesDisplayTable.setItems(data);
 
         variablesDisplayTable.setRowFactory(tv -> new TableRow<VariableValueRow>() {
             @Override
@@ -41,12 +46,9 @@ public class VariablesValueTableController {
                     return;
                 }
 
-                boolean isChanged = item.getPreviousValue() != null && !item.getPreviousValue().equals(item.getValue());
-                item.isHighlighted = isChanged;
-
-                if(item.isHighlighted) {
-                    getStyleClass().add("value-changed");
-                }
+                if(item.isHighlighted()) {
+                 getStyleClass().add("value-changed");
+                 }
             }
         });
 
@@ -56,7 +58,6 @@ public class VariablesValueTableController {
         private final String variableName;
         private Long value;
         private Long previousValue;
-        private boolean isHighlighted;
 
         public VariableValueRow(String variableName, Long value) {
             this.variableName = variableName;
@@ -72,36 +73,42 @@ public class VariablesValueTableController {
             this.previousValue = this.value;
             this.value = newValue;
         }
-        public Long getPreviousValue() { return previousValue; }
 
+        public boolean isHighlighted() {
+            return previousValue != null && !(previousValue.equals(value));
+        }
+
+    }
+
+    private void updateOrAddRow(String name, Long value) {
+        VariableValueRow row = data.stream()
+                .filter(r -> r.getVariableName().equals(name))
+                .findFirst()
+                .orElse(null);
+
+        if (row != null) {
+            row.setValue(value);
+        } else {
+            data.add(new VariableValueRow(name, value));
+        }
     }
 
     public void updateTable(RunResultsDTO runResultsDTO) {
-        ObservableList<VariableValueRow> items = variablesDisplayTable.getItems();
+        updateOrAddRow("Y-RESULT", runResultsDTO.getYValue());
 
-        BiConsumer<String, Long> addOrUpdate = (name, value) -> {
-            VariableValueRow row = items.stream()
-                    .filter(r -> r.getVariableName().equals(name))
-                    .findFirst()
-                    .orElse(null);
-
-            if (row != null) {
-                row.setValue(value);
-            } else {
-                items.add(new VariableValueRow(name, value));
-            }
-        };
-
-        addOrUpdate.accept("Y-RESULT", runResultsDTO.getYValue());
-
-        runResultsDTO.getInputVariablesValueResult()
-                .forEach(addOrUpdate);
-
-        runResultsDTO.getWorkVariablesValues()
-                .forEach(addOrUpdate);
+        runResultsDTO.getInputVariablesValueResult().forEach(this::updateOrAddRow);
+        runResultsDTO.getWorkVariablesValues().forEach(this::updateOrAddRow);
 
         variablesDisplayTable.refresh();
+
+        Platform.runLater(() -> {
+            data.stream()
+                    .filter(VariableValueRow::isHighlighted)
+                    .findFirst()
+                    .ifPresent(instruction -> variablesDisplayTable.scrollTo(instruction));
+        });
     }
+
 
     public void reset() {
         variablesDisplayTable.getItems().clear();
@@ -109,11 +116,9 @@ public class VariablesValueTableController {
 
     public void unmarkHighlightedLines() {
         for (VariableValueRow row : variablesDisplayTable.getItems()) {
-            row.isHighlighted = false;
             row.previousValue = null;
         }
 
         variablesDisplayTable.refresh();
     }
-
 }

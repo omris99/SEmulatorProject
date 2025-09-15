@@ -84,6 +84,12 @@ public class InstructionsTableController {
     public void highlightNextInstructionToExecute(int index) {
         this.nextInstructionToExecuteIndex = index;
         InstructionsTable.refresh();
+        Platform.runLater(() -> {
+            data.stream()
+                    .filter(instr -> instr.getIndex() == index)
+                    .findFirst()
+                    .ifPresent(instr -> InstructionsTable.scrollTo(instr));
+        });
     }
 
     public void stopHighlightingNextInstructionToExecute(){

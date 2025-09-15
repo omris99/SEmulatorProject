@@ -157,7 +157,6 @@ public class AppController {
     }
 
     private void resetComponents(){
-        debuggerWindowController.clearInputVariablesTable();
         debuggerWindowController.reset();
         historyWindowController.reset();
     }

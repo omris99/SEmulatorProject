@@ -66,11 +66,6 @@ public class DebuggerWindowController {
         debuggerCommandsBarController.enableExecutionButtons();
     }
 
-
-    public void clearInputVariablesTable() {
-        inputVariableRows.clear();
-    }
-
     public void onNewRunClick() {
         appController.prepareDebuggerForNewRun();
     }
@@ -135,6 +130,7 @@ public class DebuggerWindowController {
     }
 
     public void startExecutionMode() {
+        executionStateWindowController.reset();
         debuggerCommandsBarController.disableNewRunButton(true);
         debuggerCommandsBarController.disableDebuggerControlButtons(false);
         disableInputFields(true);

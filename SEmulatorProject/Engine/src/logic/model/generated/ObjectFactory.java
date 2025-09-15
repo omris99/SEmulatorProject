@@ -7,17 +7,16 @@
 
 package logic.model.generated;
 
+import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;
-
-import javax.xml.namespace.QName;
 
 
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the model.generated package. 
+ * generated in the logic.model.generated package. 
  * <p>An ObjectFactory allows you to programmatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -35,20 +34,30 @@ public class ObjectFactory {
     private static final QName _SLabel_QNAME = new QName("", "S-Label");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: model.generated
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: logic.model.generated
      * 
      */
     public ObjectFactory() {
     }
 
     /**
-     * Create an instance of {@link SProgram }
+     * Create an instance of {@link SFunctions }
      * 
      * @return
-     *     the new instance of {@link SProgram }
+     *     the new instance of {@link SFunctions }
      */
-    public SProgram createSProgram() {
-        return new SProgram();
+    public SFunctions createSFunctions() {
+        return new SFunctions();
+    }
+
+    /**
+     * Create an instance of {@link SFunction }
+     * 
+     * @return
+     *     the new instance of {@link SFunction }
+     */
+    public SFunction createSFunction() {
+        return new SFunction();
     }
 
     /**
@@ -89,6 +98,16 @@ public class ObjectFactory {
      */
     public SInstructionArgument createSInstructionArgument() {
         return new SInstructionArgument();
+    }
+
+    /**
+     * Create an instance of {@link SProgram }
+     * 
+     * @return
+     *     the new instance of {@link SProgram }
+     */
+    public SProgram createSProgram() {
+        return new SProgram();
     }
 
     /**

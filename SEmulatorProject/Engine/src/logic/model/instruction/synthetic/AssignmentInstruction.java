@@ -14,11 +14,9 @@ import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
+import logic.utils.Utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AssignmentInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
@@ -61,7 +59,10 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
+        int maxLabelIndex = Utils.getMaxLabelIndex(programLabels);
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
+
         Label freeLabel1 = new LabelImpl(maxLabelIndex + 1);
         Label freeLabel2 = new LabelImpl(maxLabelIndex + 2);
         Label freeLabel3 = new LabelImpl(maxLabelIndex + 3);

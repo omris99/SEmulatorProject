@@ -95,7 +95,7 @@ public class Instructions implements Serializable {
             Instruction instruction = instructions.get(i);
             if (instruction instanceof ExpandableInstruction) {
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
-                        .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+                        .expand(instructionsLabels, instructionsWorkVariables, instructionsInputs ,instruction.getLabel());
                 expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);

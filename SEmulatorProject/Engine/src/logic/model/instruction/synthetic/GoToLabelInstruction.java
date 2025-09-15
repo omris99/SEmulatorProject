@@ -11,11 +11,9 @@ import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.utils.Utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GoToLabelInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
@@ -55,7 +53,8 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
         Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
         List<Instruction> expandedInstructions = new LinkedList<>();
 

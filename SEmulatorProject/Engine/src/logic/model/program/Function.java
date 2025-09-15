@@ -38,7 +38,7 @@ public class Function implements Program, Argument {
 
     @Override
     public List<Instruction> getInstructions() {
-        return List.of();
+        return instructions.getInstructionsList();
     }
 
     @Override

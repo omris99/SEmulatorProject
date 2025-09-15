@@ -12,11 +12,9 @@ import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
+import logic.utils.Utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JumpEqualVariableInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
@@ -67,7 +65,10 @@ public class JumpEqualVariableInstruction extends AbstractInstruction implements
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
+        int maxLabelIndex = Utils.getMaxLabelIndex(programLabels);
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
+
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel1 = new LabelImpl(maxLabelIndex + 1);
         Label freeLabel2 = new LabelImpl(maxLabelIndex + 2);

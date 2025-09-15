@@ -151,7 +151,7 @@ public class InstructionMapper{
         return domainArguments;
     }
 
-    private static Instruction createInstruction(String name, Variable variable, Label label, Map<InstructionArgument, Argument> arguments) {
+    public static Instruction createInstruction(String name, Variable variable, Label label, Map<InstructionArgument, Argument> arguments) {
         return switch (name) {
             case "INCREASE" -> new IncreaseInstruction(variable, label);
             case "DECREASE" -> new DecreaseInstruction(variable, label);

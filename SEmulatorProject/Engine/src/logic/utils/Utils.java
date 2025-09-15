@@ -1,8 +1,12 @@
 package logic.utils;
 
+import logic.model.argument.Argument;
+import logic.model.argument.ArgumentType;
+import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,4 +36,13 @@ public class Utils {
 
         return inputVariablesMap;
     }
+
+    public static int getMaxLabelIndex(Set<Label> instructionsLabels) {
+        return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
+    }
+
+    public static int getMaxGeneralVariableIndex(Set<Variable> instructionsVariables) {
+        return instructionsVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
+    }
+
 }

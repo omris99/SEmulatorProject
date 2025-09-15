@@ -50,12 +50,14 @@ public class AppController {
     }
 
     public void loadProgramWithProgress(File selectedFile) {
+        loadFileBarController.removeProgressBarErrorStyle();
         Task<Void> loadTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
                 try{
                     updateProgress(15,100);
 //                    updateMessage("Loading program...");
+                    updateMessage(selectedFile.getAbsolutePath());
                     engine.loadProgram(selectedFile.getAbsolutePath());
                     updateProgress(50, 100);
                     Thread.sleep(100);
@@ -66,7 +68,6 @@ public class AppController {
                         resetComponents();
                     });
 
-                    updateMessage(selectedFile.getAbsolutePath());
                     updateProgress(100, 100);
                 }
 
@@ -106,7 +107,8 @@ public class AppController {
                     if(!engine.isProgramLoaded()) {
                         updateMessage(String.format("Failed to load File: %s", selectedFile.getName()));
                     }
-                    updateProgress(0,100);
+                    loadFileBarController.setProgressBarLoadErrorStyle();
+                    updateProgress(100,100);
                 }
 
                 return null;

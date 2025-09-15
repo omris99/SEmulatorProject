@@ -20,7 +20,7 @@ public class LoadFileBarController {
     private Button LoadFileButton;
 
     @FXML
-    private ProgressBar ProgressBar;
+    private ProgressBar progressBar;
 
 
     public void setAppController(AppController appController) {
@@ -43,7 +43,16 @@ public class LoadFileBarController {
     }
 
     public void bindTaskToUI(Task<?> task) {
-        ProgressBar.progressProperty().bind(task.progressProperty());
+        progressBar.progressProperty().bind(task.progressProperty());
         FilePathTextField.textProperty().bind(task.messageProperty());
     }
+
+    public void setProgressBarLoadErrorStyle() {
+        progressBar.getStyleClass().add("load-error");
+    }
+
+    public void removeProgressBarErrorStyle() {
+        progressBar.getStyleClass().remove("load-error");
+    }
+
 }

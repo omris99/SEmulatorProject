@@ -9,6 +9,7 @@ import gui.components.toolbar.InstructionsWindowToolbarController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import logic.model.instruction.InstructionType;
 
 import java.util.List;
@@ -28,6 +29,9 @@ public class InstructionsWindowController {
 
     @FXML
     private SummaryLineController summaryLineController;
+
+    @FXML
+    private Label programNameLabel;
 
     @FXML
     public void initialize() {
@@ -52,6 +56,7 @@ public class InstructionsWindowController {
 
 
     public void onProgramLoaded(ProgramDTO programDTO) {
+        programNameLabel.setText(programDTO.getName());
         updateInstructionsTableAndSummaryLine(programDTO);
         instructionsWindowToolbarController.onProgramLoaded(programDTO);
     }

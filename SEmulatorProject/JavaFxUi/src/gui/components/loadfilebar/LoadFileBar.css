@@ -1,0 +1,8 @@
+#progressBar {
+    -fx-base: #c6c6c6;
+    -fx-accent: #18a300;
+}
+
+#progressBar.load-error{
+    -fx-accent: #e80000;
+}

@@ -1,5 +1,6 @@
 package logic.model.mappers;
 
+import logic.model.generated.SFunction;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SProgram;
 import logic.model.program.Program;
@@ -11,11 +12,15 @@ public class ProgramMapper {
             return null;
         }
 
-        Program domainProgram = new ProgramImpl(jaxbProgram.getName());
+        ProgramImpl domainProgram = new ProgramImpl(jaxbProgram.getName());
+
+        for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
+            domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction));
+        }
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {
-            domainProgram.addInstruction(InstructionMapper.toDomain(instruction));
+            domainProgram.addInstruction(InstructionMapper.toDomain(instruction, domainProgram.getFunctions()));
         }
 
         return domainProgram;

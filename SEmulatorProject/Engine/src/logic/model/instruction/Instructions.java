@@ -116,7 +116,7 @@ public class Instructions implements Serializable {
         return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 
-    public int getMaxInputVariableIndex() {
+    private int getMaxInputVariableIndex() {
         return instructionsInputs.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 

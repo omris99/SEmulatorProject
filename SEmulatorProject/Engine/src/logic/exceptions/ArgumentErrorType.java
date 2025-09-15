@@ -10,7 +10,8 @@ public enum ArgumentErrorType {
     VARIABLE_INDEX_CANT_PARSE_TO_NUMBER("Variable index must be an integer number", ArgumentType.VARIABLE),
     LABEL_INDEX_CANT_PARSE_TO_NUMBER("Label index must be an integer number", ArgumentType.LABEL),
     VARIABLE_INDEX_IS_NEGATIVE("Variable index cannot be negative", ArgumentType.VARIABLE),
-    CONSTANT_MUST_BE_A_NUMBER("Constant must be a numeric value", ArgumentType.CONSTANT);
+    CONSTANT_MUST_BE_A_NUMBER("Constant must be a numeric value", ArgumentType.CONSTANT),
+    FUNCTION_NOT_FOUND("Function not found", ArgumentType.FUNCTION);
 
     private final String userMessage;
     private final ArgumentType argumentType;

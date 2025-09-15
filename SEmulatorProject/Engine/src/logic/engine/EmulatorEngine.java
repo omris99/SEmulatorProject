@@ -29,6 +29,7 @@ import java.util.*;
 
 //TODO:
 // 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
+// 2. FIX QUOTE IN INSTRUCTION DATA (CYCLES AND DEGREE)
 
 public class EmulatorEngine implements Engine {
     private Program currentLoadedProgram;

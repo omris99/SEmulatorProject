@@ -14,8 +14,7 @@ import logic.model.instruction.*;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
-import logic.model.program.Program;
-import logic.utils.Utils;
+import logic.model.program.Function;
 
 import java.util.*;
 
@@ -68,9 +67,7 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
     }
 
     @Override
-    public List<Instruction> expand(Program program, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
+    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
         int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();

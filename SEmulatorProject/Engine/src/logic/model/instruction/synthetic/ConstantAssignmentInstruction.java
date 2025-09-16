@@ -9,8 +9,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
-import logic.model.program.Program;
-import logic.utils.Utils;
+import logic.model.program.Function;
 
 import java.util.*;
 
@@ -54,7 +53,7 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
     }
 
     @Override
-    public List<Instruction> expand(Program program, Label instructionLabel){
+    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();
 

@@ -13,12 +13,11 @@ import logic.model.instruction.InstructionData;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
-import logic.model.program.Program;
-import logic.utils.Utils;
+import logic.model.program.Function;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class ZeroVariableInstruction extends AbstractInstruction implements ExpandableInstruction {
     public ZeroVariableInstruction(Variable variable) {
@@ -50,10 +49,7 @@ public class ZeroVariableInstruction extends AbstractInstruction implements Expa
     }
 
     @Override
-    public List<Instruction> expand(Program program, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
-
+    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
 

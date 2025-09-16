@@ -14,8 +14,7 @@ import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
-import logic.model.program.Program;
-import logic.utils.Utils;
+import logic.model.program.Function;
 
 import java.util.*;
 
@@ -60,10 +59,7 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
     }
 
     @Override
-    public List<Instruction> expand(Program program, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
-
+    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         Label freeLabel1 = new LabelImpl(maxLabelIndex + 1);
         Label freeLabel2 = new LabelImpl(maxLabelIndex + 2);
         Label freeLabel3 = new LabelImpl(maxLabelIndex + 3);

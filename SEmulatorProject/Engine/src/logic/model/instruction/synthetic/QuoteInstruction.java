@@ -3,25 +3,13 @@ package logic.model.instruction.synthetic;
 import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
-import logic.model.argument.ArgumentType;
-import logic.model.argument.NameArgument;
-import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
-import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
-import logic.model.argument.variable.VariableImpl;
-import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
-import logic.model.instruction.basic.DecreaseInstruction;
-import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
-import logic.model.mappers.InstructionMapper;
 import logic.model.program.Function;
-import logic.model.program.Program;
-import logic.model.program.ProgramImpl;
 import logic.model.program.QuotedFunction;
-import logic.utils.Utils;
 
 import java.util.*;
 
@@ -75,11 +63,9 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
 
     @Override
-    public List<Instruction> expand(Program program, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
+    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
 //        int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
-        Function contextFunction = ((ProgramImpl) program).getFunctionByName((arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()));
+        Function contextFunction = functions.get(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
 
         QuotedFunction quotedFunction = contextFunction.quote(maxWorkVariableIndex, maxLabelIndex);
         List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();

@@ -1,0 +1,6 @@
+#startButton{
+    -fx-background-color: #4CAF50; /* Green */
+}
+#stopButton{
+    -fx-background-color: #f44336; /* Red */
+}

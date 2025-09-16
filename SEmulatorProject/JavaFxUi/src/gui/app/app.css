@@ -5,3 +5,13 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
+
+#sEmulatorLogo {
+    -fx-background-color: #040078;
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-background-radius: 30px;
+    -fx-padding: 3px;
+}

@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="515.0" prefWidth="786.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.debuggerwindow.DebuggerWindowController">
+<VBox prefHeight="515.0" prefWidth="786.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.debuggerwindow.DebuggerWindowController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="833.0" style="-fx-background-color: blue;" styleClass="window-header" text="Execution Window" textFill="WHITE">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="833.0" styleClass="window-header" text="Execution Window" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -21,9 +21,9 @@
                   <fx:include fx:id="executionStateWindow" source="../executionstatewindow/ExecutionStateWindow.fxml" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="243.0" prefWidth="211.0" style="-fx-border-color: gray;">
+            <VBox alignment="TOP_CENTER" prefHeight="243.0" prefWidth="211.0">
                <children>
-                  <Label alignment="TOP_CENTER" prefHeight="23.0" prefWidth="222.0" style="-fx-background-color: gray;" text="Input Variables Picker" textFill="WHITE">
+                  <Label alignment="TOP_CENTER" prefHeight="23.0" prefWidth="222.0" styleClass="component-header" text="Input Variables Picker" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

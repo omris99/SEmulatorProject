@@ -8,7 +8,7 @@
 
 <VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
    <children>
-      <Label alignment="CENTER" prefHeight="23.0" prefWidth="432.0" style="-fx-background-color: gray;" text="Execution State" textFill="WHITE">
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="432.0" styleClass="component-header" text="Execution State" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

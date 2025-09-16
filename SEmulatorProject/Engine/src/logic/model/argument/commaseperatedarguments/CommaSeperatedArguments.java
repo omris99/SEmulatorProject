@@ -13,7 +13,7 @@ public class CommaSeperatedArguments implements Argument {
 
     public CommaSeperatedArguments(String arguments) {
         this.arguments = arguments;
-//        this.argumentList = convertCommaSeperatedArgumentsStringToArgumentsList(arguments);
+        this.argumentList = convertCommaSeperatedArgumentsStringToArgumentsList(arguments);
     }
     @Override
     public String getRepresentation() {
@@ -23,6 +23,10 @@ public class CommaSeperatedArguments implements Argument {
     @Override
     public int getIndex() {
         return 0;
+    }
+
+    private List<Argument> convertCommaSeperatedArgumentsStringToArgumentsList(String arguments) {
+        return null;
     }
 
 //    private List<String> extractFunctionCall(String commaSeperatedArguments) {

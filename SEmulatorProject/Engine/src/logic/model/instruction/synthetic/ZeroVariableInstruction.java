@@ -13,6 +13,7 @@ import logic.model.instruction.InstructionData;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
+import logic.model.program.Program;
 import logic.utils.Utils;
 
 import java.util.LinkedList;
@@ -49,9 +50,9 @@ public class ZeroVariableInstruction extends AbstractInstruction implements Expa
     }
 
     @Override
-    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(programLabels);
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
+    public List<Instruction> expand(Program program, Label instructionLabel){
+        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
 
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);

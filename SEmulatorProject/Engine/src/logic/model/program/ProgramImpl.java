@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 public class ProgramImpl implements Program {
     private final String name;
     private final Instructions instructions;
-    private final List<Function> functions;
+    private final Map<String, Function> functions;
 
     public ProgramImpl(String name) {
         this.name = name.trim();
         this.instructions = new Instructions();
-        this.functions = new LinkedList<>();
+        this.functions = new HashMap<>();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ProgramImpl implements Program {
             }
 
             for(int i = 0; i < degree; i++){
-                expandedProgram.instructions.expand(functions);
+                expandedProgram.instructions.expand(this);
             }
 
             return expandedProgram;
@@ -142,10 +142,11 @@ public class ProgramImpl implements Program {
     }
 
     public void addFunction(Function function){
-        functions.add(function);
+        functions.put(function.getName(), function);
     }
 
-    public List<Function> getFunctions(){
-        return functions;
+
+    public Function getFunctionByName(String name){
+        return functions.get(name);
     }
 }

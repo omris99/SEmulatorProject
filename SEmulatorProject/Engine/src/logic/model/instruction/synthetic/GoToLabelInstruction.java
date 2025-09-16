@@ -11,6 +11,7 @@ import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.program.Program;
 import logic.utils.Utils;
 
 import java.util.*;
@@ -53,8 +54,8 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     }
 
     @Override
-    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
+    public List<Instruction> expand(Program program, Label instructionLabel){
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
         Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
         List<Instruction> expandedInstructions = new LinkedList<>();
 

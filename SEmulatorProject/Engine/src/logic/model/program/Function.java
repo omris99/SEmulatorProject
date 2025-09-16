@@ -2,14 +2,20 @@ package logic.model.program;
 
 import dto.DTO;
 import logic.model.argument.Argument;
+import logic.model.argument.ArgumentType;
+import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
+import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
 import logic.model.instruction.Instruction;
+import logic.model.instruction.InstructionArgument;
+import logic.model.instruction.InstructionWithArguments;
 import logic.model.instruction.Instructions;
+import logic.model.mappers.InstructionMapper;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Function implements Program, Argument {
     private final String name;
@@ -23,6 +29,39 @@ public class Function implements Program, Argument {
         this.userString = userString;
         this.instructions = new Instructions();
         this.functions = new LinkedList<>();
+    }
+
+    public QuotedFunction quote(int maxWorkVariableIndex, int maxLabelIndex){
+        List<Instruction> quotedFunctionInstructions = new LinkedList<>();
+
+        Map<InstructionArgument, Argument> instructionArgumentsToNewVariables = null;
+        Map<Variable, Variable> FunctionAllVariablesToFreeWorkVariablesMap = mapFunctionAllVariablesToFreeWorkVariables(maxWorkVariableIndex);
+        Map<Label, Label> FunctionLabelsToFreeLabels = mapFunctionAllLabelsToFreeLabels(maxLabelIndex);
+
+        for (Instruction instruction : getInstructions()) {
+            if (instruction instanceof InstructionWithArguments) {
+                instructionArgumentsToNewVariables = new HashMap<>();
+                Map<InstructionArgument, Argument> instructionOriginalArguments = ((InstructionWithArguments) instruction).getArguments();
+                for (InstructionArgument argumentKey : instructionOriginalArguments.keySet()) {
+                    if (argumentKey.getType().equals(ArgumentType.VARIABLE)) {
+                        instructionArgumentsToNewVariables.put(argumentKey, FunctionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
+                    } else if (argumentKey.getType().equals(ArgumentType.LABEL)) {
+                        instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
+                    } else {
+                        instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
+                    }
+                }
+            }
+
+            quotedFunctionInstructions.add(InstructionMapper.createInstruction(
+                    instruction.getName(),
+                    FunctionAllVariablesToFreeWorkVariablesMap.get(instruction.getVariable()),
+                    FunctionLabelsToFreeLabels.get(instruction.getLabel()) != null ? FunctionLabelsToFreeLabels.get(instruction.getLabel()) : FixedLabel.EMPTY,
+                    instructionArgumentsToNewVariables
+            ));
+        }
+
+        return new QuotedFunction(quotedFunctionInstructions, FunctionAllVariablesToFreeWorkVariablesMap, FunctionLabelsToFreeLabels);
     }
 
 
@@ -93,5 +132,30 @@ public class Function implements Program, Argument {
 
     public List<Function> getFunctions() {
         return functions;
+    }
+
+    private Map<Variable, Variable> mapFunctionAllVariablesToFreeWorkVariables(int maxWorkVariableIndex) {
+        Map<Variable, Variable> functionAllVariablesToFreeWorkVariablesMap = new HashMap<>();
+
+        for (Variable functionInputVariable : getAllInstructionsInputs()) {
+            functionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+        }
+
+        functionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+
+        for (Variable functionWorkVariable : getAllInstructionsWorkVariables()) {
+            functionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+        }
+
+        return functionAllVariablesToFreeWorkVariablesMap;
+    }
+
+    private Map<Label, Label> mapFunctionAllLabelsToFreeLabels(int maxLabelIndex) {
+        Map<Label, Label> functionLabelsToFreeLabelsMap = new HashMap<>();
+        for (Label functionLabel : getAllInstructionsLabels()) {
+            functionLabelsToFreeLabelsMap.put(functionLabel, new LabelImpl(maxLabelIndex + 1));
+        }
+
+        return functionLabelsToFreeLabelsMap;
     }
 }

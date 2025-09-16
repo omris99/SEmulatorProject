@@ -5,6 +5,7 @@ import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
 import logic.model.argument.NameArgument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.label.LabelImpl;
@@ -17,12 +18,14 @@ import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.mappers.InstructionMapper;
 import logic.model.program.Function;
+import logic.model.program.Program;
+import logic.model.program.ProgramImpl;
+import logic.model.program.QuotedFunction;
 import logic.utils.Utils;
 
 import java.util.*;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
-    Function contextFunction;
     Map<InstructionArgument, Argument> arguments;
 
     public QuoteInstruction(Variable variable, Argument functionName, Argument functionArguments) {
@@ -72,63 +75,62 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
 
     @Override
-    public List<Instruction> expand(Set<Label> programLabels, Set<Variable> programWorkVariables, Set<Variable> programInputVariables, Label instructionLabel){
-        int maxLabelIndex = Utils.getMaxLabelIndex(programLabels);
-        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
-        int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
-        List<Instruction> expandedInstructions = new LinkedList<>();
-        Map<InstructionArgument, Argument> instructionArgumentsToNewVariables = null;
-        Map<Variable, Variable> FunctionAllVariablesToFreeWorkVariablesMap = new HashMap<>();
+    public List<Instruction> expand(Program program, Label instructionLabel){
+        int maxLabelIndex = Utils.getMaxLabelIndex(program.getAllInstructionsLabels());
+        int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(program.getAllInstructionsWorkVariables());
+//        int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
+        Function contextFunction = ((ProgramImpl) program).getFunctionByName((arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()));
 
-        expandedInstructions.add(new NeutralInstruction(Variable.RESULT, instructionLabel));
+        QuotedFunction quotedFunction = contextFunction.quote(maxWorkVariableIndex, maxLabelIndex);
+        List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();
+        expandedInstructions.addFirst(new NeutralInstruction(Variable.RESULT, instructionLabel));
 
-        for (Variable functionInputVariable : contextFunction.getAllInstructionsInputs()) {
-            FunctionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
-        }
 
-        FunctionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
-
-        for(Variable functionWorkVariable : contextFunction.getAllInstructionsWorkVariables()) {
-            FunctionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
-        }
-
-        Map<Label, Label> FunctionLabelsToFreeLabels = new HashMap<>();
-        for(Label functionLabel : contextFunction.getAllInstructionsLabels()) {
-            FunctionLabelsToFreeLabels.put(functionLabel, new LabelImpl(maxLabelIndex + 1));
-        }
-
-        for(Instruction instruction : contextFunction.getInstructions()) {
-            if(instruction instanceof InstructionWithArguments) {
-                instructionArgumentsToNewVariables = new HashMap<>();
-                Map<InstructionArgument, Argument> instructionOriginalArguments = ((InstructionWithArguments) instruction).getArguments();
-                for (InstructionArgument argumentKey : instructionOriginalArguments.keySet()) {
-                    if(argumentKey.getType().equals(ArgumentType.VARIABLE)){
-                        instructionArgumentsToNewVariables.put(argumentKey, FunctionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
-                    }
-                    else if(argumentKey.getType().equals(ArgumentType.LABEL)){
-                        instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
-                    }
-                    else{
-                        instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
-                    }
-                }
-            }
-
-            expandedInstructions.add(InstructionMapper.createInstruction(
-                    instruction.getName(),
-                    FunctionAllVariablesToFreeWorkVariablesMap.get(instruction.getVariable()),
-                    FunctionLabelsToFreeLabels.get(instruction.getLabel()) != null ? FunctionLabelsToFreeLabels.get(instruction.getLabel()) : FixedLabel.EMPTY,
-                    instructionArgumentsToNewVariables
-            ));
-        }
+//        List<Instruction> initialInputVariablesValues = new LinkedList<>();
+//        List<String> seperatedArguments = splitArguments(arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation());
+//        int inputIndex = 1;
+//        for(String argument : seperatedArguments){
+//            if(argument.startsWith("(")){
+//                initialInputVariablesValues.add(new QuoteInstruction(FunctionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), new NameArgument("er"), new CommaSeperatedArguments("sac")));
+//            } else {
+//                initialInputVariablesValues.add(new AssignmentInstruction(FunctionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), VariableImpl.parse(argument)));
+//            }
+//            inputIndex++;
+//        }
+//        expandedInstructions.addAll(0, initialInputVariablesValues);
 
         expandedInstructions.add(new AssignmentInstruction(
                 getVariable(),
-                FunctionAllVariablesToFreeWorkVariablesMap.get(Variable.RESULT),
-                FunctionLabelsToFreeLabels.getOrDefault(FixedLabel.EXIT, FixedLabel.EMPTY)));
+                quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(Variable.RESULT),
+                quotedFunction.getOriginalLabelsToFreeLabels().getOrDefault(FixedLabel.EXIT, FixedLabel.EMPTY)));
 
         return expandedInstructions;
     }
+
+//    private Map<Variable, Variable> mapFunctionAllVariablesToFreeWorkVariables(Function contextFunction, int maxWorkVariableIndex) {
+//        Map<Variable, Variable> functionAllVariablesToFreeWorkVariablesMap = new HashMap<>();
+//
+//        for (Variable functionInputVariable : contextFunction.getAllInstructionsInputs()) {
+//            functionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+//        }
+//
+//        functionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+//
+//        for (Variable functionWorkVariable : contextFunction.getAllInstructionsWorkVariables()) {
+//            functionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+//        }
+//
+//        return functionAllVariablesToFreeWorkVariablesMap;
+//    }
+//
+//    private Map<Label, Label> mapFunctionAllLabelsToFreeLabels(Function contextFunction, int maxLabelIndex) {
+//        Map<Label, Label> functionLabelsToFreeLabelsMap = new HashMap<>();
+//        for (Label functionLabel : contextFunction.getAllInstructionsLabels()) {
+//            functionLabelsToFreeLabelsMap.put(functionLabel, new LabelImpl(maxLabelIndex + 1));
+//        }
+//
+//        return functionLabelsToFreeLabelsMap;
+//    }
 
 
     @Override
@@ -138,7 +140,31 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         return copy;
     }
 
-    public void setContextFunction(Function function) {
-        this.contextFunction = function;
+    private List<String> splitArguments(String input) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        int parenLevel = 0;
+
+        for (char c : input.toCharArray()) {
+            if (c == '(') {
+                parenLevel++;
+                current.append(c);
+            } else if (c == ')') {
+                parenLevel--;
+                current.append(c);
+            } else if (c == ',' && parenLevel == 0) {
+                // פסיק מחוץ לסוגריים -> סוף אלמנט
+                result.add(current.toString().trim());
+                current.setLength(0);
+            } else {
+                current.append(c);
+            }
+        }
+
+        if (current.length() > 0) {
+            result.add(current.toString().trim());
+        }
+
+        return result;
     }
 }

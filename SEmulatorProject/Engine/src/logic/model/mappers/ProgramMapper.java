@@ -23,29 +23,20 @@ public class ProgramMapper {
         ProgramImpl domainProgram = new ProgramImpl(jaxbProgram.getName());
 
         List<String> functionNames = new ArrayList<>();
-        for(SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-            functionNames.add(jaxbFunction.getName());
+        if(jaxbProgram.getSFunctions() != null) {
+            for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()) {
+                functionNames.add(jaxbFunction.getName());
+            }
         }
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {
             domainProgram.addInstruction(InstructionMapper.toDomain(instruction, functionNames));
         }
-//
-        for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-            domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
-        }
 
-
-        for(Instruction instruction : domainProgram.getInstructions()){
-            if(instruction instanceof QuoteInstruction){
-                NameArgument functionName = (NameArgument)(((QuoteInstruction) instruction).getArguments().get(InstructionArgument.FUNCTION_NAME));
-                for(Function function : domainProgram.getFunctions()){
-                    if(functionName.getRepresentation().equals(function.getName())){
-                        ((QuoteInstruction) instruction).setContextFunction(function);
-                        break;
-                    }
-                }
+        if(!functionNames.isEmpty()){
+            for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
+                domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
             }
         }
 

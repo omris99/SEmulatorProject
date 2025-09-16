@@ -2,12 +2,14 @@ package logic.model.instruction;
 
 import logic.model.argument.Argument;
 import logic.model.argument.NameArgument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
 import logic.model.instruction.synthetic.QuoteInstruction;
 import logic.model.program.Function;
+import logic.model.program.Program;
 
 import java.io.Serializable;
 import java.util.*;
@@ -92,22 +94,23 @@ public class Instructions implements Serializable {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
-    public void expand(List<Function> functions) {
+    public void expand(Program program) {
 
         for (int i = 0; i < instructions.size(); i++) {
             Instruction instruction = instructions.get(i);
-            if(instruction instanceof QuoteInstruction){
-                NameArgument functionName = (NameArgument)(((QuoteInstruction) instruction).getArguments().get(InstructionArgument.FUNCTION_NAME));
-                for(Function function : functions){
-                    if(functionName.getRepresentation().equals(function.getName())){
-                        ((QuoteInstruction) instruction).setContextFunction(function);
-                        break;
-                    }
-                }
-            }
             if (instruction instanceof ExpandableInstruction) {
+//                if(instruction instanceof QuoteInstruction){
+//                    NameArgument functionName = (NameArgument)(((QuoteInstruction) instruction).getArguments().get(InstructionArgument.FUNCTION_NAME));
+//                    for(Function function : functions){
+//                        if(functionName.getRepresentation().equals(function.getName())){
+//                            ((QuoteInstruction) instruction).setContextFunction(function);
+//                            break;
+//                        }
+//                    }
+//                }
+
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
-                        .expand(instructionsLabels, instructionsWorkVariables, instructionsInputs ,instruction.getLabel());
+                        .expand(program ,instruction.getLabel());
                 expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);

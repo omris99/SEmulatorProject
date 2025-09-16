@@ -10,7 +10,7 @@ import logic.model.program.ProgramImpl;
 import java.util.List;
 
 public class FunctionMapper {
-    public static Function toDomain(SFunction jaxbProgram) {
+    public static Function toDomain(SFunction jaxbProgram, List<String> functionNames) {
         if (jaxbProgram == null) {
             return null;
         }
@@ -18,7 +18,7 @@ public class FunctionMapper {
         Function domainFunction = new Function(jaxbProgram.getName(), jaxbProgram.getUserString());
 
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction()) {
-            domainFunction.addInstruction(InstructionMapper.toDomain(instruction, domainFunction.getFunctions()));
+            domainFunction.addInstruction(InstructionMapper.toDomain(instruction, functionNames));
         }
 
         return domainFunction;

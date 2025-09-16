@@ -48,17 +48,17 @@ public class Function implements Program, Argument {
 
     @Override
     public Set<Label> getAllInstructionsLabels() {
-        return Set.of();
+        return instructions.getLabels();
     }
 
     @Override
     public Set<Variable> getAllInstructionsInputs() {
-        return Set.of();
+        return instructions.getInputs();
     }
 
     @Override
     public Set<Variable> getAllInstructionsWorkVariables() {
-        return Set.of();
+        return instructions.getWorkVariables();
     }
 
     @Override

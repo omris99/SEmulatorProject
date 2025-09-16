@@ -4,6 +4,7 @@ import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
+import logic.model.argument.NameArgument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.label.LabelImpl;
@@ -21,16 +22,17 @@ import logic.utils.Utils;
 import java.util.*;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
+    Function contextFunction;
     Map<InstructionArgument, Argument> arguments;
 
     public QuoteInstruction(Variable variable, Argument functionName, Argument functionArguments) {
         this(variable, functionName, functionArguments, FixedLabel.EMPTY);
     }
 
-    public QuoteInstruction(Variable variable, Argument function, Argument functionArguments, Label label) {
+    public QuoteInstruction(Variable variable, Argument functionName, Argument functionArguments, Label label) {
         super(InstructionData.QUOTE, variable, label);
         arguments = new HashMap<>();
-        arguments.put(InstructionArgument.FUNCTION_NAME, function);
+        arguments.put(InstructionArgument.FUNCTION_NAME, functionName);
         arguments.put(InstructionArgument.FUNCTION_ARGUMENTS, functionArguments);
     }
 
@@ -74,41 +76,40 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         int maxLabelIndex = Utils.getMaxLabelIndex(programLabels);
         int maxWorkVariableIndex = Utils.getMaxGeneralVariableIndex(programWorkVariables);
         int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
-        Function function = (Function) arguments.get(InstructionArgument.FUNCTION_NAME);
         List<Instruction> expandedInstructions = new LinkedList<>();
-        Map<InstructionArgument, Argument> functionArgumentsToNewVariables = null;
+        Map<InstructionArgument, Argument> instructionArgumentsToNewVariables = null;
         Map<Variable, Variable> FunctionAllVariablesToFreeWorkVariablesMap = new HashMap<>();
 
         expandedInstructions.add(new NeutralInstruction(Variable.RESULT, instructionLabel));
 
-        for (Variable functionInputVariable : function.getAllInstructionsInputs()) {
+        for (Variable functionInputVariable : contextFunction.getAllInstructionsInputs()) {
             FunctionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
         }
 
         FunctionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
 
-        for(Variable functionWorkVariable : function.getAllInstructionsWorkVariables()) {
+        for(Variable functionWorkVariable : contextFunction.getAllInstructionsWorkVariables()) {
             FunctionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
         }
 
         Map<Label, Label> FunctionLabelsToFreeLabels = new HashMap<>();
-        for(Label functionLabel : function.getAllInstructionsLabels()) {
+        for(Label functionLabel : contextFunction.getAllInstructionsLabels()) {
             FunctionLabelsToFreeLabels.put(functionLabel, new LabelImpl(maxLabelIndex + 1));
         }
 
-        for(Instruction instruction : function.getInstructions()) {
+        for(Instruction instruction : contextFunction.getInstructions()) {
             if(instruction instanceof InstructionWithArguments) {
-                functionArgumentsToNewVariables = new HashMap<>();
-                Map<InstructionArgument, Argument> functionArguments = ((InstructionWithArguments) instruction).getArguments();
-                for (InstructionArgument argumentKey : functionArguments.keySet()) {
+                instructionArgumentsToNewVariables = new HashMap<>();
+                Map<InstructionArgument, Argument> instructionOriginalArguments = ((InstructionWithArguments) instruction).getArguments();
+                for (InstructionArgument argumentKey : instructionOriginalArguments.keySet()) {
                     if(argumentKey.getType().equals(ArgumentType.VARIABLE)){
-                        functionArgumentsToNewVariables.put(argumentKey, FunctionAllVariablesToFreeWorkVariablesMap.get(argumentKey));
+                        instructionArgumentsToNewVariables.put(argumentKey, FunctionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
                     }
                     else if(argumentKey.getType().equals(ArgumentType.LABEL)){
-                        functionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(argumentKey));
+                        instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
                     }
-                    else if(argumentKey.getType().equals(ArgumentType.CONSTANT)){
-                        functionArgumentsToNewVariables.put(argumentKey, functionArguments.get(argumentKey));
+                    else{
+                        instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
                     }
                 }
             }
@@ -117,9 +118,14 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
                     instruction.getName(),
                     FunctionAllVariablesToFreeWorkVariablesMap.get(instruction.getVariable()),
                     FunctionLabelsToFreeLabels.get(instruction.getLabel()) != null ? FunctionLabelsToFreeLabels.get(instruction.getLabel()) : FixedLabel.EMPTY,
-                    functionArgumentsToNewVariables
+                    instructionArgumentsToNewVariables
             ));
         }
+
+        expandedInstructions.add(new AssignmentInstruction(
+                getVariable(),
+                FunctionAllVariablesToFreeWorkVariablesMap.get(Variable.RESULT),
+                FunctionLabelsToFreeLabels.getOrDefault(FixedLabel.EXIT, FixedLabel.EMPTY)));
 
         return expandedInstructions;
     }
@@ -130,5 +136,9 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         QuoteInstruction copy = (QuoteInstruction) super.clone();
         copy.arguments = new HashMap<>(this.arguments);
         return copy;
+    }
+
+    public void setContextFunction(Function function) {
+        this.contextFunction = function;
     }
 }

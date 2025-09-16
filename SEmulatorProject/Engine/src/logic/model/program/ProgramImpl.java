@@ -89,7 +89,7 @@ public class ProgramImpl implements Program {
             }
 
             for(int i = 0; i < degree; i++){
-                expandedProgram.instructions.expand();
+                expandedProgram.instructions.expand(functions);
             }
 
             return expandedProgram;

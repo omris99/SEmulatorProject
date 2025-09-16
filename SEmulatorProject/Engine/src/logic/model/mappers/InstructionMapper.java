@@ -4,6 +4,7 @@ import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
+import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.constant.Constant;
 import logic.model.argument.label.FixedLabel;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 public class InstructionMapper{
 
-    public static Instruction toDomain(SInstruction jaxbInstruction, List<Function> functions) {
+    public static Instruction toDomain(SInstruction jaxbInstruction, List<String> functions) {
         if (jaxbInstruction == null) {
             return null;
         }
@@ -67,7 +68,7 @@ public class InstructionMapper{
     }
 
 
-    private static Map<InstructionArgument, Argument> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments, List<Function> functions) {
+    private static Map<InstructionArgument, Argument> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments, List<String> functions) {
         if (jaxbInstructionsArguments == null || jaxbInstructionsArguments.isEmpty()) {
             return null;
         }
@@ -102,12 +103,12 @@ public class InstructionMapper{
                         throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.CONSTANT_MUST_BE_A_NUMBER);
                     }
                     break;
-                case FUNCTION:
+                case NAME:
                     boolean functionFound = false;
 
-                    for(Function function : functions) {
-                        if(function.getName().equals(jaxbInstructionArgument.getValue())) {
-                            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), function);
+                    for(String functionName : functions) {
+                        if(functionName.equals(jaxbInstructionArgument.getValue())) {
+                            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new NameArgument(functionName));
                             functionFound = true;
                             break;
                         }

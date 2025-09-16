@@ -11,7 +11,7 @@ public enum InstructionArgument {
     JE_CONSTANT_LABEL(ArgumentType.LABEL,  "JEConstantLabel"),
     VARIABLE_NAME(ArgumentType.VARIABLE, "variableName"),
     JE_VARIABLE_LABEL(ArgumentType.LABEL,  "JEVariableLabel"),
-    FUNCTION_NAME(ArgumentType.FUNCTION, "functionName"),
+    FUNCTION_NAME(ArgumentType.NAME, "functionName"),
     FUNCTION_ARGUMENTS(ArgumentType.COMMA_SEPERATED_ARGUMENTS, "functionArguments");
 
     private final ArgumentType type;

@@ -5,7 +5,7 @@
     -fx-font-weight: bold;
     -fx-background-radius: 8px;
     -fx-cursor: hand;
-    -fx-padding: 5 15 5 15;
+    /*-fx-padding: 5 15 5 15;*/
 }
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #757380, #5a5768);
@@ -57,7 +57,7 @@
 }
 
 .mini-window-header{
-    -fx-background-color: #7145ff;
+    -fx-background-color: #040078;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;

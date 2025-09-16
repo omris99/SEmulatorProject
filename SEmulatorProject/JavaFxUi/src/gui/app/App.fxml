@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="699.0" prefWidth="1259.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
+<VBox alignment="TOP_CENTER" prefHeight="733.0" prefWidth="1265.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
    <children>
       <Label text="S-Emulator" textAlignment="CENTER">
          <font>
@@ -18,20 +18,26 @@
          </VBox.margin>
       </Label>
       <fx:include fx:id="loadFileBar" source="../components/loadfilebar/LoadFileBar.fxml" />
-      <Separator prefHeight="19.0" prefWidth="606.0" />
-      <HBox alignment="TOP_CENTER" prefHeight="753.0" prefWidth="1259.0">
+      <Separator prefHeight="19.0" prefWidth="606.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin></Separator>
+      <HBox alignment="CENTER" prefHeight="753.0" prefWidth="1421.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="606.0" prefWidth="602.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="629.0" prefWidth="815.0">
                <children>
                   <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                </children>
             </VBox>
-            <Separator orientation="VERTICAL" prefHeight="588.0" prefWidth="15.0">
+            <Separator orientation="VERTICAL" prefHeight="629.0" prefWidth="0.0">
                <opaqueInsets>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets />
                </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="10.0" right="8.0" />
+               </HBox.margin>
             </Separator>
-            <VBox alignment="TOP_CENTER" prefHeight="742.0" prefWidth="601.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="639.0" prefWidth="776.0">
                <children>
                   <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                   <Separator prefWidth="200.0" />
@@ -41,4 +47,7 @@
          </children>
       </HBox>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" />
+   </padding>
 </VBox>

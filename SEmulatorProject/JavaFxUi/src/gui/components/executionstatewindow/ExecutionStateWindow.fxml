@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="227.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
+<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="404.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
    <children>
-      <Label alignment="CENTER" prefHeight="23.0" prefWidth="237.0" style="-fx-background-color: gray;" text="Execution State" textFill="WHITE">
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="432.0" style="-fx-background-color: gray;" text="Execution State" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <VBox prefHeight="288.0" prefWidth="227.0">
+      <VBox prefHeight="536.0" prefWidth="227.0">
          <children>
             <fx:include fx:id="variablesValueTable" source="../variablesvaluetable/VariablesValueTable.fxml" />
             <HBox alignment="CENTER_LEFT" style="-fx-border-color: black;">

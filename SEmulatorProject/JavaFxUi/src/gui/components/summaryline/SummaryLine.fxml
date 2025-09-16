@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="608.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.summaryline.SummaryLineController">
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="53.0" prefWidth="1122.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.summaryline.SummaryLineController">
    <children>
-      <Label alignment="TOP_CENTER" prefHeight="17.0" prefWidth="792.0" style="-fx-background-color: #979797;" text="Instructions Count:" textFill="WHITE">
+      <Label alignment="TOP_CENTER" prefHeight="20.0" prefWidth="1758.0" style="-fx-background-color: #979797;" text="Instructions Count:" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="16.0" />
          </font>

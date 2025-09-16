@@ -7,11 +7,11 @@
 }
 
 #sEmulatorLogo {
-    -fx-background-color: #040078;
+    -fx-background-color: linear-gradient(to bottom, #6a11cb, #4565b1, #ffffff);
     -fx-text-fill: white;
-    -fx-font-size: 24px;
+    -fx-font-size: 23px;
     -fx-font-weight: bold;
     -fx-alignment: center;
-    -fx-background-radius: 30px;
-    -fx-padding: 3px;
+    -fx-padding: 12px;
+    -fx-background-radius: 0 0 40 40;
 }

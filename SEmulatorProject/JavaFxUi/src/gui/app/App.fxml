@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="733.0" prefWidth="1265.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
+<VBox alignment="TOP_CENTER" prefHeight="795.0" prefWidth="1537.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
    <children>
-      <VBox alignment="CENTER">
+      <VBox alignment="CENTER" spacing="10.0">
          <VBox.margin>
-            <Insets bottom="5.0" top="10.0" />
+            <Insets />
          </VBox.margin>
          <children>
-            <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="27.0" prefWidth="152.0" text="S-Emulator" textAlignment="CENTER" textFill="WHITE">
+            <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="1630.0" text="S-Emulator" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Verdana" size="20.0" />
                </font>
@@ -22,14 +22,14 @@
             <fx:include fx:id="loadFileBar" source="../components/loadfilebar/LoadFileBar.fxml" />
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="753.0" prefWidth="1421.0" spacing="10.0">
+      <HBox alignment="CENTER" prefHeight="623.0" prefWidth="1436.0" spacing="10.0">
          <children>
-            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="629.0" prefWidth="815.0">
+            <VBox alignment="TOP_CENTER" prefHeight="623.0" prefWidth="830.0">
                <children>
                   <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="623.0" prefWidth="833.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="623.0" prefWidth="791.0" spacing="10.0">
                <children>
                   <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                   <fx:include fx:id="historyWindow" source="../components/historywindow/HistoryWindow.fxml" />

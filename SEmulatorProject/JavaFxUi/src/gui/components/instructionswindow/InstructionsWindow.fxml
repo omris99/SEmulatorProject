@@ -16,7 +16,7 @@
          </font>
       </Label>
       <fx:include fx:id="instructionsWindowToolbar" source="../toolbar/InstructionsWindowToolbar.fxml" />
-      <GridPane hgap="5.0" minHeight="-Infinity" minWidth="530.0" prefHeight="26.0" prefWidth="1157.0" style="-fx-background-color: #00bce1;">
+      <GridPane hgap="5.0" minHeight="-Infinity" minWidth="530.0" prefHeight="26.0" prefWidth="1157.0" styleClass="component-header">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="10.0" prefWidth="197.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="120.0" />

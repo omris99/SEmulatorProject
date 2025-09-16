@@ -1,6 +1,12 @@
 #startButton{
-    -fx-background-color: #4CAF50; /* Green */
+    -fx-background-color: linear-gradient(to bottom, #18a300, #116300)
+}
+#startButton:hover{
+    -fx-background-color: linear-gradient(to top, #18a300, #116300)
 }
 #stopButton{
-    -fx-background-color: #f44336; /* Red */
+    -fx-background-color: linear-gradient(to bottom, #ff0000, #810000)
+}
+#stopButton{
+    -fx-background-color: linear-gradient(to top, #ff0000, #810000)
 }

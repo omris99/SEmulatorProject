@@ -13,7 +13,7 @@ public class Main extends Application {
         primaryStage.setTitle("S-Emulator");
 
         Parent load = FXMLLoader.load(getClass().getResource("App.fxml"));
-        Scene scene = new Scene(load, 1280, 720);
+        Scene scene = new Scene(load, 1540, 720);
         primaryStage.setMinWidth(1100);
         primaryStage.setMinHeight(600);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("app.css")).toExternalForm());

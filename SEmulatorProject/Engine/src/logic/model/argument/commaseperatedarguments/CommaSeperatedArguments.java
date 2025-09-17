@@ -4,6 +4,7 @@ import logic.model.argument.Argument;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
+import logic.model.program.Function;
 
 import java.util.*;
 
@@ -27,13 +28,15 @@ public class CommaSeperatedArguments implements Argument {
     }
 
     private List<Argument> convertCommaSeperatedArgumentsStringToArgumentsList(String arguments) {
-        List<String> extractedArguments = extractArguments(arguments);
+        List<String> extractedArguments = extractArguments();
         List<Argument> argumentList = new ArrayList<>();
         for(String stringArgument : extractedArguments){
             if(VariableImpl.stringVarTypeToVariableType(stringArgument.substring(0,1)) != null){
                 argumentList.add(new VariableImpl(stringArgument));
             }else if(stringArgument.startsWith("(") && stringArgument.endsWith(")")){
                 argumentList.add(new CommaSeperatedArguments(stringArgument.substring(1, stringArgument.length() - 1)));
+            }else{
+//                argumentList.add(Functions.getFunctionByName(stringArgument));
             }
         }
         return argumentList;
@@ -43,7 +46,7 @@ public class CommaSeperatedArguments implements Argument {
 
     public Set<Variable> detectInputVariables() {
         Set<Variable> inputVariables = new HashSet<>();
-        List<String> splitedArgumentsString = extractArguments(arguments);
+        List<String> splitedArgumentsString = extractArguments();
         for (String argument : splitedArgumentsString) {
             if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) == VariableType.INPUT) {
                 inputVariables.add(new VariableImpl(argument));
@@ -56,12 +59,12 @@ public class CommaSeperatedArguments implements Argument {
         return inputVariables;
     }
 
-    private List<String> extractArguments(String input) {
+    public List<String> extractArguments() {
         List<String> parts = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         int depth = 0;
 
-        for (char c : input.toCharArray()) {
+        for (char c : arguments.toCharArray()) {
             if (c == '(') {
                 depth++;
                 current.append(c);
@@ -92,6 +95,11 @@ public class CommaSeperatedArguments implements Argument {
 
     @Override
     public Argument parse(String stringArgument) {
-        return null;
+        return new CommaSeperatedArguments(stringArgument);
     }
+
+    public List<Argument> getArgumentList() {
+        return argumentList;
+    }
+
 }

@@ -3,9 +3,13 @@ package logic.model.instruction.synthetic;
 import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
 import logic.model.argument.Argument;
+import logic.model.argument.NameArgument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.program.Function;
@@ -71,19 +75,24 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();
         expandedInstructions.addFirst(new NeutralInstruction(Variable.RESULT, instructionLabel));
 
+        List<String> contextFunctionArguments = ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).extractArguments();
 
-//        List<Instruction> initialInputVariablesValues = new LinkedList<>();
-//        List<String> seperatedArguments = splitArguments(arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation());
-//        int inputIndex = 1;
-//        for(String argument : seperatedArguments){
-//            if(argument.startsWith("(")){
-//                initialInputVariablesValues.add(new QuoteInstruction(FunctionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), new NameArgument("er"), new CommaSeperatedArguments("sac")));
-//            } else {
-//                initialInputVariablesValues.add(new AssignmentInstruction(FunctionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), VariableImpl.parse(argument)));
-//            }
-//            inputIndex++;
-//        }
-//        expandedInstructions.addAll(0, initialInputVariablesValues);
+        List<Instruction> initialInputVariablesValues = new LinkedList<>();
+        int inputIndex = 1;
+        for(String argument : contextFunctionArguments){
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null) {
+                initialInputVariablesValues.add(new AssignmentInstruction(quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(new VariableImpl(VariableType.INPUT, inputIndex)), new VariableImpl(argument)));
+            }else if(argument.startsWith("(") && argument.endsWith(")")) {
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                List<String> functionCallargumentsList = nestedArguments.extractArguments();
+                functionCallargumentsList.removeFirst();
+                String commaSeperatedFunctionCallArguments = String.join(",", functionCallargumentsList);
+                initialInputVariablesValues.add(new QuoteInstruction(quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(new VariableImpl(VariableType.INPUT, inputIndex)), new NameArgument(nestedArguments.extractArguments().getFirst()), new CommaSeperatedArguments(commaSeperatedFunctionCallArguments)));
+            }
+
+            inputIndex++;
+        }
+        expandedInstructions.addAll(0, initialInputVariablesValues);
 
         expandedInstructions.add(new AssignmentInstruction(
                 getVariable(),
@@ -124,33 +133,5 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         QuoteInstruction copy = (QuoteInstruction) super.clone();
         copy.arguments = new HashMap<>(this.arguments);
         return copy;
-    }
-
-    private List<String> splitArguments(String input) {
-        List<String> result = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
-        int parenLevel = 0;
-
-        for (char c : input.toCharArray()) {
-            if (c == '(') {
-                parenLevel++;
-                current.append(c);
-            } else if (c == ')') {
-                parenLevel--;
-                current.append(c);
-            } else if (c == ',' && parenLevel == 0) {
-                // פסיק מחוץ לסוגריים -> סוף אלמנט
-                result.add(current.toString().trim());
-                current.setLength(0);
-            } else {
-                current.append(c);
-            }
-        }
-
-        if (current.length() > 0) {
-            result.add(current.toString().trim());
-        }
-
-        return result;
     }
 }

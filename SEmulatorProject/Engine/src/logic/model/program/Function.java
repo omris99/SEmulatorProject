@@ -16,6 +16,7 @@ import logic.model.instruction.Instructions;
 import logic.model.mappers.InstructionMapper;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Function implements Program, Argument {
     private final String name;
@@ -32,11 +33,14 @@ public class Function implements Program, Argument {
     }
 
     public QuotedFunction quote(int maxWorkVariableIndex, int maxLabelIndex){
+        AtomicInteger maxWorkVariableIndexAtomic = new AtomicInteger(maxWorkVariableIndex);
+        AtomicInteger maxWorkVariableLabelAtomic = new AtomicInteger(maxLabelIndex);
+
         List<Instruction> quotedFunctionInstructions = new LinkedList<>();
 
         Map<InstructionArgument, Argument> instructionArgumentsToNewVariables = null;
-        Map<Variable, Variable> FunctionAllVariablesToFreeWorkVariablesMap = mapFunctionAllVariablesToFreeWorkVariables(maxWorkVariableIndex);
-        Map<Label, Label> FunctionLabelsToFreeLabels = mapFunctionAllLabelsToFreeLabels(maxLabelIndex);
+        Map<Variable, Variable> FunctionAllVariablesToFreeWorkVariablesMap = mapFunctionAllVariablesToFreeWorkVariables(maxWorkVariableIndexAtomic);
+        Map<Label, Label> FunctionLabelsToFreeLabels = mapFunctionAllLabelsToFreeLabels(maxWorkVariableLabelAtomic);
 
         for (Instruction instruction : getInstructions()) {
             if (instruction instanceof InstructionWithArguments) {
@@ -134,26 +138,26 @@ public class Function implements Program, Argument {
         return functions;
     }
 
-    private Map<Variable, Variable> mapFunctionAllVariablesToFreeWorkVariables(int maxWorkVariableIndex) {
+    private Map<Variable, Variable> mapFunctionAllVariablesToFreeWorkVariables(AtomicInteger maxWorkVariableIndex) {
         Map<Variable, Variable> functionAllVariablesToFreeWorkVariablesMap = new HashMap<>();
 
         for (Variable functionInputVariable : getAllInstructionsInputs()) {
-            functionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+            functionAllVariablesToFreeWorkVariablesMap.put(functionInputVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex.incrementAndGet()));
         }
 
-        functionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+        functionAllVariablesToFreeWorkVariablesMap.put(Variable.RESULT, new VariableImpl(VariableType.WORK, maxWorkVariableIndex.incrementAndGet()));
 
         for (Variable functionWorkVariable : getAllInstructionsWorkVariables()) {
-            functionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1));
+            functionAllVariablesToFreeWorkVariablesMap.put(functionWorkVariable, new VariableImpl(VariableType.WORK, maxWorkVariableIndex.incrementAndGet()));
         }
 
         return functionAllVariablesToFreeWorkVariablesMap;
     }
 
-    private Map<Label, Label> mapFunctionAllLabelsToFreeLabels(int maxLabelIndex) {
+    private Map<Label, Label> mapFunctionAllLabelsToFreeLabels(AtomicInteger maxLabelIndex) {
         Map<Label, Label> functionLabelsToFreeLabelsMap = new HashMap<>();
         for (Label functionLabel : getAllInstructionsLabels()) {
-            functionLabelsToFreeLabelsMap.put(functionLabel, new LabelImpl(maxLabelIndex + 1));
+            functionLabelsToFreeLabelsMap.put(functionLabel, new LabelImpl(maxLabelIndex.incrementAndGet()));
         }
 
         return functionLabelsToFreeLabelsMap;

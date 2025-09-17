@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="788.0" prefWidth="1159.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionsWindowController">
+<VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="1159.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionsWindowController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="1376.0" styleClass="window-header" text="Instructions Window" textFill="WHITE">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="window-header" text="Instructions Window" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -39,9 +39,13 @@
             </Label>
          </children>
       </GridPane>
-      <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
-      <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
-      <Label alignment="CENTER" prefHeight="23.0" prefWidth="1306.0" styleClass="component-header" text="Instruction History Chain" textFill="WHITE">
+      <VBox prefHeight="459.0" prefWidth="1159.0">
+         <children>
+            <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
+            <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
+         </children>
+      </VBox>
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="component-header" text="Instruction History Chain" textFill="WHITE">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

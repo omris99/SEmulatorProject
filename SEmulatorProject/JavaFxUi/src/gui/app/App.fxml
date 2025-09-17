@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="795.0" prefWidth="1537.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
+<VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="2560.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
    <children>
-      <VBox alignment="CENTER" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="126.0" prefWidth="1920.0" spacing="15.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
          <children>
-            <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="1630.0" text="S-Emulator" textAlignment="CENTER" textFill="WHITE">
+            <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="2560.0" text="S-Emulator" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Verdana" size="20.0" />
                </font>
@@ -22,24 +22,27 @@
             <fx:include fx:id="loadFileBar" source="../components/loadfilebar/LoadFileBar.fxml" />
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="623.0" prefWidth="1436.0" spacing="10.0">
+      <HBox prefHeight="993.0" prefWidth="1920.0" spacing="10.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="623.0" prefWidth="830.0">
+            <VBox alignment="TOP_CENTER" prefHeight="953.0" prefWidth="1450.0">
                <children>
                   <fx:include fx:id="instructionWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="623.0" prefWidth="791.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="953.0" prefWidth="1280.0" spacing="10.0">
                <children>
                   <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                   <fx:include fx:id="historyWindow" source="../components/historywindow/HistoryWindow.fxml" />
                </children>
             </VBox>
          </children>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </VBox.margin>
       </HBox>
    </children>
    <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" />
+      <Insets bottom="10.0" />
    </padding>
    <stylesheets>
       <URL value="@app.css" />

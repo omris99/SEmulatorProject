@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox stylesheets="@InstructionsTable.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstable.InstructionsTableController">
+<VBox prefHeight="390.0" prefWidth="600.0" stylesheets="@InstructionsTable.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstable.InstructionsTableController">
    <children>
-      <TableView fx:id="InstructionsTable" prefHeight="224.0" prefWidth="600.0">
+      <TableView fx:id="InstructionsTable" prefHeight="413.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="ColIndex" prefWidth="40.0" text="#" />
           <TableColumn fx:id="colInstructionType" prefWidth="139.0" text="Basic / Synthetic" />

@@ -15,7 +15,7 @@ public class Main extends Application {
         Parent load = FXMLLoader.load(getClass().getResource("App.fxml"));
         Scene scene = new Scene(load, 1540, 720);
         primaryStage.setMinWidth(1100);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinHeight(700);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("app.css")).toExternalForm());
 
         primaryStage.setScene(scene);

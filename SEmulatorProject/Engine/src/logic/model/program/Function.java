@@ -158,4 +158,9 @@ public class Function implements Program, Argument {
 
         return functionLabelsToFreeLabelsMap;
     }
+
+    @Override
+    public Argument parse(String stringArgument) {
+        return null;
+    }
 }

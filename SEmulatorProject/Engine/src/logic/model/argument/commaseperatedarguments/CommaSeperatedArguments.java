@@ -1,11 +1,11 @@
 package logic.model.argument.commaseperatedarguments;
 
 import logic.model.argument.Argument;
+import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class CommaSeperatedArguments implements Argument {
     private final String arguments;
@@ -15,6 +15,7 @@ public class CommaSeperatedArguments implements Argument {
         this.arguments = arguments;
         this.argumentList = convertCommaSeperatedArgumentsStringToArgumentsList(arguments);
     }
+
     @Override
     public String getRepresentation() {
         return arguments;
@@ -26,69 +27,71 @@ public class CommaSeperatedArguments implements Argument {
     }
 
     private List<Argument> convertCommaSeperatedArgumentsStringToArgumentsList(String arguments) {
-        return null;
+        List<String> extractedArguments = extractArguments(arguments);
+        List<Argument> argumentList = new ArrayList<>();
+        for(String stringArgument : extractedArguments){
+            if(VariableImpl.stringVarTypeToVariableType(stringArgument.substring(0,1)) != null){
+                argumentList.add(new VariableImpl(stringArgument));
+            }else if(stringArgument.startsWith("(") && stringArgument.endsWith(")")){
+                argumentList.add(new CommaSeperatedArguments(stringArgument.substring(1, stringArgument.length() - 1)));
+            }
+        }
+        return argumentList;
     }
 
-//    private List<String> extractFunctionCall(String commaSeperatedArguments) {
-//        if (commaSeperatedArguments.startsWith("(")) {
-//            int endOfFunctionCallIndex = commaSeperatedArguments.indexOf(")");
-//            commaSeperatedArguments.substring(0, endOfFunctionCallIndex);
-//
-//            commaSeperatedArguments = commaSeperatedArguments.substring(1, commaSeperatedArguments.length() - 1);
-//        }
-//
-//        List<String> parts = new ArrayList<>();
-//        StringBuilder current = new StringBuilder();
-//        int depth = 0;
-//
-//        for (char c : commaSeperatedArguments.toCharArray()) {
-//            if (c == '(') {
-//                depth++;
-//                current.append(c);
-//            } else if (c == ')') {
-//                depth--;
-//                current.append(c);
-//            } else if (c == ',' && depth == 0) {
-//                parts.add(current.toString().trim());
-//                current.setLength(0);
-//            } else {
-//                current.append(c);
-//            }
-//        }
-//
-//        if (current.length() > 0) {
-//            parts.add(current.toString().trim());
-//        }
-//
-//        argumentList = parts.stream().map(Argument::parse).toList();
-//    }
 
-//    public class SplitByTopLevelComma {
-//        public static List<String> splitTopLevel(String s) {
-//            List<String> parts = new ArrayList<>();
-//            StringBuilder current = new StringBuilder();
-//            int depth = 0;
-//
-//            for (char c : s.toCharArray()) {
-//                if (c == '(') {
-//                    depth++;
-//                    current.append(c);
-//                } else if (c == ')') {
-//                    depth--;
-//                    current.append(c);
-//                } else if (c == ',' && depth == 0) {
-//                    // פסיק חיצוני -> סיום חלק
-//                    parts.add(current.toString().trim());
-//                    current.setLength(0);
-//                } else {
-//                    current.append(c);
-//                }
-//            }
-//
-//            if (current.length() > 0) {
-//                parts.add(current.toString().trim());
-//            }
-//
-//            return parts;
-//        }
+
+    public Set<Variable> detectInputVariables() {
+        Set<Variable> inputVariables = new HashSet<>();
+        List<String> splitedArgumentsString = extractArguments(arguments);
+        for (String argument : splitedArgumentsString) {
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) == VariableType.INPUT) {
+                inputVariables.add(new VariableImpl(argument));
+            }else if(argument.startsWith("(") && argument.endsWith(")")) {
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                inputVariables.addAll(nestedArguments.detectInputVariables());
+            }
+        }
+
+        return inputVariables;
+    }
+
+    private List<String> extractArguments(String input) {
+        List<String> parts = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        int depth = 0;
+
+        for (char c : input.toCharArray()) {
+            if (c == '(') {
+                depth++;
+                current.append(c);
+            } else if (c == ')') {
+                depth--;
+                current.append(c);
+
+                if (depth == 0) {
+                    parts.add(current.toString().trim());
+                    current.setLength(0);
+                }
+            } else if (c == ',' && depth == 0) {
+                if (!current.isEmpty()) {
+                    parts.add(current.toString().trim());
+                    current.setLength(0);
+                }
+            } else {
+                current.append(c);
+            }
+        }
+
+        if (!current.isEmpty()) {
+            parts.add(current.toString().trim());
+        }
+
+        return parts;
+    }
+
+    @Override
+    public Argument parse(String stringArgument) {
+        return null;
+    }
 }

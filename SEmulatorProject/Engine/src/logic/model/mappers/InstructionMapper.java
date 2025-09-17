@@ -39,7 +39,7 @@ public class InstructionMapper{
         InstructionData details = InstructionData.fromNameAndType(
                 jaxbInstruction.getName(),
                 jaxbInstruction.getType());
-        Variable variable = VariableImpl.parse(jaxbInstruction.getSVariable());
+        Variable variable = new VariableImpl(jaxbInstruction.getSVariable());
         String instructionLabelOnXml = jaxbInstruction.getSLabel();
         Label instructionLabel = FixedLabel.EMPTY;
 
@@ -94,7 +94,7 @@ public class InstructionMapper{
                     }
                     break;
                 case VARIABLE:
-                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new VariableImpl(jaxbInstructionArgument.getValue()));
                     break;
                 case CONSTANT:
                     try{

@@ -61,6 +61,9 @@ public class Instructions implements Serializable {
                         this.instructionsLabels.add((Label) argument);
                     }
                 }
+                else if (argument instanceof CommaSeperatedArguments) {
+                    this.instructionsInputs.addAll(((CommaSeperatedArguments) argument).detectInputVariables());
+                }
             }
         }
     }

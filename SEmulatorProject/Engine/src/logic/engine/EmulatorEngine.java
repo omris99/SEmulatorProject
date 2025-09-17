@@ -198,7 +198,7 @@ public class EmulatorEngine implements Engine {
                 throw new NumberNotInRangeException(Integer.parseInt(Long.toString(value)));
             }
 
-            userInputToVariablesMapConverted.put(VariableImpl.parse(entry.getKey()), value);
+            userInputToVariablesMapConverted.put(new VariableImpl(entry.getKey()), value);
         }
 
         return userInputToVariablesMapConverted;

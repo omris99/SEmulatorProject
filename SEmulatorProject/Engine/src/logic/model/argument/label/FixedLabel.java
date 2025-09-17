@@ -1,5 +1,7 @@
 package logic.model.argument.label;
 
+import logic.model.argument.Argument;
+
 public enum FixedLabel implements Label {
     EXIT {
         @Override
@@ -11,6 +13,11 @@ public enum FixedLabel implements Label {
         public int getIndex() {
             return 0;
         }
+
+        @Override
+        public Argument parse(String stringArgument) {
+            return null;
+        }
     },
     EMPTY {
         @Override
@@ -21,6 +28,11 @@ public enum FixedLabel implements Label {
         @Override
         public int getIndex() {
             return 0;
+        }
+
+        @Override
+        public Argument parse(String stringArgument) {
+            return null;
         }
     };
 

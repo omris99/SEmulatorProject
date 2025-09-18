@@ -14,6 +14,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     private final InstructionData instructionData;
     private final Label label;
     private final Variable variable;
+    private int degree;
     private Instruction parentInstruction;
 
     @Override
@@ -90,13 +91,11 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
 
     @Override
     public int getDegree() {
-        if(instructionData.getType().equals(InstructionType.BASIC)){
-            return 0;
+        if(degree == 0){
+            degree = calculateDegree();
         }
 
-        ExpandableInstruction thisInstruction = (ExpandableInstruction) this;
-        List<Instruction> expandedInstructions = thisInstruction.expand(1,1, FixedLabel.EMPTY);
-        return expandedInstructions.stream().mapToInt(Instruction::getDegree).max().orElse(0) + 1;
+        return degree;
     }
 
     @Override
@@ -134,5 +133,15 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         }
 
         return associatedArgumentsAndLabels;
+    }
+
+    private int calculateDegree() {
+        if(instructionData.getType().equals(InstructionType.BASIC)){
+            return 0;
+        }
+
+        ExpandableInstruction thisInstruction = (ExpandableInstruction) this;
+        List<Instruction> expandedInstructions = thisInstruction.expand(1,1, FixedLabel.EMPTY);
+        return expandedInstructions.stream().mapToInt(Instruction::getDegree).max().orElse(0) + 1;
     }
 }

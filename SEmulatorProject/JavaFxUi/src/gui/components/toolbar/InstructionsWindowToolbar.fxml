@@ -21,7 +21,7 @@
           <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="57.0" prefWidth="285.0" text="Program / function selector" textAlignment="CENTER" wrapText="true" />
+            <fx:include fx:id="programSelector" source="../programselector/ProgramSelector.fxml" />
             <Button fx:id="collapseButton" mnemonicParsing="false" onAction="#onCollapseButtonClick" prefHeight="57.0" prefWidth="261.0" text="Collapse" GridPane.columnIndex="1" />
             <Button fx:id="expandButton" mnemonicParsing="false" onAction="#onExpandButtonClick" prefHeight="110.0" prefWidth="165.0" text="Expand" GridPane.columnIndex="3" />
             <fx:include fx:id="highlightSelection" source="../highlightselection/HighlightSelection.fxml" GridPane.columnIndex="4" />

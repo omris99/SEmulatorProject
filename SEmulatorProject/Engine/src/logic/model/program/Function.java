@@ -58,7 +58,12 @@ public class Function implements Program, Argument {
                         instructionArgumentsToNewVariables.put(argumentKey, functionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
                     } else if (argumentKey.getType().equals(ArgumentType.LABEL)) {
                         instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
-                    } else {
+                    } else if (argumentKey.getType().equals(ArgumentType.COMMA_SEPERATED_ARGUMENTS)) {
+                        CommaSeperatedArguments instructionArguments = (CommaSeperatedArguments) instructionOriginalArguments.get(argumentKey);
+                        CommaSeperatedArguments changedInstructionArguments = instructionArguments.changeInputsToActualVariables(functionAllVariablesToFreeWorkVariablesMap);
+                        instructionArgumentsToNewVariables.put(argumentKey, changedInstructionArguments);
+                    }
+                    else{
                         instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
                     }
                 }

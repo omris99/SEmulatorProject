@@ -9,7 +9,7 @@ import logic.model.program.Function;
 import java.util.*;
 
 public class CommaSeperatedArguments implements Argument {
-    private final String arguments;
+    private String arguments;
     List<Argument> argumentList;
 
     public CommaSeperatedArguments(String arguments) {
@@ -101,5 +101,22 @@ public class CommaSeperatedArguments implements Argument {
     public List<Argument> getArgumentList() {
         return argumentList;
     }
+    public CommaSeperatedArguments changeInputsToActualVariables(Map<Variable, Variable> variableMapping){
+        List<String> extractedArguments = extractArguments();
+        List<String> newArguments = new LinkedList<>();
+        for(String argument : extractedArguments){
+            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+                newArguments.add(variableMapping.get(new VariableImpl(argument)).getRepresentation());
+            }
+            else if(argument.startsWith("(") && argument.endsWith(")")){
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                newArguments.add("("+String.join(",", nestedArguments.changeInputsToActualVariables(variableMapping).extractArguments())+")");
+            }
+            else {
+                newArguments.add(argument);
+            }
+        }
 
+        return new CommaSeperatedArguments(String.join(",", newArguments));
+    }
 }

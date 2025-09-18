@@ -97,7 +97,7 @@ public class Instructions implements Serializable {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
-    public void expand(Map<String, Function> functions) {
+    public void expand() {
 
         for (int i = 0; i < instructions.size(); i++) {
             Instruction instruction = instructions.get(i);
@@ -113,7 +113,7 @@ public class Instructions implements Serializable {
 //                }
 
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
-                        .expand(functions, getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+                        .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
                 expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);

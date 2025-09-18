@@ -38,26 +38,11 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
     @Override
     public Label execute(ExecutionContext context) {
         Function functionToExecute = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
-//        List<String> argumentList = ((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).extractArguments();
-//        int inputVariableIndex = 1;
-//        ProgramExecutor executor = new ProgramExecutorImpl(functionToExecute);
-//        Map<Variable, Long> inputVariablesMap = new HashMap<>();
-//        for(String argument : argumentList){
-//            if(argument.startsWith("(") && argument.endsWith(")")) {
-//                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
-//                List<String> functionCallargumentsList = nestedArguments.extractArguments();
-//                functionCallargumentsList.removeFirst();
-//                String commaSeperatedFunctionCallArguments = String.join(",", functionCallargumentsList);
-//                new QuoteInstruction(new VariableImpl(VariableType.INPUT, inputVariableIndex), new NameArgument(nestedArguments.extractArguments().getFirst()), new CommaSeperatedArguments(commaSeperatedFunctionCallArguments)).execute(context);
-//            }
-//            else{
-//                inputVariablesMap.put(new VariableImpl(VariableType.INPUT, inputVariableIndex), 0L);
-//            }
-//            inputVariableIndex++;
-//
-//        }
-//        Long functionRunResult = executor.run(inputVariablesMap).get(Variable.RESULT);
-        context.updateVariable(getVariable(), functionToExecute.run(((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)), context.getVariablesStatus()));
+        context.updateVariable(getVariable(),
+                functionToExecute.run(
+                ((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)),
+                context.getVariablesStatus()));
+
         return FixedLabel.EMPTY;
     }
 
@@ -86,40 +71,24 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
 
     @Override
-    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
-//        int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
-        Function contextFunction = functions.get(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
-
-        QuotedFunction quotedFunction = contextFunction.quote(maxWorkVariableIndex, maxLabelIndex);
-        List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();
-
-        List<String> contextFunctionArguments = ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).extractArguments();
-
-        List<Instruction> initialInputVariablesValues = new LinkedList<>();
-        int inputIndex = 1;
-        for(String argument : contextFunctionArguments){
-            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null) {
-                initialInputVariablesValues.add(new AssignmentInstruction(quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(new VariableImpl(VariableType.INPUT, inputIndex)), new VariableImpl(argument)));
-            }else if(argument.startsWith("(") && argument.endsWith(")")) {
-                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
-                List<String> functionCallargumentsList = nestedArguments.extractArguments();
-                functionCallargumentsList.removeFirst();
-                String commaSeperatedFunctionCallArguments = String.join(",", functionCallargumentsList);
-                initialInputVariablesValues.add(new QuoteInstruction(quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(new VariableImpl(VariableType.INPUT, inputIndex)), new NameArgument(nestedArguments.extractArguments().getFirst()), new CommaSeperatedArguments(commaSeperatedFunctionCallArguments)));
-            }
-
-            inputIndex++;
-        }
-
-        expandedInstructions.addAll(0, initialInputVariablesValues);
-        expandedInstructions.addFirst(new NeutralInstruction(Variable.RESULT, instructionLabel));
-
-        expandedInstructions.add(new AssignmentInstruction(
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+        QuotedFunction quotedFunction = contextFunction.quote(
+                maxWorkVariableIndex,
+                maxLabelIndex,
+                ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)),
                 getVariable(),
-                quotedFunction.getOriginalVariablesToFreeWorkVariablesMap().get(Variable.RESULT),
-                quotedFunction.getOriginalLabelsToFreeLabels().getOrDefault(FixedLabel.EXIT, FixedLabel.EMPTY)));
+                instructionLabel);
 
-        return expandedInstructions;
+        return quotedFunction.getFullQuotedFunctionInstructions();
+    }
+
+    @Override
+    public int getCycles(){
+        int totalCycles = super.getCycles();
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+        totalCycles += contextFunction.getCycles();
+        return totalCycles;
     }
 
 

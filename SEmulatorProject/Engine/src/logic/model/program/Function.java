@@ -2,11 +2,14 @@ package logic.model.program;
 
 import dto.DTO;
 import dto.RunResultsDTO;
+import logic.exceptions.ArgumentErrorType;
+import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.NumberNotInRangeException;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
+import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -19,6 +22,9 @@ import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionWithArguments;
 import logic.model.instruction.Instructions;
+import logic.model.instruction.basic.NeutralInstruction;
+import logic.model.instruction.synthetic.AssignmentInstruction;
+import logic.model.instruction.synthetic.QuoteInstruction;
 import logic.model.mappers.InstructionMapper;
 import logic.utils.Utils;
 
@@ -39,7 +45,8 @@ public class Function implements Program, Argument {
         this.functions = new LinkedList<>();
     }
 
-    public QuotedFunction quote(int maxWorkVariableIndex, int maxLabelIndex){
+
+    public QuotedFunction quote(int maxWorkVariableIndex, int maxLabelIndex, CommaSeperatedArguments functionArguments, Variable contextVariable, Label instructionLabel) {
         AtomicInteger maxWorkVariableIndexAtomic = new AtomicInteger(maxWorkVariableIndex);
         AtomicInteger maxWorkVariableLabelAtomic = new AtomicInteger(maxLabelIndex);
 
@@ -48,23 +55,36 @@ public class Function implements Program, Argument {
         Map<InstructionArgument, Argument> instructionArgumentsToNewVariables = null;
         Map<Variable, Variable> functionAllVariablesToFreeWorkVariablesMap = mapFunctionAllVariablesToFreeWorkVariables(maxWorkVariableIndexAtomic);
         Map<Label, Label> FunctionLabelsToFreeLabels = mapFunctionAllLabelsToFreeLabels(maxWorkVariableLabelAtomic);
-
         for (Instruction instruction : getInstructions()) {
             if (instruction instanceof InstructionWithArguments) {
                 instructionArgumentsToNewVariables = new HashMap<>();
                 Map<InstructionArgument, Argument> instructionOriginalArguments = ((InstructionWithArguments) instruction).getArguments();
                 for (InstructionArgument argumentKey : instructionOriginalArguments.keySet()) {
-                    if (argumentKey.getType().equals(ArgumentType.VARIABLE)) {
-                        instructionArgumentsToNewVariables.put(argumentKey, functionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
-                    } else if (argumentKey.getType().equals(ArgumentType.LABEL)) {
-                        instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
-                    } else if (argumentKey.getType().equals(ArgumentType.COMMA_SEPERATED_ARGUMENTS)) {
-                        CommaSeperatedArguments instructionArguments = (CommaSeperatedArguments) instructionOriginalArguments.get(argumentKey);
-                        CommaSeperatedArguments changedInstructionArguments = instructionArguments.changeInputsToActualVariables(functionAllVariablesToFreeWorkVariablesMap);
-                        instructionArgumentsToNewVariables.put(argumentKey, changedInstructionArguments);
-                    }
-                    else{
-                        instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
+                    switch (argumentKey.getType()) {
+                        case VARIABLE:
+                            instructionArgumentsToNewVariables.put(argumentKey, functionAllVariablesToFreeWorkVariablesMap.get(instructionOriginalArguments.get(argumentKey)));
+                            break;
+                        case LABEL:
+                            instructionArgumentsToNewVariables.put(argumentKey, FunctionLabelsToFreeLabels.get(instructionOriginalArguments.get(argumentKey)));
+                            break;
+                        case COMMA_SEPERATED_ARGUMENTS:
+                            CommaSeperatedArguments instructionArguments = (CommaSeperatedArguments) instructionOriginalArguments.get(argumentKey);
+                            CommaSeperatedArguments changedInstructionArguments = instructionArguments.changeInputsToActualVariables(functionAllVariablesToFreeWorkVariablesMap);
+                            instructionArgumentsToNewVariables.put(argumentKey, changedInstructionArguments);
+                        case CONSTANT:
+                            instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
+                            break;
+                        case NAME:
+                            String functionName = instructionOriginalArguments.get(argumentKey).getRepresentation();
+                            if(FunctionsRepo.getInstance().isFunctionExist(functionName)){
+                                instructionArgumentsToNewVariables.put(argumentKey, instructionOriginalArguments.get(argumentKey));
+                            }
+                            else {
+                                throw new InvalidArgumentException(functionName, ArgumentErrorType.FUNCTION_NOT_FOUND);
+                            }
+                            break;
+                        default:
+                            throw new InvalidArgumentException(instructionOriginalArguments.get(argumentKey).getRepresentation(), ArgumentErrorType.UNKNOWN_ARGUMENT);
                     }
                 }
             }
@@ -77,9 +97,37 @@ public class Function implements Program, Argument {
             ));
         }
 
-        return new QuotedFunction(quotedFunctionInstructions, functionAllVariablesToFreeWorkVariablesMap, FunctionLabelsToFreeLabels);
-    }
+        List<Instruction> argumentsAssignmentToFreeWorkVariablesInstructions = new LinkedList<>();
+        List<String> contextFunctionArguments = functionArguments.extractArguments();
+        int inputIndex = 1;
+        for(String argument : contextFunctionArguments){
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null) {
+                argumentsAssignmentToFreeWorkVariablesInstructions.add(new AssignmentInstruction(functionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), new VariableImpl(argument)));
+            }else if(argument.startsWith("(") && argument.endsWith(")")) {
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                List<String> functionCallargumentsList = nestedArguments.extractArguments();
+                functionCallargumentsList.removeFirst();
+                String commaSeperatedFunctionCallArguments = String.join(",", functionCallargumentsList);
+                argumentsAssignmentToFreeWorkVariablesInstructions.add(new QuoteInstruction(functionAllVariablesToFreeWorkVariablesMap.get(new VariableImpl(VariableType.INPUT, inputIndex)), new NameArgument(nestedArguments.extractArguments().getFirst()), new CommaSeperatedArguments(commaSeperatedFunctionCallArguments)));
+            }
 
+            inputIndex++;
+        }
+
+        argumentsAssignmentToFreeWorkVariablesInstructions.addFirst(new NeutralInstruction(Variable.RESULT, instructionLabel));
+
+        Instruction returnResultToOriginalVariableInstruction = new AssignmentInstruction(
+                contextVariable,
+                functionAllVariablesToFreeWorkVariablesMap.get(Variable.RESULT),
+                FunctionLabelsToFreeLabels.getOrDefault(FixedLabel.EXIT, FixedLabel.EMPTY));
+
+        return new QuotedFunction(
+                argumentsAssignmentToFreeWorkVariablesInstructions,
+                quotedFunctionInstructions,
+                returnResultToOriginalVariableInstruction,
+                functionAllVariablesToFreeWorkVariablesMap,
+                FunctionLabelsToFreeLabels);
+    }
 
     @Override
     public String getName() {
@@ -207,5 +255,14 @@ public class Function implements Program, Argument {
         }
 
         return executor.run(new LinkedHashMap<>(functionUseInitialInputVariablesMap)).get(Variable.RESULT);
+    }
+
+    public int getCycles(){
+        int totalCycles = 0;
+//        for(Instruction instruction : getInstructions()){
+//                totalCycles += instruction.getCycles();
+//        }
+
+        return totalCycles;
     }
 }

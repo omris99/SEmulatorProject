@@ -11,7 +11,8 @@ public enum ArgumentErrorType {
     LABEL_INDEX_CANT_PARSE_TO_NUMBER("Label index must be an integer number", ArgumentType.LABEL),
     VARIABLE_INDEX_IS_NEGATIVE("Variable index cannot be negative", ArgumentType.VARIABLE),
     CONSTANT_MUST_BE_A_NUMBER("Constant must be a numeric value", ArgumentType.CONSTANT),
-    FUNCTION_NOT_FOUND("Function not found", ArgumentType.FUNCTION);
+    FUNCTION_NOT_FOUND("Function not found", ArgumentType.FUNCTION),
+    UNKNOWN_ARGUMENT("Unknown argument error", ArgumentType.NAME);
 
     private final String userMessage;
     private final ArgumentType argumentType;

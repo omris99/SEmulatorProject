@@ -59,7 +59,7 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
     }
 
     @Override
-    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         Label freeLabel1 = new LabelImpl(maxLabelIndex + 1);
         Label freeLabel2 = new LabelImpl(maxLabelIndex + 2);
         Label freeLabel3 = new LabelImpl(maxLabelIndex + 3);

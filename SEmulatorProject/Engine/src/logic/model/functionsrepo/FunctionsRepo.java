@@ -22,4 +22,9 @@ public class FunctionsRepo {
     public void addFunction(Function function){
         functions.put(function.getName(), function);
     }
+
+    public boolean isFunctionExist(String name){
+        return functions.containsKey(name);
+    }
+
 }

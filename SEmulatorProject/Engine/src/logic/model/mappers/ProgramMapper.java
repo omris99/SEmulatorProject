@@ -30,14 +30,12 @@ public class ProgramMapper {
             }
         }
 
-        for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
-        {
+        for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction()) {
             domainProgram.addInstruction(InstructionMapper.toDomain(instruction, functionNames));
         }
 
         if(!functionNames.isEmpty()){
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-                domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames)); //NEED TO DELETE!
                 FunctionsRepo.getInstance().addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
             }
         }

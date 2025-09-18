@@ -90,7 +90,13 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
 
     @Override
     public int getDegree() {
-        return instructionData.getDegree();
+        if(instructionData.getType().equals(InstructionType.BASIC)){
+            return 0;
+        }
+
+        ExpandableInstruction thisInstruction = (ExpandableInstruction) this;
+        List<Instruction> expandedInstructions = thisInstruction.expand(1,1, FixedLabel.EMPTY);
+        return expandedInstructions.stream().mapToInt(Instruction::getDegree).max().orElse(0) + 1;
     }
 
     @Override

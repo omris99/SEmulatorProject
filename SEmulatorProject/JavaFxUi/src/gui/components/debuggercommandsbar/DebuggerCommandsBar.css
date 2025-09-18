@@ -7,6 +7,6 @@
 #stopButton{
     -fx-background-color: linear-gradient(to bottom, #ff0000, #810000)
 }
-#stopButton{
+#stopButton:hover{
     -fx-background-color: linear-gradient(to top, #ff0000, #810000)
 }

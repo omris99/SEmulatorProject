@@ -2,6 +2,9 @@ package logic.model.instruction.synthetic;
 
 import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
+import logic.execution.ExecutionContextImpl;
+import logic.execution.ProgramExecutor;
+import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
 import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
@@ -10,6 +13,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.program.Function;
@@ -33,12 +37,27 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
     @Override
     public Label execute(ExecutionContext context) {
-//        long variableValue = context.getVariableValue(getVariable());
+        Function functionToExecute = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+//        List<String> argumentList = ((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).extractArguments();
+//        int inputVariableIndex = 1;
+//        ProgramExecutor executor = new ProgramExecutorImpl(functionToExecute);
+//        Map<Variable, Long> inputVariablesMap = new HashMap<>();
+//        for(String argument : argumentList){
+//            if(argument.startsWith("(") && argument.endsWith(")")) {
+//                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+//                List<String> functionCallargumentsList = nestedArguments.extractArguments();
+//                functionCallargumentsList.removeFirst();
+//                String commaSeperatedFunctionCallArguments = String.join(",", functionCallargumentsList);
+//                new QuoteInstruction(new VariableImpl(VariableType.INPUT, inputVariableIndex), new NameArgument(nestedArguments.extractArguments().getFirst()), new CommaSeperatedArguments(commaSeperatedFunctionCallArguments)).execute(context);
+//            }
+//            else{
+//                inputVariablesMap.put(new VariableImpl(VariableType.INPUT, inputVariableIndex), 0L);
+//            }
+//            inputVariableIndex++;
 //
-//        if (variableValue == 0) {
-//            return (Label) arguments.get(InstructionArgument.JZ_LABEL);
 //        }
-
+//        Long functionRunResult = executor.run(inputVariablesMap).get(Variable.RESULT);
+        context.updateVariable(getVariable(), functionToExecute.run(((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)), context.getVariablesStatus()));
         return FixedLabel.EMPTY;
     }
 
@@ -92,6 +111,7 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
             inputIndex++;
         }
+
         expandedInstructions.addAll(0, initialInputVariablesValues);
 
         expandedInstructions.add(new AssignmentInstruction(

@@ -1,6 +1,7 @@
 package logic.model.mappers;
 
 import logic.model.argument.NameArgument;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.generated.SFunction;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SProgram;
@@ -36,7 +37,8 @@ public class ProgramMapper {
 
         if(!functionNames.isEmpty()){
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-                domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
+                domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames)); //NEED TO DELETE!
+                FunctionsRepo.getInstance().addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
             }
         }
 

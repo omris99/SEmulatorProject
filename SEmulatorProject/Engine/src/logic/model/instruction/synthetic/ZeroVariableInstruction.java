@@ -49,7 +49,7 @@ public class ZeroVariableInstruction extends AbstractInstruction implements Expa
     }
 
     @Override
-    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
 

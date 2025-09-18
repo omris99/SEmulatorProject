@@ -67,7 +67,7 @@ public class JumpEqualConstantInstruction extends AbstractInstruction implements
     }
 
     @Override
-    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         Label freeLabel = new LabelImpl(maxLabelIndex + 1);
         int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();

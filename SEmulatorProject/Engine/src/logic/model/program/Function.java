@@ -208,4 +208,8 @@ public class Function implements Program, Argument {
 
         return executor.run(new LinkedHashMap<>(functionUseInitialInputVariablesMap)).get(Variable.RESULT);
     }
+
+    public int getTotalCycles(){
+        return instructions.getTotalCycles();
+    }
 }

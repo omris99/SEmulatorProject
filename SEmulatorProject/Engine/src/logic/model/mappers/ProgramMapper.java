@@ -37,7 +37,6 @@ public class ProgramMapper {
 
         if(!functionNames.isEmpty()){
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-                domainProgram.addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames)); //NEED TO DELETE!
                 FunctionsRepo.getInstance().addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
             }
         }

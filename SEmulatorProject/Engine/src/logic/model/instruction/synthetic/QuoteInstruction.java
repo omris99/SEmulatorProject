@@ -86,9 +86,9 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
 
     @Override
-    public List<Instruction> expand(Map<String, Function> functions, int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
 //        int maxInputVariableIndex = Utils.getMaxGeneralVariableIndex(programInputVariables);
-        Function contextFunction = functions.get(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
 
         QuotedFunction quotedFunction = contextFunction.quote(maxWorkVariableIndex, maxLabelIndex);
         List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();
@@ -128,5 +128,15 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
         QuoteInstruction copy = (QuoteInstruction) super.clone();
         copy.arguments = new HashMap<>(this.arguments);
         return copy;
+    }
+
+    @Override
+    public int getCycles(){
+        int totalCycles = super.getCycles();
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+        if(contextFunction != null) {
+            totalCycles += contextFunction.getTotalCycles();
+        }
+        return totalCycles;
     }
 }

@@ -12,7 +12,8 @@ public enum InstructionData {
     JUMP_ZERO(InstructionType.SYNTHETIC, 2, 2),
     JUMP_EQUAL_CONSTANT(InstructionType.SYNTHETIC, 2, 3),
     JUMP_EQUAL_VARIABLE(InstructionType.SYNTHETIC, 2, 3),
-    QUOTE(InstructionType.SYNTHETIC, 5, 13);
+    QUOTE(InstructionType.SYNTHETIC, 5, 13),
+    JUMP_EQUAL_FUNCTION(InstructionType.SYNTHETIC, 6, 13);
 
     private final InstructionType type;
     private final int cycles;

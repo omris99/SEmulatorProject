@@ -18,12 +18,10 @@ import java.util.stream.Collectors;
 public class ProgramImpl implements Program {
     private final String name;
     private final Instructions instructions;
-    private final Map<String, Function> functions;
 
     public ProgramImpl(String name) {
         this.name = name.trim();
         this.instructions = new Instructions();
-        this.functions = new HashMap<>();
     }
 
     @Override
@@ -89,7 +87,7 @@ public class ProgramImpl implements Program {
             }
 
             for(int i = 0; i < degree; i++){
-                expandedProgram.instructions.expand(functions);
+                expandedProgram.instructions.expand();
             }
 
             return expandedProgram;
@@ -139,14 +137,5 @@ public class ProgramImpl implements Program {
 
     public int getDegree(){
         return instructions.getDegree();
-    }
-
-    public void addFunction(Function function){
-        functions.put(function.getName(), function);
-    }
-
-
-    public Function getFunctionByName(String name){
-        return functions.get(name);
     }
 }

@@ -20,12 +20,14 @@ public class Instructions implements Serializable {
     private final Set<Variable> instructionsInputs;
     private final Set<Variable> instructionsWorkVariables;
     private int degree;
+    private int cycles;
 
     public Instructions() {
         this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         this.instructionsWorkVariables = new LinkedHashSet<>();
+        this.cycles = 0;
     }
 
 
@@ -36,7 +38,7 @@ public class Instructions implements Serializable {
     public void add(Instruction instruction, int indexToAdd) {
         this.instructions.add(indexToAdd, instruction);
         instruction.setIndex(indexToAdd + 1);
-
+        cycles += instruction.getCycles();
         Variable variable = instruction.getVariable();
 
         if (variable.getType() == VariableType.INPUT) {
@@ -97,23 +99,13 @@ public class Instructions implements Serializable {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
-    public void expand(Map<String, Function> functions) {
+    public void expand() {
 
         for (int i = 0; i < instructions.size(); i++) {
             Instruction instruction = instructions.get(i);
             if (instruction instanceof ExpandableInstruction) {
-//                if(instruction instanceof QuoteInstruction){
-//                    NameArgument functionName = (NameArgument)(((QuoteInstruction) instruction).getArguments().get(InstructionArgument.FUNCTION_NAME));
-//                    for(Function function : functions){
-//                        if(functionName.getRepresentation().equals(function.getName())){
-//                            ((QuoteInstruction) instruction).setContextFunction(function);
-//                            break;
-//                        }
-//                    }
-//                }
-
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
-                        .expand(functions, getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+                        .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
                 expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);
@@ -165,5 +157,9 @@ public class Instructions implements Serializable {
 
     public int getDegree() {
         return degree;
+    }
+
+    public int getTotalCycles(){
+        return cycles;
     }
 }

@@ -166,7 +166,7 @@ public class InstructionMapper{
             case "JUMP_EQUAL_CONSTANT" -> new JumpEqualConstantInstruction(variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE), label);
             case "JUMP_EQUAL_VARIABLE" -> new JumpEqualVariableInstruction(variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME), label);
             case "QUOTE" -> new QuoteInstruction(variable, arguments.get(InstructionArgument.FUNCTION_NAME), arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), label);
-
+            case "JUMP_EQUAL_FUNCTION" -> new JumpEqualFunction(variable, arguments.get(InstructionArgument.FUNCTION_NAME), arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), arguments.get(InstructionArgument.JE_FUNCTION_LABEL), label);
             default -> throw new IllegalArgumentException("Unknown instruction: " + name);
         };
     }

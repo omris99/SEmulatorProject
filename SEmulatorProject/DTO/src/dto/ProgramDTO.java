@@ -17,11 +17,12 @@ public class ProgramDTO implements DTO{
     private final Map<InstructionType, Integer> instructionsTypeCount;
     private final int expandLevelDegree;
     private final int maximalDegree;
+    private final List<String> functionsNames;
 
     public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames,
                       List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO,
                       Map<InstructionType, Integer> instructionsTypeCount, int expandLevelDegree,
-                      int maximalDegree, Set<Variable> workVariables) {
+                      int maximalDegree, Set<Variable> workVariables, List<String> functionsNames) {
         this.name = name;
         this.inputNames = inputNames;
         this.labelsNames = labelsNames;
@@ -31,6 +32,7 @@ public class ProgramDTO implements DTO{
         this.expandLevelDegree = expandLevelDegree;
         this.maximalDegree = maximalDegree;
         this.workVariables = workVariables;
+        this.functionsNames = functionsNames;
     }
 
     public String getName() {
@@ -67,5 +69,9 @@ public class ProgramDTO implements DTO{
 
     public Set<Variable> getWorkVariables() {
         return workVariables;
+    }
+
+    public List<String> getFunctionsNames() {
+        return functionsNames;
     }
 }

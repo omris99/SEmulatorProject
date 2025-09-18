@@ -22,4 +22,12 @@ public class FunctionsRepo {
     public void addFunction(Function function){
         functions.put(function.getName(), function);
     }
+
+    public String getFunctionUserString(String name){
+        Function function = functions.get(name);
+        if(function != null){
+            return function.getRepresentation();
+        }
+        return "UNKNOWN FUNCTION";
+    }
 }

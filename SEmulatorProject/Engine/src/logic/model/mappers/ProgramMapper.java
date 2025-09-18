@@ -30,6 +30,8 @@ public class ProgramMapper {
             }
         }
 
+        domainProgram.setFunctionsNames(functionNames);
+
         for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
         {
             domainProgram.addInstruction(InstructionMapper.toDomain(instruction, functionNames));

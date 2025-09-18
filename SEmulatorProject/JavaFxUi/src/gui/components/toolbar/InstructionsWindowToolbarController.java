@@ -4,6 +4,7 @@ import dto.ProgramDTO;
 import gui.components.expandationlevelwindow.ExpandationLevelWindowController;
 import gui.components.highlightselection.HighlightSelectionController;
 import gui.components.instructionswindow.InstructionsWindowController;
+import gui.components.programselector.ProgramSelectorController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import logic.model.argument.variable.Variable;
@@ -21,6 +22,8 @@ public class InstructionsWindowToolbarController {
     @FXML
     private HighlightSelectionController highlightSelectionController;
 
+    @FXML
+    private ProgramSelectorController programSelectorController;
 
     @FXML
     private Button expandButton;
@@ -32,6 +35,7 @@ public class InstructionsWindowToolbarController {
     public void initialize() {
         expandationLevelWindowController.setInstructionsWindowToolbarController(this);
         highlightSelectionController.setInstructionsWindowToolbarController(this);
+        programSelectorController.setInstructionsWindowToolbarController(this);
     }
 
     public void onDegreeChoice(int newDegree) {
@@ -45,6 +49,7 @@ public class InstructionsWindowToolbarController {
     public void onProgramLoaded(ProgramDTO programDTO) {
         expandationLevelWindowController.updateExpandationLevelChoiceBoxAndMaximalDegree(programDTO.getMaximalDegree());
         updateHighlightOptions(programDTO);
+        updateProgramOptions(programDTO);
     }
 
     public void onExpandButtonClick() {
@@ -76,6 +81,10 @@ public class InstructionsWindowToolbarController {
         highlightOptions.addAll(programDTO.getInputNames());
         highlightOptions.addAll(programDTO.getWorkVariables().stream().map(Variable::getRepresentation).toList());
         highlightSelectionController.updateOptions(highlightOptions);
+    }
+
+    public void updateProgramOptions(ProgramDTO program) {
+        programSelectorController.updateOptions(program);
     }
 
     public int getDegreeChoice() {

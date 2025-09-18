@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class ProgramImpl implements Program {
     private final String name;
     private final Instructions instructions;
+    private List<String> functionsNames;
 
     public ProgramImpl(String name) {
         this.name = name.trim();
@@ -111,7 +112,8 @@ public class ProgramImpl implements Program {
                 instructions.getInstructionsTypeCount(),
                 instructions.getDegree(),
                 instructions.getMaximalDegree(),
-                getAllInstructionsWorkVariables()
+                getAllInstructionsWorkVariables(),
+                getFunctionsNames()
         );
     }
 
@@ -137,5 +139,12 @@ public class ProgramImpl implements Program {
 
     public int getDegree(){
         return instructions.getDegree();
+    }
+    private List<String> getFunctionsNames() {
+        return functionsNames;
+    }
+
+    public void setFunctionsNames(List<String> functionsNames) {
+        this.functionsNames = functionsNames;
     }
 }

@@ -6,11 +6,17 @@ import logic.model.argument.Argument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
+import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
+import logic.model.instruction.basic.DecreaseInstruction;
+import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.program.Function;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +38,14 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
 
         @Override
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
-        return null;
-    }
+            List<Instruction> expandedInstructions = new LinkedList<>();
+            Variable workVariable1 = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
+
+            expandedInstructions.add(new QuoteInstruction(workVariable1, arguments.get(InstructionArgument.FUNCTION_NAME), arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), instructionLabel));
+            expandedInstructions.add(new JumpEqualVariableInstruction(getVariable(), arguments.get(InstructionArgument.JE_FUNCTION_LABEL), workVariable1));
+
+            return expandedInstructions;
+        }
 
     @Override
     public Label execute(ExecutionContext context) {
@@ -75,7 +87,7 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
 
     @Override
     public Instruction clone() {
-        JumpEqualVariableInstruction copy = (JumpEqualVariableInstruction) super.clone();
+        JumpEqualFunction copy = (JumpEqualFunction) super.clone();
         copy.arguments = new HashMap<>(this.arguments);
         return copy;
     }

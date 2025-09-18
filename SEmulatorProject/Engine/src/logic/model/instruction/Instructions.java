@@ -109,7 +109,7 @@ public class Instructions implements Serializable {
                 expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
 
                 addListOfInstructions(expanded, i);
-                i += expanded.size() - 1; // skip over newly added
+                i += expanded.size() - 1;
             }
         }
 

@@ -31,8 +31,6 @@ public class InstructionsWindowController {
     @FXML
     private SummaryLineController summaryLineController;
 
-    @FXML
-    private Label programNameLabel;
 
     @FXML
     public void initialize() {
@@ -57,13 +55,11 @@ public class InstructionsWindowController {
 
 
     public void onProgramLoaded(ProgramDTO programDTO) {
-        programNameLabel.setText(programDTO.getName());
         updateInstructionsTableAndSummaryLine(programDTO);
         instructionsWindowToolbarController.onProgramLoaded(programDTO);
     }
 
     public void programChanged(ProgramDTO programDTO) {
-        programNameLabel.setText(programDTO.getName());
         updateInstructionsTableAndSummaryLine(programDTO);
         instructionsWindowToolbarController.programChanged(programDTO);
     }

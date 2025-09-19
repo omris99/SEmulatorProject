@@ -2,9 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -16,29 +13,6 @@
          </font>
       </Label>
       <fx:include fx:id="instructionsWindowToolbar" source="../toolbar/InstructionsWindowToolbar.fxml" />
-      <GridPane hgap="5.0" minHeight="-Infinity" minWidth="530.0" prefHeight="26.0" prefWidth="1157.0" styleClass="component-header">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="10.0" prefWidth="197.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="120.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.0" minWidth="10.0" prefWidth="276.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="0.0" prefWidth="0.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label prefHeight="23.0" prefWidth="145.0" text="Program name:" textFill="WHITE" GridPane.columnIndex="1">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="programNameLabel" prefHeight="152.0" prefWidth="272.0" text="-" textFill="WHITE" GridPane.columnIndex="2">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-         </children>
-      </GridPane>
       <VBox prefHeight="459.0" prefWidth="1159.0">
          <children>
             <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />

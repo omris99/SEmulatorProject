@@ -187,9 +187,11 @@ public class AppController {
     public void executeNextDebugStep() {
         RunResultsDTO context = (RunResultsDTO) engine.stepOver();
         debuggerWindowController.updateRunResults(context);
-        instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         if (context.isFinished()) {
             finishExecutionMode();
+        }
+        else {
+            instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         }
     }
 

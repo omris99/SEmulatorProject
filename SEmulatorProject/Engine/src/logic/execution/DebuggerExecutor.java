@@ -9,7 +9,7 @@ import logic.model.program.Program;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DebuggerExecutor implements ProgramExecutor{
+public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
     private InstructionsQueue instructionsQueue;
@@ -63,26 +63,22 @@ public class DebuggerExecutor implements ProgramExecutor{
                 program.getAllInstructionsWorkVariables());
     }
 
-    public Map<Variable, Long> stepOver(){
-
-        if(currentInstructionToExecute == null){
-            stop();
-        }
-        else{
-            Label nextLabel = currentInstructionToExecute.execute(context);
-            cyclesCount += currentInstructionToExecute.getCycles();
-            if(nextLabel != FixedLabel.EXIT){
-                previousInstructionExecuted = currentInstructionToExecute;
-                if (nextLabel == FixedLabel.EMPTY) {
-                    currentInstructionToExecute = instructionsQueue.next();
-                } else {
-                    instructionsQueue.setQueueBegin(nextLabel);
-                    currentInstructionToExecute = instructionsQueue.getFirstInQueue();
+    public Map<Variable, Long> stepOver() {
+        Label nextLabel = currentInstructionToExecute.execute(context);
+        cyclesCount += currentInstructionToExecute.getCycles();
+        if (nextLabel != FixedLabel.EXIT) {
+            previousInstructionExecuted = currentInstructionToExecute;
+            if (nextLabel == FixedLabel.EMPTY) {
+                currentInstructionToExecute = instructionsQueue.next();
+                if (currentInstructionToExecute == null) {
+                    stop();
                 }
+            } else {
+                instructionsQueue.setQueueBegin(nextLabel);
+                currentInstructionToExecute = instructionsQueue.getFirstInQueue();
             }
-            else{
-                stop();
-            }
+        } else {
+            stop();
         }
 
         return context.getVariablesStatus();
@@ -92,19 +88,19 @@ public class DebuggerExecutor implements ProgramExecutor{
         return isFinished;
     }
 
-    public void stop(){
+    public void stop() {
         isFinished = true;
     }
 
-    public int getProgramDegree(){
+    public int getProgramDegree() {
         return program.getDegree();
     }
 
-    public Map<Variable, Long> getInitialInputVariablesMap(){
+    public Map<Variable, Long> getInitialInputVariablesMap() {
         return initialInputVariablesMap;
     }
 
-    public Instruction getCurrentInstructionToExecute(){
+    public Instruction getCurrentInstructionToExecute() {
         return currentInstructionToExecute;
     }
 }

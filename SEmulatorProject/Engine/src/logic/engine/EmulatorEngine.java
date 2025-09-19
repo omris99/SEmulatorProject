@@ -32,6 +32,7 @@ import java.util.*;
 // 3. STEP BACK NEED TO FIX, GET EXCEPTION AT THE END.
 // 4. TRY TO IMPROVE CHANGE PROGRAM FUNCTIONALITY (LOAD ONLY ONCE, THEN SWITCH BETWEEN THEM) (mainProgram and currentContextProgram(instead loadedProgram) members)
 // 5. FUNCTION AND PROGRAM ARE VERY SIMILAR, MAYBE CREATE ABSTRACT PROGRAM CLASS.
+// 6. HIGHLIGHT SELECTION NOT WORKING PROPERLY WITH QUOTE FUNCTIONS/
 
 public class EmulatorEngine implements Engine {
     private Program mainProgram;

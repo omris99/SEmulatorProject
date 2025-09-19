@@ -19,6 +19,8 @@ public class ProgramImpl implements Program {
     private final String name;
     private final Instructions instructions;
     private List<String> functionsNames;
+    private Map<Integer, Program> cachedExpandations = new HashMap<>();
+
 
     public ProgramImpl(String name) {
         this.name = name.trim();
@@ -82,6 +84,10 @@ public class ProgramImpl implements Program {
             return this;
         }
         else {
+            if(cachedExpandations.containsKey(degree)){
+                return cachedExpandations.get(degree);
+            }
+
             ProgramImpl expandedProgram = new ProgramImpl(name);
             for (Instruction instruction : instructions.getInstructionsList()) {
                 expandedProgram.addInstruction(instruction.clone());
@@ -91,6 +97,7 @@ public class ProgramImpl implements Program {
                 expandedProgram.instructions.expand();
             }
 
+            cachedExpandations.put(degree, expandedProgram);
             return expandedProgram;
         }
     }

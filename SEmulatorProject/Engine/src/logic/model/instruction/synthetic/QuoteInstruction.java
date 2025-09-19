@@ -23,6 +23,7 @@ import java.util.*;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
+    InstructionDTO cachedInstructionDTO;
 
     public QuoteInstruction(Variable variable, Argument functionName, Argument functionArguments) {
         this(variable, functionName, functionArguments, FixedLabel.EMPTY);
@@ -63,11 +64,17 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
 
     @Override
     public InstructionDTO getInstructionDTO() {
+        if (cachedInstructionDTO != null) {
+            return  cachedInstructionDTO;
+        }
+
         String displayFormat = String.format(String.format("%s <- (%s,%s)", getVariable().getRepresentation(),
                 FunctionsRepo.getInstance().getFunctionUserString(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()),
                 ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getUserDisplayArguments()));
+        InstructionDTO newInstructionDTO = super.getInstructionDTO(displayFormat);
+        cachedInstructionDTO = newInstructionDTO;
 
-        return super.getInstructionDTO(displayFormat);
+        return newInstructionDTO;
     }
 
     @Override

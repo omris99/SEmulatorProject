@@ -1,8 +1,6 @@
 package logic.engine;
 
 import dto.DTO;
-import dto.InstructionDTO;
-import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -36,7 +34,8 @@ import java.util.*;
 // 5. FUNCTION AND PROGRAM ARE VERY SIMILAR, MAYBE CREATE ABSTRACT PROGRAM CLASS.
 
 public class EmulatorEngine implements Engine {
-    private Program currentLoadedProgram;
+    private Program mainProgram;
+    private Program currentContextProgram;
 //    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
@@ -67,8 +66,8 @@ public class EmulatorEngine implements Engine {
         if (problemLabel != FixedLabel.EMPTY) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL,  problemLabel.getRepresentation());
         }
-
-        currentLoadedProgram = loadedProgram;
+        this.mainProgram = loadedProgram;
+        currentContextProgram = loadedProgram;
         pastLoadedPrograms.put(loadedProgram.getName(), loadedProgram);
 
 //        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
@@ -80,16 +79,17 @@ public class EmulatorEngine implements Engine {
     }
 
     public void changeLoadedProgramToFunction(String functionName) {
-        if(currentLoadedProgram == null){
+        if(currentContextProgram == null){
             throw new IllegalStateException("No program loaded. Load a program first.");
         }
-        if(!pastLoadedPrograms.containsKey(functionName)){
-            functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
-            currentLoadedProgram = FunctionsRepo.getInstance().getFunctionByName(functionName);
-            pastLoadedPrograms.put(functionName, currentLoadedProgram);
+
+        if (mainProgram.getName().equals(functionName)) {
+            currentContextProgram = mainProgram;
         }
-        else {
-            currentLoadedProgram = pastLoadedPrograms.get(functionName);
+        else{
+            functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
+            currentContextProgram = FunctionsRepo.getInstance().getFunctionByName(functionName);
+            pastLoadedPrograms.put(functionName, currentContextProgram);
         }
 
         history.clear();
@@ -97,12 +97,12 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public DTO getLoadedProgramDTO() {
-        return currentLoadedProgram.createDTO();
+        return currentContextProgram.createDTO();
     }
 
     @Override
     public DTO runLoadedProgramWithCommaSeperatedInput(int degree, String input) {
-        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
+        ProgramExecutor executor = new ProgramExecutorImpl(currentContextProgram.getExpandedProgram(degree));
 
         Long[] inputs = Arrays.stream(input.split(","))
                 .map(String::trim)
@@ -133,7 +133,7 @@ public class EmulatorEngine implements Engine {
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        ProgramExecutor executor = new ProgramExecutorImpl(currentLoadedProgram.getExpandedProgram(degree));
+        ProgramExecutor executor = new ProgramExecutorImpl(currentContextProgram.getExpandedProgram(degree));
 
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
@@ -160,7 +160,7 @@ public class EmulatorEngine implements Engine {
     private Set<Variable> getProgramInputVariablesFromOneToN(){
         Set<Variable> inputVariables = new LinkedHashSet<>();
 
-        int maxInputIndex = currentLoadedProgram.getAllInstructionsInputs().stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
+        int maxInputIndex = currentContextProgram.getAllInstructionsInputs().stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
         for(int i = 1; i <= maxInputIndex; i++){
             inputVariables.add(new VariableImpl(VariableType.INPUT, i));
         }
@@ -187,7 +187,7 @@ public class EmulatorEngine implements Engine {
     }
 
     public DTO getExpandedProgramDTO(int degree){
-        return currentLoadedProgram.getExpandedProgram(degree).createDTO();
+        return currentContextProgram.getExpandedProgram(degree).createDTO();
     }
 
     @Override
@@ -196,16 +196,12 @@ public class EmulatorEngine implements Engine {
     }
 
     public int getMaximalDegree(){
-        return currentLoadedProgram.getMaximalDegree();
+        return currentContextProgram.getMaximalDegree();
     }
 
     public boolean isProgramLoaded() {
-        return !(currentLoadedProgram == null);
+        return !(mainProgram == null);
     }
-//
-//    public void changeCurrentProgramDegree(int degree) {
-//        currentLoadedProgram = loadedProgramExpendations[degree];
-//    }
 
 
     @Override
@@ -238,7 +234,7 @@ public class EmulatorEngine implements Engine {
         }
         programInitialInputVariablesMap.put(Variable.RESULT, 0L);
 
-        debuggerExecutor = new DebuggerExecutor(currentLoadedProgram.getExpandedProgram(degree), new LinkedHashMap<>(programInitialInputVariablesMap));
+        debuggerExecutor = new DebuggerExecutor(currentContextProgram.getExpandedProgram(degree), new LinkedHashMap<>(programInitialInputVariablesMap));
 
 
         return new RunResultsDTO(

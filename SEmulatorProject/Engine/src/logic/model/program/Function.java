@@ -32,6 +32,7 @@ public class Function implements Program, Argument {
     private final String userString;
     private final Instructions instructions;
     private List<String> functionsNames;
+    private Map<Integer, Program> cachedExpandations = new HashMap<>();
 
 
     public Function(String name, String userString) {
@@ -108,6 +109,10 @@ public class Function implements Program, Argument {
             return this;
         }
         else {
+            if(cachedExpandations.containsKey(degree)){
+                return cachedExpandations.get(degree);
+            }
+
             Function expandedProgram = new Function(name, userString);
             for (Instruction instruction : instructions.getInstructionsList()) {
                 expandedProgram.addInstruction(instruction.clone());
@@ -117,6 +122,7 @@ public class Function implements Program, Argument {
                 expandedProgram.instructions.expand();
             }
 
+            cachedExpandations.put(degree, expandedProgram);
             return expandedProgram;
         }
     }

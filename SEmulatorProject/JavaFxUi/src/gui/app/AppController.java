@@ -54,8 +54,8 @@ public class AppController {
         Task<Void> loadTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                try{
-                    updateProgress(15,100);
+                try {
+                    updateProgress(15, 100);
 //                    updateMessage("Loading program...");
                     updateMessage(selectedFile.getAbsolutePath());
                     engine.loadProgram(selectedFile.getAbsolutePath());
@@ -69,10 +69,7 @@ public class AppController {
                     });
 
                     updateProgress(100, 100);
-                }
-
-
-                catch (Exception e){
+                } catch (Exception e) {
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error Loading Program");
@@ -91,11 +88,10 @@ public class AppController {
                                 }
                             }
                             case JAXBException jaxb -> content = "Can't read XML File";
-                            case InvalidArgumentException ia ->
-                                    content = String.format("%s.  \nError %s: %s ",
-                                            ia.getErrorType().getUserMessage(),
-                                            ia.getErrorType().getArgumentType(),
-                                            ia.getArgumentName());
+                            case InvalidArgumentException ia -> content = String.format("%s.  \nError %s: %s ",
+                                    ia.getErrorType().getUserMessage(),
+                                    ia.getErrorType().getArgumentType(),
+                                    ia.getArgumentName());
                             case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
                             default -> content = "Unexpected error: " + e.getMessage();
                         }
@@ -104,11 +100,11 @@ public class AppController {
                         alert.showAndWait();
                     });
 
-                    if(!engine.isProgramLoaded()) {
+                    if (!engine.isProgramLoaded()) {
                         updateMessage(String.format("Failed to load File: %s", selectedFile.getName()));
                     }
                     loadFileBarController.setProgressBarLoadErrorStyle();
-                    updateProgress(100,100);
+                    updateProgress(100, 100);
                 }
 
                 return null;
@@ -120,16 +116,16 @@ public class AppController {
         new Thread(loadTask).start();
     }
 
-    public void prepareDebuggerForNewRun(){
-        debuggerWindowController.prepareForNewRun(((ProgramDTO)engine.getLoadedProgramDTO()).getInputNames());
+    public void prepareDebuggerForNewRun() {
+        debuggerWindowController.prepareForNewRun(((ProgramDTO) engine.getLoadedProgramDTO()).getInputNames());
     }
 
-    public void showExpandedProgram(int degree){
+    public void showExpandedProgram(int degree) {
         instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.getExpandedProgramDTO(degree));
     }
 
-    public void startProgramExecution(Map<String,String> inputVariables) {
-        try{
+    public void startProgramExecution(Map<String, String> inputVariables) {
+        try {
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
@@ -150,22 +146,22 @@ public class AppController {
         }
     }
 
-    private void updateHistoryWindow(List<RunResultsDTO> history){
+    private void updateHistoryWindow(List<RunResultsDTO> history) {
         historyWindowController.updateHistoryTable(history);
     }
 
-    public void reRunSelectedHistory(RunResultsDTO selectedRun){
+    public void reRunSelectedHistory(RunResultsDTO selectedRun) {
         instructionWindowController.setProgramDegree(selectedRun.getDegree());
         debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesInitialValues());
     }
 
-    private void resetComponents(){
+    private void resetComponents() {
         debuggerWindowController.reset();
         historyWindowController.reset();
     }
 
-    public void startDebuggingSession(Map<String,String> inputVariables){
-        try{
+    public void startDebuggingSession(Map<String, String> inputVariables) {
+        try {
             int runDegree = instructionWindowController.getDegreeChoice();
             DTO initialState = engine.initDebuggingSession(runDegree, inputVariables);
             debuggerWindowController.startExecutionMode();
@@ -188,22 +184,22 @@ public class AppController {
         }
     }
 
-    public void executeNextDebugStep(){
+    public void executeNextDebugStep() {
         RunResultsDTO context = (RunResultsDTO) engine.stepOver();
         debuggerWindowController.updateRunResults(context);
         instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
-        if(context.isFinished()){
+        if (context.isFinished()) {
             finishExecutionMode();
         }
     }
 
-    public void stopDebuggingSession(){
+    public void stopDebuggingSession() {
         engine.stopDebuggingSession();
 //        instructionWindowController.stopHighlightingNextInstructionToExecute();
         finishExecutionMode();
     }
 
-    public void resumeDebuggerExecution(){
+    public void resumeDebuggerExecution() {
         DTO context = engine.resumeDebuggingSession();
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
 //        instructionWindowController.stopHighlightingNextInstructionToExecute();
@@ -211,11 +207,18 @@ public class AppController {
         finishExecutionMode();
     }
 
-    private void finishExecutionMode(){
+    private void finishExecutionMode() {
         updateHistoryWindow(engine.getHistory());
         debuggerWindowController.finishExecutionMode();
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
+    }
+
+    public void changeLoadedProgramToFunction(String functionName) {
+        engine.changeLoadedProgramToFunction(functionName);
+        ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        instructionWindowController.programChanged(programDTO);
+        resetComponents();
     }
 
 }

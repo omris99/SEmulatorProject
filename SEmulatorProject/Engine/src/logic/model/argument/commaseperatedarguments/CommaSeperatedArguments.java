@@ -4,6 +4,7 @@ import logic.model.argument.Argument;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.program.Function;
 
 import java.util.*;
@@ -101,6 +102,7 @@ public class CommaSeperatedArguments implements Argument {
     public List<Argument> getArgumentList() {
         return argumentList;
     }
+
     public CommaSeperatedArguments changeInputsToActualVariables(Map<Variable, Variable> variableMapping){
         List<String> extractedArguments = extractArguments();
         List<String> newArguments = new LinkedList<>();
@@ -118,5 +120,24 @@ public class CommaSeperatedArguments implements Argument {
         }
 
         return new CommaSeperatedArguments(String.join(",", newArguments));
+    }
+
+    public String getUserDisplayArguments(){
+        List<String> extractedArguments = extractArguments();
+        List<String> newArguments = new LinkedList<>();
+        for(String argument : extractedArguments){
+            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+                newArguments.add(argument);
+            }
+            else if(argument.startsWith("(") && argument.endsWith(")")){
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                newArguments.add("("+String.join(",", nestedArguments.getUserDisplayArguments())+")");
+            }
+            else {
+                newArguments.add(FunctionsRepo.getInstance().getFunctionUserString(argument));
+            }
+        }
+
+        return String.join(",", newArguments);
     }
 }

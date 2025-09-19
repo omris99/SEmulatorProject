@@ -1,6 +1,7 @@
 package logic.model.program;
 
 import dto.DTO;
+import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import logic.exceptions.NumberNotInRangeException;
 import logic.execution.ProgramExecutor;
@@ -24,19 +25,20 @@ import logic.utils.Utils;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Function implements Program, Argument {
     private final String name;
     private final String userString;
     private final Instructions instructions;
-    private final List<Function> functions;
+    private List<String> functionsNames;
 
 
     public Function(String name, String userString) {
         this.name = name;
         this.userString = userString;
         this.instructions = new Instructions();
-        this.functions = new LinkedList<>();
+        this.functionsNames = new LinkedList<>();
     }
 
     public QuotedFunction quote(int maxWorkVariableIndex, int maxLabelIndex){
@@ -98,7 +100,25 @@ public class Function implements Program, Argument {
 
     @Override
     public Program getExpandedProgram(int degree) {
-        return null;
+
+        if(degree > getMaximalDegree()){
+            throw new NumberNotInRangeException(degree);
+        }
+        else if(degree == 0){
+            return this;
+        }
+        else {
+            Function expandedProgram = new Function(name, userString);
+            for (Instruction instruction : instructions.getInstructionsList()) {
+                expandedProgram.addInstruction(instruction.clone());
+            }
+
+            for(int i = 0; i < degree; i++){
+                expandedProgram.instructions.expand();
+            }
+
+            return expandedProgram;
+        }
     }
 
     @Override
@@ -123,13 +143,25 @@ public class Function implements Program, Argument {
 
     @Override
     public int getMaximalDegree() {
-        return 0;
+        return instructions.getMaximalDegree();
     }
 
     @Override
     public DTO createDTO() {
-        return null;
+        return new ProgramDTO(
+                name,
+                getProgramInputsNames(),
+                getProgramLabelsNames(),
+                getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),
+                getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()),
+                instructions.getInstructionsTypeCount(),
+                instructions.getDegree(),
+                instructions.getMaximalDegree(),
+                getAllInstructionsWorkVariables(),
+                functionsNames
+        );
     }
+
 
     @Override
     public int getDegree() {
@@ -144,10 +176,6 @@ public class Function implements Program, Argument {
     @Override
     public int getIndex() {
         return 0;
-    }
-
-    public List<Function> getFunctions() {
-        return functions;
     }
 
     private Map<Variable, Variable> mapFunctionAllVariablesToFreeWorkVariables(AtomicInteger maxWorkVariableIndex) {
@@ -212,4 +240,25 @@ public class Function implements Program, Argument {
     public int getTotalCycles(){
         return instructions.getTotalCycles();
     }
+
+
+    private List<String> getProgramLabelsNames() {
+        List<String> programLabelsNames = getAllInstructionsLabels().stream()
+                .filter(label -> !label.equals(FixedLabel.EXIT)).sorted(Comparator.comparingInt(Label::getIndex))
+                .map(Argument::getRepresentation)
+                .collect(Collectors.toList());
+
+        if (getAllInstructionsLabels().contains(FixedLabel.EXIT)) {
+            programLabelsNames.add(FixedLabel.EXIT.getRepresentation());
+        }
+
+        return programLabelsNames;
+    }
+
+    private List<String> getProgramInputsNames() {
+        return getAllInstructionsInputs().stream()
+                .sorted(Comparator.comparingInt(Variable::getNumber))
+                .map(Argument::getRepresentation).collect(Collectors.toList());
+    }
+
 }

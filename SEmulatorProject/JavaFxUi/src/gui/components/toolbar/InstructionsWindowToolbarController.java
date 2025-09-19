@@ -46,6 +46,11 @@ public class InstructionsWindowToolbarController {
         this.instructionsWindowController = instructionsWindowToolbarController;
     }
 
+    public void programChanged(ProgramDTO programDTO){
+        expandationLevelWindowController.updateExpandationLevelChoiceBoxAndMaximalDegree(programDTO.getMaximalDegree());
+        updateHighlightOptions(programDTO);
+    }
+
     public void onProgramLoaded(ProgramDTO programDTO) {
         expandationLevelWindowController.updateExpandationLevelChoiceBoxAndMaximalDegree(programDTO.getMaximalDegree());
         updateHighlightOptions(programDTO);
@@ -72,6 +77,10 @@ public class InstructionsWindowToolbarController {
 
     public void onHighlightSelectionChange(String selection) {
         instructionsWindowController.onHighlightSelectionChange(selection);
+    }
+
+    public void onProgramSelectorChange(String selection) {
+        instructionsWindowController.onProgramSelectorChange(selection);
     }
 
     public void updateHighlightOptions(ProgramDTO programDTO) {

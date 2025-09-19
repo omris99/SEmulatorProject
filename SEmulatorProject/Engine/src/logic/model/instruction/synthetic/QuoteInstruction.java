@@ -65,7 +65,7 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
     public InstructionDTO getInstructionDTO() {
         String displayFormat = String.format(String.format("%s <- (%s,%s)", getVariable().getRepresentation(),
                 FunctionsRepo.getInstance().getFunctionUserString(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()),
-                arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation()));
+                ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getUserDisplayArguments()));
 
         return super.getInstructionDTO(displayFormat);
     }
@@ -74,7 +74,7 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format(String.format("%s <- (%s,%s)", getVariable().getRepresentation(),
                 FunctionsRepo.getInstance().getFunctionUserString(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()),
-                arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation()));
+                ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getUserDisplayArguments()));
 
         return super.getInstructionDisplayFormat(displayFormat);
     }

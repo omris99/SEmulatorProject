@@ -19,6 +19,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.generated.SProgram;
 import logic.model.mappers.ProgramMapper;
 import logic.model.program.Program;
@@ -36,9 +37,11 @@ public class EmulatorEngine implements Engine {
 //    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
+    private Map<String, Program> pastLoadedPrograms;
 
     public EmulatorEngine() {
         history = new LinkedList<>();
+        pastLoadedPrograms = new HashMap<>();
     }
 
     @Override
@@ -63,11 +66,28 @@ public class EmulatorEngine implements Engine {
         }
 
         currentLoadedProgram = loadedProgram;
+        pastLoadedPrograms.put(loadedProgram.getName(), loadedProgram);
 
 //        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
 //        for (int i = 0; i <= currentLoadedProgram.getMaximalDegree(); i++) {
 //            loadedProgramExpendations[i] = currentLoadedProgram.getExpandedProgram(i);
 //        }
+
+        history.clear();
+    }
+
+    public void changeLoadedProgramToFunction(String functionName) {
+        if(currentLoadedProgram == null){
+            throw new IllegalStateException("No program loaded. Load a program first.");
+        }
+        if(!pastLoadedPrograms.containsKey(functionName)){
+            functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
+            currentLoadedProgram = FunctionsRepo.getInstance().getFunctionByName(functionName);
+            pastLoadedPrograms.put(functionName, currentLoadedProgram);
+        }
+        else {
+            currentLoadedProgram = pastLoadedPrograms.get(functionName);
+        }
 
         history.clear();
     }

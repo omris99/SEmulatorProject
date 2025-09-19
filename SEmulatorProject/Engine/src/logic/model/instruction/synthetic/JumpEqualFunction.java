@@ -10,6 +10,7 @@ import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
@@ -50,7 +51,7 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
     @Override
     public Label execute(ExecutionContext context) {
         long variableValue = context.getVariableValue(getVariable());
-        Function contextFunction = (Function) arguments.get(InstructionArgument.FUNCTION_NAME);
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
         Long functionResult = contextFunction.run((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), context.getVariablesStatus());
         if(variableValue == functionResult){
             return (Label) arguments.get(InstructionArgument.JE_FUNCTION_LABEL);
@@ -62,8 +63,8 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
     @Override
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format(String.format("IF %s = (%s,%s) GOTO %s", getVariable().getRepresentation(),
-                arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation(),
-                arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation(),
+                FunctionsRepo.getInstance().getFunctionUserString(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()),
+                ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getUserDisplayArguments(),
                 arguments.get(InstructionArgument.JE_FUNCTION_LABEL).getRepresentation()));
 
         return super.getInstructionDisplayFormat(displayFormat);
@@ -73,8 +74,8 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
     @Override
     public InstructionDTO getInstructionDTO() {
         String displayFormat = String.format("IF %s = (%s,%s) GOTO %s", getVariable().getRepresentation(),
-                arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation(),
-                arguments.get(InstructionArgument.FUNCTION_ARGUMENTS).getRepresentation(),
+                FunctionsRepo.getInstance().getFunctionUserString(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation()),
+                ((CommaSeperatedArguments)arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getUserDisplayArguments(),
                 arguments.get(InstructionArgument.JE_FUNCTION_LABEL).getRepresentation());
 
         return getInstructionDTO(displayFormat);

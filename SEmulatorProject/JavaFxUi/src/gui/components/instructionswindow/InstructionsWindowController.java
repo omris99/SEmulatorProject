@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.InstructionType;
 
 import java.util.List;
@@ -61,6 +62,12 @@ public class InstructionsWindowController {
         instructionsWindowToolbarController.onProgramLoaded(programDTO);
     }
 
+    public void programChanged(ProgramDTO programDTO) {
+        programNameLabel.setText(programDTO.getName());
+        updateInstructionsTableAndSummaryLine(programDTO);
+        instructionsWindowToolbarController.programChanged(programDTO);
+    }
+
     public void onExpandationLevelChanged(ProgramDTO programDTO) {
         updateInstructionsTableAndSummaryLine(programDTO);
         instructionsWindowToolbarController.updateHighlightOptions(programDTO);
@@ -87,6 +94,15 @@ public class InstructionsWindowController {
         instructionsTableController.highlightInstructionsWithSelection(selection);
 //        appController.highLightInstructionsWithSelection(selection);
     }
+
+    public void onProgramSelectorChange(String selection) {
+        if(selection == null){
+            return;
+        }
+
+        appController.changeLoadedProgramToFunction(selection);
+    }
+
 
     public int getDegreeChoice() {
         return instructionsWindowToolbarController.getDegreeChoice();

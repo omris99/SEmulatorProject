@@ -17,6 +17,12 @@ public class ProgramSelectorController {
 
     @FXML
     private ChoiceBox<String> programChoiceBox;
+    @FXML
+    public void initialize() {
+        programChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            instructionsWindowToolbarController.onProgramSelectorChange(newVal);
+        });
+    }
 
     public void setInstructionsWindowToolbarController(InstructionsWindowToolbarController instructionsWindowToolbarController) {
         this.instructionsWindowToolbarController = instructionsWindowToolbarController;
@@ -29,5 +35,6 @@ public class ProgramSelectorController {
         programChoiceBox.getSelectionModel().clearSelection();
         programChoiceBox.getItems().clear();
         programChoiceBox.getItems().addAll(programOptions);
+        programChoiceBox.getSelectionModel().select(0);
     }
 }

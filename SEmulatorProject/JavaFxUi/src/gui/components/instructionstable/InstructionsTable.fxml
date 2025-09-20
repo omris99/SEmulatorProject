@@ -9,7 +9,7 @@
    <children>
       <TableView fx:id="InstructionsTable" prefHeight="413.0" prefWidth="600.0">
         <columns>
-          <TableColumn fx:id="ColIndex" prefWidth="40.0" text="#" />
+            <TableColumn fx:id="ColIndex" prefWidth="40.0" text="#" />
           <TableColumn fx:id="colInstructionType" prefWidth="139.0" text="Basic / Synthetic" />
             <TableColumn fx:id="colLabel" prefWidth="53.0" text="Label" />
             <TableColumn fx:id="colInstructionDisplayFormat" prefWidth="277.0" text="Instruction" />

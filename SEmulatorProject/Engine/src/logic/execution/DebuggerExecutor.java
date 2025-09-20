@@ -39,7 +39,7 @@ public class DebuggerExecutor implements ProgramExecutor {
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
             } else if (nextLabel != FixedLabel.EXIT) {
-                currentInstructionToExecute = instructionsQueue.setQueueBegin(nextLabel);
+                currentInstructionToExecute = instructionsQueue.jumpToLabel(nextLabel);
             }
         } while (nextLabel != FixedLabel.EXIT && currentInstructionToExecute != null);
         stop();
@@ -81,7 +81,7 @@ public class DebuggerExecutor implements ProgramExecutor {
                     stop();
                 }
             } else {
-                currentInstructionToExecute = instructionsQueue.setQueueBegin(nextLabel);
+                currentInstructionToExecute = instructionsQueue.jumpToLabel(nextLabel);
 
             }
         } else {

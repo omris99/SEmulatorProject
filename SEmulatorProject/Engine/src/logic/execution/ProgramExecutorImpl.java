@@ -37,7 +37,7 @@ public class ProgramExecutorImpl implements ProgramExecutor{
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstruction = instructionsQueue.next();
             } else if (nextLabel != FixedLabel.EXIT) {
-                currentInstruction = instructionsQueue.setQueueBegin(nextLabel);
+                currentInstruction = instructionsQueue.jumpToLabel(nextLabel);
             }
         } while (nextLabel != FixedLabel.EXIT && currentInstruction != null);
 

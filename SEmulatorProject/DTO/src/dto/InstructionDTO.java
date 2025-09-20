@@ -12,10 +12,11 @@ public class InstructionDTO implements DTO{
     private final int cycles;
     private final List<InstructionDTO> parentInstructions;
     private final List<String> associatedArgumentsAndLabels;
+    private boolean isBreakpointSet;
 
     public InstructionDTO(int index, String instructionType, String label,
                           String displayFormat, int cycles, List<InstructionDTO> parentInstructions,
-                          List<String> associatedArgumentsAndLabels) {
+                          List<String> associatedArgumentsAndLabels, boolean isBreakpointSet) {
         this.index = index;
         this.instructionType = instructionType;
         this.label = label;
@@ -23,6 +24,7 @@ public class InstructionDTO implements DTO{
         this.cycles = cycles;
         this.parentInstructions = parentInstructions;
         this.associatedArgumentsAndLabels = associatedArgumentsAndLabels;
+        this.isBreakpointSet = isBreakpointSet;
     }
 
     public int getIndex() {
@@ -50,5 +52,8 @@ public class InstructionDTO implements DTO{
     }
     public List<String> getAssociatedArgumentsAndLabels(){
         return associatedArgumentsAndLabels;
+    }
+    public boolean getIsBreakpointSet() {
+        return isBreakpointSet;
     }
 }

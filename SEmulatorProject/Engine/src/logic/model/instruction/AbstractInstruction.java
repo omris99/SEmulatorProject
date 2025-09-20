@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractInstruction implements Instruction, Cloneable {
+    private boolean isBreakpointSet;
     private int index;
     private final InstructionData instructionData;
     private final Label label;
@@ -40,6 +41,11 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         parentInstruction = null;
     }
 
+    public void setBreakpointSet(boolean breakpointSet) {
+        isBreakpointSet = breakpointSet;
+    }
+
+
     public InstructionDTO getInstructionDTO(String instructionDisplayFormat) {
         List<InstructionDTO> parentInstructions = new LinkedList<>();
         Instruction currentParentInstruction = parentInstruction;
@@ -48,7 +54,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             currentParentInstruction = currentParentInstruction.getParent();
         }
 
-        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels());
+        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels(), isBreakpointSet);
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {

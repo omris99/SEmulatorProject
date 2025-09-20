@@ -9,7 +9,7 @@ import java.util.List;
 
 public class InstructionsQueue implements Serializable {
     private final List<Instruction> allInstructions;
-    private List<Instruction> queue;
+    private final List<Instruction> queue;
     private int currentInstructionIndex;
     List<Integer> executedInstructionsIndexes;
 
@@ -39,7 +39,7 @@ public class InstructionsQueue implements Serializable {
         return queue.get(currentInstructionIndex);
     }
 
-    public Instruction setQueueBegin(Label labelToBeginFrom)
+    public Instruction jumpToLabel(Label labelToBeginFrom)
     {
         executedInstructionsIndexes.add(currentInstructionIndex);
         int instructionLabelToBeginFromIndex = 0;

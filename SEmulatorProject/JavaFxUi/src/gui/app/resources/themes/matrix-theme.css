@@ -100,7 +100,7 @@
 
 #sEmulatorLogo {
     -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
-    -fx-background-color: linear-gradient(to bottom, #616161, #000000);
+    -fx-background-color: linear-gradient(to bottom, #003e00,#000000);
     -fx-text-fill: #00ff41;
     -fx-font-size: 23px;
     -fx-font-weight: bold;
@@ -112,7 +112,7 @@
 
 .table-view .column-header,
 .table-view .column-header .label{
-    -fx-background-color: #001a00;
+    -fx-background-color: #292929;
     -fx-text-fill: #00ff41;
     -fx-font-weight: bold;
 }

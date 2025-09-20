@@ -19,6 +19,10 @@ public class ExecutionContextImpl implements ExecutionContext {
         }
     }
 
+    public ExecutionContextImpl(Map<Variable, Long> variablesStatus) {
+        this.variablesStatus = variablesStatus;
+    }
+
     @Override
     public long getVariableValue(Variable v) {
 
@@ -37,6 +41,6 @@ public class ExecutionContextImpl implements ExecutionContext {
     }
 
     public ExecutionContext copy() {
-        return new ExecutionContextImpl(new HashMap<>(variablesStatus), Set.of());
+        return new ExecutionContextImpl(new HashMap<>(variablesStatus));
     }
 }

@@ -39,8 +39,7 @@ public class DebuggerExecutor implements ProgramExecutor {
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
             } else if (nextLabel != FixedLabel.EXIT) {
-                instructionsQueue.setQueueBegin(nextLabel);
-                currentInstructionToExecute = instructionsQueue.getFirstInQueue();
+                currentInstructionToExecute = instructionsQueue.setQueueBegin(nextLabel);
             }
         } while (nextLabel != FixedLabel.EXIT && currentInstructionToExecute != null);
         stop();
@@ -68,12 +67,9 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public Map<Variable, Long> stepOver() {
-        if(contextsHistory.isEmpty()) {
-            context = initialContext.copy();
-        }
-        else {
-            context = contextsHistory.getLast();
-        }
+        contextsHistory.add(context);
+
+        context = contextsHistory.getLast().copy();
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
@@ -92,7 +88,6 @@ public class DebuggerExecutor implements ProgramExecutor {
             stop();
         }
 
-        contextsHistory.add(context);
         return context.getVariablesStatus();
     }
 
@@ -103,15 +98,10 @@ public class DebuggerExecutor implements ProgramExecutor {
 
         Instruction previousInstruction = instructionsQueue.prev();
         cyclesCount -= previousInstruction.getCycles();
-        if(previousInstruction != null){
-            currentInstructionToExecute = previousInstruction;
-        }
+        currentInstructionToExecute = previousInstruction;
 
-        contextsHistory.removeLast();
+        context = contextsHistory.removeLast();
 
-        if(contextsHistory.isEmpty()){
-            return initialContext.getVariablesStatus();
-        }
         return context.getVariablesStatus();
     }
 

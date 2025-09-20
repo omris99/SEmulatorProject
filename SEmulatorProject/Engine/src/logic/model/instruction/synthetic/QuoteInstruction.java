@@ -20,6 +20,7 @@ import logic.model.program.Function;
 import logic.model.program.QuotedFunction;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;

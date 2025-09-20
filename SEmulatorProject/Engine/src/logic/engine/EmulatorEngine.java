@@ -28,11 +28,8 @@ import java.util.*;
 
 //TODO:
 // 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
-// 2. FIX QUOTE IN INSTRUCTION DATA (CYCLES AND DEGREE)
-// 3. STEP BACK NEED TO FIX, GET EXCEPTION AT THE END.
 // 4. TRY TO IMPROVE CHANGE PROGRAM FUNCTIONALITY (LOAD ONLY ONCE, THEN SWITCH BETWEEN THEM) (mainProgram and currentContextProgram(instead loadedProgram) members)
 // 5. FUNCTION AND PROGRAM ARE VERY SIMILAR, MAYBE CREATE ABSTRACT PROGRAM CLASS.
-// 6. HIGHLIGHT SELECTION NOT WORKING PROPERLY WITH QUOTE FUNCTIONS/
 
 public class EmulatorEngine implements Engine {
     private Program mainProgram;

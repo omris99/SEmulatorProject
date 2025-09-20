@@ -5,6 +5,7 @@ import dto.InstructionDTO;
 import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
+import gui.components.displaycommandsbar.DisplayCommandsBarController;
 import gui.components.historywindow.HistoryWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
@@ -38,11 +39,15 @@ public class AppController {
     private DebuggerWindowController debuggerWindowController;
 
     @FXML
+    private DisplayCommandsBarController displayCommandsBarController;
+
+    @FXML
     private void initialize() {
         loadFileBarController.setAppController(this);
         debuggerWindowController.setAppController(this);
         instructionWindowController.setAppController(this);
         historyWindowController.setAppController(this);
+        displayCommandsBarController.setAppController(this);
     }
 
     public AppController() {
@@ -221,6 +226,14 @@ public class AppController {
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         instructionWindowController.programChanged(programDTO);
         resetComponents();
+    }
+
+    public void disableAnimations(boolean enable) {
+        //complete this method
+    }
+
+    public void changeTheme(Theme theme) {
+        Main.applyTheme(theme);
     }
 
 }

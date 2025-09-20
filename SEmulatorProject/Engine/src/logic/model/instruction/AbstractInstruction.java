@@ -2,6 +2,7 @@ package logic.model.instruction;
 
 import dto.InstructionDTO;
 import logic.model.argument.Argument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -118,7 +119,8 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         return parentInstruction;
     }
 
-    private List<String> getAssociatedArgumentsAndLabels() {
+    @Override
+    public List<String> getAssociatedArgumentsAndLabels() {
         List<String> associatedArgumentsAndLabels = new LinkedList<>();
         associatedArgumentsAndLabels.add(variable.getRepresentation());
         if (label != FixedLabel.EMPTY) {
@@ -128,7 +130,12 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         if(this instanceof InstructionWithArguments){
             InstructionWithArguments instructionWithArguments = (InstructionWithArguments) this;
             for(Argument argument : instructionWithArguments.getArguments().values()){
-                associatedArgumentsAndLabels.add(argument.getRepresentation());
+                if(argument instanceof Variable || argument instanceof Label){
+                    associatedArgumentsAndLabels.add(argument.getRepresentation());
+                }
+                else if(argument instanceof CommaSeperatedArguments){
+                    associatedArgumentsAndLabels.addAll(((CommaSeperatedArguments) argument).getAllVariables().stream().map(Variable::getRepresentation).toList());
+                }
             }
         }
 

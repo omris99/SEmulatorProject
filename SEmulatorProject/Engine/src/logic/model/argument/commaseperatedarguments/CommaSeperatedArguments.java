@@ -140,4 +140,20 @@ public class CommaSeperatedArguments implements Argument {
 
         return String.join(",", newArguments);
     }
+
+    public List<Variable> getAllVariables() {
+        List<Variable> variables = new LinkedList<>();
+        List<String> extractedArguments = extractArguments();
+        for(String argument : extractedArguments){
+            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+                variables.add(new VariableImpl(argument));
+            }
+            else if(argument.startsWith("(") && argument.endsWith(")")){
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                variables.addAll(nestedArguments.getAllVariables());
+            }
+        }
+
+        return variables;
+    }
 }

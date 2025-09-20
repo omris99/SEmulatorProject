@@ -6,6 +6,7 @@ import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface Instruction extends Cloneable, Serializable {
     String getName();
@@ -21,6 +22,6 @@ public interface Instruction extends Cloneable, Serializable {
     int getIndex();
     void setParent(Instruction parent);
     Instruction clone();
-
+    List<String> getAssociatedArgumentsAndLabels();
     Instruction getParent();
 }

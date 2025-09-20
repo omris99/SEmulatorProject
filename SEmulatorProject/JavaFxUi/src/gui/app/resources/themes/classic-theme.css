@@ -1,3 +1,4 @@
+
 .button {
     -fx-background-color: linear-gradient(to bottom, #9e9e9e, #7d7d7d);
     -fx-text-fill: white;
@@ -10,6 +11,15 @@
     -fx-background-color: linear-gradient(to bottom, #757380, #5a5768);
 }
 
+#sEmulatorLogo {
+    -fx-background-color: linear-gradient(to bottom, #6a11cb, #4565b1, #ffffff);
+    -fx-text-fill: white;
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 12px;
+    -fx-background-radius: 0 0 10 10;
+}
 
 .window-header {
     -fx-background-color: linear-gradient(to bottom, #6a11cb, #83b1ff);
@@ -55,6 +65,10 @@
     -fx-border-color: #b3b3b3;
 }
 
+#app-view {
+    -fx-background-color: #ffffff;
+}
+
 .mini-window-header{
     -fx-background-color: #040078;
     -fx-text-fill: white;
@@ -62,4 +76,31 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-background-radius: 4;
+}
+
+
+
+.table-row-cell.highlighted {
+    -fx-background-color: linear-gradient(to bottom, rgba(43, 0, 90, 0.25), #ffffff, rgba(43, 0, 90, 0.25));
+    -fx-border-color: #040078;
+    -fx-border-width: 1;
+}
+
+.table-row-cell.highlighted:selected {
+    -fx-background-color: rgb(0, 166, 255);
+}
+
+.table-row-cell.next-instruction{
+    -fx-background-color: linear-gradient(to bottom, rgba(22, 136, 0, 0.35), #ffffff, rgba(22, 136, 0, 0.35));
+    -fx-border-color: #00ff51;
+    -fx-border-width: 1;
+}
+
+#progressBar {
+    -fx-base: #c6c6c6;
+    -fx-accent: #18a300;
+}
+
+#progressBar.load-error{
+    -fx-accent: #e80000;
 }

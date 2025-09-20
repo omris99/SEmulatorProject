@@ -32,7 +32,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <ScrollPane prefHeight="540.0" prefWidth="211.0">
+                  <ScrollPane prefHeight="540.0" prefWidth="211.0" styleClass="input-variables-container">
                      <content>
                         <VBox fx:id="inputVariablesContainer" alignment="TOP_CENTER" prefHeight="497.0" prefWidth="190.0" />
                      </content>

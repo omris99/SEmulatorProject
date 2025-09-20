@@ -3,21 +3,20 @@
     -fx-font-family: "Consolas", "Courier New", "Monaco", monospace;
     -fx-text-fill: #00ff41;
 }
+
 .table-view{
     -fx-background-color: #0d0d0d;
     -fx-border-color: #00ff41;
     -fx-border-width: 0.5px;
-    -fx-border-radius: 8;
 }
+
 .button {
     -fx-background-color: linear-gradient(to bottom, #003300, #001a00);
     -fx-text-fill: #00ff41;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-background-radius: 6px;
     -fx-cursor: hand;
     -fx-border-color: #00ff41;
-    -fx-border-radius: 6px;
 }
 
 .button:hover {
@@ -44,19 +43,50 @@
     -fx-padding: 5px;
 }
 
-.choice-box {
-    -fx-background-color: #000000;
+#program-choice-box .label {
+    -fx-text-fill: #1dff00;
+    -fx-font-weight: bold;
+}
+
+.text-field,
+.choice-box
+{
+    -fx-background-color: #0d0d0d;
     -fx-text-fill: #00ff41;
-    -fx-font-size: 13px;
     -fx-border-color: #00ff41;
     -fx-border-radius: 6px;
+}
+
+.viewport {
+    -fx-background-color: #0d0d0d;
+}
+
+/* ScrollBars */
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: #0d0d0d;
+}
+
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #00ff41;
+}
+
+#cycles-label{
+    -fx-font-weight: 600;
+    -fx-background-color: #000000;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.2, 0, 2);}
+.label {
+    -fx-text-fill:#00ff41;
 }
 
 .mini-window {
     -fx-background-color: #0d0d0d;
     -fx-border-color: #00ff41;
     -fx-border-width: 0.5px;
-    -fx-border-radius: 8;
 }
 
 .mini-window-header {
@@ -66,7 +96,6 @@
     -fx-font-weight: bold;
     -fx-alignment: center;
     -fx-border-color: #00ff41;
-    -fx-border-radius: 8;
 }
 
 #sEmulatorLogo {
@@ -82,7 +111,7 @@
 
 
 .table-view .column-header,
-.table-view .column-header .label {
+.table-view .column-header .label{
     -fx-background-color: #001a00;
     -fx-text-fill: #00ff41;
     -fx-font-weight: bold;
@@ -96,7 +125,7 @@
     -fx-text-fill: #00ff41;
 }
 .table-row-cell.highlighted {
-    -fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), #4e4e4e, rgb(0, 0, 0));
+    -fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), #8a8a8a, rgb(0, 0, 0));
 }
 
 .table-row-cell.highlighted:selected {
@@ -104,7 +133,7 @@
 }
 
 .table-row-cell.next-instruction{
-    -fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), #8a8a8a, rgb(0, 0, 0));
+    -fx-background-color: linear-gradient(to bottom, rgba(0, 255, 81, 0.63), #000000, rgba(0, 255, 81, 0.5));
     -fx-border-color: #00ff51;
     -fx-border-width: 1;
 }
@@ -115,5 +144,5 @@
 }
 
 #progressBar.load-error{
-    -fx-accent: #e80000;
+    -fx-accent: #ff0000;
 }

@@ -1,6 +1,7 @@
 package gui.components.debuggerwindow;
 
 import dto.RunResultsDTO;
+import gui.app.AnimationsManager;
 import gui.app.AppController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
 import gui.components.inputrow.InputRowController;
@@ -105,6 +106,10 @@ public class DebuggerWindowController {
 
     public void onStepOverClick() {
         appController.executeNextDebugStep();
+    }
+
+    public void onStepBackwardClick() {
+        appController.executePreviousDebugStep();
     }
 
     public void onStopButtonClick() {

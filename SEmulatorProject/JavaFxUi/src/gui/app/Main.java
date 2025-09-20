@@ -1,7 +1,7 @@
 package gui.app;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,11 +22,13 @@ public class Main extends Application {
         scene = new Scene(load, 1540, 720);
         primaryStage.setMinWidth(1100);
         primaryStage.setMinHeight(700);
-        applyTheme(Theme.DARK);
+        applyTheme(Theme.CLASSIC);
 
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     public static void applyTheme(Theme theme) {

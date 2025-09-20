@@ -2,6 +2,7 @@ package logic.execution;
 
 import logic.model.argument.variable.Variable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,5 +34,9 @@ public class ExecutionContextImpl implements ExecutionContext {
     @Override
     public Map<Variable, Long> getVariablesStatus() {
         return variablesStatus;
+    }
+
+    public ExecutionContext copy() {
+        return new ExecutionContextImpl(new HashMap<>(variablesStatus), Set.of());
     }
 }

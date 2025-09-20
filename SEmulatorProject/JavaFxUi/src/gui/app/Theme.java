@@ -3,7 +3,7 @@ package gui.app;
 public enum Theme {
     CLASSIC("Classic", "/gui/app/resources/themes/classic-theme.css"),
     LIGHT("Light", "/gui/app/resources/themes/light-theme.css"),
-    DARK("Dark", "/gui/app/resources/themes/dark-theme.css");
+    MATRIX("Matrix", "/gui/app/resources/themes/matrix-theme.css");
 
     private final String displayName;
     private final String cssFilePath;

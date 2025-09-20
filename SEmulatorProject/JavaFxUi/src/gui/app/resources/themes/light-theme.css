@@ -88,7 +88,7 @@
 }
 
 .table-row-cell.highlighted {
-    -fx-background-color: linear-gradient(to bottom, rgba(43, 0, 90, 0.25), #ffffff, rgba(43, 0, 90, 0.25));
+    -fx-background-color: linear-gradient(to bottom, rgba(0, 166, 255, 0.25), #ffffff, rgba(0, 166, 255, 0.25));
     -fx-border-color: #040078;
     -fx-border-width: 1;
 }
@@ -98,7 +98,7 @@
 }
 
 .table-row-cell.next-instruction{
-    -fx-background-color: linear-gradient(to bottom, rgba(22, 136, 0, 0.35), #ffffff, rgba(22, 136, 0, 0.35));
+    -fx-background-color: linear-gradient(to bottom, rgba(0, 218, 255, 0.38), #ffffff, rgba(0, 218, 255, 0.35));
     -fx-border-color: #00ff51;
     -fx-border-width: 1;
 }

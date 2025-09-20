@@ -6,14 +6,16 @@ import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
 import logic.model.program.Program;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
+    private List<ExecutionContext> contextsHistory;
+    private List<InstructionsQueue> queueHistory;
     private InstructionsQueue instructionsQueue;
     private final Map<Variable, Long> initialInputVariablesMap;
+    private ExecutionContext initialContext;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
     private Instruction nextInstructionToExecute;
@@ -21,6 +23,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     private boolean isFinished = false;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap) {
+        this.contextsHistory = new LinkedList<>();
         this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
     }
@@ -61,9 +64,17 @@ public class DebuggerExecutor implements ProgramExecutor {
     private void initializeContext(Map<Variable, Long> inputVariablesMap) {
         context = new ExecutionContextImpl(inputVariablesMap,
                 program.getAllInstructionsWorkVariables());
+        initialContext = context;
     }
 
     public Map<Variable, Long> stepOver() {
+        if(contextsHistory.isEmpty()) {
+            context = initialContext.copy();
+        }
+        else {
+            context = contextsHistory.getLast();
+        }
+
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
         if (nextLabel != FixedLabel.EXIT) {
@@ -74,15 +85,36 @@ public class DebuggerExecutor implements ProgramExecutor {
                     stop();
                 }
             } else {
-                instructionsQueue.setQueueBegin(nextLabel);
-                currentInstructionToExecute = instructionsQueue.getFirstInQueue();
+                currentInstructionToExecute = instructionsQueue.setQueueBegin(nextLabel);
+
             }
         } else {
             stop();
         }
 
+        contextsHistory.add(context);
         return context.getVariablesStatus();
     }
+
+    public Map<Variable, Long> stepBackward() {
+        if(contextsHistory.isEmpty()){
+            return initialContext.getVariablesStatus();
+        }
+
+        Instruction previousInstruction = instructionsQueue.prev();
+        cyclesCount -= previousInstruction.getCycles();
+        if(previousInstruction != null){
+            currentInstructionToExecute = previousInstruction;
+        }
+
+        contextsHistory.removeLast();
+
+        if(contextsHistory.isEmpty()){
+            return initialContext.getVariablesStatus();
+        }
+        return context.getVariablesStatus();
+    }
+
 
     public boolean isFinished() {
         return isFinished;

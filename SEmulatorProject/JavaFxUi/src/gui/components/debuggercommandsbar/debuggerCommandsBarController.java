@@ -1,5 +1,6 @@
 package gui.components.debuggercommandsbar;
 
+import gui.app.AnimationsManager;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,17 +49,20 @@ public class debuggerCommandsBarController {
     @FXML
     void startButtonAction(ActionEvent event) {
         startButton.setDisable(true);
+        AnimationsManager.playBigger(startButton, 400);
         debuggerWindowController.onStartClick();
         startButton.setDisable(false);
     }
 
     @FXML
     void stepBackwardButtonAction(ActionEvent event) {
-
+        AnimationsManager.playSmaller(stepBackwardButton, 300);
+        debuggerWindowController.onStepBackwardClick();
     }
 
     @FXML
     void stepOverButtonAction(ActionEvent event) {
+        AnimationsManager.playBigger(stepOverButton, 300);
         debuggerWindowController.onStepOverClick();
     }
 

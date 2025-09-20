@@ -1,6 +1,7 @@
 package gui.components.variablesvaluetable;
 
 import dto.RunResultsDTO;
+import gui.app.AnimationsManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,7 +25,6 @@ public class VariablesValueTableController {
     private final ObservableList<VariableValueRow> data = FXCollections.observableArrayList();
 
 
-
     @FXML
     public void initialize() {
         colVariable.setCellValueFactory(cellData ->
@@ -46,9 +46,10 @@ public class VariablesValueTableController {
                     return;
                 }
 
-                if(item.isHighlighted()) {
-                 getStyleClass().add("value-changed");
-                 }
+                if (item.isHighlighted()) {
+                    getStyleClass().add("value-changed");
+                    AnimationsManager.playFadeIn(tv, 200);
+                }
             }
         });
 
@@ -68,7 +69,10 @@ public class VariablesValueTableController {
             return variableName;
         }
 
-        public Long getValue() { return value; }
+        public Long getValue() {
+            return value;
+        }
+
         public void setValue(Long newValue) {
             this.previousValue = this.value;
             this.value = newValue;

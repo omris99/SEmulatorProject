@@ -268,6 +268,26 @@ public class EmulatorEngine implements Engine {
         return debugResults;
     }
 
+    public DTO stepBackward(){
+        if(debuggerExecutor == null){
+            throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
+        }
+
+        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepBackward();
+
+        RunResultsDTO debugResults = new RunResultsDTO(
+                debuggerExecutor.getProgramDegree(),
+                finalVariablesResult.get(Variable.RESULT),
+                debuggerExecutor.getInitialInputVariablesMap(),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.isFinished()
+        );
+
+        return debugResults;
+    }
+
     public void stopDebuggingSession(){
         debuggerExecutor.stop();
     }

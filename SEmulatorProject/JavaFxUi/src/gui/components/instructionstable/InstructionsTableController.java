@@ -1,6 +1,7 @@
 package gui.components.instructionstable;
 
 import dto.InstructionDTO;
+import gui.app.AnimationsManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,6 +62,7 @@ public class InstructionsTableController {
 
                 if (isNextInstruction) {
                     getStyleClass().add("next-instruction");
+                    AnimationsManager.playFadeIn(tv, 200);
                 } else if (isHighlighted) {
                     getStyleClass().add("highlighted");
                 }

@@ -200,6 +200,12 @@ public class AppController {
         }
     }
 
+    public void executePreviousDebugStep(){
+        RunResultsDTO context = (RunResultsDTO) engine.stepBackward();
+        debuggerWindowController.updateRunResults(context);
+        instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
+    }
+
     public void stopDebuggingSession() {
         engine.stopDebuggingSession();
 //        instructionWindowController.stopHighlightingNextInstructionToExecute();
@@ -229,7 +235,7 @@ public class AppController {
     }
 
     public void disableAnimations(boolean enable) {
-        //complete this method
+        AnimationsManager.setAnimationsDisabled(enable);
     }
 
     public void changeTheme(Theme theme) {

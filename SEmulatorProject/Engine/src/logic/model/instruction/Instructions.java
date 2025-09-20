@@ -1,15 +1,11 @@
 package logic.model.instruction;
 
 import logic.model.argument.Argument;
-import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableType;
-import logic.model.instruction.synthetic.QuoteInstruction;
-import logic.model.program.Function;
-import logic.model.program.Program;
 
 import java.io.Serializable;
 import java.util.*;
@@ -161,5 +157,12 @@ public class Instructions implements Serializable {
 
     public int getTotalCycles(){
         return cycles;
+    }
+
+    public void updateInstructionBreakpoint(int instructionIndex, boolean isSet){
+        Instruction instruction = instructions.stream().filter(instr -> instr.getIndex() == instructionIndex).findFirst().orElse(null);
+        if(instruction != null){
+            instruction.setBreakpoint(isSet);
+        }
     }
 }

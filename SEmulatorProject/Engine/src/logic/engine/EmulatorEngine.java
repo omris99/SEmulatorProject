@@ -19,6 +19,7 @@ import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.generated.SProgram;
+import logic.model.instruction.Instruction;
 import logic.model.mappers.ProgramMapper;
 import logic.model.program.Program;
 import logic.utils.Utils;
@@ -307,12 +308,21 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished());
-        history.add(debugResults);
+        if(debuggerExecutor.isFinished()){
+            history.add(debugResults);
+        }
 
         return debugResults;
     }
 
     public DTO getNextInstructionToExecute(){
         return debuggerExecutor.getCurrentInstructionToExecute().getInstructionDTO();
+    }
+
+    public void updateInstructionBreakpoint(int index, boolean isSet){
+        Instruction instruction = currentContextProgram.getInstructions().stream().filter(instr -> instr.getIndex() == index).findFirst().orElse(null);
+        if(instruction != null){
+            instruction.setBreakpoint(isSet);
+        }
     }
 }

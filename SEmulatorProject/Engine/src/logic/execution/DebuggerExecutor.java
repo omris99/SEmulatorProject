@@ -20,6 +20,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     private Instruction currentInstructionToExecute;
     private Instruction nextInstructionToExecute;
     private Instruction previousInstructionExecuted;
+    private boolean isPausedAtBreakpoint;
     private boolean isFinished = false;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap) {
@@ -33,6 +34,12 @@ public class DebuggerExecutor implements ProgramExecutor {
         Label nextLabel;
 
         do {
+            if (currentInstructionToExecute.getBreakpoint() && !isPausedAtBreakpoint) {
+                isPausedAtBreakpoint = true;
+                return context.getVariablesStatus();
+            }
+
+            isPausedAtBreakpoint = false;
             nextLabel = currentInstructionToExecute.execute(context);
             cyclesCount += currentInstructionToExecute.getCycles();
 

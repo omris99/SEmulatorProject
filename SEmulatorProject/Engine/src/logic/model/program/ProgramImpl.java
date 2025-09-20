@@ -84,9 +84,9 @@ public class ProgramImpl implements Program {
             return this;
         }
         else {
-            if(cachedExpandations.containsKey(degree)){
-                return cachedExpandations.get(degree);
-            }
+//            if(cachedExpandations.containsKey(degree)){
+//                return cachedExpandations.get(degree);
+//            }
 
             ProgramImpl expandedProgram = new ProgramImpl(name);
             for (Instruction instruction : instructions.getInstructionsList()) {

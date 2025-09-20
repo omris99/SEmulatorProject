@@ -4,6 +4,7 @@ import dto.InstructionDTO;
 import dto.ProgramDTO;
 import gui.app.AppController;
 import gui.components.instructionstable.InstructionsTableController;
+import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +21,7 @@ public class InstructionsWindowController {
     private AppController appController;
 
     @FXML
-    private InstructionsTableController instructionsTableController;
+    private InstructionsTableWithBreakpointsController instructionsTableController;
 
     @FXML
     private InstructionsWindowToolbarController instructionsWindowToolbarController;
@@ -35,6 +36,7 @@ public class InstructionsWindowController {
     @FXML
     public void initialize() {
         instructionsWindowToolbarController.setInstructionsWindowController(this);
+        instructionsTableController.setInstructionsWindowController(this);
         instructionsTableController.getTable().getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<InstructionDTO>() {
                     @Override
@@ -118,6 +120,10 @@ public class InstructionsWindowController {
 
     public void setProgramDegree(int degree){
         instructionsWindowToolbarController.setProgramDegree(degree);
+    }
+
+    public void onBreakpointToggled(int instructionIndex, boolean isSet){
+        appController.updateInstructionBreakpoint(instructionIndex, isSet);
     }
 
 }

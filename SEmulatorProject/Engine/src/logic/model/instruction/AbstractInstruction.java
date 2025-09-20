@@ -41,8 +41,14 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         parentInstruction = null;
     }
 
-    public void setBreakpointSet(boolean breakpointSet) {
+    @Override
+    public void setBreakpoint(boolean breakpointSet) {
         isBreakpointSet = breakpointSet;
+    }
+
+    @Override
+    public boolean getBreakpoint() {
+        return isBreakpointSet;
     }
 
 

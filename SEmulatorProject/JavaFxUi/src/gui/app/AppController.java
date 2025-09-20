@@ -217,7 +217,7 @@ public class AppController {
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
 //        instructionWindowController.stopHighlightingNextInstructionToExecute();
 //        updateHistoryWindow(engine.getHistory());
-        finishExecutionMode();
+//        finishExecutionMode();
     }
 
     private void finishExecutionMode() {
@@ -242,4 +242,7 @@ public class AppController {
         Main.applyTheme(theme);
     }
 
+    public void updateInstructionBreakpoint(int index, boolean isSet) {
+        engine.updateInstructionBreakpoint(index, isSet);
+    }
 }

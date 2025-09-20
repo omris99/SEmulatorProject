@@ -15,7 +15,7 @@
       <fx:include fx:id="instructionsWindowToolbar" source="../toolbar/InstructionsWindowToolbar.fxml" />
       <VBox prefHeight="459.0" prefWidth="1159.0">
          <children>
-            <fx:include fx:id="instructionsTable" source="../instructionstable/InstructionsTable.fxml" />
+            <fx:include fx:id="instructionsTable" source="../instructionstablewithbreakpoints/InstructionsTableWithBreakpoints.fxml" />
             <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
          </children>
       </VBox>

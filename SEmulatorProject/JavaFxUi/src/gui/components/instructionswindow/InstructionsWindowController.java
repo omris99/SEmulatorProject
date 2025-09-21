@@ -122,8 +122,8 @@ public class InstructionsWindowController {
         instructionsWindowToolbarController.setProgramDegree(degree);
     }
 
-    public void onBreakpointToggled(int instructionIndex, boolean isSet){
-        appController.updateInstructionBreakpoint(instructionIndex, isSet);
+    public InstructionDTO onBreakpointToggled(int instructionIndex, boolean isSet){
+        return appController.updateInstructionBreakpoint(instructionIndex, isSet);
     }
 
 }

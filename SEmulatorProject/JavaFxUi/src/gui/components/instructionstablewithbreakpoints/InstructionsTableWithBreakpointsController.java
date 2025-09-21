@@ -44,7 +44,7 @@ import java.util.Map;
                             InstructionDTO instr = getTableView().getItems().get(getIndex());
                             boolean newValue = !circle.isVisible();
                             circle.setVisible(newValue);
-                            onBreakpointToggled(instr, newValue);
+                            getTableView().getItems().set(getIndex(), onBreakpointToggled(instr, newValue));
                         }
                     });
                 }
@@ -55,9 +55,13 @@ import java.util.Map;
                     if (empty || getIndex() >= getTableView().getItems().size()) {
                         setGraphic(null);
                     } else {
+                        InstructionDTO instr = getTableView().getItems().get(getIndex());
+
                         setGraphic(stack);
                         setStyle("-fx-alignment: CENTER;");
-                        circle.setVisible(item != null && item);
+                        if(instr != null){
+                            circle.setVisible(instr.getIsBreakpointSet());
+                        }
                     }
                 }
             });
@@ -65,8 +69,8 @@ import java.util.Map;
             super.initialize();
         }
 
-        private void onBreakpointToggled(InstructionDTO instr, boolean newValue) {
-            instructionsWindowController.onBreakpointToggled(instr.getIndex(), newValue);
+        private InstructionDTO onBreakpointToggled(InstructionDTO instr, boolean newValue) {
+            return instructionsWindowController.onBreakpointToggled(instr.getIndex(), newValue);
         }
 
         public void setInstructionsWindowController(InstructionsWindowController instructionsWindowController) {

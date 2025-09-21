@@ -66,7 +66,9 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
     @Override
     public InstructionDTO getInstructionDTO() {
         if (cachedInstructionDTO != null) {
-            return  cachedInstructionDTO;
+            if(getBreakpoint() == cachedInstructionDTO.getIsBreakpointSet()){
+                return cachedInstructionDTO;
+            }
         }
 
         String displayFormat = String.format(String.format("%s <- (%s,%s)", getVariable().getRepresentation(),

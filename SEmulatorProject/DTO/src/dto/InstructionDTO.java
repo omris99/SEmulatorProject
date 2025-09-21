@@ -56,4 +56,8 @@ public class InstructionDTO implements DTO{
     public boolean getIsBreakpointSet() {
         return isBreakpointSet;
     }
+
+    public void getIsBreakpointSet(boolean isBreakpointSet) {
+        this.isBreakpointSet = isBreakpointSet;
+    }
 }

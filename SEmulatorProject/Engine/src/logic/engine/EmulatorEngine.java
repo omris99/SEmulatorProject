@@ -1,6 +1,7 @@
 package logic.engine;
 
 import dto.DTO;
+import dto.InstructionDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -319,10 +320,12 @@ public class EmulatorEngine implements Engine {
         return debuggerExecutor.getCurrentInstructionToExecute().getInstructionDTO();
     }
 
-    public void updateInstructionBreakpoint(int index, boolean isSet){
+    public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet){
         Instruction instruction = currentContextProgram.getInstructions().stream().filter(instr -> instr.getIndex() == index).findFirst().orElse(null);
         if(instruction != null){
             instruction.setBreakpoint(isSet);
         }
+
+        return instruction.getInstructionDTO();
     }
 }

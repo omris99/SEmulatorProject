@@ -215,6 +215,12 @@ public class AppController {
     public void resumeDebuggerExecution() {
         DTO context = engine.resumeDebuggingSession();
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
+        if(((RunResultsDTO) context).isFinished()){
+            finishExecutionMode();
+        }
+        else {
+            instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
+        }
 //        instructionWindowController.stopHighlightingNextInstructionToExecute();
 //        updateHistoryWindow(engine.getHistory());
 //        finishExecutionMode();
@@ -242,7 +248,7 @@ public class AppController {
         Main.applyTheme(theme);
     }
 
-    public void updateInstructionBreakpoint(int index, boolean isSet) {
-        engine.updateInstructionBreakpoint(index, isSet);
+    public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet) {
+        return engine.updateInstructionBreakpoint(index, isSet);
     }
 }

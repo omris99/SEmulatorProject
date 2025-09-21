@@ -68,7 +68,7 @@ public class EmulatorEngine implements Engine {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL,  problemLabel.getRepresentation());
         }
         this.mainProgram = loadedProgram;
-        currentContextProgram = loadedProgram;
+        setCurrentContextProgram(mainProgram);
         pastLoadedPrograms.put(loadedProgram.getName(), loadedProgram);
 
 //        loadedProgramExpendations = new Program[currentLoadedProgram.getMaximalDegree() + 1];
@@ -85,11 +85,11 @@ public class EmulatorEngine implements Engine {
         }
 
         if (mainProgram.getName().equals(functionName)) {
-            currentContextProgram = mainProgram;
+            setCurrentContextProgram(mainProgram);
         }
         else{
             functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
-            currentContextProgram = FunctionsRepo.getInstance().getFunctionByName(functionName);
+            setCurrentContextProgram(FunctionsRepo.getInstance().getFunctionByName(functionName));
             pastLoadedPrograms.put(functionName, currentContextProgram);
         }
 
@@ -98,13 +98,12 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public DTO getLoadedProgramDTO() {
-        return currentContextProgram.createDTO();
+        return currentOnScreenProgram.createDTO();
     }
 
     @Override
     public DTO runLoadedProgramWithCommaSeperatedInput(int degree, String input) {
         ProgramExecutor executor = new ProgramExecutorImpl(currentContextProgram.getExpandedProgram(degree));
-
         Long[] inputs = Arrays.stream(input.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -134,7 +133,7 @@ public class EmulatorEngine implements Engine {
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        ProgramExecutor executor = new ProgramExecutorImpl(currentContextProgram.getExpandedProgram(degree));
+        ProgramExecutor executor = new ProgramExecutorImpl(currentOnScreenProgram);
 
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
@@ -188,7 +187,8 @@ public class EmulatorEngine implements Engine {
     }
 
     public DTO getExpandedProgramDTO(int degree){
-        return currentContextProgram.getExpandedProgram(degree).createDTO();
+        currentOnScreenProgram = currentContextProgram.getExpandedProgram(degree);
+        return currentOnScreenProgram.createDTO();
     }
 
     @Override
@@ -235,7 +235,7 @@ public class EmulatorEngine implements Engine {
         }
         programInitialInputVariablesMap.put(Variable.RESULT, 0L);
 
-        debuggerExecutor = new DebuggerExecutor(currentContextProgram.getExpandedProgram(degree), new LinkedHashMap<>(programInitialInputVariablesMap));
+        debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap));
 
 
         return new RunResultsDTO(
@@ -322,11 +322,16 @@ public class EmulatorEngine implements Engine {
     }
 
     public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet){
-        Instruction instruction = currentContextProgram.getInstructions().stream().filter(instr -> instr.getIndex() == index).findFirst().orElse(null);
+        Instruction instruction = currentOnScreenProgram.getInstructions().stream().filter(instr -> instr.getIndex() == index).findFirst().orElse(null);
         if(instruction != null){
             instruction.setBreakpoint(isSet);
         }
 
         return instruction.getInstructionDTO();
+    }
+
+    private void setCurrentContextProgram(Program program){
+        currentContextProgram = program;
+        currentOnScreenProgram = program;
     }
 }

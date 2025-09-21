@@ -36,6 +36,7 @@ import java.util.*;
 public class EmulatorEngine implements Engine {
     private Program mainProgram;
     private Program currentContextProgram;
+    private Program currentOnScreenProgram;
 //    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;

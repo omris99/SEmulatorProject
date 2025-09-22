@@ -126,7 +126,7 @@ public class AppController {
     }
 
     public void showExpandedProgram(int degree) {
-        instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.getExpandedProgramDTO(degree));
+        instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.showExpandedProgramOnScreen(degree));
     }
 
     public void startProgramExecution(Map<String, String> inputVariables) {

@@ -119,7 +119,7 @@ public class ConsoleUI implements UI {
     public void expand() {
         int expansionDegree = getUserDesiredExpansionDegree();
 
-        showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+        showProgramDetails((ProgramDTO) engine.showExpandedProgramOnScreen(expansionDegree));
         System.out.printf("Program expanded successfully to degree %s.%n", expansionDegree);
 
     }
@@ -171,7 +171,7 @@ public class ConsoleUI implements UI {
                 System.out.println("\n***********************************************");
                 System.out.println("               Executed Program: ");
                 System.out.println("***********************************************");
-                showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+                showProgramDetails((ProgramDTO) engine.showExpandedProgramOnScreen(expansionDegree));
                 showProgramRunResults(runResults);
                 isInputOk = true;
             }

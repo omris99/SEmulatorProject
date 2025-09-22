@@ -186,7 +186,7 @@ public class EmulatorEngine implements Engine {
         return Utils.createInputVariablesMap(programActualInputVariables, inputs);
     }
 
-    public DTO getExpandedProgramDTO(int degree){
+    public DTO showExpandedProgramOnScreen(int degree){
         currentOnScreenProgram = currentContextProgram.getExpandedProgram(degree);
         return currentOnScreenProgram.createDTO();
     }

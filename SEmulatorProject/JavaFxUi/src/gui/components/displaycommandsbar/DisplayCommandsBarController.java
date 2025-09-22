@@ -41,6 +41,12 @@ public class DisplayCommandsBarController {
         appController.disableAnimations(animationsDisabled);
     }
 
+
+    @FXML
+    void onShowTreeTableView(ActionEvent event) {
+        appController.showTreeTableView();
+
+    }
     public void setAppController(AppController appController) {
         this.appController = appController;
     }

@@ -3,6 +3,7 @@ package dto;
 import logic.model.instruction.Instruction;
 
 import java.util.List;
+import java.util.Objects;
 
 public class InstructionDTO implements DTO{
     private final int index;
@@ -57,7 +58,20 @@ public class InstructionDTO implements DTO{
         return isBreakpointSet;
     }
 
+
     public void getIsBreakpointSet(boolean isBreakpointSet) {
         this.isBreakpointSet = isBreakpointSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        InstructionDTO that = (InstructionDTO) o;
+        return index == that.index && cycles == that.cycles && isBreakpointSet == that.isBreakpointSet && Objects.equals(instructionType, that.instructionType) && Objects.equals(label, that.label) && Objects.equals(displayFormat, that.displayFormat) && Objects.equals(parentInstructions, that.parentInstructions) && Objects.equals(associatedArgumentsAndLabels, that.associatedArgumentsAndLabels);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(index, instructionType, label, displayFormat, cycles, parentInstructions, associatedArgumentsAndLabels, isBreakpointSet);
     }
 }

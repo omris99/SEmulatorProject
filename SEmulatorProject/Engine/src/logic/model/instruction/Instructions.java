@@ -26,7 +26,6 @@ public class Instructions implements Serializable {
         this.cycles = 0;
     }
 
-
     public void add(Instruction instruction) {
         add(instruction, instructions.size());
     }
@@ -95,6 +94,7 @@ public class Instructions implements Serializable {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
+
     public void expand() {
 
         for (int i = 0; i < instructions.size(); i++) {
@@ -102,8 +102,10 @@ public class Instructions implements Serializable {
             if (instruction instanceof ExpandableInstruction) {
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
                         .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
-                expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
-
+                expanded.forEach(newInstruction -> {
+                    newInstruction.setParent(instruction);
+                    instruction.addChild(newInstruction);
+                });
                 addListOfInstructions(expanded, i);
                 i += expanded.size() - 1;
             }
@@ -165,4 +167,5 @@ public class Instructions implements Serializable {
             instruction.setBreakpoint(isSet);
         }
     }
+
 }

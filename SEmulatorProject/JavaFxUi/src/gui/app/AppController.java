@@ -7,17 +7,24 @@ import dto.RunResultsDTO;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.displaycommandsbar.DisplayCommandsBarController;
 import gui.components.historywindow.HistoryWindowController;
+import gui.components.instructionstreetable.InstructionsTreeTableController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
+import gui.popups.showallvariables.ShowAllVariablesController;
 import jakarta.xml.bind.JAXBException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import logic.engine.EmulatorEngine;
 import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
+import logic.instructiontree.InstructionsTree;
 
 import java.io.File;
 import java.util.List;
@@ -250,5 +257,22 @@ public class AppController {
 
     public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet) {
         return engine.updateInstructionBreakpoint(index, isSet);
+    }
+
+    public void showTreeTableView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
+            Parent load = loader.load();
+            InstructionsTreeTableController controller = loader.getController();
+            InstructionsTree instructionsTree = engine.getInstructionsTree();
+            controller.setInstructions(instructionsTree);
+            Scene scene = new Scene(load, 400, 200);
+            Stage showWindow = new Stage();
+            showWindow.setTitle("Tree table view of instructions");
+            showWindow.setScene(scene);
+            showWindow.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

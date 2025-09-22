@@ -18,6 +18,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     private final Variable variable;
     private int degree;
     private Instruction parentInstruction;
+    private List<Instruction> children;
 
     @Override
     public Instruction clone() {
@@ -39,6 +40,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         this.label = label;
         this.variable = variable;
         parentInstruction = null;
+        children = new LinkedList<>();
     }
 
     @Override
@@ -59,6 +61,12 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             parentInstructions.add(currentParentInstruction.getInstructionDTO());
             currentParentInstruction = currentParentInstruction.getParent();
         }
+//        List<Integer> childrenIndexes = new LinkedList<>();
+//        if(children != null && !children.isEmpty()){
+//            for(Instruction child : this.children){
+//                childrenIndexes.add(child.getIndex());
+//            }
+//        }
 
         return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels(), isBreakpointSet);
     }
@@ -127,8 +135,20 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
     }
 
     @Override
+    public void addChild(Instruction child) {
+        this.children.add(child);
+    }
+
+
+
+    @Override
     public Instruction getParent() {
         return parentInstruction;
+    }
+
+    @Override
+    public List<Instruction> getChildren() {
+        return children;
     }
 
     @Override

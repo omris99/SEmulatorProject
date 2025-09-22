@@ -2,6 +2,7 @@ package logic.engine;
 
 import dto.DTO;
 import dto.InstructionDTO;
+import dto.ProgramDTO;
 import dto.RunResultsDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -12,6 +13,8 @@ import logic.exceptions.XmlErrorType;
 import logic.execution.DebuggerExecutor;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
+import logic.instructiontree.InstructionsTree;
+import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -37,7 +40,7 @@ public class EmulatorEngine implements Engine {
     private Program mainProgram;
     private Program currentContextProgram;
     private Program currentOnScreenProgram;
-//    private Program[] loadedProgramExpendations;
+    //    private Program[] loadedProgramExpendations;
     private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
     private Map<String, Program> pastLoadedPrograms;
@@ -49,12 +52,12 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public void loadProgram(String xmlPath) throws JAXBException, InvalidXmlFileException {
-        if(!xmlPath.endsWith(".xml") || !(xmlPath.length() > 4)) {
+        if (!xmlPath.endsWith(".xml") || !(xmlPath.length() > 4)) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.INVALID_EXTENSION);
         }
 
         File xmlFile = new File(xmlPath);
-        if(!xmlFile.exists()) {
+        if (!xmlFile.exists()) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.FILE_MISSING);
         }
 
@@ -65,7 +68,7 @@ public class EmulatorEngine implements Engine {
         Program loadedProgram = ProgramMapper.toDomain(sProgram);
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
-            throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL,  problemLabel.getRepresentation());
+            throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
         }
         this.mainProgram = loadedProgram;
         setCurrentContextProgram(mainProgram);
@@ -80,14 +83,13 @@ public class EmulatorEngine implements Engine {
     }
 
     public void changeLoadedProgramToFunction(String functionName) {
-        if(currentContextProgram == null){
+        if (currentContextProgram == null) {
             throw new IllegalStateException("No program loaded. Load a program first.");
         }
 
         if (mainProgram.getName().equals(functionName)) {
             setCurrentContextProgram(mainProgram);
-        }
-        else{
+        } else {
             functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
             setCurrentContextProgram(FunctionsRepo.getInstance().getFunctionByName(functionName));
             pastLoadedPrograms.put(functionName, currentContextProgram);
@@ -108,8 +110,8 @@ public class EmulatorEngine implements Engine {
                 .map(String::trim)
                 .map(Long::parseLong)
                 .toArray(Long[]::new);
-        for(Long number : inputs){
-            if(number < 0){
+        for (Long number : inputs) {
+            if (number < 0) {
                 throw new NumberNotInRangeException(Integer.parseInt(number.toString()));
             }
         }
@@ -138,7 +140,7 @@ public class EmulatorEngine implements Engine {
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
         Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
-        for(Variable inputVariable : programActualInputVariables){
+        for (Variable inputVariable : programActualInputVariables) {
             programInitialInputVariablesMap.put(
                     inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
         }
@@ -157,22 +159,22 @@ public class EmulatorEngine implements Engine {
         return runResults;
     }
 
-    private Set<Variable> getProgramInputVariablesFromOneToN(){
+    private Set<Variable> getProgramInputVariablesFromOneToN() {
         Set<Variable> inputVariables = new LinkedHashSet<>();
 
         int maxInputIndex = currentContextProgram.getAllInstructionsInputs().stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
-        for(int i = 1; i <= maxInputIndex; i++){
+        for (int i = 1; i <= maxInputIndex; i++) {
             inputVariables.add(new VariableImpl(VariableType.INPUT, i));
         }
 
         return inputVariables;
     }
 
-    private Map<Variable, Long> mapUserInputToVariables(Long... input){
+    private Map<Variable, Long> mapUserInputToVariables(Long... input) {
         int i = 1;
         Map<Variable, Long> userInputToVariablesMap = new LinkedHashMap<>();
 
-        for(long value : input){
+        for (long value : input) {
             userInputToVariablesMap.put(new VariableImpl(VariableType.INPUT, i), value);
             i++;
         }
@@ -180,13 +182,17 @@ public class EmulatorEngine implements Engine {
         return userInputToVariablesMap;
     }
 
-    private Map<Variable, Long> createProgramUseInitialVariablesMap(Long... inputs){
+    private Map<Variable, Long> createProgramUseInitialVariablesMap(Long... inputs) {
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
         return Utils.createInputVariablesMap(programActualInputVariables, inputs);
     }
 
-    public DTO showExpandedProgramOnScreen(int degree){
+    public DTO getExpandedProgramDTO(int degree) {
+        return currentContextProgram.getExpandedProgram(degree).createDTO();
+    }
+
+    public DTO showExpandedProgramOnScreen(int degree) {
         currentOnScreenProgram = currentContextProgram.getExpandedProgram(degree);
         return currentOnScreenProgram.createDTO();
     }
@@ -196,7 +202,7 @@ public class EmulatorEngine implements Engine {
         return history;
     }
 
-    public int getMaximalDegree(){
+    public int getMaximalDegree() {
         return currentContextProgram.getMaximalDegree();
     }
 
@@ -206,15 +212,15 @@ public class EmulatorEngine implements Engine {
 
 
     @Override
-    public void quit(){
+    public void quit() {
         System.exit(0);
     }
 
     private Map<Variable, Long> convertGuiVariablesMapToDomainVariablesMap(Map<String, String> guiVariablesMap) {
         Map<Variable, Long> userInputToVariablesMapConverted = new LinkedHashMap<>();
-        for(Map.Entry<String, String> entry : guiVariablesMap.entrySet()){
+        for (Map.Entry<String, String> entry : guiVariablesMap.entrySet()) {
             long value = Long.parseLong(entry.getValue());
-            if(value < 0){
+            if (value < 0) {
                 throw new NumberNotInRangeException(Integer.parseInt(Long.toString(value)));
             }
 
@@ -229,7 +235,7 @@ public class EmulatorEngine implements Engine {
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
         Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
-        for(Variable inputVariable : programActualInputVariables){
+        for (Variable inputVariable : programActualInputVariables) {
             programInitialInputVariablesMap.put(
                     inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
         }
@@ -248,8 +254,8 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.isFinished());
     }
 
-    public DTO stepOver(){
-        if(debuggerExecutor == null){
+    public DTO stepOver() {
+        if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
@@ -264,15 +270,15 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished()
         );
-        if(debuggerExecutor.isFinished()){
+        if (debuggerExecutor.isFinished()) {
             history.add(debugResults);
         }
 
         return debugResults;
     }
 
-    public DTO stepBackward(){
-        if(debuggerExecutor == null){
+    public DTO stepBackward() {
+        if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
@@ -291,12 +297,12 @@ public class EmulatorEngine implements Engine {
         return debugResults;
     }
 
-    public void stopDebuggingSession(){
+    public void stopDebuggingSession() {
         debuggerExecutor.stop();
     }
 
-    public DTO resumeDebuggingSession(){
-        if(debuggerExecutor == null){
+    public DTO resumeDebuggingSession() {
+        if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
@@ -310,28 +316,43 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished());
-        if(debuggerExecutor.isFinished()){
+        if (debuggerExecutor.isFinished()) {
             history.add(debugResults);
         }
 
         return debugResults;
     }
 
-    public DTO getNextInstructionToExecute(){
+    public DTO getNextInstructionToExecute() {
         return debuggerExecutor.getCurrentInstructionToExecute().getInstructionDTO();
     }
 
-    public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet){
+    public InstructionDTO updateInstructionBreakpoint(int index, boolean isSet) {
         Instruction instruction = currentOnScreenProgram.getInstructions().stream().filter(instr -> instr.getIndex() == index).findFirst().orElse(null);
-        if(instruction != null){
+        if (instruction != null) {
             instruction.setBreakpoint(isSet);
         }
 
         return instruction.getInstructionDTO();
     }
 
-    private void setCurrentContextProgram(Program program){
+    private void setCurrentContextProgram(Program program) {
         currentContextProgram = program;
         currentOnScreenProgram = program;
     }
+
+
+    public InstructionsTree getInstructionsTree() {
+        InstructionsTreeNode root = new InstructionsTreeNode();
+        InstructionsTree tree = new InstructionsTree(root);
+        Program fullyExpandedProgram = currentContextProgram.getExpandedProgram(getMaximalDegree());
+
+        for (Instruction instruction : currentContextProgram.getInstructions()) {
+            root.addChild(new InstructionsTreeNode(instruction, instruction.getChildren()));
+        }
+
+        return tree;
+    }
+
+
 }

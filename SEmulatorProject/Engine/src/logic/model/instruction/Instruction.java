@@ -26,4 +26,6 @@ public interface Instruction extends Cloneable, Serializable {
     Instruction getParent();
     void setBreakpoint(boolean isBreakpointSet);
     boolean getBreakpoint();
+    void addChild(Instruction child);
+    List<Instruction> getChildren();
 }

@@ -155,5 +155,7 @@ public class ProgramImpl implements Program {
     public void setFunctionsNames(List<String> functionsNames) {
         this.functionsNames = functionsNames;
     }
-    public InstructionsTree getInstructionsTree() {return instructions.getInstructionsTree();}
+    public InstructionsTree getInstructionsTree() {
+        return instructions.getInstructionsTree();
+    }
 }

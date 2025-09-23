@@ -9,6 +9,7 @@ import logic.model.argument.variable.Variable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractInstruction implements Instruction, Cloneable {
     private boolean isBreakpointSet;
@@ -168,5 +169,17 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         ExpandableInstruction thisInstruction = (ExpandableInstruction) this;
         List<Instruction> expandedInstructions = thisInstruction.expand(1,1, FixedLabel.EMPTY);
         return expandedInstructions.stream().mapToInt(Instruction::getDegree).max().orElse(0) + 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractInstruction that = (AbstractInstruction) o;
+        return isBreakpointSet == that.isBreakpointSet && index == that.index && degree == that.degree && instructionData == that.instructionData && Objects.equals(label, that.label) && Objects.equals(variable, that.variable) && Objects.equals(parentInstruction, that.parentInstruction);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isBreakpointSet, index, instructionData, label, variable, degree, parentInstruction);
     }
 }

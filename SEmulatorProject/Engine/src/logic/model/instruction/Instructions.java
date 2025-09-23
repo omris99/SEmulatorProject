@@ -195,12 +195,59 @@ public class Instructions implements Serializable {
         InstructionsTree tree = new InstructionsTree();
         InstructionsTreeNode root = tree.getRoot();
 
-        for (Instruction instruction : instructions) {
-            root.addChild(createInsructionNode(instruction));
-//            root.addChild(new InstructionsTreeNode(instruction, createInsructionNode(instruction)));
+        Map<Instruction, InstructionsTreeNode> parents = new HashMap<>();
+
+        for(Instruction instruction : instructions) {
+
+            InstructionsTreeNode node = new InstructionsTreeNode(instruction);
+            Instruction parent = instruction.getParent();
+            while (parent != null) {
+                if (parents.containsKey(parent)) {
+                    if(!parents.get(parent).getChildren().contains(node)) {
+                        parents.get(parent).addChild(node);
+                    }
+                } else {
+                    InstructionsTreeNode parentNode = new InstructionsTreeNode(parent);
+                    if(!parentNode.getChildren().contains(node)) {
+                        parentNode.addChild(node);
+                    }
+                    parents.put(parent, parentNode);
+                }
+
+                node = parents.get(parent);
+                parent = parent.getParent();
+            }
+
+            if (!root.getChildren().contains(node)) {
+                root.addChild(node);
+            }
         }
 
         return tree;
     }
 
+    public void createParentsMap(Map<Instruction, InstructionsTreeNode> parents){
+        for(Instruction child : instructions){
+            InstructionsTreeNode childNode = new InstructionsTreeNode(child);
+            Instruction parent = child.getParent();
+            while (parent != null){
+                if(parents.containsKey(parent)){
+                    parents.get(parent).addChild(childNode);
+                }
+                else{
+                    parents.put(parent, childNode);
+                }
+            }
+            if(child.getParent() != null) {
+                if(parents.containsKey(child.getParent())){
+                    parents.get(child.getParent()).addChild(childNode);
+                    parents.put(child, childNode);
+                }
+                else{
+
+                }
+                createParentsMap(parents);
+            }
+        }
+    }
 }

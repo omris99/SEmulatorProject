@@ -59,8 +59,7 @@ public class Instructions implements Serializable {
                     if (argument == FixedLabel.EXIT) {
                         this.instructionsLabels.add((Label) argument);
                     }
-                }
-                else if (argument instanceof CommaSeperatedArguments) {
+                } else if (argument instanceof CommaSeperatedArguments) {
                     this.instructionsInputs.addAll(((CommaSeperatedArguments) argument).detectInputVariables());
                 }
             }
@@ -95,28 +94,6 @@ public class Instructions implements Serializable {
     public int getMaximalDegree() {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
-
-    private InstructionsTreeNode createInsructionNode(Instruction instruction) {
-        InstructionsTreeNode instructionNode = new InstructionsTreeNode(instruction);
-        List<Instruction> children = new LinkedList<>();
-        if(instruction instanceof ExpandableInstruction) {
-            List<Instruction> expanded = ((ExpandableInstruction) instruction)
-                    .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
-            expanded.forEach(child -> children.add(child));
-        }
-        else{
-            return instructionNode;
-        }
-
-        for(Instruction child : children){
-            instructionNode.addChild(createInsructionNode(child));
-//            InstructionsTreeNode childNode = createInsructionNode(instruction, child);
-//            parentNode.addChild(childNode);
-        }
-
-        return instructionNode;
-    }
-
 
     public void expand() {
 
@@ -167,8 +144,7 @@ public class Instructions implements Serializable {
         for (Instruction instruction : instructions) {
             if (instruction.getType() == InstructionType.BASIC) {
                 instructionsTypeCount.put(InstructionType.BASIC, instructionsTypeCount.get(InstructionType.BASIC) + 1);
-            }
-            else {
+            } else {
                 instructionsTypeCount.put(InstructionType.SYNTHETIC, instructionsTypeCount.get(InstructionType.SYNTHETIC) + 1);
             }
         }
@@ -180,35 +156,35 @@ public class Instructions implements Serializable {
         return degree;
     }
 
-    public int getTotalCycles(){
+    public int getTotalCycles() {
         return cycles;
     }
 
-    public void updateInstructionBreakpoint(int instructionIndex, boolean isSet){
+    public void updateInstructionBreakpoint(int instructionIndex, boolean isSet) {
         Instruction instruction = instructions.stream().filter(instr -> instr.getIndex() == instructionIndex).findFirst().orElse(null);
-        if(instruction != null){
+        if (instruction != null) {
             instruction.setBreakpoint(isSet);
         }
     }
 
-    public InstructionsTree getInstructionsTree(){
+    public InstructionsTree getInstructionsTree() {
         InstructionsTree tree = new InstructionsTree();
         InstructionsTreeNode root = tree.getRoot();
 
         Map<Instruction, InstructionsTreeNode> parents = new HashMap<>();
 
-        for(Instruction instruction : instructions) {
+        for (Instruction instruction : instructions) {
 
             InstructionsTreeNode node = new InstructionsTreeNode(instruction);
             Instruction parent = instruction.getParent();
             while (parent != null) {
                 if (parents.containsKey(parent)) {
-                    if(!parents.get(parent).getChildren().contains(node)) {
+                    if (!parents.get(parent).getChildren().contains(node)) {
                         parents.get(parent).addChild(node);
                     }
                 } else {
                     InstructionsTreeNode parentNode = new InstructionsTreeNode(parent);
-                    if(!parentNode.getChildren().contains(node)) {
+                    if (!parentNode.getChildren().contains(node)) {
                         parentNode.addChild(node);
                     }
                     parents.put(parent, parentNode);
@@ -223,31 +199,7 @@ public class Instructions implements Serializable {
             }
         }
 
+
         return tree;
-    }
-
-    public void createParentsMap(Map<Instruction, InstructionsTreeNode> parents){
-        for(Instruction child : instructions){
-            InstructionsTreeNode childNode = new InstructionsTreeNode(child);
-            Instruction parent = child.getParent();
-            while (parent != null){
-                if(parents.containsKey(parent)){
-                    parents.get(parent).addChild(childNode);
-                }
-                else{
-                    parents.put(parent, childNode);
-                }
-            }
-            if(child.getParent() != null) {
-                if(parents.containsKey(child.getParent())){
-                    parents.get(child.getParent()).addChild(childNode);
-                    parents.put(child, childNode);
-                }
-                else{
-
-                }
-                createParentsMap(parents);
-            }
-        }
     }
 }

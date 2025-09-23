@@ -15,6 +15,11 @@ public class InstructionsTreeNode {
         this.children = createChildrenNodes(children);
     }
 
+    public InstructionsTreeNode(Instruction instruction) {
+        this.instruction = instruction;
+        this.children = new LinkedList<>();
+    }
+
     public InstructionsTreeNode() {
         this.children = new LinkedList<>();
     }
@@ -34,7 +39,7 @@ public class InstructionsTreeNode {
     private List<InstructionsTreeNode> createChildrenNodes(List<Instruction> children){
         List<InstructionsTreeNode> childrenNodes = new ArrayList<>();
         for(Instruction child : children){
-            childrenNodes.add(new InstructionsTreeNode(child, child.getChildren()));
+//            childrenNodes.add(new InstructionsTreeNode(child, child.getChildren()));
         }
 
         return childrenNodes;

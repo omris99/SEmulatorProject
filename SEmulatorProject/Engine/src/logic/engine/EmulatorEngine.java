@@ -343,15 +343,7 @@ public class EmulatorEngine implements Engine {
 
 
     public InstructionsTree getInstructionsTree() {
-        InstructionsTreeNode root = new InstructionsTreeNode();
-        InstructionsTree tree = new InstructionsTree(root);
-        Program fullyExpandedProgram = currentContextProgram.getExpandedProgram(getMaximalDegree());
-
-        for (Instruction instruction : currentContextProgram.getInstructions()) {
-            root.addChild(new InstructionsTreeNode(instruction, instruction.getChildren()));
-        }
-
-        return tree;
+        return currentContextProgram.getInstructionsTree();
     }
 
 

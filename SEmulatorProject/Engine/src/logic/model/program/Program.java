@@ -1,6 +1,7 @@
 package logic.model.program;
 
 import dto.DTO;
+import logic.instructiontree.InstructionsTree;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
@@ -22,4 +23,5 @@ public interface Program extends Serializable {
     int getMaximalDegree();
     DTO createDTO();
     int getDegree();
+    InstructionsTree getInstructionsTree();
 }

@@ -61,8 +61,7 @@ public class InstructionsTreeTableController {
         instructionsTreeTable.setShowRoot(false);
     }
 
-    private TreeItem<InstructionDTO> createTreeItemRecursive(
-            InstructionsTreeNode instruction) {
+    private TreeItem<InstructionDTO> createTreeItemRecursive(InstructionsTreeNode instruction) {
         List<InstructionsTreeNode> children = instruction.getChildren();
         TreeItem<InstructionDTO> item = new TreeItem<>(instruction.getInstruction().getInstructionDTO());
 

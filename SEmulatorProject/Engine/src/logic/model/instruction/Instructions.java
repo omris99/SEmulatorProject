@@ -1,5 +1,7 @@
 package logic.model.instruction;
 
+import logic.instructiontree.InstructionsTree;
+import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
@@ -94,6 +96,27 @@ public class Instructions implements Serializable {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
+    private InstructionsTreeNode createInsructionNode(Instruction instruction) {
+        InstructionsTreeNode instructionNode = new InstructionsTreeNode(instruction);
+        List<Instruction> children = new LinkedList<>();
+        if(instruction instanceof ExpandableInstruction) {
+            List<Instruction> expanded = ((ExpandableInstruction) instruction)
+                    .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
+            expanded.forEach(child -> children.add(child));
+        }
+        else{
+            return instructionNode;
+        }
+
+        for(Instruction child : children){
+            instructionNode.addChild(createInsructionNode(child));
+//            InstructionsTreeNode childNode = createInsructionNode(instruction, child);
+//            parentNode.addChild(childNode);
+        }
+
+        return instructionNode;
+    }
+
 
     public void expand() {
 
@@ -104,11 +127,11 @@ public class Instructions implements Serializable {
                         .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
                 expanded.forEach(newInstruction -> {
                     newInstruction.setParent(instruction);
-                    instruction.addChild(newInstruction);
                 });
                 addListOfInstructions(expanded, i);
                 i += expanded.size() - 1;
             }
+
         }
 
         resetIndexes();
@@ -166,6 +189,18 @@ public class Instructions implements Serializable {
         if(instruction != null){
             instruction.setBreakpoint(isSet);
         }
+    }
+
+    public InstructionsTree getInstructionsTree(){
+        InstructionsTree tree = new InstructionsTree();
+        InstructionsTreeNode root = tree.getRoot();
+
+        for (Instruction instruction : instructions) {
+            root.addChild(createInsructionNode(instruction));
+//            root.addChild(new InstructionsTreeNode(instruction, createInsructionNode(instruction)));
+        }
+
+        return tree;
     }
 
 }

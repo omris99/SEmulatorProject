@@ -6,6 +6,7 @@ import dto.RunResultsDTO;
 import logic.exceptions.NumberNotInRangeException;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
+import logic.instructiontree.InstructionsTree;
 import logic.model.argument.Argument;
 import logic.model.argument.ArgumentType;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
@@ -32,7 +33,7 @@ public class Function implements Program, Argument {
     private final String userString;
     private final Instructions instructions;
     private List<String> functionsNames;
-    private Map<Integer, Program> cachedExpandations = new HashMap<>();
+    private final Map<Integer, Program> cachedExpandations = new HashMap<>();
 
 
     public Function(String name, String userString) {
@@ -109,9 +110,9 @@ public class Function implements Program, Argument {
             return this;
         }
         else {
-            if(cachedExpandations.containsKey(degree)){
-                return cachedExpandations.get(degree);
-            }
+//            if(cachedExpandations.containsKey(degree)){
+//                return cachedExpandations.get(degree);
+//            }
 
             Function expandedProgram = new Function(name, userString);
             for (Instruction instruction : instructions.getInstructionsList()) {
@@ -265,6 +266,10 @@ public class Function implements Program, Argument {
         return getAllInstructionsInputs().stream()
                 .sorted(Comparator.comparingInt(Variable::getNumber))
                 .map(Argument::getRepresentation).collect(Collectors.toList());
+    }
+
+    public InstructionsTree getInstructionsTree() {
+        return instructions.getInstructionsTree();
     }
 
 }

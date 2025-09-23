@@ -3,6 +3,7 @@ package logic.model.program;
 import dto.DTO;
 import dto.ProgramDTO;
 import logic.exceptions.NumberNotInRangeException;
+import logic.instructiontree.InstructionsTree;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -154,4 +155,5 @@ public class ProgramImpl implements Program {
     public void setFunctionsNames(List<String> functionsNames) {
         this.functionsNames = functionsNames;
     }
+    public InstructionsTree getInstructionsTree() {return instructions.getInstructionsTree();}
 }

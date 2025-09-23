@@ -3,8 +3,8 @@ package logic.instructiontree;
 public class InstructionsTree {
     InstructionsTreeNode root;
 
-    public InstructionsTree(InstructionsTreeNode root) {
-        this.root = root;
+    public InstructionsTree() {
+        this.root = new InstructionsTreeNode();
     }
 
     public InstructionsTreeNode getRoot() {

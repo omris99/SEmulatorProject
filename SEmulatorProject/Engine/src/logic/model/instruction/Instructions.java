@@ -160,13 +160,6 @@ public class Instructions implements Serializable {
         return cycles;
     }
 
-    public void updateInstructionBreakpoint(int instructionIndex, boolean isSet) {
-        Instruction instruction = instructions.stream().filter(instr -> instr.getIndex() == instructionIndex).findFirst().orElse(null);
-        if (instruction != null) {
-            instruction.setBreakpoint(isSet);
-        }
-    }
-
     public InstructionsTree getInstructionsTree() {
         InstructionsTree tree = new InstructionsTree();
         InstructionsTreeNode root = tree.getRoot();

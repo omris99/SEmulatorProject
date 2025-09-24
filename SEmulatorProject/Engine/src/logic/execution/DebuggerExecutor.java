@@ -34,6 +34,9 @@ public class DebuggerExecutor implements ProgramExecutor {
         Label nextLabel;
 
         do {
+            contextsHistory.add(context);
+            context = contextsHistory.getLast().copy();
+
             if (currentInstructionToExecute.getBreakpoint() && !isPausedAtBreakpoint) {
                 isPausedAtBreakpoint = true;
                 return context.getVariablesStatus();

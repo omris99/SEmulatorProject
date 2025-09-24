@@ -8,12 +8,8 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import logic.instructiontree.InstructionsTree;
 import logic.instructiontree.InstructionsTreeNode;
-import logic.model.instruction.Instruction;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class InstructionsTreeTableController {
 
@@ -62,8 +58,8 @@ public class InstructionsTreeTableController {
     }
 
     private TreeItem<InstructionDTO> createTreeItemRecursive(InstructionsTreeNode instruction) {
-        List<InstructionsTreeNode> children = instruction.getChildren();
-        TreeItem<InstructionDTO> item = new TreeItem<>(instruction.getInstruction().getInstructionDTO());
+        List<InstructionsTreeNode> children = instruction.getChildrenNodes();
+        TreeItem<InstructionDTO> item = new TreeItem<>(instruction.getInstruction());
 
         if (!children.isEmpty()) {
             for (InstructionsTreeNode child : children) {
@@ -79,7 +75,7 @@ public class InstructionsTreeTableController {
         root.getChildren().clear();
 
         InstructionsTreeNode treeRoot = instructionsTree.getRoot();
-        for(InstructionsTreeNode node : treeRoot.getChildren()) {
+        for(InstructionsTreeNode node : treeRoot.getChildrenNodes()) {
             TreeItem<InstructionDTO> childItem = createTreeItemRecursive(node);
             this.root.getChildren().add(childItem);
         }

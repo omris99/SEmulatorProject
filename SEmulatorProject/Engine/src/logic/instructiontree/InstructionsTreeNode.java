@@ -1,15 +1,15 @@
 package logic.instructiontree;
 
-import logic.model.instruction.Instruction;
+import dto.InstructionDTO;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class InstructionsTreeNode {
-    private Instruction instruction;
+    private InstructionDTO instruction;
     private List<InstructionsTreeNode> children;
 
-    public InstructionsTreeNode(Instruction instruction) {
+    public InstructionsTreeNode(InstructionDTO instruction) {
         this.instruction = instruction;
         this.children = new LinkedList<>();
     }
@@ -18,15 +18,15 @@ public class InstructionsTreeNode {
         this.children = new LinkedList<>();
     }
 
-    public void addChild(InstructionsTreeNode child) {
+    public void addChildNode(InstructionsTreeNode child) {
         this.children.add(child);
     }
 
-    public List<InstructionsTreeNode> getChildren() {
+    public List<InstructionsTreeNode> getChildrenNodes() {
         return children;
     }
 
-    public Instruction getInstruction() {
+    public InstructionDTO getInstruction() {
         return instruction;
     }
 }

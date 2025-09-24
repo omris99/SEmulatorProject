@@ -163,36 +163,32 @@ public class Instructions implements Serializable {
     public InstructionsTree getInstructionsTree() {
         InstructionsTree tree = new InstructionsTree();
         InstructionsTreeNode root = tree.getRoot();
-
         Map<Instruction, InstructionsTreeNode> parents = new HashMap<>();
 
         for (Instruction instruction : instructions) {
-
-            InstructionsTreeNode node = new InstructionsTreeNode(instruction);
+            InstructionsTreeNode node = new InstructionsTreeNode(instruction.getInstructionDTO());
             Instruction parent = instruction.getParent();
+
             while (parent != null) {
-                if (parents.containsKey(parent)) {
-                    if (!parents.get(parent).getChildren().contains(node)) {
-                        parents.get(parent).addChild(node);
-                    }
-                } else {
-                    InstructionsTreeNode parentNode = new InstructionsTreeNode(parent);
-                    if (!parentNode.getChildren().contains(node)) {
-                        parentNode.addChild(node);
-                    }
-                    parents.put(parent, parentNode);
+                InstructionsTreeNode parentNode = parents.computeIfAbsent(
+                        parent,
+                        p -> new InstructionsTreeNode(p.getInstructionDTO())
+                );
+
+                if (!parentNode.getChildrenNodes().contains(node)) {
+                    parentNode.addChildNode(node);
                 }
 
-                node = parents.get(parent);
+                node = parentNode;
                 parent = parent.getParent();
             }
 
-            if (!root.getChildren().contains(node)) {
-                root.addChild(node);
+            if (!root.getChildrenNodes().contains(node)) {
+                root.addChildNode(node);
             }
         }
 
-
         return tree;
     }
+
 }

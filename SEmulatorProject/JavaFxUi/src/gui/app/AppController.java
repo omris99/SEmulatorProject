@@ -170,6 +170,7 @@ public class AppController {
     private void resetComponents() {
         debuggerWindowController.reset();
         historyWindowController.reset();
+        displayCommandsBarController.disableTreeTableViewButton(false);
     }
 
     public void startDebuggingSession(Map<String, String> inputVariables) {
@@ -266,9 +267,9 @@ public class AppController {
             InstructionsTreeTableController controller = loader.getController();
             InstructionsTree instructionsTree = engine.getInstructionsTree();
             controller.setInstructions(instructionsTree);
-            Scene scene = new Scene(load, 400, 200);
+            Scene scene = new Scene(load, 700, 400);
             Stage showWindow = new Stage();
-            showWindow.setTitle("Tree table view of instructions");
+            showWindow.setTitle("Tree Table View");
             showWindow.setScene(scene);
             showWindow.show();
         } catch (Exception e) {

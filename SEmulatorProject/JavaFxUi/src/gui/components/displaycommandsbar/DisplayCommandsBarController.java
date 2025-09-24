@@ -18,11 +18,15 @@ public class DisplayCommandsBarController {
     @FXML
     private AppController appController;
 
+    @FXML
+    private Button showTreeTableViewButton;
+
     private boolean animationsDisabled = true;
 
     @FXML
     public void initialize() {
         animationsButton.setText("OFF");
+        showTreeTableViewButton.setDisable(true);
 
         for(Theme theme : Theme.values()) {
             themeChoiceBox.getItems().add(theme);
@@ -49,5 +53,9 @@ public class DisplayCommandsBarController {
     }
     public void setAppController(AppController appController) {
         this.appController = appController;
+    }
+
+    public void disableTreeTableViewButton(boolean disable) {
+        showTreeTableViewButton.setDisable(disable);
     }
 }

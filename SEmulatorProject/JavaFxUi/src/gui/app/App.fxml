@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="app-view" alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="2560.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
+<VBox id="app-view" alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="2560.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.app.AppController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="126.0" prefWidth="1920.0" spacing="15.0">
          <VBox.margin>

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" minHeight="-Infinity" prefHeight="259.0" prefWidth="833.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.historywindow.HistoryWindowController">
+<VBox alignment="CENTER" minHeight="-Infinity" prefHeight="259.0" prefWidth="833.0" styleClass="window-view" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.historywindow.HistoryWindowController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="1257.0" styleClass="window-header" text="History" textFill="WHITE">
          <font>

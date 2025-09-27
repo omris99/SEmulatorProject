@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="404.0" stylesheets="@ExecutionStateWindow.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
+<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="404.0" stylesheets="@ExecutionStateWindow.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
    <children>
       <Label alignment="CENTER" prefHeight="23.0" prefWidth="432.0" styleClass="component-header" text="Execution State" textFill="WHITE">
          <font>

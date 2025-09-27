@@ -92,4 +92,17 @@ public class JumpEqualFunction extends AbstractInstruction implements Instructio
         copy.arguments = new HashMap<>(this.arguments);
         return copy;
     }
+
+    @Override
+    public int getCycles(){
+        int totalCycles = super.getCycles();
+        Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
+        if(contextFunction != null) {
+            totalCycles += contextFunction.getTotalCycles();
+        }
+
+        totalCycles += ((CommaSeperatedArguments) arguments.get(InstructionArgument.FUNCTION_ARGUMENTS)).getTotalCycles();
+
+        return totalCycles;
+    }
 }

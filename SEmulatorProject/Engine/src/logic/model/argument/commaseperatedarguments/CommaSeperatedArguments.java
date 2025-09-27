@@ -10,12 +10,10 @@ import logic.model.program.Function;
 import java.util.*;
 
 public class CommaSeperatedArguments implements Argument {
-    private String arguments;
-    List<Argument> argumentList;
+    private final String arguments;
 
     public CommaSeperatedArguments(String arguments) {
         this.arguments = arguments;
-        this.argumentList = convertCommaSeperatedArgumentsStringToArgumentsList(arguments);
     }
 
     @Override
@@ -28,30 +26,13 @@ public class CommaSeperatedArguments implements Argument {
         return 0;
     }
 
-    private List<Argument> convertCommaSeperatedArgumentsStringToArgumentsList(String arguments) {
-        List<String> extractedArguments = extractArguments();
-        List<Argument> argumentList = new ArrayList<>();
-        for(String stringArgument : extractedArguments){
-            if(VariableImpl.stringVarTypeToVariableType(stringArgument.substring(0,1)) != null){
-                argumentList.add(new VariableImpl(stringArgument));
-            }else if(stringArgument.startsWith("(") && stringArgument.endsWith(")")){
-                argumentList.add(new CommaSeperatedArguments(stringArgument.substring(1, stringArgument.length() - 1)));
-            }else{
-//                argumentList.add(Functions.getFunctionByName(stringArgument));
-            }
-        }
-        return argumentList;
-    }
-
-
-
     public Set<Variable> detectInputVariables() {
         Set<Variable> inputVariables = new HashSet<>();
         List<String> splitedArgumentsString = extractArguments();
         for (String argument : splitedArgumentsString) {
-            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) == VariableType.INPUT) {
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0, 1)) == VariableType.INPUT) {
                 inputVariables.add(new VariableImpl(argument));
-            }else if(argument.startsWith("(") && argument.endsWith(")")) {
+            } else if (argument.startsWith("(") && argument.endsWith(")")) {
                 CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
                 inputVariables.addAll(nestedArguments.detectInputVariables());
             }
@@ -99,22 +80,16 @@ public class CommaSeperatedArguments implements Argument {
         return new CommaSeperatedArguments(stringArgument);
     }
 
-    public List<Argument> getArgumentList() {
-        return argumentList;
-    }
-
-    public CommaSeperatedArguments changeInputsToActualVariables(Map<Variable, Variable> variableMapping){
+    public CommaSeperatedArguments changeInputsToActualVariables(Map<Variable, Variable> variableMapping) {
         List<String> extractedArguments = extractArguments();
         List<String> newArguments = new LinkedList<>();
-        for(String argument : extractedArguments){
-            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+        for (String argument : extractedArguments) {
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0, 1)) != null) {
                 newArguments.add(variableMapping.get(new VariableImpl(argument)).getRepresentation());
-            }
-            else if(argument.startsWith("(") && argument.endsWith(")")){
+            } else if (argument.startsWith("(") && argument.endsWith(")")) {
                 CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
-                newArguments.add("("+String.join(",", nestedArguments.changeInputsToActualVariables(variableMapping).extractArguments())+")");
-            }
-            else {
+                newArguments.add("(" + String.join(",", nestedArguments.changeInputsToActualVariables(variableMapping).extractArguments()) + ")");
+            } else {
                 newArguments.add(argument);
             }
         }
@@ -122,18 +97,16 @@ public class CommaSeperatedArguments implements Argument {
         return new CommaSeperatedArguments(String.join(",", newArguments));
     }
 
-    public String getUserDisplayArguments(){
+    public String getUserDisplayArguments() {
         List<String> extractedArguments = extractArguments();
         List<String> newArguments = new LinkedList<>();
-        for(String argument : extractedArguments){
-            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+        for (String argument : extractedArguments) {
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0, 1)) != null) {
                 newArguments.add(argument);
-            }
-            else if(argument.startsWith("(") && argument.endsWith(")")){
+            } else if (argument.startsWith("(") && argument.endsWith(")")) {
                 CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
-                newArguments.add("("+String.join(",", nestedArguments.getUserDisplayArguments())+")");
-            }
-            else {
+                newArguments.add("(" + String.join(",", nestedArguments.getUserDisplayArguments()) + ")");
+            } else {
                 newArguments.add(FunctionsRepo.getInstance().getFunctionUserString(argument));
             }
         }
@@ -144,16 +117,31 @@ public class CommaSeperatedArguments implements Argument {
     public List<Variable> getAllVariables() {
         List<Variable> variables = new LinkedList<>();
         List<String> extractedArguments = extractArguments();
-        for(String argument : extractedArguments){
-            if(VariableImpl.stringVarTypeToVariableType(argument.substring(0,1)) != null){
+        for (String argument : extractedArguments) {
+            if (VariableImpl.stringVarTypeToVariableType(argument.substring(0, 1)) != null) {
                 variables.add(new VariableImpl(argument));
-            }
-            else if(argument.startsWith("(") && argument.endsWith(")")){
+            } else if (argument.startsWith("(") && argument.endsWith(")")) {
                 CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
                 variables.addAll(nestedArguments.getAllVariables());
             }
         }
 
         return variables;
+    }
+
+    public int getTotalCycles() {
+        int totalCycles = 0;
+        List<String> extractedArguments = extractArguments();
+
+        for (String argument : extractedArguments) {
+            if (argument.startsWith("(") && argument.endsWith(")")) {
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                totalCycles += nestedArguments.getTotalCycles();
+            } else if (FunctionsRepo.getInstance().getFunctionByName(argument) != null) {
+                totalCycles += FunctionsRepo.getInstance().getFunctionByName(argument).getTotalCycles();
+            }
+        }
+
+        return totalCycles;
     }
 }

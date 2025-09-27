@@ -75,7 +75,6 @@ public class EmulatorEngine implements Engine {
         setCurrentContextProgram(mainProgram);
 
         savedHistories.clear();
-//        history.clear();
     }
 
     public void changeLoadedProgramToFunction(String functionName) {

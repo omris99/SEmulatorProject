@@ -68,13 +68,13 @@ public class AppController {
             protected Void call() throws Exception {
                 try {
                     updateProgress(15, 100);
-//                    updateMessage("Loading program...");
                     updateMessage(selectedFile.getAbsolutePath());
                     engine.loadProgram(selectedFile.getAbsolutePath());
                     updateProgress(50, 100);
                     Thread.sleep(100);
 
                     ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+
                     Platform.runLater(() -> {
                         instructionWindowController.onProgramLoaded(programDTO);
                         resetComponents();

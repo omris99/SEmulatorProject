@@ -60,12 +60,6 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             parentInstructions.add(currentParentInstruction.getInstructionDTO());
             currentParentInstruction = currentParentInstruction.getParent();
         }
-//        List<Integer> childrenIndexes = new LinkedList<>();
-//        if(children != null && !children.isEmpty()){
-//            for(Instruction child : this.children){
-//                childrenIndexes.add(child.getIndex());
-//            }
-//        }
 
         return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels(), isBreakpointSet);
     }

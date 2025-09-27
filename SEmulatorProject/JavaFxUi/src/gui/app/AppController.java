@@ -163,6 +163,7 @@ public class AppController {
     }
 
     public void reRunSelectedHistory(RunResultsDTO selectedRun) {
+        prepareDebuggerForNewRun();
         instructionWindowController.setProgramDegree(selectedRun.getDegree());
         debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesInitialValues());
     }

@@ -40,14 +40,14 @@ public class EmulatorEngine implements Engine {
     private Program mainProgram;
     private Program currentContextProgram;
     private Program currentOnScreenProgram;
-    //    private Program[] loadedProgramExpendations;
-    private final List<RunResultsDTO> history;
+//    private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
-    private final Map<String, Program> pastLoadedPrograms;
+    private final Map<String, List<RunResultsDTO>> savedHistories;
 
     public EmulatorEngine() {
-        history = new LinkedList<>();
-        pastLoadedPrograms = new HashMap<>();
+//        history = new LinkedList<>();
+        this.savedHistories = new HashMap<>();
+
     }
 
     @Override
@@ -73,9 +73,9 @@ public class EmulatorEngine implements Engine {
 
         this.mainProgram = loadedProgram;
         setCurrentContextProgram(mainProgram);
-        pastLoadedPrograms.put(loadedProgram.getName(), loadedProgram);
 
-        history.clear();
+        savedHistories.clear();
+//        history.clear();
     }
 
     public void changeLoadedProgramToFunction(String functionName) {
@@ -88,10 +88,9 @@ public class EmulatorEngine implements Engine {
         } else {
             functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
             setCurrentContextProgram(FunctionsRepo.getInstance().getFunctionByName(functionName));
-            pastLoadedPrograms.put(functionName, currentContextProgram);
         }
 
-        history.clear();
+//        history.clear();
     }
 
     @Override
@@ -124,7 +123,8 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
-        history.add(runResults);
+        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
+//        history.add(runResults);
 
         return runResults;
     }
@@ -150,7 +150,8 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
-        history.add(runResults);
+        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
+//        history.add(runResults);
 
         return runResults;
     }
@@ -195,7 +196,7 @@ public class EmulatorEngine implements Engine {
 
     @Override
     public List<RunResultsDTO> getHistory() {
-        return history;
+        return savedHistories.getOrDefault(currentOnScreenProgram.getName(), new LinkedList<>());
     }
 
     public int getMaximalDegree() {
@@ -267,7 +268,7 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.isFinished()
         );
         if (debuggerExecutor.isFinished()) {
-            history.add(debugResults);
+            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
         }
 
         return debugResults;
@@ -280,7 +281,7 @@ public class EmulatorEngine implements Engine {
 
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepBackward();
 
-        RunResultsDTO debugResults = new RunResultsDTO(
+        return new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
                 debuggerExecutor.getInitialInputVariablesMap(),
@@ -289,8 +290,6 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished()
         );
-
-        return debugResults;
     }
 
     public void stopDebuggingSession() {
@@ -313,7 +312,7 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.isFinished());
         if (debuggerExecutor.isFinished()) {
-            history.add(debugResults);
+            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
         }
 
         return debugResults;
@@ -342,6 +341,4 @@ public class EmulatorEngine implements Engine {
         Program fullyExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
         return fullyExpandedProgram.getInstructionsTree();
     }
-
-
 }

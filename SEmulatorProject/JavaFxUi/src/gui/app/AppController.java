@@ -246,6 +246,7 @@ public class AppController {
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         instructionWindowController.programChanged(programDTO);
         resetComponents();
+        updateHistoryWindow(engine.getHistory());
     }
 
     public void disableAnimations(boolean enable) {

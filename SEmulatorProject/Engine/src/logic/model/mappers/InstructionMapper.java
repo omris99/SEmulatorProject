@@ -79,8 +79,8 @@ public class InstructionMapper{
             InstructionArgument argumentType = InstructionArgument.fromXmlNameFormat(argumentName);
             switch (argumentType.getType()) {
                 case LABEL:
-                    if(jaxbInstructionArgument.getValue().toUpperCase().equals("EXIT")) {
-                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
+                    if(jaxbInstructionArgument.getValue().equalsIgnoreCase("EXIT")) {
+                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), FixedLabel.EXIT);
                     }
                     else {
                         if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){

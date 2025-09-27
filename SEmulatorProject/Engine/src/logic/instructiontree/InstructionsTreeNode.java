@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InstructionsTreeNode {
     private InstructionDTO instruction;
-    private List<InstructionsTreeNode> children;
+    private final List<InstructionsTreeNode> children;
 
     public InstructionsTreeNode(InstructionDTO instruction) {
         this.instruction = instruction;

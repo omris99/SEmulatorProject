@@ -13,7 +13,7 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     private final Program program;
     private InstructionsQueue instructionsQueue;
     private int cyclesCount;
-    private int degree;
+    private final int degree;
 
     public ProgramExecutorImpl(Program program) {
         this.program = program;

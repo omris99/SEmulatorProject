@@ -14,7 +14,7 @@ public class ExecutionContextImpl implements ExecutionContext {
 
         variablesStatus.put(Variable.RESULT, 0L);
 
-        for(Variable variable : programWorkVariables) {
+        for (Variable variable : programWorkVariables) {
             variablesStatus.put(variable, 0L);
         }
     }

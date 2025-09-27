@@ -26,10 +26,10 @@ public abstract class AbstractMenu implements Menu{
         System.out.println(header);
         System.out.println(getUnderLine(header));
         for(MenuOption option : menuOptions){
-            System.out.println(String.format("%d. %s", i++, option.getMenuDisplay()));
+            System.out.printf("%d. %s%n", i++, option.getMenuDisplay());
         }
 
-        System.out.print(String.format("\nPlease Enter Your Choice (%d - %d): ", 1, menuOptions.size()));
+        System.out.printf("\nPlease Enter Your Choice (%d - %d): ", 1, menuOptions.size());
         Scanner scanner = new Scanner(System.in);
         while(!validInput){
             if(scanner.hasNextInt()){
@@ -56,8 +56,6 @@ public abstract class AbstractMenu implements Menu{
 
 
     private String getUnderLine(String text){
-        StringBuilder underLineToReturn = new StringBuilder();
-        underLineToReturn.append(String.valueOf(underLineChar).repeat(text.length() + 2));
-        return underLineToReturn.toString();
+        return String.valueOf(underLineChar).repeat(text.length() + 2);
     }
 }

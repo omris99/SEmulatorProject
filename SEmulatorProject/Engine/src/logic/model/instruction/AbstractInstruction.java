@@ -140,8 +140,7 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             associatedArgumentsAndLabels.add(label.getRepresentation());
         }
 
-        if(this instanceof InstructionWithArguments){
-            InstructionWithArguments instructionWithArguments = (InstructionWithArguments) this;
+        if(this instanceof InstructionWithArguments instructionWithArguments){
             for(Argument argument : instructionWithArguments.getArguments().values()){
                 if(argument instanceof Variable || argument instanceof Label){
                     associatedArgumentsAndLabels.add(argument.getRepresentation());

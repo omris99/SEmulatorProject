@@ -6,5 +6,5 @@ public enum ArgumentType {
     CONSTANT,
     NAME,
     FUNCTION,
-    COMMA_SEPERATED_ARGUMENTS;
+    COMMA_SEPERATED_ARGUMENTS
 }

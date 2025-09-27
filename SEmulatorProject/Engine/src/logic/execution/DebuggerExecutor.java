@@ -11,7 +11,7 @@ import java.util.*;
 public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
-    private List<ExecutionContext> contextsHistory;
+    private final List<ExecutionContext> contextsHistory;
     private List<InstructionsQueue> queueHistory;
     private InstructionsQueue instructionsQueue;
     private final Map<Variable, Long> initialInputVariablesMap;

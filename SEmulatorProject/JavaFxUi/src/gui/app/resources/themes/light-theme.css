@@ -1,7 +1,7 @@
 .button {
     -fx-background-color: linear-gradient(to bottom, #00a6ff, #005baf);
     -fx-text-fill: white;
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: 600;
     -fx-background-radius: 25px;
@@ -16,7 +16,7 @@
 }
 
 #sEmulatorLogo {
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-background-color: linear-gradient(to bottom, #00a6ff, #ffffff);
     -fx-text-fill: white;
     -fx-font-size: 23px;
@@ -28,7 +28,7 @@
 
 
 .window-header {
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-background-color: linear-gradient(to bottom, #00a6ff, rgba(0, 234, 255, 0.13));
     -fx-text-fill: white;
     -fx-font-size: 18px;
@@ -39,7 +39,7 @@
 }
 
 .component-header {
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-background-color: #00a6ff;
     -fx-text-fill: white;
     -fx-font-size: 15px;
@@ -49,7 +49,7 @@
 }
 
 .mini-window-header {
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-background-color: #005baf;
     -fx-text-fill: white;
     -fx-font-size: 13px;
@@ -74,7 +74,7 @@
 .choice-box {
     -fx-background-color: #ffffff;
     -fx-text-fill: black;
-    -fx-font-family: "Optima", "Segoe UI", "Helvetica", "Arial", sans-serif;
+    -fx-font-family: "Optima", "Candara", "Segoe Script", "Helvetica", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: 500;
     -fx-alignment: center-left;

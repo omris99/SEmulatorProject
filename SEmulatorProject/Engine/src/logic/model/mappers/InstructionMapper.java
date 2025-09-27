@@ -3,7 +3,6 @@ package logic.model.mappers;
 import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
 import logic.model.argument.Argument;
-import logic.model.argument.ArgumentType;
 import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.constant.Constant;

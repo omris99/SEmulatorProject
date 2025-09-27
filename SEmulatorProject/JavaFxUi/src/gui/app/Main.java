@@ -19,9 +19,9 @@ public class Main extends Application {
         primaryStage.getIcons().add(icon);
 
         Parent load = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("App.fxml")));
-        scene = new Scene(load, 1540, 720);
+        scene = new Scene(load, 1540, 750);
         primaryStage.setMinWidth(1100);
-        primaryStage.setMinHeight(700);
+        primaryStage.setMinHeight(750);
         applyTheme(Theme.CLASSIC);
 
 

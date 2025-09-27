@@ -100,4 +100,8 @@ public class HistoryWindowController {
     public void reset(){
             historyTable.getItems().clear();
     }
+
+    public void disableReRunButton(boolean disable){
+        Platform.runLater(() -> reRunButton.setDisable(disable));
+    }
 }

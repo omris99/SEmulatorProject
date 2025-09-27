@@ -63,4 +63,8 @@ public class LoadFileBarController {
     public void removeProgressBarErrorStyle() {
         progressBar.getStyleClass().remove("load-error");
     }
+
+    public void disableLoadButton(boolean disable) {
+        LoadFileButton.setDisable(disable);
+    }
 }

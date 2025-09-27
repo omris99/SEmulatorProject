@@ -182,6 +182,8 @@ public class AppController {
             debuggerWindowController.updateRunResults((RunResultsDTO) initialState);
             instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
             instructionWindowController.disableDegreeChoiceControls(true);
+            historyWindowController.disableReRunButton(true);
+            loadFileBarController.disableLoadButton(true);
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Starting Execution");
@@ -217,7 +219,6 @@ public class AppController {
 
     public void stopDebuggingSession() {
         engine.stopDebuggingSession();
-//        instructionWindowController.stopHighlightingNextInstructionToExecute();
         finishExecutionMode();
     }
 
@@ -230,9 +231,6 @@ public class AppController {
         else {
             instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         }
-//        instructionWindowController.stopHighlightingNextInstructionToExecute();
-//        updateHistoryWindow(engine.getHistory());
-//        finishExecutionMode();
     }
 
     private void finishExecutionMode() {
@@ -240,6 +238,8 @@ public class AppController {
         debuggerWindowController.finishExecutionMode();
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
+        historyWindowController.disableReRunButton(false);
+        loadFileBarController.disableLoadButton(false);
     }
 
     public void changeLoadedProgramToFunction(String functionName) {

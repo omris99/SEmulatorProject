@@ -90,7 +90,6 @@ public class InstructionsWindowController {
 
     public void onHighlightSelectionChange(String selection) {
         instructionsTableController.highlightInstructionsWithSelection(selection);
-//        appController.highLightInstructionsWithSelection(selection);
     }
 
     public void onProgramSelectorChange(String selection) {

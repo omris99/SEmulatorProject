@@ -40,12 +40,10 @@ public class EmulatorEngine implements Engine {
     private Program mainProgram;
     private Program currentContextProgram;
     private Program currentOnScreenProgram;
-//    private final List<RunResultsDTO> history;
     private DebuggerExecutor debuggerExecutor;
     private final Map<String, List<RunResultsDTO>> savedHistories;
 
     public EmulatorEngine() {
-//        history = new LinkedList<>();
         this.savedHistories = new HashMap<>();
 
     }
@@ -88,8 +86,6 @@ public class EmulatorEngine implements Engine {
             functionName = FunctionsRepo.getInstance().getFunctionNameByUserString(functionName);
             setCurrentContextProgram(FunctionsRepo.getInstance().getFunctionByName(functionName));
         }
-
-//        history.clear();
     }
 
     @Override
@@ -123,7 +119,6 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
-//        history.add(runResults);
 
         return runResults;
     }
@@ -150,7 +145,6 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
-//        history.add(runResults);
 
         return runResults;
     }
@@ -182,10 +176,6 @@ public class EmulatorEngine implements Engine {
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
         return Utils.createInputVariablesMap(programActualInputVariables, inputs);
-    }
-
-    public DTO getExpandedProgramDTO(int degree) {
-        return currentContextProgram.getExpandedProgram(degree).createDTO();
     }
 
     public DTO showExpandedProgramOnScreen(int degree) {

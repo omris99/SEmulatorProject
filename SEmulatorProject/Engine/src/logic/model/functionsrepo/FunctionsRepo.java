@@ -21,15 +21,6 @@ public class FunctionsRepo {
         return functions.get(name);
     }
 
-    public Function getFunctionByUserString(String userString){
-        for(Function function : functions.values()){
-            if(function.getRepresentation().equals(userString)){
-                return function;
-            }
-        }
-        return null;
-    }
-
     public void addFunction(Function function){
         functions.put(function.getName(), function);
         userStringToFunctionName.put(function.getRepresentation(), function.getName());
@@ -45,6 +36,5 @@ public class FunctionsRepo {
 
     public String getFunctionNameByUserString(String userString){
         return userStringToFunctionName.get(userString);
-
     }
 }

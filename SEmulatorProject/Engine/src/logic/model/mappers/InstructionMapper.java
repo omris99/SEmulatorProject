@@ -121,32 +121,6 @@ public class InstructionMapper{
                     domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new CommaSeperatedArguments(jaxbInstructionArgument.getValue()));
                     break;
             }
-
-//            if(argumentType.getType().equals(ArgumentType.LABEL)) {
-//                if(jaxbInstructionArgument.getValue().toUpperCase().equals("EXIT")) {
-//                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
-//                }
-//                else {
-//                    if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
-//                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_MUST_START_WITH_L);
-//                    }
-//                    try {
-//                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
-//                    } catch (NumberFormatException e) {
-//                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_INDEX_CANT_PARSE_TO_NUMBER);
-//                    }
-//                }
-//            }
-//            else if(argumentType.getType().equals(ArgumentType.VARIABLE)) {
-//                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
-//            }
-//            else if(argumentType.getType().equals(ArgumentType.CONSTANT)) {
-//                try{
-//                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
-//                } catch(NumberFormatException e){
-//                    throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.CONSTANT_MUST_BE_A_NUMBER);
-//                }
-//            }
         }
 
         return domainArguments;

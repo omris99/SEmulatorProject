@@ -14,10 +14,6 @@ public enum FixedLabel implements Label {
             return 0;
         }
 
-        @Override
-        public Argument parse(String stringArgument) {
-            return null;
-        }
     },
     EMPTY {
         @Override
@@ -30,10 +26,6 @@ public enum FixedLabel implements Label {
             return 0;
         }
 
-        @Override
-        public Argument parse(String stringArgument) {
-            return null;
-        }
     };
 
     @Override

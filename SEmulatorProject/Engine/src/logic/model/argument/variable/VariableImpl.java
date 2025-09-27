@@ -16,7 +16,7 @@ public class VariableImpl implements Variable, Argument {
         return number;
     }
 
-    public VariableImpl parse(String stringVariable)
+    private VariableImpl parse(String stringVariable)
     {
         if (stringVariable == null || stringVariable.isEmpty()) {
             throw new IllegalArgumentException("Variable string cannot be null or empty");

@@ -1,4 +1,4 @@
-package logic.model.program;
+package logic.model.program.quotedfunction;
 
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;

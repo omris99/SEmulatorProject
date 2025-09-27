@@ -16,9 +16,4 @@ public class NameArgument implements Argument {
     public int getIndex() {
         return 0;
     }
-
-    @Override
-    public Argument parse(String stringArgument) {
-        return new NameArgument(stringArgument);
-    }
 }

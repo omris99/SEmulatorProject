@@ -32,14 +32,6 @@ public class LabelImpl implements Label {
     }
 
     @Override
-    public Argument parse(String stringArgument) {
-        if(stringArgument == null || stringArgument.length() < 2 || stringArgument.charAt(0) != 'L'){
-            throw new InvalidArgumentException(stringArgument, ArgumentErrorType.LABEL_MUST_START_WITH_L);
-        }
-        return new LabelImpl(Integer.parseInt(stringArgument.substring(1)));
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hashCode(label);
     }

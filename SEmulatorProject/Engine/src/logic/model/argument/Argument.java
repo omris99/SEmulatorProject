@@ -9,5 +9,4 @@ import java.io.Serializable;
 public interface Argument extends Serializable {
     String getRepresentation();
     int getIndex();
-    Argument parse(String stringArgument);
 }

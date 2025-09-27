@@ -2,9 +2,6 @@ package logic.model.instruction.synthetic;
 
 import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
-import logic.execution.ExecutionContextImpl;
-import logic.execution.ProgramExecutor;
-import logic.execution.ProgramExecutorImpl;
 import logic.model.argument.Argument;
 import logic.model.argument.NameArgument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
@@ -17,10 +14,9 @@ import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.*;
 import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.program.Function;
-import logic.model.program.QuotedFunction;
+import logic.model.program.quotedfunction.QuotedFunction;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;

@@ -75,11 +75,6 @@ public class CommaSeperatedArguments implements Argument {
         return parts;
     }
 
-    @Override
-    public Argument parse(String stringArgument) {
-        return new CommaSeperatedArguments(stringArgument);
-    }
-
     public CommaSeperatedArguments changeInputsToActualVariables(Map<Variable, Variable> variableMapping) {
         List<String> extractedArguments = extractArguments();
         List<String> newArguments = new LinkedList<>();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="1159.0" styleClass="window-view" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionswindow.InstructionsWindowController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="window-header" text="Instructions Window" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <fx:include fx:id="instructionsWindowToolbar" source="../toolbar/InstructionsWindowToolbar.fxml" />
+      <VBox prefHeight="459.0" prefWidth="1159.0">
+         <children>
+            <fx:include fx:id="instructionsTable" source="../instructionstablewithbreakpoints/InstructionsTableWithBreakpoints.fxml" />
+            <fx:include fx:id="summaryLine" source="../summaryline/SummaryLine.fxml" />
+         </children>
+      </VBox>
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="component-header" text="Instruction History Chain" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Label>
+      <fx:include fx:id="instructionHistoryChainTable" source="../instructionstable/InstructionsTable.fxml" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
+</VBox>

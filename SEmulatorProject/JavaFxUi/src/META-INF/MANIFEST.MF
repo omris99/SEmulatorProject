@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Main-Class: gui.app.Main
+Class-Path: DTO.jar Engine.jar JAXB/jaxb-xjc.jar JAXB/jaxb-impl.jar JAXB
+ /jaxb-core.jar JAXB/jaxb-jxc.jar JAXB/jakarta.xml.bind-api.jar JAXB/jak
+ arta.activation-api.jar JAXB/angus-activation.jar JavaFxSDK/javafx-swt.
+ jar JavaFxSDK/javafx.base.jar JavaFxSDK/javafx.controls.jar JavaFxSDK/j
+ avafx.fxml.jar JavaFxSDK/javafx.graphics.jar JavaFxSDK/javafx.media.jar
+  JavaFxSDK/javafx.swing.jar JavaFxSDK/javafx.web.jar
+

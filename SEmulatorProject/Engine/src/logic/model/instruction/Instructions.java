@@ -1,6 +1,9 @@
 package logic.model.instruction;
 
+import logic.instructiontree.InstructionsTree;
+import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
@@ -14,15 +17,16 @@ public class Instructions implements Serializable {
     private final Set<Label> instructionsLabels;
     private final Set<Variable> instructionsInputs;
     private final Set<Variable> instructionsWorkVariables;
-    private int expandLevel;
+    private int degree;
+    private int cycles;
 
     public Instructions() {
         this.instructions = new LinkedList<>();
         this.instructionsLabels = new LinkedHashSet<>();
         this.instructionsInputs = new LinkedHashSet<>();
         this.instructionsWorkVariables = new LinkedHashSet<>();
+        this.cycles = 0;
     }
-
 
     public void add(Instruction instruction) {
         add(instruction, instructions.size());
@@ -31,13 +35,12 @@ public class Instructions implements Serializable {
     public void add(Instruction instruction, int indexToAdd) {
         this.instructions.add(indexToAdd, instruction);
         instruction.setIndex(indexToAdd + 1);
-
+        cycles += instruction.getCycles();
         Variable variable = instruction.getVariable();
 
         if (variable.getType() == VariableType.INPUT) {
             this.instructionsInputs.add(variable);
-        }
-        else if (variable.getType() == VariableType.WORK) {
+        } else if (variable.getType() == VariableType.WORK) {
             this.instructionsWorkVariables.add(variable);
         }
 
@@ -52,11 +55,12 @@ public class Instructions implements Serializable {
                     if (((Variable) argument).getType() == VariableType.INPUT) {
                         this.instructionsInputs.add((Variable) argument);
                     }
-                }
-                else if (argument instanceof Label) {
-                    if(argument == FixedLabel.EXIT) {
+                } else if (argument instanceof Label) {
+                    if (argument == FixedLabel.EXIT) {
                         this.instructionsLabels.add((Label) argument);
                     }
+                } else if (argument instanceof CommaSeperatedArguments) {
+                    this.instructionsInputs.addAll(((CommaSeperatedArguments) argument).detectInputVariables());
                 }
             }
         }
@@ -87,7 +91,7 @@ public class Instructions implements Serializable {
         return instructions;
     }
 
-    public int getMaximalDegree(){
+    public int getMaximalDegree() {
         return instructions.stream().map(Instruction::getDegree).max(Comparator.naturalOrder()).get();
     }
 
@@ -98,15 +102,17 @@ public class Instructions implements Serializable {
             if (instruction instanceof ExpandableInstruction) {
                 List<Instruction> expanded = ((ExpandableInstruction) instruction)
                         .expand(getMaxLabelIndex(), getMaxWorkVariableIndex(), instruction.getLabel());
-                expanded.forEach(newInstruction -> newInstruction.setParent(instruction));
-
+                expanded.forEach(newInstruction -> {
+                    newInstruction.setParent(instruction);
+                });
                 addListOfInstructions(expanded, i);
-                i += expanded.size() - 1; // skip over newly added
+                i += expanded.size() - 1;
             }
+
         }
 
         resetIndexes();
-        expandLevel++;
+        degree++;
     }
 
 
@@ -118,10 +124,9 @@ public class Instructions implements Serializable {
         return instructionsWorkVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
 
-    public int getMaxInputVariableIndex() {
+    private int getMaxInputVariableIndex() {
         return instructionsInputs.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
     }
-
 
     public void resetIndexes() {
         int index = 1;
@@ -130,5 +135,59 @@ public class Instructions implements Serializable {
             instruction.setIndex(index);
             index++;
         }
+    }
+
+    public Map<InstructionType, Integer> getInstructionsTypeCount() {
+        Map<InstructionType, Integer> instructionsTypeCount = new HashMap<>();
+        instructionsTypeCount.put(InstructionType.BASIC, 0);
+        instructionsTypeCount.put(InstructionType.SYNTHETIC, 0);
+        for (Instruction instruction : instructions) {
+            if (instruction.getType() == InstructionType.BASIC) {
+                instructionsTypeCount.put(InstructionType.BASIC, instructionsTypeCount.get(InstructionType.BASIC) + 1);
+            } else {
+                instructionsTypeCount.put(InstructionType.SYNTHETIC, instructionsTypeCount.get(InstructionType.SYNTHETIC) + 1);
+            }
+        }
+
+        return instructionsTypeCount;
+    }
+
+    public int getDegree() {
+        return degree;
+    }
+
+    public int getTotalCycles() {
+        return cycles;
+    }
+
+    public InstructionsTree getInstructionsTree() {
+        InstructionsTree tree = new InstructionsTree();
+        InstructionsTreeNode root = tree.getRoot();
+        Map<Instruction, InstructionsTreeNode> parents = new HashMap<>();
+
+        for (Instruction instruction : instructions) {
+            InstructionsTreeNode node = new InstructionsTreeNode(instruction.getInstructionDTO());
+            Instruction parent = instruction.getParent();
+
+            while (parent != null) {
+                InstructionsTreeNode parentNode = parents.computeIfAbsent(
+                        parent,
+                        p -> new InstructionsTreeNode(p.getInstructionDTO())
+                );
+
+                if (!parentNode.getChildrenNodes().contains(node)) {
+                    parentNode.addChildNode(node);
+                }
+
+                node = parentNode;
+                parent = parent.getParent();
+            }
+
+            if (!root.getChildrenNodes().contains(node)) {
+                root.addChildNode(node);
+            }
+        }
+
+        return tree;
     }
 }

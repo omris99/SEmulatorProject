@@ -1,23 +1,22 @@
 package logic.model.instruction.synthetic;
 
-import logic.model.argument.Argument;
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
+import logic.model.argument.Argument;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
 import logic.model.argument.label.LabelImpl;
+import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.instruction.*;
-import logic.model.argument.label.FixedLabel;
-import logic.model.argument.label.Label;
-import logic.model.argument.variable.Variable;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
+import logic.model.program.Function;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AssignmentInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
@@ -40,6 +39,14 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
     }
 
     @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.ASSIGNED_VARIABLE).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
+    }
+
+
+    @Override
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.ASSIGNED_VARIABLE).getRepresentation());
 
@@ -52,7 +59,7 @@ public class AssignmentInstruction extends AbstractInstruction implements Instru
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         Label freeLabel1 = new LabelImpl(maxLabelIndex + 1);
         Label freeLabel2 = new LabelImpl(maxLabelIndex + 2);
         Label freeLabel3 = new LabelImpl(maxLabelIndex + 3);

@@ -1,5 +1,9 @@
 package logic.model.argument.label;
 
+import logic.exceptions.ArgumentErrorType;
+import logic.exceptions.InvalidArgumentException;
+import logic.model.argument.Argument;
+
 import java.util.Objects;
 
 public class LabelImpl implements Label {

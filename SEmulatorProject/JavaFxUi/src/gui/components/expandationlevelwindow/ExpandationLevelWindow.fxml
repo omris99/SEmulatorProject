@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox styleClass="mini-window" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.expandationlevelwindow.ExpandationLevelWindowController">
+   <children>
+      <Label alignment="CENTER" prefHeight="17.0" prefWidth="263.0" styleClass="mini-window-header" text="Expendation Level" textFill="WHITE" />
+      <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">
+         <children>
+            <ChoiceBox fx:id="currentDegreeChoiceBox" prefHeight="26.0" prefWidth="59.0">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin></ChoiceBox>
+            <Label alignment="CENTER" prefHeight="37.0" prefWidth="21.0" text="/">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="maximalDegreeLabel" layoutX="79.0" layoutY="10.0" prefHeight="30.0" prefWidth="45.0" text="-">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>

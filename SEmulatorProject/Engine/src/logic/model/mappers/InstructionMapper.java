@@ -3,22 +3,26 @@ package logic.model.mappers;
 import logic.exceptions.ArgumentErrorType;
 import logic.exceptions.InvalidArgumentException;
 import logic.model.argument.Argument;
-import logic.model.argument.ArgumentType;
+import logic.model.argument.NameArgument;
+import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.constant.Constant;
-import logic.model.instruction.*;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.label.LabelImpl;
+import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.generated.SInstruction;
+import logic.model.generated.SInstructionArgument;
+import logic.model.generated.SInstructionArguments;
+import logic.model.instruction.Instruction;
+import logic.model.instruction.InstructionArgument;
+import logic.model.instruction.InstructionData;
 import logic.model.instruction.basic.DecreaseInstruction;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
 import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.instruction.synthetic.*;
-import logic.model.argument.label.FixedLabel;
-import logic.model.argument.label.Label;
-import logic.model.argument.label.LabelImpl;
-import logic.model.argument.variable.Variable;
-import logic.model.generated.SInstruction;
-import logic.model.generated.SInstructionArgument;
-import logic.model.generated.SInstructionArguments;
-import logic.model.argument.variable.VariableImpl;
+import logic.model.program.Function;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +30,7 @@ import java.util.Map;
 
 public class InstructionMapper{
 
-    public static Instruction toDomain(SInstruction jaxbInstruction) {
+    public static Instruction toDomain(SInstruction jaxbInstruction, List<String> functions) {
         if (jaxbInstruction == null) {
             return null;
         }
@@ -34,7 +38,7 @@ public class InstructionMapper{
         InstructionData details = InstructionData.fromNameAndType(
                 jaxbInstruction.getName(),
                 jaxbInstruction.getType());
-        Variable variable = VariableImpl.parse(jaxbInstruction.getSVariable());
+        Variable variable = new VariableImpl(jaxbInstruction.getSVariable());
         String instructionLabelOnXml = jaxbInstruction.getSLabel();
         Label instructionLabel = FixedLabel.EMPTY;
 
@@ -54,7 +58,7 @@ public class InstructionMapper{
         Map<InstructionArgument, Argument> arguments = null;
 
         if(sInstructionArguments != null){
-            arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument());
+            arguments = jaxbInstructionsArgumentToDomain(jaxbInstruction.getSInstructionArguments().getSInstructionArgument(), functions);
         }
 
         Instruction domainInstruction = createInstruction(details.name(), variable, instructionLabel, arguments);
@@ -63,7 +67,7 @@ public class InstructionMapper{
     }
 
 
-    private static Map<InstructionArgument, Argument> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments) {
+    private static Map<InstructionArgument, Argument> jaxbInstructionsArgumentToDomain(List<SInstructionArgument> jaxbInstructionsArguments, List<String> functions) {
         if (jaxbInstructionsArguments == null || jaxbInstructionsArguments.isEmpty()) {
             return null;
         }
@@ -72,37 +76,56 @@ public class InstructionMapper{
         for (SInstructionArgument jaxbInstructionArgument : jaxbInstructionsArguments) {
             String argumentName = jaxbInstructionArgument.getName();
             InstructionArgument argumentType = InstructionArgument.fromXmlNameFormat(argumentName);
-            if(argumentType.getType().equals(ArgumentType.LABEL)) {
-                if(jaxbInstructionArgument.getValue().toUpperCase().equals("EXIT")) {
-                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), (Argument) FixedLabel.EXIT);
-                }
-                else {
-                    if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
-                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_MUST_START_WITH_L);
+            switch (argumentType.getType()) {
+                case LABEL:
+                    if(jaxbInstructionArgument.getValue().equalsIgnoreCase("EXIT")) {
+                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), FixedLabel.EXIT);
                     }
-                    try {
-                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
-                    } catch (NumberFormatException e) {
-                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_INDEX_CANT_PARSE_TO_NUMBER);
+                    else {
+                        if(!jaxbInstructionArgument.getValue().toUpperCase().startsWith("L")){
+                            throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_MUST_START_WITH_L);
+                        }
+                        try {
+                            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new LabelImpl(Integer.parseInt(jaxbInstructionArgument.getValue().substring(1))));
+                        } catch (NumberFormatException e) {
+                            throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.LABEL_INDEX_CANT_PARSE_TO_NUMBER);
+                        }
                     }
-                }
-            }
-            else if(argumentType.getType().equals(ArgumentType.VARIABLE)) {
-                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), VariableImpl.parse(jaxbInstructionArgument.getValue()));
-            }
-            else if(argumentType.getType().equals(ArgumentType.CONSTANT)) {
-                try{
-                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
-                } catch(NumberFormatException e){
-                    throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.CONSTANT_MUST_BE_A_NUMBER);
-                }
+                    break;
+                case VARIABLE:
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new VariableImpl(jaxbInstructionArgument.getValue()));
+                    break;
+                case CONSTANT:
+                    try{
+                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new Constant(Integer.parseInt(jaxbInstructionArgument.getValue())));
+                    } catch(NumberFormatException e){
+                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.CONSTANT_MUST_BE_A_NUMBER);
+                    }
+                    break;
+                case NAME:
+                    boolean functionFound = false;
+
+                    for(String functionName : functions) {
+                        if(functionName.equals(jaxbInstructionArgument.getValue())) {
+                            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new NameArgument(functionName));
+                            functionFound = true;
+                            break;
+                        }
+                    }
+                    if(!functionFound) {
+                        throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.FUNCTION_NOT_FOUND);
+                    }
+                    break;
+                case COMMA_SEPERATED_ARGUMENTS:
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new CommaSeperatedArguments(jaxbInstructionArgument.getValue()));
+                    break;
             }
         }
 
         return domainArguments;
     }
 
-    private static Instruction createInstruction(String name, Variable variable, Label label, Map<InstructionArgument, Argument> arguments) {
+    public static Instruction createInstruction(String name, Variable variable, Label label, Map<InstructionArgument, Argument> arguments) {
         return switch (name) {
             case "INCREASE" -> new IncreaseInstruction(variable, label);
             case "DECREASE" -> new DecreaseInstruction(variable, label);
@@ -115,7 +138,8 @@ public class InstructionMapper{
             case "JUMP_ZERO" -> new JumpZeroInstruction(variable, arguments.get(InstructionArgument.JZ_LABEL), label);
             case "JUMP_EQUAL_CONSTANT" -> new JumpEqualConstantInstruction(variable, arguments.get(InstructionArgument.JE_CONSTANT_LABEL), arguments.get(InstructionArgument.CONSTANT_VALUE), label);
             case "JUMP_EQUAL_VARIABLE" -> new JumpEqualVariableInstruction(variable, arguments.get(InstructionArgument.JE_VARIABLE_LABEL), arguments.get(InstructionArgument.VARIABLE_NAME), label);
-
+            case "QUOTE" -> new QuoteInstruction(variable, arguments.get(InstructionArgument.FUNCTION_NAME), arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), label);
+            case "JUMP_EQUAL_FUNCTION" -> new JumpEqualFunction(variable, arguments.get(InstructionArgument.FUNCTION_NAME), arguments.get(InstructionArgument.FUNCTION_ARGUMENTS), arguments.get(InstructionArgument.JE_FUNCTION_LABEL), label);
             default -> throw new IllegalArgumentException("Unknown instruction: " + name);
         };
     }

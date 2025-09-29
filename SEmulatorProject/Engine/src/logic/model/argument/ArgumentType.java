@@ -3,5 +3,8 @@ package logic.model.argument;
 public enum ArgumentType {
     LABEL,
     VARIABLE,
-    CONSTANT;
+    CONSTANT,
+    NAME,
+    FUNCTION,
+    COMMA_SEPERATED_ARGUMENTS
 }

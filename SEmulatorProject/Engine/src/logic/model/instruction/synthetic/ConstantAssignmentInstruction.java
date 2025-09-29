@@ -1,18 +1,17 @@
 package logic.model.instruction.synthetic;
 
-import logic.model.argument.Argument;
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
+import logic.model.argument.Argument;
 import logic.model.argument.constant.Constant;
-import logic.model.instruction.*;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
+import logic.model.program.Function;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConstantAssignmentInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;
@@ -35,6 +34,13 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
     }
 
     @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
+    }
+
+    @Override
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format("%s <- %s", getVariable().getRepresentation(), arguments.get(InstructionArgument.CONSTANT_VALUE).getRepresentation());
 
@@ -47,7 +53,7 @@ public class ConstantAssignmentInstruction extends AbstractInstruction implement
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         List<Instruction> expandedInstructions = new LinkedList<>();
         int constantValue = ((Constant)arguments.get(InstructionArgument.CONSTANT_VALUE)).getValue();
 

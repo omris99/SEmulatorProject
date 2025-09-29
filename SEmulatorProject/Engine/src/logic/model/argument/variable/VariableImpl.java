@@ -16,7 +16,7 @@ public class VariableImpl implements Variable, Argument {
         return number;
     }
 
-    public static VariableImpl parse(String stringVariable)
+    private VariableImpl parse(String stringVariable)
     {
         if (stringVariable == null || stringVariable.isEmpty()) {
             throw new IllegalArgumentException("Variable string cannot be null or empty");
@@ -60,6 +60,12 @@ public class VariableImpl implements Variable, Argument {
         this.number = number;
     }
 
+    public VariableImpl(String stringVariable) {
+        VariableImpl parsedVar = parse(stringVariable);
+        this.type = parsedVar.type;
+        this.number = parsedVar.number;
+    }
+
     @Override
     public VariableType getType() {
         return type;
@@ -70,7 +76,7 @@ public class VariableImpl implements Variable, Argument {
         return type.getVariableRepresentation(number);
     }
 
-    private static VariableType stringVarTypeToVariableType(String type) {
+    public static VariableType stringVarTypeToVariableType(String type) {
         VariableType variableType;
         switch (type.toLowerCase()) {
             case "x":

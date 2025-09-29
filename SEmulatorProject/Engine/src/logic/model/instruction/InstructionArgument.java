@@ -10,7 +10,10 @@ public enum InstructionArgument {
     JZ_LABEL(ArgumentType.LABEL, "JZLabel"),
     JE_CONSTANT_LABEL(ArgumentType.LABEL,  "JEConstantLabel"),
     VARIABLE_NAME(ArgumentType.VARIABLE, "variableName"),
-    JE_VARIABLE_LABEL(ArgumentType.LABEL,  "JEVariableLabel"),;
+    JE_VARIABLE_LABEL(ArgumentType.LABEL,  "JEVariableLabel"),
+    FUNCTION_NAME(ArgumentType.NAME, "functionName"),
+    FUNCTION_ARGUMENTS(ArgumentType.COMMA_SEPERATED_ARGUMENTS, "functionArguments"),
+    JE_FUNCTION_LABEL(ArgumentType.LABEL, "JEFunctionLabel");
 
     private final ArgumentType type;
     private final String nameInXml;

@@ -1,15 +1,17 @@
 package logic.model.instruction.synthetic;
 
-import logic.model.argument.Argument;
+import dto.InstructionDTO;
 import logic.execution.ExecutionContext;
-import logic.model.argument.variable.VariableImpl;
-import logic.model.argument.variable.VariableType;
-import logic.model.instruction.*;
+import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
+import logic.model.argument.variable.VariableImpl;
+import logic.model.argument.variable.VariableType;
+import logic.model.instruction.*;
 import logic.model.instruction.basic.IncreaseInstruction;
 import logic.model.instruction.basic.JumpNotZeroInstruction;
+import logic.model.program.Function;
 
 import java.util.*;
 
@@ -32,6 +34,13 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     }
 
     @Override
+    public InstructionDTO getInstructionDTO() {
+        String displayFormat = String.format("GOTO %s", arguments.get(InstructionArgument.GOTO_LABEL).getRepresentation());
+
+        return super.getInstructionDTO(displayFormat);
+    }
+
+    @Override
     public String getInstructionDisplayFormat() {
         String displayFormat = String.format("GOTO %s", arguments.get(InstructionArgument.GOTO_LABEL).getRepresentation());
 
@@ -44,7 +53,7 @@ public class GoToLabelInstruction extends AbstractInstruction implements Instruc
     }
 
     @Override
-    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel) {
+    public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         Variable workVariable = new VariableImpl(VariableType.WORK, maxWorkVariableIndex + 1);
         List<Instruction> expandedInstructions = new LinkedList<>();
 

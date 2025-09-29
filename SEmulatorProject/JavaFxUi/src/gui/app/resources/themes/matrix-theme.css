@@ -1,0 +1,148 @@
+.root {
+    -fx-background-color: #000000;
+    -fx-font-family: "Consolas", "Courier New", "Monaco", monospace;
+    -fx-text-fill: #00ff41;
+}
+
+.table-view{
+    -fx-background-color: #0d0d0d;
+    -fx-border-color: #00ff41;
+    -fx-border-width: 0.5px;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #003300, #001a00);
+    -fx-text-fill: #00ff41;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: #00ff41;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #005500, #002200);
+    -fx-text-fill: #00ff99;
+}
+
+.window-header {
+    -fx-background-color: #001a00;
+    -fx-text-fill: #00ff41;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 8px;
+    -fx-border-color: #00ff41;
+    -fx-border-width: 0 0 1 0;
+}
+
+.component-header {
+    -fx-background-color: #002200;
+    -fx-text-fill: #00ff66;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+#program-choice-box .label {
+    -fx-text-fill: #1dff00;
+    -fx-font-weight: bold;
+}
+
+.text-field,
+.choice-box
+{
+    -fx-background-color: #0d0d0d;
+    -fx-text-fill: #00ff41;
+    -fx-border-color: #00ff41;
+    -fx-border-radius: 6px;
+}
+
+.viewport {
+    -fx-background-color: #0d0d0d;
+}
+
+/* ScrollBars */
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: #0d0d0d;
+}
+
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #00ff41;
+}
+
+#cycles-label{
+    -fx-font-weight: 600;
+    -fx-background-color: #000000;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.2, 0, 2);}
+.label {
+    -fx-text-fill:#00ff41;
+}
+
+.mini-window {
+    -fx-background-color: #0d0d0d;
+    -fx-border-color: #00ff41;
+    -fx-border-width: 0.5px;
+}
+
+.mini-window-header {
+    -fx-background-color: #001a00;
+    -fx-text-fill: #00ff41;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-border-color: #00ff41;
+}
+
+#sEmulatorLogo {
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-background-color: linear-gradient(to bottom, #003e00,#000000);
+    -fx-text-fill: #00ff41;
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 12px;
+    -fx-background-radius: 0 0 10 10;
+}
+
+
+.table-view .column-header,
+.table-view .column-header .label{
+    -fx-background-color: #292929;
+    -fx-text-fill: #00ff41;
+    -fx-font-weight: bold;
+}
+.table-view .table-row-cell {
+    -fx-background-color: #0d0d0d;
+    -fx-border-color: #00ff41;
+}
+
+.table-view .table-row-cell .table-cell {
+    -fx-text-fill: #00ff41;
+}
+.table-row-cell.highlighted {
+    -fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), #8a8a8a, rgb(0, 0, 0));
+}
+
+.table-row-cell.highlighted:selected {
+    -fx-background-color: #757575;
+}
+
+.table-row-cell.next-instruction{
+    -fx-background-color: linear-gradient(to bottom, rgba(0, 255, 81, 0.63), #000000, rgba(0, 255, 81, 0.5));
+    -fx-border-color: #00ff51;
+    -fx-border-width: 1;
+}
+
+#progressBar {
+    -fx-base: #000000;
+    -fx-accent: #00ff51;
+}
+
+#progressBar.load-error{
+    -fx-accent: #ff0000;
+}

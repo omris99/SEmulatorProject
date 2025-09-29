@@ -1,5 +1,7 @@
 package logic.model.argument.constant;
 
+import logic.exceptions.ArgumentErrorType;
+import logic.exceptions.InvalidArgumentException;
 import logic.model.argument.Argument;
 
 public class Constant implements Argument {

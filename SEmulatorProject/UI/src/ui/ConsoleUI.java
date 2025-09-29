@@ -107,9 +107,9 @@ public class ConsoleUI implements UI {
 
     @Override
     public void showProgramDetails(ProgramDTO programDetails) {
-        System.out.println(String.format("Program Name: %s", programDetails.getName()));
-        System.out.println(String.format("Inputs Names: %s", programDetails.getInputNames()));
-        System.out.println(String.format("Labels Names: %s", programDetails.getLabelsNames()));
+        System.out.printf("Program Name: %s%n", programDetails.getName());
+        System.out.printf("Inputs Names: %s%n", programDetails.getInputNames());
+        System.out.printf("Labels Names: %s%n", programDetails.getLabelsNames());
         for (String instruction : programDetails.getInstructionsInDisplayFormat()) {
             System.out.println(instruction);
         }
@@ -119,7 +119,7 @@ public class ConsoleUI implements UI {
     public void expand() {
         int expansionDegree = getUserDesiredExpansionDegree();
 
-        showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+        showProgramDetails((ProgramDTO) engine.showExpandedProgramOnScreen(expansionDegree));
         System.out.printf("Program expanded successfully to degree %s.%n", expansionDegree);
 
     }
@@ -128,15 +128,15 @@ public class ConsoleUI implements UI {
         int maximalDegree = engine.getMaximalDegree();
         int expansionDegree = 0;
 
-        System.out.println(String.format("Maximal Degree: %d", maximalDegree));
+        System.out.printf("Maximal Degree: %d%n", maximalDegree);
         if (maximalDegree == 0) {
             System.out.println("All instructions are basic. Nothing to expand.");
         }
         else {
             while (true) {
-                System.out.print(String.format("Enter expand degree (0 - %d): ", maximalDegree));
+                System.out.printf("Enter expand degree (0 - %d): ", maximalDegree);
                 if (!inputScanner.hasNextInt()) {
-                    printError(String.format("Invalid input: Please enter an integer number."));
+                    printError("Invalid input: Please enter an integer number.");
                     inputScanner.nextLine();
                     continue;
                 }
@@ -162,16 +162,16 @@ public class ConsoleUI implements UI {
 
         ProgramDTO loadedProgramDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         System.out.print("Available program inputs: ");
-        System.out.println(String.format("%s", loadedProgramDTO.getInputNames()));
+        System.out.printf("%s%n", loadedProgramDTO.getInputNames());
         while (!isInputOk) {
             System.out.println("Enter input values separated by commas (e.g: 5,10,15): ");
             String inputs = inputScanner.nextLine();
             try {
-                RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgram(expansionDegree, inputs);
+                RunResultsDTO runResults = (RunResultsDTO) engine.runLoadedProgramWithCommaSeperatedInput(expansionDegree, inputs);
                 System.out.println("\n***********************************************");
                 System.out.println("               Executed Program: ");
                 System.out.println("***********************************************");
-                showProgramDetails((ProgramDTO) engine.getExpandedProgramDTO(expansionDegree));
+                showProgramDetails((ProgramDTO) engine.showExpandedProgramOnScreen(expansionDegree));
                 showProgramRunResults(runResults);
                 isInputOk = true;
             }
@@ -210,17 +210,17 @@ public class ConsoleUI implements UI {
 
             for (RunResultsDTO executionRecord : history) {
                 System.out.println("\n----------------------");
-                System.out.println(String.format("Execution #%d ", i++));
+                System.out.printf("Execution #%d %n", i++);
                 System.out.println("----------------------");
 
-                System.out.println(String.format("- Run Degree: %d", executionRecord.getDegree()));
+                System.out.printf("- Run Degree: %d%n", executionRecord.getDegree());
                 System.out.println("\n- Input Values:");
-                for (String variable : executionRecord.getInputVariablesAsEntered().keySet()) {
-                    System.out.println(String.format("  %s = %d ", variable, executionRecord.getInputVariablesAsEntered().get(variable)));
+                for (String variable : executionRecord.getInputVariablesInitialValues().keySet()) {
+                    System.out.printf("  %s = %d %n", variable, executionRecord.getInputVariablesInitialValues().get(variable));
                 }
 
-                System.out.println(String.format("\n- y Result: %d", executionRecord.getYValue()));
-                System.out.println(String.format("\n- Total Cycles Count: %d", executionRecord.getTotalCyclesCount()));
+                System.out.printf("\n- y Result: %d%n", executionRecord.getYValue());
+                System.out.printf("\n- Total Cycles Count: %d%n", executionRecord.getTotalCyclesCount());
             }
 
             System.out.println("\n******************** E N D ********************");
@@ -239,19 +239,19 @@ public class ConsoleUI implements UI {
         System.out.println("              Program Run Results:");
         System.out.println("***********************************************\n");
         System.out.println("--- Y-RESULT ---");
-        System.out.println(String.format("y = %d ", results.getYValue()));
+        System.out.printf("y = %d %n", results.getYValue());
         System.out.println("--- PROGRAM VARIABLES ---");
-        System.out.println(String.format("y = %d ", results.getYValue()));
-        for (String variableName : results.getInputVariablesAsEntered().keySet()) {
-            System.out.println(String.format("%s = %d ", variableName, results.getInputVariablesAsEntered().get(variableName)));
+        System.out.printf("y = %d %n", results.getYValue());
+        for (String variableName : results.getInputVariablesInitialValues().keySet()) {
+            System.out.printf("%s = %d %n", variableName, results.getInputVariablesInitialValues().get(variableName));
         }
 
         for (String variableName : results.getWorkVariablesValues().keySet()) {
-            System.out.println(String.format("%s = %d ", variableName, results.getWorkVariablesValues().get(variableName)));
+            System.out.printf("%s = %d %n", variableName, results.getWorkVariablesValues().get(variableName));
         }
 
         System.out.println("--- TOTAL CYCLES COUNT ---");
-        System.out.println(String.format("%d Cycles", results.getTotalCyclesCount()));
+        System.out.printf("%d Cycles%n", results.getTotalCyclesCount());
         System.out.println("\n******************** E N D ********************");
         System.out.println("***********************************************");
     }

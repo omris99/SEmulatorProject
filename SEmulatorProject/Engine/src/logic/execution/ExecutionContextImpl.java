@@ -1,7 +1,10 @@
 package logic.execution;
 
 import logic.model.argument.variable.Variable;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ExecutionContextImpl implements ExecutionContext {
     private final Map<Variable, Long> variablesStatus;
@@ -11,9 +14,13 @@ public class ExecutionContextImpl implements ExecutionContext {
 
         variablesStatus.put(Variable.RESULT, 0L);
 
-        for(Variable variable : programWorkVariables) {
+        for (Variable variable : programWorkVariables) {
             variablesStatus.put(variable, 0L);
         }
+    }
+
+    public ExecutionContextImpl(Map<Variable, Long> variablesStatus) {
+        this.variablesStatus = variablesStatus;
     }
 
     @Override
@@ -31,5 +38,9 @@ public class ExecutionContextImpl implements ExecutionContext {
     @Override
     public Map<Variable, Long> getVariablesStatus() {
         return variablesStatus;
+    }
+
+    public ExecutionContext copy() {
+        return new ExecutionContextImpl(new HashMap<>(variablesStatus));
     }
 }

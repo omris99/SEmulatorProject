@@ -3,40 +3,22 @@ package logic.model.program;
 import dto.DTO;
 import dto.ProgramDTO;
 import logic.exceptions.NumberNotInRangeException;
+import logic.instructiontree.InstructionsTree;
 import logic.model.argument.Argument;
+import logic.model.argument.label.FixedLabel;
+import logic.model.argument.label.Label;
+import logic.model.argument.variable.Variable;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.InstructionArgument;
 import logic.model.instruction.InstructionWithArguments;
 import logic.model.instruction.Instructions;
-import logic.model.argument.label.FixedLabel;
-import logic.model.argument.label.Label;
-import logic.model.argument.variable.Variable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ProgramImpl implements Program {
-    private final String name;
-    private final Instructions instructions;
-
+public class ProgramImpl extends AbstractProgram {
     public ProgramImpl(String name) {
-        this.name = name.trim();
-        this.instructions = new Instructions();
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void addInstruction(Instruction instruction) {
-        instructions.add(instruction);
-    }
-
-    @Override
-    public List<Instruction> getInstructions() {
-        return instructions.getInstructionsList();
+        super(name);
     }
 
     @Override
@@ -59,18 +41,6 @@ public class ProgramImpl implements Program {
         return FixedLabel.EMPTY;
     }
 
-    public Set<Label> getAllInstructionsLabels() {
-        return instructions.getLabels();
-    }
-
-    public Set<Variable> getAllInstructionsInputs() {
-        return instructions.getInputs();
-    }
-
-    public Set<Variable> getAllInstructionsWorkVariables() {
-        return instructions.getWorkVariables();
-    }
-
     @Override
     public Program getExpandedProgram(int degree) {
 
@@ -81,7 +51,7 @@ public class ProgramImpl implements Program {
             return this;
         }
         else {
-            ProgramImpl expandedProgram = new ProgramImpl(name);
+            ProgramImpl expandedProgram = new ProgramImpl(getName());
             for (Instruction instruction : instructions.getInstructionsList()) {
                 expandedProgram.addInstruction(instruction.clone());
             }
@@ -94,37 +64,7 @@ public class ProgramImpl implements Program {
         }
     }
 
-    @Override
-    public int getMaximalDegree(){
-        return instructions.getMaximalDegree();
-    }
-
-    @Override
-    public DTO createDTO() {
-        return new ProgramDTO(
-                name,
-                getProgramInputsNames(),
-                getProgramLabelsNames(),
-                getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()));
-    }
-
-
-    private List<String> getProgramLabelsNames() {
-        List<String> programLabelsNames = getAllInstructionsLabels().stream()
-                .filter(label -> !label.equals(FixedLabel.EXIT)).sorted(Comparator.comparingInt(Label::getIndex))
-                .map(Argument::getRepresentation)
-                .collect(Collectors.toList());
-
-        if (getAllInstructionsLabels().contains(FixedLabel.EXIT)) {
-            programLabelsNames.add(FixedLabel.EXIT.getRepresentation());
-        }
-
-        return programLabelsNames;
-    }
-
-    private List<String> getProgramInputsNames() {
-        return getAllInstructionsInputs().stream()
-                .sorted(Comparator.comparingInt(Variable::getNumber))
-                .map(Argument::getRepresentation).collect(Collectors.toList());
+    public void setFunctionsNames(List<String> functionsNames) {
+        this.functionsNames = functionsNames;
     }
 }

@@ -7,10 +7,6 @@ import javafx.util.Duration;
 public class AnimationsManager {
     private static boolean isAnimationsDisabled = true;
 
-    public static boolean isAnimationsDisabled() {
-        return isAnimationsDisabled;
-    }
-
     public static void setAnimationsDisabled(boolean animationsDisabled) {
         isAnimationsDisabled = animationsDisabled;
     }

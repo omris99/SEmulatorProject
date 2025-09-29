@@ -1,3 +1,13 @@
+.root {
+    -fx-background-color: linear-gradient(
+            to bottom,
+            #ffffff 0%,
+            #ffffff 60%,
+            rgba(0, 166, 255, 0.7) 95%,
+            rgba(0, 91, 175, 0.8) 100%
+    );
+}
+
 .button {
     -fx-background-color: linear-gradient(to bottom, #00a6ff, #005baf);
     -fx-text-fill: white;
@@ -59,7 +69,7 @@
 }
 
 .window-view {
-    -fx-background-color: rgba(0, 234, 255, 0.05);
+    -fx-background-color: rgba(0, 234, 255, 0.10);
     -fx-padding: 10px;
     -fx-background-radius: 12;
 }
@@ -81,10 +91,6 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-color: #b3b3b3;
-}
-
-#app-view {
-    -fx-background-color: #ffffff;
 }
 
 .table-row-cell.highlighted {

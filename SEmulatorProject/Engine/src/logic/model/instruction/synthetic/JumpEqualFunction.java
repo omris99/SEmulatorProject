@@ -6,14 +6,11 @@ import logic.model.argument.Argument;
 import logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
-import logic.model.argument.label.LabelImpl;
 import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.*;
-import logic.model.instruction.basic.DecreaseInstruction;
-import logic.model.instruction.basic.NeutralInstruction;
 import logic.model.program.Function;
 
 import java.util.HashMap;

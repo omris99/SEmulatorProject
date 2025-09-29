@@ -29,11 +29,6 @@ import logic.utils.Utils;
 import java.io.File;
 import java.util.*;
 
-//TODO:
-// 1. SPLIT runLoadedProgramWithDebuggerWindowInput TO SUB FUNCTIONS.
-// 4. TRY TO IMPROVE CHANGE PROGRAM FUNCTIONALITY (LOAD ONLY ONCE, THEN SWITCH BETWEEN THEM) (mainProgram and currentContextProgram(instead loadedProgram) members)
-// 5. FUNCTION AND PROGRAM ARE VERY SIMILAR, MAYBE CREATE ABSTRACT PROGRAM CLASS.
-
 public class EmulatorEngine implements Engine {
     private Program mainProgram;
     private Program currentContextProgram;
@@ -43,7 +38,6 @@ public class EmulatorEngine implements Engine {
 
     public EmulatorEngine() {
         this.savedHistories = new HashMap<>();
-
     }
 
     @Override

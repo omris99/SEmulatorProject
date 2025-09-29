@@ -10,7 +10,6 @@ import gui.components.historywindow.HistoryWindowController;
 import gui.components.instructionstreetable.InstructionsTreeTableController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
-import gui.popups.showallvariables.ShowAllVariablesController;
 import jakarta.xml.bind.JAXBException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -69,6 +68,7 @@ public class AppController {
                 try {
                     updateProgress(15, 100);
                     updateMessage(selectedFile.getAbsolutePath());
+                    engine.loadProgram(selectedFile.getAbsolutePath());
                     engine.loadProgram(selectedFile.getAbsolutePath());
                     updateProgress(50, 100);
                     Thread.sleep(100);

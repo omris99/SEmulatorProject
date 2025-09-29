@@ -52,6 +52,8 @@ public class InstructionsWindowToolbarController {
     }
 
     public void onProgramLoaded(ProgramDTO programDTO) {
+        expandButton.setDisable(false);
+        collapseButton.setDisable(false);
         expandationLevelWindowController.updateExpandationLevelChoiceBoxAndMaximalDegree(programDTO.getMaximalDegree());
         updateHighlightOptions(programDTO);
         updateProgramOptions(programDTO);

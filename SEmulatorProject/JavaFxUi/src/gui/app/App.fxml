@@ -14,12 +14,6 @@
             <Insets />
          </VBox.margin>
          <children>
-<!--            <ImageView fx:id="sEmulatorLogo" fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" >-->
-<!--               <image>-->
-<!--                  <Image url="@resources/images/s_emulator_logo.png" />-->
-<!--               </image>-->
-<!--            </ImageView>-->
-
             <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="2560.0" text="S-Emulator" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Verdana" size="20.0" />

@@ -319,7 +319,6 @@ public class EmulatorEngine implements Engine {
 
 
     public InstructionsTree getInstructionsTree() {
-        Program fullyExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
-        return fullyExpandedProgram.getInstructionsTree();
+        return currentOnScreenProgram.getInstructionsTree();
     }
 }

@@ -9,7 +9,7 @@
     <children>
         <TreeTableView fx:id="instructionsTreeTable" prefHeight="413.0" prefWidth="600.0">
             <columns>
-                <TreeTableColumn fx:id="colIndex" prefWidth="40.0" text="#" />
+                <TreeTableColumn fx:id="colIndex" prefWidth="60.0" text="#" />
                 <TreeTableColumn fx:id="colInstructionType" prefWidth="139.0" text="Basic / Synthetic" />
                 <TreeTableColumn fx:id="colLabel" prefWidth="53.0" text="Label" />
                 <TreeTableColumn fx:id="colInstructionDisplayFormat" prefWidth="277.0" text="Instruction" />

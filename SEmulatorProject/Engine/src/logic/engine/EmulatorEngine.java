@@ -28,6 +28,7 @@ import logic.model.program.Program;
 import logic.utils.Utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 public class EmulatorEngine implements Engine {
@@ -60,6 +61,23 @@ public class EmulatorEngine implements Engine {
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
+        }
+
+        this.mainProgram = loadedProgram;
+        setCurrentContextProgram(mainProgram);
+
+        savedHistories.clear();
+    }
+
+    public void loadProgram(InputStream inputStream) throws JAXBException, InvalidXmlFileException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
+
+        Program loadedProgram = ProgramMapper.toDomain(sProgram);
+        Label problemLabel = loadedProgram.validate();
+        if (problemLabel != FixedLabel.EMPTY) {
+            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
         }
 
         this.mainProgram = loadedProgram;

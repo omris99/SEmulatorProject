@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="53.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.summaryline.SummaryLineController">
+   <children>
+      <Label alignment="TOP_CENTER" prefHeight="20.0" prefWidth="1758.0" styleClass="component-header" text="Instructions Count:" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label text="Basic Instructions:" />
+            <TextField fx:id="basicInstructionsCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+            <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0">
+               <HBox.margin>
+                  <Insets left="25.0" right="25.0" />
+               </HBox.margin>
+            </Separator>
+            <Label layoutX="10.0" layoutY="10.0" text="Synthetic Instructions:">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="syntheticInstructionsCount" disable="true" editable="false" layoutX="209.0" layoutY="24.0" prefHeight="26.0" prefWidth="50.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

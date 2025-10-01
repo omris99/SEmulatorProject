@@ -1,0 +1,33 @@
+package gui.components.highlightselection;
+
+import gui.components.toolbar.InstructionsWindowToolbarController;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+
+import java.util.List;
+
+public class HighlightSelectionController {
+
+    @FXML
+    private InstructionsWindowToolbarController instructionsWindowToolbarController;
+
+    @FXML
+    private ComboBox<String> highlightSelector;
+
+    @FXML
+    public void initialize() {
+        highlightSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            instructionsWindowToolbarController.onHighlightSelectionChange(newVal);
+        });
+    }
+
+    public void updateOptions(List<String> highlightOptions) {
+        highlightSelector.getSelectionModel().clearSelection();
+        highlightSelector.getItems().clear();
+        highlightSelector.getItems().addAll(highlightOptions);
+    }
+
+    public void setInstructionsWindowToolbarController(InstructionsWindowToolbarController instructionsWindowToolbarController) {
+        this.instructionsWindowToolbarController = instructionsWindowToolbarController;
+    }
+}

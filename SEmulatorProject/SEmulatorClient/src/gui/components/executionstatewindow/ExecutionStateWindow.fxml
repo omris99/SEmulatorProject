@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="404.0" stylesheets="@ExecutionStateWindow.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.executionstatewindow.ExecutionStateWindowController">
+   <children>
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="432.0" styleClass="component-header" text="Execution State" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <VBox prefHeight="536.0" prefWidth="227.0">
+         <children>
+            <fx:include fx:id="variablesValueTable" source="../variablesvaluetable/VariablesValueTable.fxml" />
+            <HBox id="cycles-label" alignment="CENTER_LEFT" prefWidth="297.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="76.0" text="Cycles: ">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="cyclesCounter" prefHeight="23.0" prefWidth="139.0" text="-">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

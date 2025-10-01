@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="613.0" spacing="50.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.displaycommandsbar.DisplayCommandsBarController">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="806.0" spacing="50.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.displaycommandsbar.DisplayCommandsBarController">
    <children>
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="202.0" spacing="10.0">
          <children>
@@ -14,15 +14,16 @@
             <ChoiceBox fx:id="themeChoiceBox" prefHeight="25.0" prefWidth="122.0" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" layoutX="65.0" layoutY="10.0" prefHeight="52.0" prefWidth="122.0" spacing="10.0">
+      <HBox alignment="CENTER" layoutX="65.0" layoutY="10.0" prefHeight="42.0" prefWidth="146.0" spacing="10.0">
          <children>
             <Label text="Animations:" />
             <Button fx:id="animationsButton" mnemonicParsing="false" onAction="#onAnimationsButtonClick" text="OFF" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="42.0" prefWidth="159.0">
+      <HBox alignment="CENTER" prefHeight="42.0" prefWidth="339.0" spacing="50.0">
          <children>
-            <Button fx:id="showTreeTableViewButton" mnemonicParsing="false" onAction="#onShowTreeTableView" prefHeight="26.0" prefWidth="157.0" text="Show Tree Table View" />
+            <Button fx:id="showTreeTableViewButton" disable="true" mnemonicParsing="false" onAction="#onShowTreeTableViewButtonClick" prefHeight="26.0" prefWidth="157.0" text="Show Tree Table View" />
+            <Button fx:id="specificExpansionButton" disable="true" mnemonicParsing="false" onAction="#onSpecificExpansionButtonClick" prefHeight="26.0" prefWidth="157.0" text="Specific Expansion" />
          </children>
       </HBox>
    </children>

@@ -21,12 +21,14 @@ public class DisplayCommandsBarController {
     @FXML
     private Button showTreeTableViewButton;
 
+    @FXML
+    private Button specificExpansionButton;
+
     private boolean animationsDisabled = true;
 
     @FXML
     public void initialize() {
         animationsButton.setText("OFF");
-        showTreeTableViewButton.setDisable(true);
 
         for(Theme theme : Theme.values()) {
             themeChoiceBox.getItems().add(theme);
@@ -45,17 +47,23 @@ public class DisplayCommandsBarController {
         appController.disableAnimations(animationsDisabled);
     }
 
+    @FXML
+    void onShowTreeTableViewButtonClick(ActionEvent event) {
+        appController.showOnScreenProgramTreeTableView();
+
+    }
 
     @FXML
-    void onShowTreeTableView(ActionEvent event) {
-        appController.showTreeTableView();
+    void onSpecificExpansionButtonClick(ActionEvent event) {
+        appController.showSpecificExpansionView();
 
     }
     public void setAppController(AppController appController) {
         this.appController = appController;
     }
 
-    public void disableTreeTableViewButton(boolean disable) {
+    public void disableTreeTableViewAndSpecificExpansionButton(boolean disable) {
         showTreeTableViewButton.setDisable(disable);
+        specificExpansionButton.setDisable(disable);
     }
 }

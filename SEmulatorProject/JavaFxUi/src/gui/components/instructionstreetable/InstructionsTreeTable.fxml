@@ -5,11 +5,11 @@
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="390.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstreetable.InstructionsTreeTableController">
+<VBox prefHeight="390.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.instructionstreetable.InstructionsTreeTableController">
     <children>
-        <TreeTableView fx:id="instructionsTreeTable" prefHeight="413.0" prefWidth="600.0">
+        <TreeTableView fx:id="instructionsTreeTable" prefHeight="1080.0" prefWidth="2560.0">
             <columns>
-                <TreeTableColumn fx:id="colIndex" prefWidth="40.0" text="#" />
+                <TreeTableColumn fx:id="colIndex" prefWidth="60.0" text="#" />
                 <TreeTableColumn fx:id="colInstructionType" prefWidth="139.0" text="Basic / Synthetic" />
                 <TreeTableColumn fx:id="colLabel" prefWidth="53.0" text="Label" />
                 <TreeTableColumn fx:id="colInstructionDisplayFormat" prefWidth="277.0" text="Instruction" />

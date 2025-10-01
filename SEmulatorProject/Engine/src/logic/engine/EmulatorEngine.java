@@ -13,6 +13,7 @@ import logic.execution.DebuggerExecutor;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.instructiontree.InstructionsTree;
+import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -318,8 +319,12 @@ public class EmulatorEngine implements Engine {
     }
 
 
-    public InstructionsTree getInstructionsTree() {
-        Program fullyExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
-        return fullyExpandedProgram.getInstructionsTree();
+    public InstructionsTree getOnScreenProgramInstructionsTree() {
+        return currentOnScreenProgram.getInstructionsTree();
+    }
+
+    public InstructionsTree getSpecificExpansionInstructionsTree(){
+        Program fullExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
+        return fullExpandedProgram.getInstructionsTree();
     }
 }

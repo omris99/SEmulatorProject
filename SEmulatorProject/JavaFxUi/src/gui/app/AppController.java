@@ -171,7 +171,7 @@ public class AppController {
     private void resetComponents() {
         debuggerWindowController.reset();
         historyWindowController.reset();
-        displayCommandsBarController.disableTreeTableViewButton(false);
+        displayCommandsBarController.disableTreeTableViewAndSpecificExpansionButton(false);
     }
 
     public void startDebuggingSession(Map<String, String> inputVariables) {
@@ -262,16 +262,33 @@ public class AppController {
         return engine.updateInstructionBreakpoint(index, isSet);
     }
 
-    public void showTreeTableView() {
+    public void showOnScreenProgramTreeTableView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
             Parent load = loader.load();
             InstructionsTreeTableController controller = loader.getController();
-            InstructionsTree instructionsTree = engine.getInstructionsTree();
+            InstructionsTree instructionsTree = engine.getOnScreenProgramInstructionsTree();
             controller.setInstructions(instructionsTree);
             Scene scene = new Scene(load, 700, 400);
             Stage showWindow = new Stage();
             showWindow.setTitle("Tree Table View");
+            showWindow.setScene(scene);
+            showWindow.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSpecificExpansionView(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
+            Parent load = loader.load();
+            InstructionsTreeTableController controller = loader.getController();
+            InstructionsTree instructionsTree = engine.getSpecificExpansionInstructionsTree();
+            controller.setInstructions(instructionsTree);
+            Scene scene = new Scene(load, 700, 400);
+            Stage showWindow = new Stage();
+            showWindow.setTitle("Specific Expansion View");
             showWindow.setScene(scene);
             showWindow.show();
         } catch (Exception e) {

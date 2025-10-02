@@ -1,10 +1,8 @@
 package http;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.*;
 
+import java.io.File;
 import java.util.function.Consumer;
 
 public class HttpClientUtil {
@@ -21,5 +19,27 @@ public class HttpClientUtil {
         System.out.println("Shutting down HTTP CLIENT");
         HTTP_CLIENT.dispatcher().executorService().shutdown();
         HTTP_CLIENT.connectionPool().evictAll();
+    }
+
+    public static Request buildUploadRequest(File selectedFile) {
+        String finalUrl = HttpUrl
+                .parse(Constants.LOADFILE)
+                .newBuilder()
+                .build()
+                .toString();
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                        "fileContent",
+                        selectedFile.getName(),
+                        RequestBody.create(selectedFile, MediaType.parse("text/plain"))
+                )
+                .build();
+
+        return new Request.Builder()
+                .url(finalUrl)
+                .post(requestBody)
+                .build();
     }
 }

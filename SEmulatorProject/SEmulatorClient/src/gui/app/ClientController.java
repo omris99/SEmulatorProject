@@ -13,7 +13,9 @@ import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import http.Constants;
 import http.HttpClientUtil;
+import jakarta.xml.bind.JAXBException;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import logic.engine.EmulatorEngine;
+import logic.exceptions.InvalidArgumentException;
+import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
 import logic.instructiontree.InstructionsTree;
 import logic.json.GsonFactory;
@@ -63,68 +67,64 @@ public class ClientController {
     }
 
     public void loadProgramWithProgress(File selectedFile) {
-        String finalUrl = HttpUrl
-                .parse(Constants.LOADFILE)
-                .newBuilder()
-                .build()
-                .toString();
-
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                        "fileContent",
-                        selectedFile.getName(),
-                        RequestBody.create(selectedFile, MediaType.parse("text/plain"))
-                )
-                .build();
-
-
-        Request request = new Request.Builder()
-                .url(finalUrl)
-                .post(requestBody)
-                .build();
-
-        HttpClientUtil.runAsync(request, new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Upload Failed");
-                    alert.setHeaderText("Failed to upload file to server");
-                    alert.setContentText(e.getMessage());
-                    alert.showAndWait();
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseBodyString = response.body().string();
-                if (response.isSuccessful()) {
-                    ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Upload Successful");
-                        alert.setHeaderText(null);
-                        alert.setContentText("File uploaded successfully!");
-                        alert.showAndWait();
-                        instructionWindowController.onProgramLoaded(programDTO);
-                        resetComponents();
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("HTTP " + response.code() + " Error");
-                        alert.setHeaderText("Failed to load XML file");
-                        alert.setContentText(responseBodyString);
-                        alert.showAndWait();
-                    });
-                }
-                response.close();
-            }
-        });
-
         loadFileBarController.removeProgressBarErrorStyle();
+        Task<Void> loadTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                updateProgress(15, 100);
+                updateMessage(selectedFile.getAbsolutePath());
+                Request request = HttpClientUtil.buildUploadRequest(selectedFile);
+                HttpClientUtil.runAsync(request, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Platform.runLater(() -> {
+                            loadFileBarController.setProgressBarLoadErrorStyle();
+                            showErrorAlert(
+                                    "Upload Failed",
+                                    "Failed to upload file to server",
+                                    e.getMessage()
+                            );
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String responseBodyString = response.body().string();
+                        if (response.isSuccessful()) {
+                            ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+                            Platform.runLater(() -> {
+                                instructionWindowController.onProgramLoaded(programDTO);
+                                resetComponents();
+                            });
+                        } else {
+                            Platform.runLater(() -> {
+                                loadFileBarController.setProgressBarLoadErrorStyle();
+                                showErrorAlert(
+                                        ("HTTP " + response.code() + " Error"),
+                                        ("Failed to load XML file"),
+                                        responseBodyString);
+                            });
+                        }
+                        response.close();
+                    }
+                });
+
+                updateProgress(100, 100);
+                return null;
+            }
+        };
+
+        loadFileBarController.bindTaskToUI(loadTask);
+
+        new Thread(loadTask).start();
+    }
+
+    private void showErrorAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     public void prepareDebuggerForNewRun() {
@@ -204,13 +204,12 @@ public class ClientController {
         debuggerWindowController.updateRunResults(context);
         if (context.isFinished()) {
             finishExecutionMode();
-        }
-        else {
+        } else {
             instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         }
     }
 
-    public void executePreviousDebugStep(){
+    public void executePreviousDebugStep() {
         RunResultsDTO context = (RunResultsDTO) engine.stepBackward();
         debuggerWindowController.updateRunResults(context);
         instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
@@ -224,10 +223,9 @@ public class ClientController {
     public void resumeDebuggerExecution() {
         DTO context = engine.resumeDebuggingSession();
         debuggerWindowController.updateRunResults((RunResultsDTO) context);
-        if(((RunResultsDTO) context).isFinished()){
+        if (((RunResultsDTO) context).isFinished()) {
             finishExecutionMode();
-        }
-        else {
+        } else {
             instructionWindowController.highlightNextInstructionToExecute((InstructionDTO) engine.getNextInstructionToExecute());
         }
     }
@@ -278,7 +276,7 @@ public class ClientController {
         }
     }
 
-    public void showSpecificExpansionView(){
+    public void showSpecificExpansionView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
             Parent load = loader.load();

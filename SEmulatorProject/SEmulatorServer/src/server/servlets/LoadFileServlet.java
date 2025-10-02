@@ -15,6 +15,7 @@ import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import logic.json.GsonFactory;
 import logic.model.generated.SProgram;
+import server.utils.ServletUtils;
 
 import java.io.IOException;
 
@@ -31,13 +32,7 @@ public class LoadFileServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         try {
-            ServletContext context = getServletContext();
-            EmulatorEngine engine = (EmulatorEngine) context.getAttribute("emulatorEngine");
-
-            if (engine == null) {
-                engine = new EmulatorEngine();
-                context.setAttribute("emulatorEngine", engine);
-            }
+            EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
 
             Part fileContent = req.getPart("fileContent");
             engine.loadProgram(fileContent.getInputStream());

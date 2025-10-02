@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import logic.engine.EmulatorEngine;
 import logic.json.GsonFactory;
+import server.utils.ServletUtils;
 
 import java.io.IOException;
 
@@ -18,12 +19,7 @@ public class GetExpandedProgramServlet extends HttpServlet {
         int degreeParam = Integer.parseInt(req.getParameter("degree"));
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = (EmulatorEngine) getServletContext().getAttribute("emulatorEngine");
-        if (engine == null) {
-            System.out.println("Engine is null");
-            engine = new EmulatorEngine();
-            getServletContext().setAttribute("emulatorEngine", engine);
-        }
+        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
 
         ProgramDTO program = (ProgramDTO) engine.showExpandedProgramOnScreen(degreeParam);
 

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import logic.engine.EmulatorEngine;
 import logic.json.GsonFactory;
+import server.utils.ServletUtils;
 
 import java.io.IOException;
 
@@ -18,12 +19,7 @@ public class ChangeOnScreenProgramServlet extends HttpServlet {
         String functionName = req.getParameter("functionName");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = (EmulatorEngine) getServletContext().getAttribute("emulatorEngine");
-        if (engine == null) {
-            System.out.println("Engine is null");
-            engine = new EmulatorEngine();
-            getServletContext().setAttribute("emulatorEngine", engine);
-        }
+        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
 
         engine.changeLoadedProgramToFunction(functionName);
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();

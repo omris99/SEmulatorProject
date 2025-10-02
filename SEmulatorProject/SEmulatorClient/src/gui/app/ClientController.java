@@ -128,7 +128,7 @@ public class ClientController {
                 .url(Constants.GET_LOADED_PROGRAM)
                 .build();
 
-        try (Response response = HttpClientUtil.runSync(request)) {  // try-with-resources סוגר את ה-response אוטומטית
+        try (Response response = HttpClientUtil.runSync(request)) {
             String responseBody = response.body().string();
 
             if (!response.isSuccessful()) {
@@ -144,15 +144,48 @@ public class ClientController {
             Platform.runLater(() -> {
                 showErrorAlert("Error Fetching Program", "Failed to fetch ProgramDTO from server", e.getMessage());
             });
+
             return null;
         }
     }
 
     public void prepareDebuggerForNewRun() {
-        ProgramDTO programDTO = fetchLoadedProgram();
-        if (programDTO != null) {
-            debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
-        }
+        Request request = new Request.Builder()
+                .url(Constants.GET_LOADED_PROGRAM)
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Error Fetching Loaded Program",
+                        "Failed to fetch loaded program from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+                    Platform.runLater(() -> {
+                        debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
+                    });
+                }
+                else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch loaded program from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
+//        ProgramDTO programDTO = fetchLoadedProgram();
+//        if (programDTO != null) {
+//            debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
+//        }
     }
 
     public void showExpandedProgram(int degree) {

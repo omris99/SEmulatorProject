@@ -28,6 +28,7 @@ import okhttp3.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -151,15 +152,15 @@ public class ClientController {
 
     public void prepareDebuggerForNewRun() {
         Request request = new Request.Builder()
-                .url(Constants.GET_LOADED_PROGRAM)
+                .url(Constants.GET_INPUTS_NAMES)
                 .build();
 
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Platform.runLater(() -> showErrorAlert(
-                        "Error Fetching Loaded Program",
-                        "Failed to fetch loaded program from server",
+                        "Error Fetching inputs names",
+                        "Failed to fetch inputs names from server",
                         e.getMessage()));
             }
 
@@ -167,15 +168,15 @@ public class ClientController {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
-                    ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+                    String[] inputsNames = GsonFactory.getGson().fromJson(responseBodyString, String[].class);
                     Platform.runLater(() -> {
-                        debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
+                        debuggerWindowController.prepareForNewRun(List.of(inputsNames));
                     });
                 }
                 else {
                     Platform.runLater(() -> showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
-                            ("Failed to fetch loaded program from server"),
+                            ("Failed to fetch input names from server"),
                             null));
                 }
 

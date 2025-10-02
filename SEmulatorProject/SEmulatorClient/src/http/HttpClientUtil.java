@@ -27,7 +27,7 @@ public class HttpClientUtil {
 
     public static Request buildUploadFileRequest(File selectedFile) {
         String finalUrl = HttpUrl
-                .parse(Constants.LOADFILE)
+                .parse(Constants.LOAD_FILE)
                 .newBuilder()
                 .build()
                 .toString();

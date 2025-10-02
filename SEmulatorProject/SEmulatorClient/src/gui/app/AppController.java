@@ -1,5 +1,6 @@
 package gui.app;
 
+import com.google.gson.Gson;
 import dto.DTO;
 import dto.InstructionDTO;
 import dto.ProgramDTO;
@@ -26,6 +27,7 @@ import logic.exceptions.InvalidArgumentException;
 import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
 import logic.instructiontree.InstructionsTree;
+import logic.json.GsonFactory;
 import okhttp3.*;
 
 import java.io.File;
@@ -101,6 +103,9 @@ public class AppController {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+
                 if (response.isSuccessful()) {
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -108,6 +113,8 @@ public class AppController {
                         alert.setHeaderText(null);
                         alert.setContentText("File uploaded successfully!");
                         alert.showAndWait();
+                        instructionWindowController.onProgramLoaded(programDTO);
+                        resetComponents();
                     });
                 } else {
                     Platform.runLater(() -> {
@@ -123,70 +130,70 @@ public class AppController {
         });
 
         loadFileBarController.removeProgressBarErrorStyle();
-        Task<Void> loadTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    updateProgress(15, 100);
-                    updateMessage(selectedFile.getAbsolutePath());
-                    engine.loadProgram(selectedFile.getAbsolutePath());
-                    engine.loadProgram(selectedFile.getAbsolutePath());
-                    updateProgress(50, 100);
-                    Thread.sleep(100);
-
-                    ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-
-                    Platform.runLater(() -> {
-                        instructionWindowController.onProgramLoaded(programDTO);
-                        resetComponents();
-                    });
-
-                    updateProgress(100, 100);
-                } catch (Exception e) {
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error Loading Program");
-                        alert.setHeaderText("Failed to load XML file");
-
-                        String content;
-                        switch (e) {
-                            case InvalidXmlFileException iv -> {
-                                switch (iv.getType()) {
-                                    case FILE_MISSING -> content = "File not found: " + iv.getFilePath();
-                                    case INVALID_EXTENSION ->
-                                            content = "Invalid file type: " + iv.getFilePath() + " must be .xml";
-                                    case UNKNOWN_LABEL ->
-                                            content = String.format("No instruction labeled as %s exists in the program.", iv.getElement());
-                                    default -> content = "Unknown InvalidXmlFileException";
-                                }
-                            }
-                            case JAXBException jaxb -> content = "Can't read XML File";
-                            case InvalidArgumentException ia -> content = String.format("%s.  \nError %s: %s ",
-                                    ia.getErrorType().getUserMessage(),
-                                    ia.getErrorType().getArgumentType(),
-                                    ia.getArgumentName());
-                            case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
-                            default -> content = "Unexpected error: " + e.getMessage();
-                        }
-
-                        alert.setContentText(content);
-                        alert.showAndWait();
-                    });
-
-                    if (!engine.isProgramLoaded()) {
-                        updateMessage(String.format("Failed to load File: %s", selectedFile.getName()));
-                    }
-                    loadFileBarController.setProgressBarLoadErrorStyle();
-                    updateProgress(100, 100);
-                }
-
-                return null;
-            }
-        };
-
-        loadFileBarController.bindTaskToUI(loadTask);
-
-        new Thread(loadTask).start();
+//        Task<Void> loadTask = new Task<>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                try {
+//                    updateProgress(15, 100);
+//                    updateMessage(selectedFile.getAbsolutePath());
+//                    engine.loadProgram(selectedFile.getAbsolutePath());
+//                    engine.loadProgram(selectedFile.getAbsolutePath());
+//                    updateProgress(50, 100);
+//                    Thread.sleep(100);
+//
+//                    ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+//
+//                    Platform.runLater(() -> {
+//                        instructionWindowController.onProgramLoaded(programDTO);
+//                        resetComponents();
+//                    });
+//
+//                    updateProgress(100, 100);
+//                } catch (Exception e) {
+//                    Platform.runLater(() -> {
+//                        Alert alert = new Alert(Alert.AlertType.ERROR);
+//                        alert.setTitle("Error Loading Program");
+//                        alert.setHeaderText("Failed to load XML file");
+//
+//                        String content;
+//                        switch (e) {
+//                            case InvalidXmlFileException iv -> {
+//                                switch (iv.getType()) {
+//                                    case FILE_MISSING -> content = "File not found: " + iv.getFilePath();
+//                                    case INVALID_EXTENSION ->
+//                                            content = "Invalid file type: " + iv.getFilePath() + " must be .xml";
+//                                    case UNKNOWN_LABEL ->
+//                                            content = String.format("No instruction labeled as %s exists in the program.", iv.getElement());
+//                                    default -> content = "Unknown InvalidXmlFileException";
+//                                }
+//                            }
+//                            case JAXBException jaxb -> content = "Can't read XML File";
+//                            case InvalidArgumentException ia -> content = String.format("%s.  \nError %s: %s ",
+//                                    ia.getErrorType().getUserMessage(),
+//                                    ia.getErrorType().getArgumentType(),
+//                                    ia.getArgumentName());
+//                            case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
+//                            default -> content = "Unexpected error: " + e.getMessage();
+//                        }
+//
+//                        alert.setContentText(content);
+//                        alert.showAndWait();
+//                    });
+//
+//                    if (!engine.isProgramLoaded()) {
+//                        updateMessage(String.format("Failed to load File: %s", selectedFile.getName()));
+//                    }
+//                    loadFileBarController.setProgressBarLoadErrorStyle();
+//                    updateProgress(100, 100);
+//                }
+//
+//                return null;
+//            }
+//        };
+//
+//        loadFileBarController.bindTaskToUI(loadTask);
+//
+//        new Thread(loadTask).start();
     }
 
     public void prepareDebuggerForNewRun() {

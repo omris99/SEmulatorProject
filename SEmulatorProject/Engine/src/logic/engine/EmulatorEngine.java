@@ -72,8 +72,8 @@ public class EmulatorEngine implements Engine {
     public void loadProgram(InputStream inputStream) throws JAXBException, InvalidXmlFileException {
         JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
 
+        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
         Program loadedProgram = ProgramMapper.toDomain(sProgram);
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {

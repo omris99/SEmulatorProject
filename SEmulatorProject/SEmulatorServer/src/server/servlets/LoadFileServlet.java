@@ -1,5 +1,7 @@
 package server.servlets;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.ProgramDTO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -10,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import logic.engine.EmulatorEngine;
+import logic.json.GsonFactory;
+import logic.model.generated.SProgram;
 
 import java.io.Console;
 import java.io.IOException;
@@ -27,40 +31,36 @@ public class LoadFileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String filePath = req.getParameter("filePath");
+//        String filePath = req.getParameter("filePath");
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            ServletContext context = getServletContext();
+            ServletContext context = req.getServletContext();
             EmulatorEngine engine = (EmulatorEngine) context.getAttribute("emulatorEngine");
-            System.out.println("i a m here");
+            System.out.println("[Servlet] Reached LoadFileServlet");
 
             if (engine == null) {
-//                System.out.println("fileContent part: " + req.getPart("fileContent"));
-
-//                engine = new EmulatorEngine();
-                context.setAttribute("emulatorEngine", new EmulatorEngine());
-                System.out.println("engine added");
+                System.out.println("[Servlet] EmulatorEngine not found, creating new one...");
+                engine = new EmulatorEngine();
+                context.setAttribute("emulatorEngine", engine);
+                System.out.println("[Servlet] EmulatorEngine added to context");
             }
 
-//            Collection<Part> parts = req.getParts();
-//            for (Part part : parts) {
-//                fileContent.append(part.getInputStream());
-//            }
             Part fileContent = req.getPart("fileContent");
-            System.out.println("fileContent part: " + req.getPart("fileContent"));
 
+            System.out.println("[Servlet] before getinputstream ");
+            System.out.println("Class exists? " + SProgram.class);
             engine.loadProgram(fileContent.getInputStream());
+            System.out.println("[Servlet] after getinputstream ");
+
             ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
+            System.out.println("[Servlet] before json convert ");
 
-            // ממירים את ה־DTO ל־JSON (באמצעות Jackson)
-//            ObjectMapper mapper = new ObjectMapper();
-//            String json = mapper.writeValueAsString(program);
-
+            String programDtoJson = GsonFactory.getGson().toJson(program);
             resp.setStatus(HttpServletResponse.SC_OK);
-//            resp.getWriter().write(json);
+            resp.getWriter().write(programDtoJson);
 
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

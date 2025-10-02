@@ -12,6 +12,6 @@ public class Constants {
     public final static String GET_HISTORY = FULL_SERVER_PATH + "/history";
     public final static String GET_LOADED_PROGRAM = FULL_SERVER_PATH + "/loadedProgram";
     public final static String GET_INPUTS_NAMES = FULL_SERVER_PATH + "/programInputsNames";
-
+    public final static String RUN_PROGRAM = FULL_SERVER_PATH + "/runProgram";
 
 }

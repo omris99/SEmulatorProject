@@ -1,9 +1,6 @@
 package gui.app;
 
-import dto.DTO;
-import dto.InstructionDTO;
-import dto.ProgramDTO;
-import dto.RunResultsDTO;
+import dto.*;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.displaycommandsbar.DisplayCommandsBarController;
 import gui.components.historywindow.HistoryWindowController;
@@ -29,6 +26,7 @@ import okhttp3.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -227,25 +225,46 @@ public class ClientController {
     }
 
     public void startProgramExecution(Map<String, String> inputVariables) {
-        try {
-            int runDegree = instructionWindowController.getDegreeChoice();
-            DTO runResultsDTO = engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
-            debuggerWindowController.updateRunResults((RunResultsDTO) runResultsDTO);
-            finishExecutionMode();
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Starting Execution");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("The input is invalid. Please enter integers only.");
-            alert.showAndWait();
-        } catch (NumberNotInRangeException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Starting Execution");
-            alert.setHeaderText("Negative Number Submitted");
-            alert.setContentText("You entered the number: " + e.getNumber() + " which is not positive.\n" +
-                    "Please enter only Positive Numbers.");
-            alert.showAndWait();
-        }
+        int runDegree = instructionWindowController.getDegreeChoice();
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("runDegree", runDegree);
+        payload.put("inputVariables", inputVariables);
+
+        String json = GsonFactory.getGson().toJson(payload);
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
+
+        Request request = new Request.Builder()
+                .url(Constants.RUN_PROGRAM)
+                .post(body)
+                .build();
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Run Program failed",
+                        "Failed to get program's run results from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                System.out.println(responseBodyString);
+                if (response.isSuccessful()) {
+                    RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
+                    Platform.runLater(() -> {
+                        debuggerWindowController.updateRunResults(runResultsDTO);
+                        finishExecutionMode();
+                    });
+                }
+                else {
+                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    Platform.runLater(() -> showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
+                }
+
+                response.close();
+            }
+        });
     }
 
     private void updateHistoryWindow(List<RunResultsDTO> history) {

@@ -31,7 +31,7 @@ public class LoadFileServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         try {
-            ServletContext context = req.getServletContext();
+            ServletContext context = getServletContext();
             EmulatorEngine engine = (EmulatorEngine) context.getAttribute("emulatorEngine");
 
             if (engine == null) {

@@ -1,0 +1,34 @@
+package server.servlets;
+
+import dto.ProgramDTO;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import logic.engine.EmulatorEngine;
+import logic.json.GsonFactory;
+
+import java.io.IOException;
+
+@WebServlet(name = "getExpandedProgramServlet", urlPatterns = {"/expandedProgram"})
+public class GetExpandedProgramServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int degreeParam = Integer.parseInt(req.getParameter("degree"));
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        EmulatorEngine engine = (EmulatorEngine) getServletContext().getAttribute("emulatorEngine");
+        if (engine == null) {
+            System.out.println("Engine is null");
+            engine = new EmulatorEngine();
+            getServletContext().setAttribute("emulatorEngine", engine);
+        }
+
+        ProgramDTO program = (ProgramDTO) engine.showExpandedProgramOnScreen(degreeParam);
+
+        String programDtoJson = GsonFactory.getGson().toJson(program);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(programDtoJson);
+    }
+}

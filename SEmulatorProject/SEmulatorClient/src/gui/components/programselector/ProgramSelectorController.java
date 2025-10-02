@@ -31,7 +31,7 @@ public class ProgramSelectorController {
     public void updateOptions(ProgramDTO program) {
         List<String> programOptions = new LinkedList<>();
         programOptions.add(program.getName());
-        programOptions.addAll(program.getFunctionsNames().stream().map(name -> FunctionsRepo.getInstance().getFunctionUserString(name)).toList());
+        programOptions.addAll(program.getFunctionsNames());
         programChoiceBox.getSelectionModel().clearSelection();
         programChoiceBox.getItems().clear();
         programChoiceBox.getItems().addAll(programOptions);

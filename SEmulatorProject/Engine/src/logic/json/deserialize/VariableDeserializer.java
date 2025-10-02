@@ -12,7 +12,6 @@ import java.lang.reflect.Type;
 public class VariableDeserializer implements JsonDeserializer<Variable> {
     @Override
     public Variable deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-        System.out.println("i am here");
         JsonElement typeElement = json.getAsJsonObject().get("type");
         VariableType type = VariableType.valueOf(json.getAsJsonObject().get("type").getAsString());
         int number = json.getAsJsonObject().get("number").getAsInt();

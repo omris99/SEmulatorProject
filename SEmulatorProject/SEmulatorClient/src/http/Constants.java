@@ -7,4 +7,7 @@ public class Constants {
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
 
     public final static String LOADFILE = FULL_SERVER_PATH + "/loadFile";
+    public final static String GET_EXPANDED_PROGRAM = FULL_SERVER_PATH + "/expandedProgram";
+    public final static String CHANGE_ON_SCREEN_PROGRAM = FULL_SERVER_PATH + "/changeOnScreenProgram";
+
 }

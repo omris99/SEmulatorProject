@@ -3,7 +3,6 @@ package http;
 import okhttp3.*;
 
 import java.io.File;
-import java.util.function.Consumer;
 
 public class HttpClientUtil {
     private final static OkHttpClient HTTP_CLIENT =
@@ -21,7 +20,7 @@ public class HttpClientUtil {
         HTTP_CLIENT.connectionPool().evictAll();
     }
 
-    public static Request buildUploadRequest(File selectedFile) {
+    public static Request buildUploadFileRequest(File selectedFile) {
         String finalUrl = HttpUrl
                 .parse(Constants.LOADFILE)
                 .newBuilder()

@@ -1,6 +1,5 @@
 package gui.app;
 
-import com.google.gson.JsonObject;
 import dto.DTO;
 import dto.InstructionDTO;
 import dto.ProgramDTO;
@@ -13,7 +12,6 @@ import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import http.Constants;
 import http.HttpClientUtil;
-import jakarta.xml.bind.JAXBException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -23,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import logic.engine.EmulatorEngine;
-import logic.exceptions.InvalidArgumentException;
-import logic.exceptions.InvalidXmlFileException;
 import logic.exceptions.NumberNotInRangeException;
 import logic.instructiontree.InstructionsTree;
 import logic.json.GsonFactory;
@@ -73,7 +69,7 @@ public class ClientController {
             protected Void call() throws Exception {
                 updateProgress(15, 100);
                 updateMessage(selectedFile.getAbsolutePath());
-                Request request = HttpClientUtil.buildUploadRequest(selectedFile);
+                Request request = HttpClientUtil.buildUploadFileRequest(selectedFile);
                 HttpClientUtil.runAsync(request, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -132,7 +128,40 @@ public class ClientController {
     }
 
     public void showExpandedProgram(int degree) {
-        instructionWindowController.onExpandationLevelChanged((ProgramDTO) engine.showExpandedProgramOnScreen(degree));
+        Request request = new Request.Builder()
+                .url(HttpUrl.parse(Constants.GET_EXPANDED_PROGRAM)
+                        .newBuilder()
+                        .addQueryParameter("degree", String.valueOf(degree))
+                        .build()
+                        .toString())
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Error Fetching Expanded Program",
+                        "Failed to fetch expanded program from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+                    Platform.runLater(() -> instructionWindowController.onExpandationLevelChanged(programDTO));
+                }
+                else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch expanded program from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
     }
 
     public void startProgramExecution(Map<String, String> inputVariables) {
@@ -240,11 +269,44 @@ public class ClientController {
     }
 
     public void changeLoadedProgramToFunction(String functionName) {
-        engine.changeLoadedProgramToFunction(functionName);
-        ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
-        instructionWindowController.programChanged(programDTO);
-        resetComponents();
-        updateHistoryWindow(engine.getHistory());
+        RequestBody formBody = new FormBody.Builder()
+                .add("functionName", functionName)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(Constants.CHANGE_ON_SCREEN_PROGRAM)
+                .post(formBody)
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Error Changing On-Screen Program",
+                        "Failed to change on-screen program from server",
+                        e.getMessage()));
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+                    Platform.runLater(() -> {
+                        instructionWindowController.programChanged(programDTO);
+                        resetComponents();
+//                        updateHistoryWindow(engine.getHistory());
+                    });
+                }
+                else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to change on-screen program from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
     }
 
     public void disableAnimations(boolean enable) {

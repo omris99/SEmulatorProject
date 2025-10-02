@@ -14,6 +14,11 @@ public class HttpClientUtil {
         call.enqueue(callback);
     }
 
+    public static Response runSync(Request request) throws Exception {
+        Call call = HTTP_CLIENT.newCall(request);
+        return call.execute();
+    }
+
     public static void shutdown() {
         System.out.println("Shutting down HTTP CLIENT");
         HTTP_CLIENT.dispatcher().executorService().shutdown();

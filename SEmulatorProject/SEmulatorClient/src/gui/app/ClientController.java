@@ -123,8 +123,36 @@ public class ClientController {
         alert.showAndWait();
     }
 
+    private ProgramDTO fetchLoadedProgram() {
+        Request request = new Request.Builder()
+                .url(Constants.GET_LOADED_PROGRAM)
+                .build();
+
+        try (Response response = HttpClientUtil.runSync(request)) {  // try-with-resources סוגר את ה-response אוטומטית
+            String responseBody = response.body().string();
+
+            if (!response.isSuccessful()) {
+                Platform.runLater(() -> {
+                    showErrorAlert("HTTP " + response.code() + " Error", "Failed to fetch ProgramDTO from server", null);
+                });
+                return null;
+            }
+
+            return GsonFactory.getGson().fromJson(responseBody, ProgramDTO.class);
+
+        } catch (Exception e) {
+            Platform.runLater(() -> {
+                showErrorAlert("Error Fetching Program", "Failed to fetch ProgramDTO from server", e.getMessage());
+            });
+            return null;
+        }
+    }
+
     public void prepareDebuggerForNewRun() {
-        debuggerWindowController.prepareForNewRun(((ProgramDTO) engine.getLoadedProgramDTO()).getInputNames());
+        ProgramDTO programDTO = fetchLoadedProgram();
+        if (programDTO != null) {
+            debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
+        }
     }
 
     public void showExpandedProgram(int degree) {
@@ -260,7 +288,7 @@ public class ClientController {
     }
 
     private void finishExecutionMode() {
-        updateHistoryWindow(engine.getHistory());
+        fetchHistoryAndUpdateHistoryWindow();
         debuggerWindowController.finishExecutionMode();
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
@@ -294,7 +322,7 @@ public class ClientController {
                     Platform.runLater(() -> {
                         instructionWindowController.programChanged(programDTO);
                         resetComponents();
-//                        updateHistoryWindow(engine.getHistory());
+                        fetchHistoryAndUpdateHistoryWindow();
                     });
                 }
                 else {
@@ -353,5 +381,37 @@ public class ClientController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void fetchHistoryAndUpdateHistoryWindow() {
+        Request request = new Request.Builder()
+                .url(Constants.GET_HISTORY)
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Error Fetching History",
+                        "Failed to fetch history from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    RunResultsDTO[] historyArray = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO[].class);
+                    Platform.runLater(() -> updateHistoryWindow(List.of(historyArray)));
+                } else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch history from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
     }
 }

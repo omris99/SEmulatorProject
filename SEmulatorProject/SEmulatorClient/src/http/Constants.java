@@ -9,5 +9,8 @@ public class Constants {
     public final static String LOADFILE = FULL_SERVER_PATH + "/loadFile";
     public final static String GET_EXPANDED_PROGRAM = FULL_SERVER_PATH + "/expandedProgram";
     public final static String CHANGE_ON_SCREEN_PROGRAM = FULL_SERVER_PATH + "/changeOnScreenProgram";
+    public final static String GET_HISTORY = FULL_SERVER_PATH + "/history";
+    public final static String GET_LOADED_PROGRAM = FULL_SERVER_PATH + "/loadedProgram";
+
 
 }

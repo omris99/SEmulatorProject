@@ -1,4 +1,4 @@
-package logic.json;
+package logic.json.deserialize;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;

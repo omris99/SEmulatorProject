@@ -1,4 +1,4 @@
-package logic.json;
+package logic.json.serialize;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -2,13 +2,11 @@ package logic.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 import dto.InstructionDTO;
+import logic.json.deserialize.InstructionDTODeserializer;
+import logic.json.deserialize.VariableDeserializer;
+import logic.json.serialize.VariableSerializer;
 import logic.model.argument.variable.Variable;
-import logic.model.argument.variable.VariableImpl;
-import logic.model.argument.variable.VariableType;
-
-import java.lang.reflect.Type;
 
 public class GsonFactory {
 

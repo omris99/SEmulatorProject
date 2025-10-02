@@ -2,7 +2,7 @@ package gui.components.instructionswindow;
 
 import dto.InstructionDTO;
 import dto.ProgramDTO;
-import gui.app.AppController;
+import gui.app.ClientController;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InstructionsWindowController {
-    private AppController appController;
+    private ClientController clientController;
 
     @FXML
     private InstructionsTableWithBreakpointsController instructionsTableController;
@@ -78,12 +78,12 @@ public class InstructionsWindowController {
     }
 
     public void onDegreeChoice(int newDegree) {
-        appController.showExpandedProgram(newDegree);
+        clientController.showExpandedProgram(newDegree);
 
     }
 
-    public void setAppController(AppController appController) {
-        this.appController = appController;
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void onHighlightSelectionChange(String selection) {
@@ -95,7 +95,7 @@ public class InstructionsWindowController {
             return;
         }
 
-        appController.changeLoadedProgramToFunction(selection);
+        clientController.changeLoadedProgramToFunction(selection);
     }
 
 
@@ -120,7 +120,7 @@ public class InstructionsWindowController {
     }
 
     public InstructionDTO onBreakpointToggled(int instructionIndex, boolean isSet){
-        return appController.updateInstructionBreakpoint(instructionIndex, isSet);
+        return clientController.updateInstructionBreakpoint(instructionIndex, isSet);
     }
 
 }

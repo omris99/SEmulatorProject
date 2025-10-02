@@ -1,7 +1,7 @@
 package gui.components.historywindow;
 
 import dto.RunResultsDTO;
-import gui.app.AppController;
+import gui.app.ClientController;
 import gui.popups.showallvariables.ShowAllVariablesController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class HistoryWindowController {
-    private AppController appController;
+    private ClientController clientController;
 
     @FXML
     private TableColumn<RunResultsDTO, Integer> colDegree;
@@ -90,11 +90,11 @@ public class HistoryWindowController {
             return;
         }
 
-        appController.reRunSelectedHistory(selected);
+        clientController.reRunSelectedHistory(selected);
     }
 
-    public void setAppController(AppController appController) {
-        this.appController = appController;
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void reset(){

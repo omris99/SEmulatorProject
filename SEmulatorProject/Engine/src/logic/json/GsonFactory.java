@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 public class GsonFactory {
 
     private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Variable.class, new VariableSerializer())
             .registerTypeAdapter(Variable.class, new VariableDeserializer())
             .registerTypeAdapter(InstructionDTO.class, new InstructionDTODeserializer())
             .create();

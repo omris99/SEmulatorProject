@@ -1,8 +1,7 @@
 package gui.components.debuggerwindow;
 
 import dto.RunResultsDTO;
-import gui.app.AnimationsManager;
-import gui.app.AppController;
+import gui.app.ClientController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
 import gui.components.inputrow.InputRowController;
 import javafx.fxml.FXML;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DebuggerWindowController {
-    private AppController appController;
+    private ClientController clientController;
 
     @FXML
     private debuggerCommandsBarController debuggerCommandsBarController;
@@ -68,15 +67,15 @@ public class DebuggerWindowController {
     }
 
     public void onNewRunClick() {
-        appController.prepareDebuggerForNewRun();
+        clientController.prepareDebuggerForNewRun();
     }
 
-    public void setAppController(AppController appController) {
-        this.appController = appController;
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void onStartClick() {
-        appController.startProgramExecution(getInputVariablesValues());
+        clientController.startProgramExecution(getInputVariablesValues());
     }
 
     private Map<String, String> getInputVariablesValues() {
@@ -101,24 +100,24 @@ public class DebuggerWindowController {
     }
 
     public void onDebugButtonClick() {
-        appController.startDebuggingSession(getInputVariablesValues());
+        clientController.startDebuggingSession(getInputVariablesValues());
     }
 
     public void onStepOverClick() {
-        appController.executeNextDebugStep();
+        clientController.executeNextDebugStep();
     }
 
     public void onStepBackwardClick() {
-        appController.executePreviousDebugStep();
+        clientController.executePreviousDebugStep();
     }
 
     public void onStopButtonClick() {
-        appController.stopDebuggingSession();
+        clientController.stopDebuggingSession();
         finishExecutionMode();
     }
 
     public void onResumeClick() {
-        appController.resumeDebuggerExecution();
+        clientController.resumeDebuggerExecution();
     }
 
     public void disableInputFields(boolean disable) {

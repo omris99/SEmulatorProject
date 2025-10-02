@@ -1,6 +1,6 @@
 package gui.components.displaycommandsbar;
 
-import gui.app.AppController;
+import gui.app.ClientController;
 import gui.app.Theme;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +16,7 @@ public class DisplayCommandsBarController {
     private ChoiceBox<Theme> themeChoiceBox;
 
     @FXML
-    private AppController appController;
+    private ClientController clientController;
 
     @FXML
     private Button showTreeTableViewButton;
@@ -36,7 +36,7 @@ public class DisplayCommandsBarController {
 
         themeChoiceBox.getSelectionModel().select(Theme.CLASSIC);
         themeChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            appController.changeTheme(newVal);
+            clientController.changeTheme(newVal);
         });
     }
 
@@ -44,22 +44,22 @@ public class DisplayCommandsBarController {
     void onAnimationsButtonClick(ActionEvent event) {
         animationsDisabled = !animationsDisabled;
         animationsButton.setText(animationsDisabled ? "OFF" : "ON");
-        appController.disableAnimations(animationsDisabled);
+        clientController.disableAnimations(animationsDisabled);
     }
 
     @FXML
     void onShowTreeTableViewButtonClick(ActionEvent event) {
-        appController.showOnScreenProgramTreeTableView();
+        clientController.showOnScreenProgramTreeTableView();
 
     }
 
     @FXML
     void onSpecificExpansionButtonClick(ActionEvent event) {
-        appController.showSpecificExpansionView();
+        clientController.showSpecificExpansionView();
 
     }
-    public void setAppController(AppController appController) {
-        this.appController = appController;
+    public void setCLientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void disableTreeTableViewAndSpecificExpansionButton(boolean disable) {

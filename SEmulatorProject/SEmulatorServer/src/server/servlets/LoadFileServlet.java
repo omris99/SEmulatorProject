@@ -1,7 +1,5 @@
 package server.servlets;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import dto.ProgramDTO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -11,15 +9,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import jakarta.xml.bind.JAXBException;
 import logic.engine.EmulatorEngine;
+import logic.exceptions.InvalidArgumentException;
+import logic.exceptions.InvalidXmlFileException;
 import logic.json.GsonFactory;
 import logic.model.generated.SProgram;
 
-import java.io.Console;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Scanner;
 
 @WebServlet(name = "LoadFileServlet", urlPatterns = {"/loadFile"})
 @MultipartConfig(
@@ -31,32 +28,21 @@ public class LoadFileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String filePath = req.getParameter("filePath");
-
-        resp.setContentType("application/json");
+        resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-
         try {
             ServletContext context = req.getServletContext();
             EmulatorEngine engine = (EmulatorEngine) context.getAttribute("emulatorEngine");
-            System.out.println("[Servlet] Reached LoadFileServlet");
 
             if (engine == null) {
-                System.out.println("[Servlet] EmulatorEngine not found, creating new one...");
                 engine = new EmulatorEngine();
                 context.setAttribute("emulatorEngine", engine);
-                System.out.println("[Servlet] EmulatorEngine added to context");
             }
 
             Part fileContent = req.getPart("fileContent");
-
-            System.out.println("[Servlet] before getinputstream ");
-            System.out.println("Class exists? " + SProgram.class);
             engine.loadProgram(fileContent.getInputStream());
-            System.out.println("[Servlet] after getinputstream ");
 
             ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
-            System.out.println("[Servlet] before json convert ");
 
             String programDtoJson = GsonFactory.getGson().toJson(program);
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -64,7 +50,26 @@ public class LoadFileServlet extends HttpServlet {
 
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+            String content;
+            switch (e) {
+                case InvalidXmlFileException iv -> {
+                    switch (iv.getType()) {
+                        case FILE_MISSING -> content = "File not found: " + iv.getFilePath();
+                        case INVALID_EXTENSION -> content = "Invalid file type: " + iv.getFilePath() + " must be .xml";
+                        case UNKNOWN_LABEL ->
+                                content = String.format("No instruction labeled as %s exists in the program.", iv.getElement());
+                        default -> content = "Unknown InvalidXmlFileException";
+                    }
+                }
+                case JAXBException jaxb -> content = "Can't read XML File";
+                case InvalidArgumentException ia -> content = String.format("%s.  \nError %s: %s ",
+                        ia.getErrorType().getUserMessage(),
+                        ia.getErrorType().getArgumentType(),
+                        ia.getArgumentName());
+                case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
+                default -> content = "Unexpected error: " + e.getMessage();
+            }
+                resp.getWriter().write(content);
         }
     }
 }

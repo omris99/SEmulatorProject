@@ -1,8 +1,7 @@
 package gui.components.loadfilebar;
 
 import gui.app.AnimationsManager;
-import gui.app.AppController;
-import javafx.animation.ScaleTransition;
+import gui.app.ClientController;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,12 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import javafx.util.Duration;
 
 import java.io.File;
 
 public class LoadFileBarController {
-    private AppController appController;
+    private ClientController clientController;
 
     @FXML
     private TextField FilePathTextField;
@@ -27,8 +25,8 @@ public class LoadFileBarController {
     private ProgressBar progressBar;
 
 
-    public void setAppController(AppController appController) {
-        this.appController = appController;
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     @FXML
@@ -42,7 +40,7 @@ public class LoadFileBarController {
             return;
         }
 
-        appController.loadProgramWithProgress(selectedFile);
+        clientController.loadProgramWithProgress(selectedFile);
         AnimationsManager.playShake(LoadFileButton, 400, 15);
 
     }

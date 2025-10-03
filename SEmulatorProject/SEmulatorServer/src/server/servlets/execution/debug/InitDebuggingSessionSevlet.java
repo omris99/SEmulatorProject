@@ -1,7 +1,6 @@
-package server.servlets;
+package server.servlets.execution.debug;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import dto.ErrorAlertDTO;
 import dto.RunResultsDTO;
 import jakarta.servlet.ServletException;
@@ -15,18 +14,14 @@ import logic.json.GsonFactory;
 import server.utils.ServletUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@WebServlet(name = "runProgramServlet", urlPatterns = {"/runProgram"})
-public class RunProgramServlet extends HttpServlet {
+@WebServlet(name = "initDebuggingSessionSevlet", urlPatterns = {"/execution/debug/initDebuggingSession"})
+public class InitDebuggingSessionSevlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try{
-            String json = req.getReader().lines().collect(Collectors.joining());
-            Map<String, Object> payload = GsonFactory.getGson().fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
-
+        try {
+            Map<String, Object> payload = ServletUtils.getPayloadFromRequest(req);
             int runDegree = ((Double) payload.get("runDegree")).intValue();
             Map<String, String> inputVariables = (Map<String, String>) payload.get("inputVariables");
 
@@ -34,10 +29,11 @@ public class RunProgramServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
             EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
 
-            RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
-            String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
+            RunResultsDTO initialState = (RunResultsDTO) engine.initDebuggingSession(runDegree, inputVariables);
+            String initialStateJson = GsonFactory.getGson().toJson(initialState);
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(runResultsDtoJson);
+            resp.getWriter().write(initialStateJson);
+
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             ErrorAlertDTO error = new ErrorAlertDTO("Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
@@ -49,7 +45,7 @@ public class RunProgramServlet extends HttpServlet {
                     "Error Starting Execution",
                     "Negative Number Submitted",
                     "You entered the number: " + e.getNumber() + " which is not positive.\n" +
-                    "Please enter only Positive Numbers.");
+                            "Please enter only Positive Numbers.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
         }

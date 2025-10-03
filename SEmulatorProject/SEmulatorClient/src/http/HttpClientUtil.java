@@ -27,7 +27,7 @@ public class HttpClientUtil {
 
     public static Request buildUploadFileRequest(File selectedFile) {
         String finalUrl = HttpUrl
-                .parse(Constants.LOAD_FILE)
+                .parse(ServerPaths.LOAD_FILE)
                 .newBuilder()
                 .build()
                 .toString();
@@ -44,6 +44,13 @@ public class HttpClientUtil {
         return new Request.Builder()
                 .url(finalUrl)
                 .post(requestBody)
+                .build();
+    }
+
+    public static Request createEmptyBodyPostRequest(String url) {
+        return new Request.Builder()
+                .url(url)
+                .post(RequestBody.create("", null))
                 .build();
     }
 }

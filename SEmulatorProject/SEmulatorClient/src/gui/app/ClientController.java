@@ -17,7 +17,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import logic.engine.EmulatorEngine;
 import logic.instructiontree.InstructionsTree;
 import logic.json.GsonFactory;
 import okhttp3.*;
@@ -27,6 +26,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//TODO:
+// 1. BUG in reRunSelectedHistory(RunResultsDTO selectedRun):
+// The call to prepareDebuggerForNewRun() is asynchronous.
+// As a result, the following lines are executed before the debugger is actually ready,
+// so input variables are always reset to 0 instead of being restored correctly.
 
 public class ClientController {
     @FXML
@@ -115,9 +120,7 @@ public class ClientController {
     }
 
     private ProgramDTO fetchLoadedProgram() {
-        Request request = new Request.Builder()
-                .url(ServerPaths.GET_LOADED_PROGRAM)
-                .build();
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_LOADED_PROGRAM);
 
         try (Response response = HttpClientUtil.runSync(request)) {
             String responseBody = response.body().string();
@@ -141,9 +144,7 @@ public class ClientController {
     }
 
     public void prepareDebuggerForNewRun() {
-        Request request = new Request.Builder()
-                .url(ServerPaths.GET_INPUTS_NAMES)
-                .build();
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_INPUTS_NAMES);
 
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
@@ -173,10 +174,6 @@ public class ClientController {
                 response.close();
             }
         });
-//        ProgramDTO programDTO = fetchLoadedProgram();
-//        if (programDTO != null) {
-//            debuggerWindowController.prepareForNewRun((programDTO.getInputNames()));
-//        }
     }
 
     public void showExpandedProgram(int degree) {
@@ -358,9 +355,7 @@ public class ClientController {
     }
 
     private void fetchAndHighlightNextInstructionToExecute() {
-        Request request = new Request.Builder()
-                .url(ServerPaths.GET_NEXT_INSTRUCTION_TO_EXECUTE)
-                .build();
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_NEXT_INSTRUCTION_TO_EXECUTE);
 
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
@@ -662,24 +657,13 @@ public class ClientController {
                     response.close();
                 }
             });
-//
-//            InstructionsTree instructionsTree = engine.getSpecificExpansionInstructionsTree();
-//            controller.setInstructions(instructionsTree);
-//            Scene scene = new Scene(load, 700, 400);
-//            Stage showWindow = new Stage();
-//            showWindow.setTitle("Specific Expansion View");
-//            showWindow.setScene(scene);
-//            showWindow.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void fetchHistoryAndUpdateHistoryWindow() {
-        Request request = new Request.Builder()
-                .url(ServerPaths.GET_HISTORY)
-                .build();
-
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_HISTORY);
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -1,0 +1,27 @@
+package server.servlets;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import logic.engine.EmulatorEngine;
+import logic.instructiontree.InstructionsTree;
+import logic.json.GsonFactory;
+import server.utils.ServletUtils;
+
+import java.io.IOException;
+
+@WebServlet(name = "getSpecificExpansionInstructionsTreeServlet", urlPatterns = {"/specificExpansionInstructionsTree"})
+public class GetSpecificExpansionInstructionsTreeServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        InstructionsTree onScreenProgramInstructionsTree = engine.getSpecificExpansionInstructionsTree();
+        String onScreenProgramInstructionsTreeJson = GsonFactory.getGson().toJson(onScreenProgramInstructionsTree);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(onScreenProgramInstructionsTreeJson);
+    }
+}

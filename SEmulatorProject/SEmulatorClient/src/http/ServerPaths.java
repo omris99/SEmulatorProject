@@ -14,6 +14,8 @@ public class ServerPaths {
     public final static String GET_HISTORY = FULL_SERVER_PATH + "/history";
     public final static String GET_LOADED_PROGRAM = FULL_SERVER_PATH + "/loadedProgram";
     public final static String GET_INPUTS_NAMES = FULL_SERVER_PATH + "/programInputsNames";
+    public final static String GET_ON_SCREEN_PROGRAM_INSTRUCTIONS_TREE = FULL_SERVER_PATH + "/onScreenProgramInstructionsTree";
+    public final static String GET_SPECIFIC_EXPANSION_INSTRUCTIONS_TREE = FULL_SERVER_PATH + "/specificExpansionInstructionsTree";
 
     //EXECUTION
     public final static String RUN_PROGRAM = FULL_SERVER_PATH + EXECUTION_CONTEXT_PATH + "/runProgram";

@@ -53,4 +53,11 @@ public class HttpClientUtil {
                 .post(RequestBody.create("", null))
                 .build();
     }
+
+    public static Request createGetRequest(String url) {
+        return new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+    }
 }

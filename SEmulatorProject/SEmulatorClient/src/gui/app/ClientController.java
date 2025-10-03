@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientController {
-    private final EmulatorEngine engine;
-
     @FXML
     private LoadFileBarController loadFileBarController;
 
@@ -53,10 +51,6 @@ public class ClientController {
         instructionWindowController.setClientController(this);
         historyWindowController.setClientController(this);
         displayCommandsBarController.setCLientController(this);
-    }
-
-    public ClientController() {
-        this.engine = new EmulatorEngine();
     }
 
     public void loadProgramWithProgress(File selectedFile) {
@@ -590,13 +584,40 @@ public class ClientController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
             Parent load = loader.load();
             InstructionsTreeTableController controller = loader.getController();
-            InstructionsTree instructionsTree = engine.getOnScreenProgramInstructionsTree();
-            controller.setInstructions(instructionsTree);
-            Scene scene = new Scene(load, 700, 400);
-            Stage showWindow = new Stage();
-            showWindow.setTitle("Tree Table View");
-            showWindow.setScene(scene);
-            showWindow.show();
+
+            Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_ON_SCREEN_PROGRAM_INSTRUCTIONS_TREE);
+            HttpClientUtil.runAsync(request, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Platform.runLater(() -> showErrorAlert(
+                            "Error Fetching Instructions Tree",
+                            "Failed to fetch instructions tree from server",
+                            e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseBodyString = response.body().string();
+                    if (response.isSuccessful()) {
+                        InstructionsTree instructionsTree = GsonFactory.getGson().fromJson(responseBodyString, InstructionsTree.class);
+                        Platform.runLater(() -> {
+                            controller.setInstructions(instructionsTree);
+                            Scene scene = new Scene(load, 700, 400);
+                            Stage showWindow = new Stage();
+                            showWindow.setTitle("Tree Table View");
+                            showWindow.setScene(scene);
+                            showWindow.show();
+                        });
+                    } else {
+                        Platform.runLater(() -> showErrorAlert(
+                                ("HTTP " + response.code() + " Error"),
+                                ("Failed to fetch instructions tree from server"),
+                                null));
+                    }
+
+                    response.close();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -607,13 +628,48 @@ public class ClientController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
             Parent load = loader.load();
             InstructionsTreeTableController controller = loader.getController();
-            InstructionsTree instructionsTree = engine.getSpecificExpansionInstructionsTree();
-            controller.setInstructions(instructionsTree);
-            Scene scene = new Scene(load, 700, 400);
-            Stage showWindow = new Stage();
-            showWindow.setTitle("Specific Expansion View");
-            showWindow.setScene(scene);
-            showWindow.show();
+
+            Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_SPECIFIC_EXPANSION_INSTRUCTIONS_TREE);
+            HttpClientUtil.runAsync(request, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Platform.runLater(() -> showErrorAlert(
+                            "Error Fetching Specific Expansion Instructions Tree",
+                            "Failed to fetch specific expansion instructions tree from server",
+                            e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseBodyString = response.body().string();
+                    if (response.isSuccessful()) {
+                        InstructionsTree instructionsTree = GsonFactory.getGson().fromJson(responseBodyString, InstructionsTree.class);
+                        Platform.runLater(() -> {
+                            controller.setInstructions(instructionsTree);
+                            Scene scene = new Scene(load, 700, 400);
+                            Stage showWindow = new Stage();
+                            showWindow.setTitle("Specific Expansion View");
+                            showWindow.setScene(scene);
+                            showWindow.show();
+                        });
+                    } else {
+                        Platform.runLater(() -> showErrorAlert(
+                                ("HTTP " + response.code() + " Error"),
+                                ("Failed to fetch specific expansion instructions tree from server"),
+                                null));
+                    }
+
+                    response.close();
+                }
+            });
+//
+//            InstructionsTree instructionsTree = engine.getSpecificExpansionInstructionsTree();
+//            controller.setInstructions(instructionsTree);
+//            Scene scene = new Scene(load, 700, 400);
+//            Stage showWindow = new Stage();
+//            showWindow.setTitle("Specific Expansion View");
+//            showWindow.setScene(scene);
+//            showWindow.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

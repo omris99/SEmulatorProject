@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="891.0" prefWidth="1159.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userswindow.UsersWindowController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="window-header" text="Users" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="component-header" text="Available Users" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
+      <VBox prefHeight="337.0" prefWidth="1159.0">
+         <children>
+            <fx:include fx:id="availableUsersTable" source="../availableusers/AvailableUsers.fxml" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </VBox>
+      <Label alignment="CENTER" prefHeight="23.0" prefWidth="1758.0" styleClass="component-header" text="User History" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
+      <fx:include fx:id="userHistoryTable" source="../userhistorytable/UsersHistoryTable.fxml" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
+</VBox>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_RIGHT" prefHeight="297.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.availableusers.AvailableUsersController">
+   <children>
+      <TableView fx:id="usersTable" prefHeight="476.0" prefWidth="833.0">
+        <columns>
+          <TableColumn fx:id="colUserName" prefWidth="103.74083864688873" text="# Execution" />
+            <TableColumn fx:id="colMainProgramsUploaded" prefWidth="139.0" text="Program / Function" />
+            <TableColumn fx:id="colFunctionsContributed" prefWidth="140.0" text="Name" />
+            <TableColumn fx:id="colCreditBalance" prefWidth="105.0" text="Architecture" />
+            <TableColumn fx:id="colCreditsUsed" prefWidth="72.0" text="Degree" />
+            <TableColumn fx:id="colExecutionsPerformed" prefWidth="95.0" text="Y-Result" />
+            <TableColumn fx:id="colExecutionsPerformed1" prefWidth="208.0" text="Total Cycles" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</VBox>

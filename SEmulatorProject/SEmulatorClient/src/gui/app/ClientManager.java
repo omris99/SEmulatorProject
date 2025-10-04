@@ -12,6 +12,7 @@ import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.dashboard.DashBoardController;
 import gui.execution.ExecutionScreenController;
+import gui.login.LoginController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -21,7 +22,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import logic.instructiontree.InstructionsTree;
 import logic.json.GsonFactory;
@@ -36,11 +39,14 @@ import java.util.Map;
 public class ClientManager {
     @FXML
     private AnchorPane mainPanel;
-
+    private Parent loginScreen;
+    private LoginController loginController;
     private Parent dashBoardScreen;
     private DashBoardController dashBoardController;
     private Parent executionScreen;
     private ExecutionScreenController executionScreenController;
+    private String currentUsername;
+
 
     @FXML
     public void initialize() {
@@ -48,12 +54,17 @@ public class ClientManager {
             FXMLLoader dashLoader = new FXMLLoader(getClass().getResource("/gui/dashboard/DashBoard.fxml"));
             dashBoardScreen = dashLoader.load();
             dashBoardController = dashLoader.getController();
+            dashBoardController.setClientManager(this);
 
             FXMLLoader execLoader = new FXMLLoader(getClass().getResource("/gui/execution/ExecutionScreen.fxml"));
             executionScreen = execLoader.load();
             executionScreenController = execLoader.getController();
-            switchToDashBoard();
 
+            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/gui/login/Login.fxml"));
+            loginScreen = loginLoader.load();
+            loginController = loginLoader.getController();
+            loginController.setClientManager(this);
+            switchToLoginScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +77,6 @@ public class ClientManager {
         AnchorPane.setBottomAnchor(pane, 0.0);
         AnchorPane.setLeftAnchor(pane, 0.0);
         AnchorPane.setRightAnchor(pane, 0.0);
-
     }
 
     public void switchToDashBoard() {
@@ -79,5 +89,12 @@ public class ClientManager {
 //        executionScreen.setActive();
     }
 
+    public void switchToLoginScreen() {
+        setMainPanelTo(loginScreen);
+//        executionScreen.setActive();
+    }
 
+    public void setUserName(String username) {
+        this.currentUsername = username;
+    }
 }

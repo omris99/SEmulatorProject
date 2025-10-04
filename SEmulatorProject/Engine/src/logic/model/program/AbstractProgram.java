@@ -18,6 +18,7 @@ public abstract class AbstractProgram implements Program {
     protected final String name;
     protected final Instructions instructions;
     protected List<String> functionsNames;
+    protected String uploadedBy;
 
     public AbstractProgram(String name) {
         this.name = name.trim();

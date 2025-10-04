@@ -2,6 +2,7 @@ package gui.components.loadfilebar;
 
 import gui.app.AnimationsManager;
 import gui.app.ClientController;
+import gui.dashboard.DashBoardController;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 public class LoadFileBarController {
-    private ClientController clientController;
+    private DashBoardController dashBoardController;
 
     @FXML
     private TextField FilePathTextField;
@@ -25,8 +26,8 @@ public class LoadFileBarController {
     private ProgressBar progressBar;
 
 
-    public void setClientController(ClientController clientController) {
-        this.clientController = clientController;
+    public void setDashBoardController(DashBoardController dashBoardController) {
+        this.dashBoardController = dashBoardController;
     }
 
     @FXML
@@ -40,7 +41,7 @@ public class LoadFileBarController {
             return;
         }
 
-        clientController.loadProgramWithProgress(selectedFile);
+        dashBoardController.loadProgramWithProgress(selectedFile);
         AnimationsManager.playShake(LoadFileButton, 400, 15);
 
     }

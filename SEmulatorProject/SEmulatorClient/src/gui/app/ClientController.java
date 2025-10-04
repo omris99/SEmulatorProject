@@ -34,8 +34,8 @@ import java.util.Map;
 // so input variables are always reset to 0 instead of being restored correctly.
 
 public class ClientController {
-    @FXML
-    private LoadFileBarController loadFileBarController;
+//    @FXML
+//    private LoadFileBarController loadFileBarController;
 
     @FXML
     private InstructionsWindowController instructionWindowController;
@@ -51,65 +51,65 @@ public class ClientController {
 
     @FXML
     private void initialize() {
-        loadFileBarController.setClientController(this);
+//        loadFileBarController.setDashBoardController(this);
         debuggerWindowController.setClientController(this);
         instructionWindowController.setClientController(this);
         historyWindowController.setClientController(this);
         displayCommandsBarController.setCLientController(this);
     }
-
-    public void loadProgramWithProgress(File selectedFile) {
-        loadFileBarController.removeProgressBarErrorStyle();
-        Task<Void> loadTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
-                updateProgress(15, 100);
-                updateMessage(selectedFile.getAbsolutePath());
-                Request request = HttpClientUtil.buildUploadFileRequest(selectedFile);
-                HttpClientUtil.runAsync(request, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Platform.runLater(() -> {
-                            loadFileBarController.setProgressBarLoadErrorStyle();
-                            showErrorAlert(
-                                    "Upload Failed",
-                                    "Failed to upload file to server",
-                                    e.getMessage()
-                            );
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String responseBodyString = response.body().string();
-                        if (response.isSuccessful()) {
-                            ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
-                            Platform.runLater(() -> {
-                                instructionWindowController.onProgramLoaded(programDTO);
-                                resetComponents();
-                            });
-                        } else {
-                            Platform.runLater(() -> {
-                                loadFileBarController.setProgressBarLoadErrorStyle();
-                                showErrorAlert(
-                                        ("HTTP " + response.code() + " Error"),
-                                        ("Failed to load XML file"),
-                                        responseBodyString);
-                            });
-                        }
-                        response.close();
-                    }
-                });
-
-                updateProgress(100, 100);
-                return null;
-            }
-        };
-
-        loadFileBarController.bindTaskToUI(loadTask);
-
-        new Thread(loadTask).start();
-    }
+//
+//    public void loadProgramWithProgress(File selectedFile) {
+//        loadFileBarController.removeProgressBarErrorStyle();
+//        Task<Void> loadTask = new Task<>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                updateProgress(15, 100);
+//                updateMessage(selectedFile.getAbsolutePath());
+//                Request request = HttpClientUtil.buildUploadFileRequest(selectedFile);
+//                HttpClientUtil.runAsync(request, new Callback() {
+//                    @Override
+//                    public void onFailure(Call call, IOException e) {
+//                        Platform.runLater(() -> {
+//                            loadFileBarController.setProgressBarLoadErrorStyle();
+//                            showErrorAlert(
+//                                    "Upload Failed",
+//                                    "Failed to upload file to server",
+//                                    e.getMessage()
+//                            );
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Call call, Response response) throws IOException {
+//                        String responseBodyString = response.body().string();
+//                        if (response.isSuccessful()) {
+//                            ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
+//                            Platform.runLater(() -> {
+//                                instructionWindowController.onProgramLoaded(programDTO);
+//                                resetComponents();
+//                            });
+//                        } else {
+//                            Platform.runLater(() -> {
+//                                loadFileBarController.setProgressBarLoadErrorStyle();
+//                                showErrorAlert(
+//                                        ("HTTP " + response.code() + " Error"),
+//                                        ("Failed to load XML file"),
+//                                        responseBodyString);
+//                            });
+//                        }
+//                        response.close();
+//                    }
+//                });
+//
+//                updateProgress(100, 100);
+//                return null;
+//            }
+//        };
+//
+//        loadFileBarController.bindTaskToUI(loadTask);
+//
+//        new Thread(loadTask).start();
+//    }
 
     private void showErrorAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -305,7 +305,7 @@ public class ClientController {
                         fetchAndHighlightNextInstructionToExecute();
                         instructionWindowController.disableDegreeChoiceControls(true);
                         historyWindowController.disableReRunButton(true);
-                        loadFileBarController.disableLoadButton(true);
+//                        loadFileBarController.disableLoadButton(true);
                     });
                 }
                 else {
@@ -489,7 +489,7 @@ public class ClientController {
         instructionWindowController.stopHighlightingNextInstructionToExecute();
         instructionWindowController.disableDegreeChoiceControls(false);
         historyWindowController.disableReRunButton(false);
-        loadFileBarController.disableLoadButton(false);
+//        loadFileBarController.disableLoadButton(false);
     }
 
     public void changeLoadedProgramToFunction(String functionName) {

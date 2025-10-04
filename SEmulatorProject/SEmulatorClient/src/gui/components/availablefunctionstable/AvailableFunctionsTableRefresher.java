@@ -1,10 +1,12 @@
 package gui.components.availablefunctionstable;
 
 import dto.ProgramDTO;
+import dto.UploadedProgramDTO;
 import dto.UserDTO;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import logic.json.GsonFactory;
+import logic.model.functionsrepo.UploadedProgram;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -18,11 +20,11 @@ import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class AvailableFunctionsTableRefresher extends TimerTask {
-    private final Consumer<List<ProgramDTO>> functionsListConsumer;
+    private final Consumer<List<UploadedProgramDTO>> functionsListConsumer;
     private final boolean shouldUpdate;
 
 
-    public AvailableFunctionsTableRefresher(boolean shouldUpdate, Consumer<List<ProgramDTO>> functionsListConsumer) {
+    public AvailableFunctionsTableRefresher(boolean shouldUpdate, Consumer<List<UploadedProgramDTO>> functionsListConsumer) {
         this.shouldUpdate = shouldUpdate;
         this.functionsListConsumer = functionsListConsumer;
     }
@@ -45,8 +47,8 @@ public class AvailableFunctionsTableRefresher extends TimerTask {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonArrayOfUsersNames = response.body().string();
-                ProgramDTO[] usersNames = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, ProgramDTO[].class);
-                functionsListConsumer.accept(Arrays.asList(usersNames));
+                UploadedProgramDTO[] functions = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, UploadedProgramDTO[].class);
+                functionsListConsumer.accept(Arrays.asList(functions));
             }
         });
     }

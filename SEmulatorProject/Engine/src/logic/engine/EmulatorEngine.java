@@ -13,7 +13,6 @@ import logic.execution.DebuggerExecutor;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.instructiontree.InstructionsTree;
-import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -21,7 +20,6 @@ import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.functionsrepo.FunctionsRepo;
-import logic.model.functionsrepo.ProgramsRepo;
 import logic.model.functionsrepo.UploadedProgram;
 import logic.model.generated.SProgram;
 import logic.model.instruction.Instruction;
@@ -59,7 +57,7 @@ public class EmulatorEngine implements Engine {
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
 
-        Program loadedProgram = ProgramMapper.toDomain(sProgram);
+        Program loadedProgram = ProgramMapper.toDomain("null", sProgram);
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
@@ -86,7 +84,7 @@ public class EmulatorEngine implements Engine {
         setCurrentContextProgram(mainProgram);
         UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
 
-        ProgramsRepo.getInstance().addProgram(uploadedProgram);
+        FunctionsRepo.getInstance().addProgram(uploadedProgram);
 
         savedHistories.clear();
     }

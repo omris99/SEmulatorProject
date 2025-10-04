@@ -1,6 +1,6 @@
 package gui.components.availablefunctionstable;
 
-import dto.ProgramDTO;
+import dto.UploadedProgramDTO;
 import dto.UserDTO;
 import gui.components.availableusers.AvailabaleUsersRefresher;
 import javafx.application.Platform;
@@ -24,27 +24,27 @@ public class AvailableFunctionsTableController {
     private boolean autoUpdate;
 
     @FXML
-    private TableColumn<ProgramDTO, String> colContextProgram;
+    private TableColumn<UploadedProgramDTO, String> colContextProgram;
 
     @FXML
-    private TableColumn<ProgramDTO, Integer> colInstructionsCount;
+    private TableColumn<UploadedProgramDTO, Integer> colInstructionsCount;
 
     @FXML
-    private TableColumn<ProgramDTO, Integer> colMaximalDegree;
+    private TableColumn<UploadedProgramDTO, Integer> colMaximalDegree;
 
     @FXML
-    private TableColumn<ProgramDTO, Integer> colUploadedBy;
+    private TableColumn<UploadedProgramDTO, Integer> colUploadedBy;
 
     @FXML
-    private TableColumn<ProgramDTO, Integer> colName;
+    private TableColumn<UploadedProgramDTO, Integer> colName;
 
     @FXML
     private Button executeFunctionButton;
 
     @FXML
-    private TableView<ProgramDTO> functionsTable;
+    private TableView<UploadedProgramDTO> functionsTable;
 
-    private final ObservableList<ProgramDTO> data = FXCollections.observableArrayList();
+    private final ObservableList<UploadedProgramDTO> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -56,9 +56,9 @@ public class AvailableFunctionsTableController {
 
         functionsTable.setItems(data);
 
-        functionsTable.setRowFactory(tv -> new TableRow<ProgramDTO>() {
+        functionsTable.setRowFactory(tv -> new TableRow<UploadedProgramDTO>() {
             @Override
-            protected void updateItem(ProgramDTO item, boolean empty) {
+            protected void updateItem(UploadedProgramDTO item, boolean empty) {
                 super.updateItem(item, empty);
             }
         });
@@ -73,16 +73,16 @@ public class AvailableFunctionsTableController {
 
 
 
-    public void updateUsersList(List<ProgramDTO> users) {
+    public void updateUsersList(List<UploadedProgramDTO> users) {
         Platform.runLater(() -> {
-            ProgramDTO selectedProgram = functionsTable.getSelectionModel().getSelectedItem();
-            String selectedProgramName = (selectedProgram != null) ? selectedProgram.getName() : null;
+            UploadedProgramDTO selectedProgram = functionsTable.getSelectionModel().getSelectedItem();
+            String selectedProgramName = (selectedProgram != null) ? selectedProgram.getProgram().getName() : null;
 
             data.setAll(users);
 
             if (selectedProgramName != null) {
-                for (ProgramDTO function : data) {
-                    if (function.getName().equals(selectedProgramName)) {
+                for (UploadedProgramDTO function : data) {
+                    if (function.getProgram().getName().equals(selectedProgramName)) {
                         functionsTable.getSelectionModel().select(function);
                         break;
                     }

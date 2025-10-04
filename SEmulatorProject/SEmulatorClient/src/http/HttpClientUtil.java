@@ -3,11 +3,27 @@ package http;
 import okhttp3.*;
 
 import java.io.File;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.util.function.Consumer;
 
 public class HttpClientUtil {
+
+
+    private final static chat.client.util.http.SimpleCookieManager simpleCookieManager = new chat.client.util.http.SimpleCookieManager();
     private final static OkHttpClient HTTP_CLIENT =
             new OkHttpClient.Builder()
+                    .cookieJar(simpleCookieManager)
+                    .followRedirects(false)
                     .build();
+
+    public static void setCookieManagerLoggingFacility(Consumer<String> logConsumer) {
+        simpleCookieManager.setLogData(logConsumer);
+    }
+
+    public static void removeCookiesOf(String domain) {
+        simpleCookieManager.removeCookiesOf(domain);
+    }
 
     public static void runAsync(Request request, Callback callback) {
         Call call = HttpClientUtil.HTTP_CLIENT.newCall(request);

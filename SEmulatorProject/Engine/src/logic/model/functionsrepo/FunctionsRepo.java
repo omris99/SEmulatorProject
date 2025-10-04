@@ -1,6 +1,7 @@
 package logic.model.functionsrepo;
 
 import dto.ProgramDTO;
+import dto.UploadedProgramDTO;
 import logic.model.program.Function;
 import logic.model.program.Program;
 
@@ -9,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public class FunctionsRepo {
-    private final Map<String, Function> functions = new HashMap<>();
-    private final Map<String, String> userStringToFunctionName = new HashMap<>();
+    private final Map<String, UploadedProgram> programs = new HashMap<>();
+    private final Map<String, UploadedProgram> functions = new HashMap<>();
+    private final Map<String, String> userStringToProgramName = new HashMap<>();
     private static final FunctionsRepo repo = new FunctionsRepo();
 
     private FunctionsRepo() {}
@@ -20,27 +22,34 @@ public class FunctionsRepo {
     }
 
     public Function getFunctionByName(String name){
-        return functions.get(name);
-    }
-
-    public void addFunction(Function function){
-        functions.put(function.getName(), function);
-        userStringToFunctionName.put(function.getRepresentation(), function.getName());
-    }
-
-    public String getFunctionUserString(String name){
-        Function function = functions.get(name);
-        if(function != null){
-            return function.getRepresentation();
+        if(functions.get(name) != null){
+            return (Function) functions.get(name).getProgram();
         }
         return null;
     }
 
-    public String getFunctionNameByUserString(String userString){
-        return userStringToFunctionName.get(userString);
+    public void addProgram(UploadedProgram program){
+        programs.put(program.getName(), program);
     }
 
-    public List<ProgramDTO> getAllFunctions(){
-        return functions.values().stream().map(Program::createDTO).map(p -> (ProgramDTO) p).toList();
+    public void addFunction(UploadedProgram function){
+        functions.put(function.getName(), function);
+        userStringToProgramName.put(function.getName(), function.getName());
     }
+
+    public String getFunctionUserString(String name){
+        UploadedProgram function = functions.get(name);
+        if(function != null){
+            return ((Function) function.getProgram()).getRepresentation();
+        }
+        return null;
+    }
+    public String getFunctionNameByUserString(String userString){
+        return userStringToProgramName.get(userString);
+    }
+
+    public List<UploadedProgramDTO> getAllFunctions(){
+        return functions.values().stream().map(UploadedProgram::createDTO).toList();
+    }
+
 }

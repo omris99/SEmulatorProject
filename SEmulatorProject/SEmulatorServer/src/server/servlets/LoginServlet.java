@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
                         resp.getWriter().write(errorMessage);
                     } else {
                         userManager.addUser(usernameFromParameter);
-                        req.getSession().setAttribute("username", usernameFromParameter);
+                        req.getSession(true).setAttribute("username", usernameFromParameter);
                         resp.setStatus(HttpServletResponse.SC_OK);
                         resp.getWriter().write("Login successful");
                     }

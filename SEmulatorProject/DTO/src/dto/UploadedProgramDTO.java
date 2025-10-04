@@ -13,6 +13,11 @@ public class UploadedProgramDTO {
         this.instructionsCount = instructionsCount;
     }
 
+    public String getName() {
+        return program.getName();
+    }
+
+
     public String getUploadedBy() {
         return uploadedBy;
     }
@@ -25,7 +30,13 @@ public class UploadedProgramDTO {
         return totalExecutions;
     }
 
-    public int getInstructionsCount() {
+
+    public int getInstructionsCount(){
         return instructionsCount;
     }
+
+    public int getMaximalDegree() {
+        return program.getMaximalDegree();
+    }
+
 }

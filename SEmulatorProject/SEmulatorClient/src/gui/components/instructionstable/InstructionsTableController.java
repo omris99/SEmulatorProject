@@ -33,6 +33,10 @@ public class InstructionsTableController {
     @FXML
     private TableColumn<InstructionDTO, Integer> colCycle;
 
+    @FXML
+    private TableColumn<InstructionDTO, String> colArchitecture;
+
+
     private String highlightedSelection;
     private int nextInstructionToExecuteIndex;
     private final ObservableList<InstructionDTO> data = FXCollections.observableArrayList();
@@ -44,6 +48,8 @@ public class InstructionsTableController {
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
         colInstructionDisplayFormat.setCellValueFactory(new PropertyValueFactory<>("displayFormat"));
         colCycle.setCellValueFactory(new PropertyValueFactory<>("cycles"));
+//        colArchitecture.setCellValueFactory(new PropertyValueFactory<>("architecture"));
+
 
         InstructionsTable.setItems(data);
 

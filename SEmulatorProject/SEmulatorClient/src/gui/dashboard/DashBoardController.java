@@ -8,6 +8,7 @@ public class DashBoardController {
     private LoadFileBarController loadFileBarController;
 
     private void initialize() {
+//        loadFileBarController.setClientController(this);
     }
 
 }

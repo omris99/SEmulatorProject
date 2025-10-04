@@ -1,5 +1,6 @@
 package gui.app;
 
+import http.HttpClientUtil;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,7 @@ public class Main extends Application {
         Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/gui/app/resources/images/icon.png")));
         primaryStage.getIcons().add(icon);
 
-        Parent load = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("App.fxml")));
+        Parent load = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Client.fxml")));
         scene = new Scene(load, 1540, 750);
         primaryStage.setMinWidth(1100);
         primaryStage.setMinHeight(750);
@@ -35,6 +36,11 @@ public class Main extends Application {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("app.css")).toExternalForm());
         scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(theme.getCssFilePath())).toExternalForm());
+    }
+
+    @Override
+    public void stop() throws Exception {
+        HttpClientUtil.shutdown();
     }
 
     public static void main(String[] args) {

@@ -22,8 +22,8 @@ public class InstructionsWindowToolbarController {
     @FXML
     private HighlightSelectionController highlightSelectionController;
 
-    @FXML
-    private ProgramSelectorController programSelectorController;
+//    @FXML
+//    private ProgramSelectorController programSelectorController;
 
     @FXML
     private Button expandButton;
@@ -35,7 +35,7 @@ public class InstructionsWindowToolbarController {
     public void initialize() {
         expandationLevelWindowController.setInstructionsWindowToolbarController(this);
         highlightSelectionController.setInstructionsWindowToolbarController(this);
-        programSelectorController.setInstructionsWindowToolbarController(this);
+//        programSelectorController.setInstructionsWindowToolbarController(this);
     }
 
     public void onDegreeChoice(int newDegree) {
@@ -95,7 +95,7 @@ public class InstructionsWindowToolbarController {
     }
 
     public void updateProgramOptions(ProgramDTO program) {
-        programSelectorController.updateOptions(program);
+//        programSelectorController.updateOptions(program);
     }
 
     public int getDegreeChoice() {

@@ -8,9 +8,9 @@
 
 <VBox alignment="TOP_RIGHT" prefHeight="440.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.availablefunctionstable.AvailableFunctionsTableController">
    <children>
-      <TableView fx:id="usersTable" prefHeight="538.0" prefWidth="833.0">
+      <TableView fx:id="functionsTable" prefHeight="538.0" prefWidth="833.0">
         <columns>
-          <TableColumn fx:id="colUserName" prefWidth="103.74083864688873" text="Name" />
+          <TableColumn fx:id="colName" prefWidth="103.74083864688873" text="Name" />
             <TableColumn fx:id="colContextProgram" prefWidth="151.0" text="Context Program" />
             <TableColumn fx:id="colUploadedBy" prefWidth="158.44225311279297" text="Uploaded By" />
             <TableColumn fx:id="colInstructionsCount" prefWidth="165.24786376953125" text="Instructions Count" />

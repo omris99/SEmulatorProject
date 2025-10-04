@@ -1,9 +1,11 @@
 package logic.model.functionsrepo;
 
+import dto.ProgramDTO;
 import logic.model.program.Function;
 import logic.model.program.Program;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FunctionsRepo {
@@ -36,5 +38,9 @@ public class FunctionsRepo {
 
     public String getFunctionNameByUserString(String userString){
         return userStringToFunctionName.get(userString);
+    }
+
+    public List<ProgramDTO> getAllFunctions(){
+        return functions.values().stream().map(Program::createDTO).map(p -> (ProgramDTO) p).toList();
     }
 }

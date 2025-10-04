@@ -25,7 +25,7 @@
       </Label>
       <VBox prefHeight="337.0" prefWidth="1159.0">
          <children>
-            <fx:include fx:id="availableUsersTable" source="../availableusers/AvailableUsers.fxml" />
+            <fx:include fx:id="availableUsersTable" source="../availableusers/AvailableUsersTable.fxml" />
          </children>
          <VBox.margin>
             <Insets />

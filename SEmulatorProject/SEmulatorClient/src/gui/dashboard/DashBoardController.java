@@ -3,11 +3,14 @@ package gui.dashboard;
 import dto.ProgramDTO;
 import gui.app.ClientManager;
 import gui.components.loadfilebar.LoadFileBarController;
+import gui.components.programswindow.ProgramsWindowController;
+import gui.components.userswindow.UsersWindowController;
 import http.HttpClientUtil;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import logic.json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,6 +26,15 @@ public class DashBoardController {
 
     @FXML
     private ClientManager clientManager;
+
+    @FXML
+    private Label userNameLabel;
+
+    @FXML
+    private UsersWindowController usersWindowController;
+
+    @FXML
+    private ProgramsWindowController programsWindowController;
 
     @FXML
     private void initialize() {
@@ -92,6 +104,15 @@ public class DashBoardController {
 
     public void setClientManager(ClientManager clientManager) {
         this.clientManager = clientManager;
+    }
+
+    public void setUserName(String userName) {
+        userNameLabel.setText(userName);
+    }
+
+    public void setActive() {
+        usersWindowController.startAvailableUsersTableRefresher();
+        programsWindowController.startAvailableFunctionsTableRefresher();
     }
 
 

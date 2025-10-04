@@ -16,6 +16,7 @@ import logic.exceptions.InvalidXmlFileException;
 import logic.json.GsonFactory;
 import logic.model.generated.SProgram;
 import server.utils.ServletUtils;
+import users.UserManager;
 
 import java.io.IOException;
 
@@ -33,9 +34,11 @@ public class LoadFileServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         try {
             EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+            UserManager userManager = ServletUtils.getUserManager(getServletContext());
+            String userName = (String) req.getSession().getAttribute("username");
 
             Part fileContent = req.getPart("fileContent");
-            engine.loadProgram(fileContent.getInputStream());
+            engine.loadProgram(userName, fileContent.getInputStream());
 
             ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
 

@@ -8,6 +8,8 @@ public class ServerPaths {
     private final static String DEBUG_CONTEXT_PATH = EXECUTION_CONTEXT_PATH + "/debug";
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
 
+    public final static String FUNCTIONS_LIST = FULL_SERVER_PATH + "/functions";
+    public final static String USERS_LIST = FULL_SERVER_PATH + "/users";
     public final static String LOGIN = FULL_SERVER_PATH + "/login";
     public final static String LOAD_FILE = FULL_SERVER_PATH + "/loadFile";
     public final static String GET_EXPANDED_PROGRAM = FULL_SERVER_PATH + "/expandedProgram";

@@ -2,6 +2,8 @@ package logic.model.mappers;
 
 import logic.model.argument.NameArgument;
 import logic.model.functionsrepo.FunctionsRepo;
+import logic.model.functionsrepo.ProgramsRepo;
+import logic.model.functionsrepo.UploadedProgram;
 import logic.model.generated.SFunction;
 import logic.model.generated.SInstruction;
 import logic.model.generated.SProgram;
@@ -39,7 +41,39 @@ public class ProgramMapper {
 
         if(!functionNames.isEmpty()){
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
-                FunctionsRepo.getInstance().addFunction(FunctionMapper.toDomain(jaxbFunction, functionNames));
+                Function function = FunctionMapper.toDomain(jaxbFunction, functionNames);
+                FunctionsRepo.getInstance().addFunction(function);
+            }
+        }
+
+        return domainProgram;
+    }
+
+    public static Program toDomain(String uploadedBy, SProgram jaxbProgram) {
+        if (jaxbProgram == null) {
+            return null;
+        }
+
+        ProgramImpl domainProgram = new ProgramImpl(jaxbProgram.getName());
+
+        List<String> functionNames = new ArrayList<>();
+        if(jaxbProgram.getSFunctions() != null) {
+            for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()) {
+                functionNames.add(jaxbFunction.getName());
+            }
+        }
+
+        domainProgram.setFunctionsNames(functionNames);
+
+        for(SInstruction instruction : jaxbProgram.getSInstructions().getSInstruction())
+        {
+            domainProgram.addInstruction(InstructionMapper.toDomain(instruction, functionNames));
+        }
+
+        if(!functionNames.isEmpty()){
+            for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
+                Function function = FunctionMapper.toDomain(jaxbFunction, functionNames);
+                ProgramsRepo.getInstance().addFunction(new UploadedProgram(uploadedBy, function, jaxbProgram.getName()));
             }
         }
 

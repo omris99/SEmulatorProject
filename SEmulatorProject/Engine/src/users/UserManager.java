@@ -1,29 +1,38 @@
 package users;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import dto.UserDTO;
+
+import java.util.*;
 
 public class UserManager {
-    private final Set<String> usersSet;
+    private final Map<String, User> usersMap;
 
     public UserManager() {
-        usersSet = new HashSet<>();
+        usersMap = new HashMap<>();
     }
 
     public synchronized void addUser(String username) {
-        usersSet.add(username);
+        usersMap.putIfAbsent(username, new User(username));
     }
 
     public synchronized void removeUser(String username) {
-        usersSet.remove(username);
+        usersMap.remove(username);
     }
 
-    public synchronized Set<String> getUsers() {
-        return Collections.unmodifiableSet(usersSet);
+    public synchronized Map<String, User> getUsers() {
+        return Collections.unmodifiableMap(usersMap);
+    }
+
+    public synchronized List<UserDTO> getUserDTOs() {
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : usersMap.values()) {
+            userDTOs.add(user.createDTO());
+        }
+
+        return userDTOs;
     }
 
     public boolean isUserExists(String username) {
-        return usersSet.contains(username);
+        return usersMap.containsKey(username);
     }
 }

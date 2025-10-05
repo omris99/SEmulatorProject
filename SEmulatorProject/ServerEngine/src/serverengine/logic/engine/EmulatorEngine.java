@@ -3,6 +3,7 @@ package serverengine.logic.engine;
 import clientserverdto.DTO;
 import clientserverdto.InstructionDTO;
 import clientserverdto.RunResultsDTO;
+import clientserverdto.ExecutionHistoryDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -24,11 +25,11 @@ import serverengine.logic.model.functionsrepo.UploadedProgram;
 import serverengine.logic.model.generated.SProgram;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.mappers.ProgramMapper;
+import serverengine.logic.model.program.Function;
 import serverengine.logic.model.program.Program;
 import serverengine.logic.utils.Utils;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.*;
 
 public class EmulatorEngine implements Engine {
@@ -37,9 +38,12 @@ public class EmulatorEngine implements Engine {
     private Program currentOnScreenProgram;
     private DebuggerExecutor debuggerExecutor;
     private final Map<String, List<RunResultsDTO>> savedHistories;
+    private final List<ExecutionHistoryDTO> executionsHistory;
+    private int currentExecutionNumber = 1;
 
     public EmulatorEngine() {
         this.savedHistories = new HashMap<>();
+        this.executionsHistory = new LinkedList<>();
     }
 
     @Override
@@ -138,9 +142,20 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
+        addExecutionToHistory(runResults);
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
 
         return runResults;
+    }
+
+    private void addExecutionToHistory(RunResultsDTO runResults){
+        executionsHistory.add(new ExecutionHistoryDTO(
+                currentExecutionNumber,
+                runResults,
+                currentOnScreenProgram instanceof Function ? "Function" : "Program",
+                currentOnScreenProgram.getName(),
+                "Need to Implement"));
+        currentExecutionNumber++;
     }
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
@@ -165,7 +180,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 executor.getCyclesCount());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
-
+        addExecutionToHistory(runResults);
         return runResults;
     }
 
@@ -204,8 +219,8 @@ public class EmulatorEngine implements Engine {
     }
 
     @Override
-    public List<RunResultsDTO> getHistory() {
-        return savedHistories.getOrDefault(currentOnScreenProgram.getName(), new LinkedList<>());
+    public List<ExecutionHistoryDTO> getHistory() {
+        return executionsHistory;
     }
 
     public int getMaximalDegree() {
@@ -278,6 +293,7 @@ public class EmulatorEngine implements Engine {
         );
         if (debuggerExecutor.isFinished()) {
             savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
+            addExecutionToHistory(debugResults);
         }
 
         return debugResults;
@@ -322,6 +338,7 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.isFinished());
         if (debuggerExecutor.isFinished()) {
             savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
+            addExecutionToHistory(debugResults);
         }
 
         return debugResults;

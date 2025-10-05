@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DebuggerWindowController {
-    private ClientController clientController;
-
     private ExecutionScreenController executionScreenController;
 
     @FXML
@@ -75,10 +73,6 @@ public class DebuggerWindowController {
 
     public void setExecutionScreenController(ExecutionScreenController executionScreenController) {
         this.executionScreenController = executionScreenController;
-    }
-
-    public void setClientController(ClientController clientController) {
-        this.clientController = clientController;
     }
 
     public void onStartClick() {

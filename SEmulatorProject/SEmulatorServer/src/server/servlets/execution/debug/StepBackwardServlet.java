@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
@@ -18,7 +19,7 @@ public class StepBackwardServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));;
         RunResultsDTO stepResult = (RunResultsDTO) engine.stepBackward();
         String stepResultJson = GsonFactory.getGson().toJson(stepResult);
         resp.setStatus(HttpServletResponse.SC_OK);

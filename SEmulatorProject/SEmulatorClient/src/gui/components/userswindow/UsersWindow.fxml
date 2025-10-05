@@ -39,7 +39,7 @@
             <Insets top="10.0" />
          </VBox.margin>
       </Label>
-      <fx:include fx:id="userHistoryTable" source="../userhistorytable/UsersHistoryTable.fxml" />
+      <fx:include fx:id="usersHistoryTable" source="../userhistorytable/UsersHistoryTable.fxml" />
    </children>
    <opaqueInsets>
       <Insets />

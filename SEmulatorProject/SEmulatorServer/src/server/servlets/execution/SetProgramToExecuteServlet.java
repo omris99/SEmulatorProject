@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.ServletUtils;
+import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.json.GsonFactory;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
@@ -20,7 +21,7 @@ public class SetProgramToExecuteServlet extends HttpServlet {
         String programName = req.getParameter("programName");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
         engine.setMainProgram(ProgramsRepo.getInstance().getProgramByName(programName));
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         String programDtoJson = GsonFactory.getGson().toJson(programDTO);

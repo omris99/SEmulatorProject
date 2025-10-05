@@ -1,11 +1,13 @@
 package server.servlets;
 
+import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.RunResultsDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
@@ -19,9 +21,18 @@ public class HistoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
+        String username = req.getParameter("username");
+        System.out.println(username);
+        EmulatorEngine engine;
+        if(username != null) {
+            engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
+        }
+        else {
+            engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
+            System.out.println("No username provided, using session username: " + SessionUtils.getUsername(req));
+        }
 
-        List<RunResultsDTO> history = engine.getHistory();
+        List<ExecutionHistoryDTO> history = engine.getHistory();
 
         String historyDtoJson = GsonFactory.getGson().toJson(history);
         resp.setStatus(HttpServletResponse.SC_OK);

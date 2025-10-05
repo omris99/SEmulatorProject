@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.json.GsonFactory;
@@ -27,7 +28,7 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
-            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
+            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));;
 
             RunResultsDTO initialState = (RunResultsDTO) engine.initDebuggingSession(runDegree, inputVariables);
             String initialStateJson = GsonFactory.getGson().toJson(initialState);

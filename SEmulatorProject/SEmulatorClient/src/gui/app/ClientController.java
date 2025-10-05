@@ -53,7 +53,6 @@ public class ClientController {
     @FXML
     private void initialize() {
 //        loadFileBarController.setDashBoardController(this);
-        debuggerWindowController.setClientController(this);
         instructionWindowController.setClientController(this);
         historyWindowController.setClientController(this);
         displayCommandsBarController.setCLientController(this);

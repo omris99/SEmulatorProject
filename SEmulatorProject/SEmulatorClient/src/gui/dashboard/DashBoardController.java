@@ -115,6 +115,7 @@ public class DashBoardController {
 
     public void setActive() {
         usersWindowController.startAvailableUsersTableRefresher();
+        usersWindowController.setHistory();
         programsWindowController.startAvailableFunctionsTableRefresher();
         programsWindowController.startAvailableProgramsTableRefresher();
     }

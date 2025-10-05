@@ -1,6 +1,7 @@
 package serverengine.users;
 
 import clientserverdto.UserDTO;
+import serverengine.logic.engine.EmulatorEngine;
 
 import java.util.*;
 
@@ -38,5 +39,14 @@ public class UserManager {
 
     public synchronized User getUser(String username) {
         return usersMap.get(username);
+    }
+
+    public synchronized EmulatorEngine getUserEmulatorEngine(String username) {
+        User user = usersMap.get(username);
+        if (user != null) {
+            return user.getUserEngine();
+        }
+
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package gui.components.availableusers;
 
+import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.UserDTO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ public class AvailableUsersTableController {
     private Timer timer;
     private TimerTask listRefresher;
     private boolean autoUpdate;
+    private boolean isRefreshing;
 
 
     @FXML
@@ -75,6 +77,7 @@ public class AvailableUsersTableController {
     }
 
     public void updateUsersList(List<UserDTO> users) {
+        isRefreshing = true;
         Platform.runLater(() -> {
             UserDTO selectedUser = usersTable.getSelectionModel().getSelectedItem();
             String selectedUserName = (selectedUser != null) ? selectedUser.getUserName() : null;
@@ -90,6 +93,7 @@ public class AvailableUsersTableController {
                 }
             }
         });
+        isRefreshing = false;
     }
 
     public void startTableRefresher() {
@@ -101,4 +105,11 @@ public class AvailableUsersTableController {
         timer.schedule(listRefresher, 500, 500);
     }
 
+    public TableView<UserDTO> getTable() {
+        return usersTable;
+    }
+
+    public boolean isRefreshing() {
+        return isRefreshing;
+    }
 }

@@ -1,8 +1,6 @@
 package gui.components.availablefunctionstable;
 
 import dto.UploadedProgramDTO;
-import dto.UserDTO;
-import gui.components.availableusers.AvailabaleUsersRefresher;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,7 +71,7 @@ public class AvailableFunctionsTableController {
 
 
 
-    public void updateUsersList(List<UploadedProgramDTO> users) {
+    public void updateFunctionsTable(List<UploadedProgramDTO> users) {
         Platform.runLater(() -> {
             UploadedProgramDTO selectedProgram = functionsTable.getSelectionModel().getSelectedItem();
             String selectedProgramName = (selectedProgram != null) ? selectedProgram.getProgram().getName() : null;
@@ -95,7 +93,7 @@ public class AvailableFunctionsTableController {
         autoUpdate = true;
         listRefresher = new AvailableFunctionsTableRefresher(
                 autoUpdate,
-                this::updateUsersList);
+                this::updateFunctionsTable);
         timer = new Timer();
         timer.schedule(listRefresher, 500, 500);
     }

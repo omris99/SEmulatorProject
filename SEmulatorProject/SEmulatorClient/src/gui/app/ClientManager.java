@@ -55,6 +55,7 @@ public class ClientManager {
 
     public void switchToDashBoard() {
         setMainPanelTo(dashBoardScreen);
+        AnimationsManager.playFadeIn(dashBoardScreen, 1500);
         dashBoardController.setActive();
     }
 

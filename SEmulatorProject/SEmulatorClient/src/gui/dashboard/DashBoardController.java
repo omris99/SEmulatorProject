@@ -113,6 +113,7 @@ public class DashBoardController {
     public void setActive() {
         usersWindowController.startAvailableUsersTableRefresher();
         programsWindowController.startAvailableFunctionsTableRefresher();
+        programsWindowController.startAvailableProgramsTableRefresher();
     }
 
 

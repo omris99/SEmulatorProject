@@ -57,7 +57,7 @@ public class EmulatorEngine implements Engine {
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
 
-        Program loadedProgram = ProgramMapper.toDomain("null", sProgram);
+        Program loadedProgram = ProgramMapper.toDomain(sProgram);
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
             throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());

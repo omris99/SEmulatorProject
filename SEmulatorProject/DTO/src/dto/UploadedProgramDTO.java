@@ -5,12 +5,14 @@ public class UploadedProgramDTO {
     private final ProgramDTO program;
     private final int totalExecutions;
     private final int instructionsCount;
+    private final String contextProgram;
 
     public UploadedProgramDTO(String uploadedBy, ProgramDTO program, int totalExecutions, String contextProgram, int instructionsCount) {
         this.uploadedBy = uploadedBy;
         this.program = program;
         this.totalExecutions = totalExecutions;
         this.instructionsCount = instructionsCount;
+        this.contextProgram = contextProgram;
     }
 
     public String getName() {
@@ -37,6 +39,10 @@ public class UploadedProgramDTO {
 
     public int getMaximalDegree() {
         return program.getMaximalDegree();
+    }
+
+    public String getContextProgram() {
+        return contextProgram;
     }
 
 }

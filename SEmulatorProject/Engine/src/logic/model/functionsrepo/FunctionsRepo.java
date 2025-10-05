@@ -52,4 +52,8 @@ public class FunctionsRepo {
         return functions.values().stream().map(UploadedProgram::createDTO).toList();
     }
 
+    public List<UploadedProgramDTO> getAllPrograms(){
+        return programs.values().stream().map(UploadedProgram::createDTO).toList();
+    }
+
 }

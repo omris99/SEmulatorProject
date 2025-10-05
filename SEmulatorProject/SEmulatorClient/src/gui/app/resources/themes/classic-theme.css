@@ -108,3 +108,27 @@
 #progressBar.load-error{
     -fx-accent: #e80000;
 }
+
+#chargeCreditsButton {
+    -fx-background-color: linear-gradient(to bottom, #ffae00, #ff6a00, #ffae00);
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+#chargeCreditsButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffc400, #ff7b00, #ffc400);
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 170, 0, 0.6), 10, 0.4, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}

@@ -28,12 +28,12 @@
                <children>
                   <VBox prefHeight="953.0" prefWidth="1236.0">
                      <children>
-                        <fx:include source="../components/instructionswindow/InstructionsWindow.fxml" />
+                        <fx:include fx:id="instructionsWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
                      </children>
                   </VBox>
                   <VBox prefHeight="953.0" prefWidth="847.0">
                      <children>
-                        <fx:include source="../components/debuggerwindow/DebuggerWindow.fxml" />
+                        <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
                      </children>
                   </VBox>
                </children>

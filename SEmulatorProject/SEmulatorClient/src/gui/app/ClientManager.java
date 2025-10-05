@@ -7,6 +7,7 @@ import gui.login.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -77,9 +78,17 @@ public class ClientManager {
     }
 
     public String getUserName() {
-        if(userName == null) {
+        if (userName == null) {
             return "";
         }
         return userName;
+    }
+
+    public static void showErrorAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

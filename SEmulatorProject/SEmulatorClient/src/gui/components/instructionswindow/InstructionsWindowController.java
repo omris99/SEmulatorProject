@@ -3,10 +3,12 @@ package gui.components.instructionswindow;
 import dto.InstructionDTO;
 import dto.ProgramDTO;
 import gui.app.ClientController;
+import gui.app.ClientManager;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
+import gui.execution.ExecutionScreenController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -17,6 +19,9 @@ import java.util.Map;
 
 public class InstructionsWindowController {
     private ClientController clientController;
+
+    @FXML
+    private ExecutionScreenController executionScreenController;
 
     @FXML
     private InstructionsTableWithBreakpointsController instructionsTableController;
@@ -78,8 +83,7 @@ public class InstructionsWindowController {
     }
 
     public void onDegreeChoice(int newDegree) {
-        clientController.showExpandedProgram(newDegree);
-
+        executionScreenController.showExpandedProgram(newDegree);
     }
 
     public void setClientController(ClientController clientController) {
@@ -123,4 +127,7 @@ public class InstructionsWindowController {
         return clientController.updateInstructionBreakpoint(instructionIndex, isSet);
     }
 
+    public void setExecutionScreenController(ExecutionScreenController executionScreenController) {
+        this.executionScreenController = executionScreenController;
+    }
 }

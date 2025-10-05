@@ -10,16 +10,12 @@ import java.util.function.Consumer;
 public class HttpClientUtil {
 
 
-    private final static chat.client.util.http.SimpleCookieManager simpleCookieManager = new chat.client.util.http.SimpleCookieManager();
+    private final static SimpleCookieManager simpleCookieManager = new SimpleCookieManager();
     private final static OkHttpClient HTTP_CLIENT =
             new OkHttpClient.Builder()
                     .cookieJar(simpleCookieManager)
                     .followRedirects(false)
                     .build();
-
-    public static void setCookieManagerLoggingFacility(Consumer<String> logConsumer) {
-        simpleCookieManager.setLogData(logConsumer);
-    }
 
     public static void removeCookiesOf(String domain) {
         simpleCookieManager.removeCookiesOf(domain);

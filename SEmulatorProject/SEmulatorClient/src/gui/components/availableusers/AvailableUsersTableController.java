@@ -77,23 +77,26 @@ public class AvailableUsersTableController {
     }
 
     public void updateUsersList(List<UserDTO> users) {
-        isRefreshing = true;
-        Platform.runLater(() -> {
-            UserDTO selectedUser = usersTable.getSelectionModel().getSelectedItem();
-            String selectedUserName = (selectedUser != null) ? selectedUser.getUserName() : null;
+        try {
+            isRefreshing = true;
+            Platform.runLater(() -> {
+                UserDTO selectedUser = usersTable.getSelectionModel().getSelectedItem();
+                String selectedUserName = (selectedUser != null) ? selectedUser.getUserName() : null;
 
-            data.setAll(users);
+                data.setAll(users);
 
-            if (selectedUserName != null) {
-                for (UserDTO user : data) {
-                    if (user.getUserName().equals(selectedUserName)) {
-                        usersTable.getSelectionModel().select(user);
-                        break;
+                if (selectedUserName != null) {
+                    for (UserDTO user : data) {
+                        if (user.getUserName().equals(selectedUserName)) {
+                            usersTable.getSelectionModel().select(user);
+                            break;
+                        }
                     }
                 }
-            }
-        });
-        isRefreshing = false;
+            });
+        } finally {
+            isRefreshing = false;
+        }
     }
 
     public void startTableRefresher() {

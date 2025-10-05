@@ -36,6 +36,11 @@ public class ProgramImpl extends AbstractProgram {
     }
 
     @Override
+    public String getRepresentation() {
+        return name;
+    }
+
+    @Override
     public Program getExpandedProgram(int degree) {
 
         if(degree > getMaximalDegree()){

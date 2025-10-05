@@ -64,7 +64,7 @@ public abstract class AbstractProgram implements Program {
     @Override
     public DTO createDTO() {
         return new ProgramDTO(
-                name,
+                getRepresentation(),
                 getProgramInputsNames(),
                 getProgramLabelsNames(),
                 getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),

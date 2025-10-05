@@ -13,6 +13,7 @@ import java.util.Set;
 public interface Program extends Serializable {
 
     String getName();
+    String getRepresentation();
     void addInstruction(Instruction instruction);
     List<Instruction> getInstructions();
     Program getExpandedProgram(int degree);

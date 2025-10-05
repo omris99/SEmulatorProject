@@ -153,7 +153,7 @@ public class EmulatorEngine implements Engine {
                 currentExecutionNumber,
                 runResults,
                 currentOnScreenProgram instanceof Function ? "Function" : "Program",
-                currentOnScreenProgram.getName(),
+                currentOnScreenProgram.getRepresentation(),
                 "Need to Implement"));
         currentExecutionNumber++;
     }
@@ -370,5 +370,9 @@ public class EmulatorEngine implements Engine {
     public InstructionsTree getSpecificExpansionInstructionsTree(){
         Program fullExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
         return fullExpandedProgram.getInstructionsTree();
+    }
+
+    public int getExecutionsPerformed() {
+        return executionsHistory.size();
     }
 }

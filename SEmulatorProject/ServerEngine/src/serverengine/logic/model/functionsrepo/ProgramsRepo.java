@@ -32,7 +32,7 @@ public class ProgramsRepo {
 
     public void addFunction(UploadedProgram function){
         functions.put(function.getName(), function);
-        userStringToProgramName.put(function.getName(), function.getName());
+        userStringToProgramName.put(function.getUserString(), function.getName());
     }
 
     public String getFunctionUserString(String name){
@@ -57,7 +57,12 @@ public class ProgramsRepo {
     }
 
     public UploadedProgram getProgramByName(String name){
-        return programs.get(name);
+        if(programs.containsKey(name)){
+            return programs.get(name);
+        }
+        else {
+            return functions.get(getFunctionNameByUserString(name));
+        }
     }
 
 }

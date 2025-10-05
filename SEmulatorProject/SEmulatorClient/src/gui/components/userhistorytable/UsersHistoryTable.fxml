@@ -6,7 +6,7 @@
 
 <VBox alignment="TOP_RIGHT" prefHeight="297.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userhistorytable.UsersHistoryTableController">
    <children>
-      <TableView fx:id="userHistoryTable" prefHeight="476.0" prefWidth="833.0">
+      <TableView fx:id="userHistoryTable" editable="true" prefHeight="476.0" prefWidth="833.0">
         <columns>
           <TableColumn fx:id="colExecutionNumber" prefWidth="103.74083864688873" text="# Execution" />
             <TableColumn fx:id="colProgramType" prefWidth="139.0" text="Program / Function" />

@@ -166,4 +166,5 @@ public class Function extends AbstractProgram implements Argument {
     public int getTotalCycles(){
         return instructions.getTotalCycles();
     }
+
 }

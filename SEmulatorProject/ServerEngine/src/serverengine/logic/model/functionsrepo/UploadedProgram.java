@@ -33,6 +33,10 @@ public class UploadedProgram {
         return program.getName();
     }
 
+    public String getUserString(){
+        return program.getRepresentation();
+    }
+
     public Program getProgram(){
         return program;
     }

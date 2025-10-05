@@ -30,7 +30,7 @@ public class User {
     public UserDTO createDTO() {
         String mainPrograms = programsListToString(this.mainProgramsUploaded);
         String functions = programsListToString(this.functionsContributed);
-        return new UserDTO(userName, mainPrograms, functions, creditsUsed, creditBalance, executionsPerformed);
+        return new UserDTO(userName, mainPrograms, functions, creditsUsed, creditBalance, engine.getExecutionsPerformed());
     }
 
     private String programsListToString(List<String> programs) {

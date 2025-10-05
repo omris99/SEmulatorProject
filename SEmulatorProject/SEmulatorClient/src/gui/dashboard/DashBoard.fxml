@@ -17,17 +17,33 @@
          <children>
             <HBox prefHeight="28.0" prefWidth="2560.0">
                <children>
-                  <Label text="User Name: ">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="userNameLabel" layoutX="10.0" layoutY="10.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
+                  <HBox minHeight="0.0" minWidth="0.0" prefHeight="28.0" prefWidth="2395.0">
+                     <children>
+                        <Label text="User Name: ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="userNameLabel">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="434.0">
+                     <children>
+                        <Label prefHeight="23.0" prefWidth="425.0" text="Available Credits:  -">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
             </HBox>
             <HBox prefHeight="53.0" prefWidth="2560.0" spacing="10.0">
                <children>

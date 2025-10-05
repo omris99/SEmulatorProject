@@ -7,7 +7,6 @@ import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
 import logic.model.argument.variable.Variable;
-import logic.model.functionsrepo.FunctionsRepo;
 import logic.model.instruction.Instruction;
 import logic.model.instruction.Instructions;
 
@@ -72,7 +71,7 @@ public abstract class AbstractProgram implements Program {
                 instructions.getDegree(),
                 instructions.getMaximalDegree(),
                 getProgramWorkVariablesNames(),
-                functionsNames.stream().map(name -> FunctionsRepo.getInstance().getFunctionUserString(name)).toList()
+                functionsNames
         );
     }
 
@@ -91,7 +90,6 @@ public abstract class AbstractProgram implements Program {
                 .sorted(Comparator.comparingInt(Variable::getNumber))
                 .map(Argument::getRepresentation).collect(Collectors.toList());
     }
-
     private List<String> getProgramWorkVariablesNames() {
         return getAllInstructionsWorkVariables().stream()
                 .sorted(Comparator.comparingInt(Variable::getNumber))

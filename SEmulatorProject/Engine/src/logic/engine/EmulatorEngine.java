@@ -13,6 +13,7 @@ import logic.execution.DebuggerExecutor;
 import logic.execution.ProgramExecutor;
 import logic.execution.ProgramExecutorImpl;
 import logic.instructiontree.InstructionsTree;
+import logic.instructiontree.InstructionsTreeNode;
 import logic.model.argument.Argument;
 import logic.model.argument.label.FixedLabel;
 import logic.model.argument.label.Label;
@@ -20,7 +21,6 @@ import logic.model.argument.variable.Variable;
 import logic.model.argument.variable.VariableImpl;
 import logic.model.argument.variable.VariableType;
 import logic.model.functionsrepo.FunctionsRepo;
-import logic.model.functionsrepo.UploadedProgram;
 import logic.model.generated.SProgram;
 import logic.model.instruction.Instruction;
 import logic.model.mappers.ProgramMapper;
@@ -28,7 +28,6 @@ import logic.model.program.Program;
 import logic.utils.Utils;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.*;
 
 public class EmulatorEngine implements Engine {
@@ -65,26 +64,6 @@ public class EmulatorEngine implements Engine {
 
         this.mainProgram = loadedProgram;
         setCurrentContextProgram(mainProgram);
-
-        savedHistories.clear();
-    }
-
-    public void loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
-        Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
-        Label problemLabel = loadedProgram.validate();
-        if (problemLabel != FixedLabel.EMPTY) {
-            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
-        }
-
-        this.mainProgram = loadedProgram;
-        setCurrentContextProgram(mainProgram);
-        UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
-
-        FunctionsRepo.getInstance().addProgram(uploadedProgram);
 
         savedHistories.clear();
     }

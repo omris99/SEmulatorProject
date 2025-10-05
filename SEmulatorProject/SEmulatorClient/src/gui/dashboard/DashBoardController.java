@@ -80,6 +80,7 @@ public class DashBoardController {
                                         ("HTTP " + response.code() + " Error"),
                                         ("Failed to load XML file"),
                                         responseBodyString);
+                                System.out.println("HTTP " + response.code() + " Error: " + responseBodyString);
                             });
                         }
                         response.close();

@@ -37,7 +37,6 @@ public class LoadFileServlet extends HttpServlet {
 
             Part fileContent = req.getPart("fileContent");
             engine.loadProgram(userName, fileContent.getInputStream());
-
             ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
             userManager.getUser(userName).addMainProgram(program);
             String programDtoJson = GsonFactory.getGson().toJson(program);

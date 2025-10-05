@@ -10,7 +10,7 @@ public class ServerPaths {
 
     public final static String PROGRAMS_LIST = FULL_SERVER_PATH + "/programs";
     public final static String FUNCTIONS_LIST = FULL_SERVER_PATH + "/functions";
-    public final static String USERS_LIST = FULL_SERVER_PATH + "/users";
+    public final static String USERS_LIST = FULL_SERVER_PATH + "/serverengine";
     public final static String LOGIN = FULL_SERVER_PATH + "/login";
     public final static String LOAD_FILE = FULL_SERVER_PATH + "/loadFile";
     public final static String GET_EXPANDED_PROGRAM = FULL_SERVER_PATH + "/expandedProgram";

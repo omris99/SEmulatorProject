@@ -1,6 +1,6 @@
 package gui.components.availableusers;
 
-import dto.UserDTO;
+import clientserverdto.UserDTO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -5,9 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import logic.engine.EmulatorEngine;
-import logic.instructiontree.InstructionsTree;
-import logic.json.GsonFactory;
+import serverengine.logic.engine.EmulatorEngine;
+import serverengine.logic.instructiontree.InstructionsTree;
+import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
 
 import java.io.IOException;

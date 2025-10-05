@@ -1,21 +1,16 @@
 package gui.components.instructionstable;
 
-import dto.InstructionDTO;
+import clientserverdto.InstructionDTO;
 import gui.app.AnimationsManager;
-import gui.components.instructionswindow.InstructionsWindowController;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
 import java.util.List;
 
 public class InstructionsTableController {

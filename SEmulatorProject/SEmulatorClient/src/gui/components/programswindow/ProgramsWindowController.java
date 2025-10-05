@@ -1,9 +1,7 @@
 package gui.components.programswindow;
 
-import dto.UploadedProgramDTO;
-import gui.app.ClientManager;
+import clientserverdto.UploadedProgramDTO;
 import gui.components.availablefunctionstable.AvailableFunctionsTableController;
-import gui.components.availablefunctionstable.AvailableFunctionsTableRefresher;
 import gui.components.availableprogramstable.AvailableProgramsTableController;
 import gui.dashboard.DashBoardController;
 import javafx.fxml.FXML;

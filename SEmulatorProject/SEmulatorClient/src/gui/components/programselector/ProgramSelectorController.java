@@ -1,15 +1,12 @@
 package gui.components.programselector;
 
-import dto.ProgramDTO;
+import clientserverdto.ProgramDTO;
 import gui.components.toolbar.InstructionsWindowToolbarController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import logic.model.functionsrepo.FunctionsRepo;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProgramSelectorController {
     @FXML

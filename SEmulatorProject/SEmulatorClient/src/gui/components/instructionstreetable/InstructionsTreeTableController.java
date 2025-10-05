@@ -1,13 +1,13 @@
 package gui.components.instructionstreetable;
 
-import dto.InstructionDTO;
+import clientserverdto.InstructionDTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import logic.instructiontree.InstructionsTree;
-import logic.instructiontree.InstructionsTreeNode;
+import serverengine.logic.instructiontree.InstructionsTree;
+import serverengine.logic.instructiontree.InstructionsTreeNode;
 
 import java.util.List;
 

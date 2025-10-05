@@ -1,14 +1,11 @@
 package gui.components.toolbar;
 
-import dto.ProgramDTO;
+import clientserverdto.ProgramDTO;
 import gui.components.expandationlevelwindow.ExpandationLevelWindowController;
 import gui.components.highlightselection.HighlightSelectionController;
 import gui.components.instructionswindow.InstructionsWindowController;
-import gui.components.programselector.ProgramSelectorController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import logic.model.argument.variable.Variable;
-import logic.model.argument.variable.VariableType;
 
 import java.util.ArrayList;
 import java.util.List;

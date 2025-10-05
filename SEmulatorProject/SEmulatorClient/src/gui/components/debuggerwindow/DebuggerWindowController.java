@@ -1,6 +1,6 @@
 package gui.components.debuggerwindow;
 
-import dto.RunResultsDTO;
+import clientserverdto.RunResultsDTO;
 import gui.app.ClientController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
 import gui.components.inputrow.InputRowController;

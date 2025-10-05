@@ -1,7 +1,7 @@
 package gui.dashboard;
 
-import dto.ProgramDTO;
-import dto.UploadedProgramDTO;
+import clientserverdto.ProgramDTO;
+import clientserverdto.UploadedProgramDTO;
 import gui.app.ClientManager;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
@@ -12,7 +12,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import logic.json.GsonFactory;
+import serverengine.logic.json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

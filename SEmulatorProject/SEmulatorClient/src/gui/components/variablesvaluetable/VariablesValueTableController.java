@@ -1,6 +1,6 @@
 package gui.components.variablesvaluetable;
 
-import dto.RunResultsDTO;
+import clientserverdto.RunResultsDTO;
 import gui.app.AnimationsManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;

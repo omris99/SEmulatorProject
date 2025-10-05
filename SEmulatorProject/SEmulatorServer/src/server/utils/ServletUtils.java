@@ -3,9 +3,9 @@ package server.utils;
 import com.google.gson.reflect.TypeToken;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
-import logic.engine.EmulatorEngine;
-import logic.json.GsonFactory;
-import users.UserManager;
+import serverengine.logic.engine.EmulatorEngine;
+import serverengine.logic.json.GsonFactory;
+import serverengine.users.UserManager;
 
 import java.io.IOException;
 import java.util.Map;

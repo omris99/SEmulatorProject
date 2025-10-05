@@ -1,27 +1,28 @@
 package gui.app;
 
-import dto.*;
+import clientserverdto.ErrorAlertDTO;
+import clientserverdto.InstructionDTO;
+import clientserverdto.ProgramDTO;
+import clientserverdto.RunResultsDTO;
+import clientserverdto.*;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.displaycommandsbar.DisplayCommandsBarController;
 import gui.components.historywindow.HistoryWindowController;
 import gui.components.instructionstreetable.InstructionsTreeTableController;
 import gui.components.instructionswindow.InstructionsWindowController;
-import gui.components.loadfilebar.LoadFileBarController;
 import http.ServerPaths;
 import http.HttpClientUtil;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import logic.instructiontree.InstructionsTree;
-import logic.json.GsonFactory;
+import serverengine.logic.instructiontree.InstructionsTree;
+import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;

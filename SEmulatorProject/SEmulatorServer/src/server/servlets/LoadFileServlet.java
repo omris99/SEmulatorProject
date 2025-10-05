@@ -1,7 +1,6 @@
 package server.servlets;
 
-import dto.ProgramDTO;
-import jakarta.servlet.ServletContext;
+import clientserverdto.ProgramDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,14 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import jakarta.xml.bind.JAXBException;
-import logic.engine.EmulatorEngine;
-import logic.exceptions.InvalidArgumentException;
-import logic.exceptions.InvalidXmlFileException;
-import logic.json.GsonFactory;
-import logic.model.generated.SProgram;
+import serverengine.logic.engine.EmulatorEngine;
+import serverengine.logic.exceptions.InvalidArgumentException;
+import serverengine.logic.exceptions.InvalidXmlFileException;
+import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
-import users.User;
-import users.UserManager;
+import serverengine.users.UserManager;
 
 import java.io.IOException;
 

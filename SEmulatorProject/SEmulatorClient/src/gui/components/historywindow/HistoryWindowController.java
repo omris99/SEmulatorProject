@@ -1,6 +1,6 @@
 package gui.components.historywindow;
 
-import dto.RunResultsDTO;
+import clientserverdto.RunResultsDTO;
 import gui.app.ClientController;
 import gui.popups.showallvariables.ShowAllVariablesController;
 import javafx.application.Platform;

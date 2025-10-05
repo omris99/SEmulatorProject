@@ -1,6 +1,6 @@
 package gui.popups.showallvariables;
 
-import dto.RunResultsDTO;
+import clientserverdto.RunResultsDTO;
 import gui.components.variablesvaluetable.VariablesValueTableController;
 import javafx.fxml.FXML;
 

@@ -1,10 +1,9 @@
 package gui.components.availableusers;
 
-import dto.UserDTO;
+import clientserverdto.UserDTO;
 import http.HttpClientUtil;
 import http.ServerPaths;
-import javafx.beans.property.BooleanProperty;
-import logic.json.GsonFactory;
+import serverengine.logic.json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

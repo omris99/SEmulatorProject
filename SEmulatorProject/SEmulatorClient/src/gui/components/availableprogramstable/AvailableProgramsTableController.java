@@ -1,6 +1,6 @@
 package gui.components.availableprogramstable;
 
-import dto.UploadedProgramDTO;
+import clientserverdto.UploadedProgramDTO;
 import gui.components.programswindow.ProgramsWindowController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

@@ -1,28 +1,18 @@
 package gui.components.instructionstablewithbreakpoints;
 
-import dto.InstructionDTO;
-import gui.app.AnimationsManager;
+import clientserverdto.InstructionDTO;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionswindow.InstructionsWindowController;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-    public class InstructionsTableWithBreakpointsController extends InstructionsTableController {
+public class InstructionsTableWithBreakpointsController extends InstructionsTableController {
         @FXML
         private TableColumn<InstructionDTO, Boolean> colBreakpoint;
 

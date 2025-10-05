@@ -1,9 +1,8 @@
 package gui.components.instructionswindow;
 
-import dto.InstructionDTO;
-import dto.ProgramDTO;
+import clientserverdto.InstructionDTO;
+import clientserverdto.ProgramDTO;
 import gui.app.ClientController;
-import gui.app.ClientManager;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
@@ -12,7 +11,7 @@ import gui.execution.ExecutionScreenController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import logic.model.instruction.InstructionType;
+import serverengine.logic.model.instruction.InstructionType;
 
 import java.util.List;
 import java.util.Map;

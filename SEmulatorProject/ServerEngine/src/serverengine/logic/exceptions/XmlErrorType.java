@@ -1,0 +1,7 @@
+package serverengine.logic.exceptions;
+
+public enum XmlErrorType {
+    FILE_MISSING,
+    INVALID_EXTENSION,
+    UNKNOWN_LABEL
+}

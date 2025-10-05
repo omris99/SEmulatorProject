@@ -1,6 +1,6 @@
 package gui.app;
 
-import dto.UploadedProgramDTO;
+import clientserverdto.UploadedProgramDTO;
 import gui.dashboard.DashBoardController;
 import gui.execution.ExecutionScreenController;
 import gui.login.LoginController;

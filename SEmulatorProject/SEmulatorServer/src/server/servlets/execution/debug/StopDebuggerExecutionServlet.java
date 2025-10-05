@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import logic.engine.EmulatorEngine;
+import serverengine.logic.engine.EmulatorEngine;
 import server.utils.ServletUtils;
 
 import java.io.IOException;

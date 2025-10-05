@@ -1,12 +1,9 @@
 package gui.components.availablefunctionstable;
 
-import dto.ProgramDTO;
-import dto.UploadedProgramDTO;
-import dto.UserDTO;
+import clientserverdto.UploadedProgramDTO;
 import http.HttpClientUtil;
 import http.ServerPaths;
-import logic.json.GsonFactory;
-import logic.model.functionsrepo.UploadedProgram;
+import serverengine.logic.json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

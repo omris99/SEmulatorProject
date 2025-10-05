@@ -30,7 +30,7 @@ public class RunProgramServlet extends HttpServlet {
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
-            EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
 
             RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);

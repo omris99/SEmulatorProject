@@ -18,7 +18,7 @@ public class GetNextInstructionToExecuteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
         InstructionDTO nextInstructionToExecute = (InstructionDTO) engine.getNextInstructionToExecute();
         String nextInstructionToExecuteJson = GsonFactory.getGson().toJson(nextInstructionToExecute);
         resp.setStatus(HttpServletResponse.SC_OK);

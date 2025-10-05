@@ -69,23 +69,29 @@ public class EmulatorEngine implements Engine {
         savedHistories.clear();
     }
 
-    public void loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//    public void loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
+//        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
+//        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//
+//        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
+//        Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
+//        Label problemLabel = loadedProgram.validate();
+//        if (problemLabel != FixedLabel.EMPTY) {
+//            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
+//        }
+//
+//        this.mainProgram = loadedProgram;
+//        setCurrentContextProgram(mainProgram);
+//        UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
+//
+//        ProgramsRepo.getInstance().addProgram(uploadedProgram);
+//
+//        savedHistories.clear();
+//    }
 
-        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
-        Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
-        Label problemLabel = loadedProgram.validate();
-        if (problemLabel != FixedLabel.EMPTY) {
-            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
-        }
-
-        this.mainProgram = loadedProgram;
+    public void setMainProgram(UploadedProgram uploadedProgram) {
+        this.mainProgram = uploadedProgram.getProgram();
         setCurrentContextProgram(mainProgram);
-        UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
-
-        ProgramsRepo.getInstance().addProgram(uploadedProgram);
-
         savedHistories.clear();
     }
 

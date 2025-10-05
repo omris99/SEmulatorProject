@@ -19,7 +19,7 @@ public class ChangeOnScreenProgramServlet extends HttpServlet {
         String functionName = req.getParameter("functionName");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
 
         engine.changeLoadedProgramToFunction(functionName);
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();

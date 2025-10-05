@@ -1,27 +1,30 @@
-package server.servlets.execution.debug;
+package server.servlets.execution;
 
-import clientserverdto.RunResultsDTO;
+import clientserverdto.ProgramDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import server.utils.ServletUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.json.GsonFactory;
-import server.utils.ServletUtils;
+import serverengine.logic.model.functionsrepo.ProgramsRepo;
 
 import java.io.IOException;
 
-@WebServlet(name = "resumeDebuggerExecutionServlet", urlPatterns = {"/execution/debug/resume"})
-public class ResumeDebuggerExecutionServlet extends HttpServlet {
+@WebServlet(name = "setProgramToExecuteServlet", urlPatterns = {"/execution/setProgramToExecute"})
+public class SetProgramToExecuteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String programName = req.getParameter("programName");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
-        RunResultsDTO context = (RunResultsDTO) engine.resumeDebuggingSession();
-        String contextJson = GsonFactory.getGson().toJson(context);
+        engine.setMainProgram(ProgramsRepo.getInstance().getProgramByName(programName));
+        ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
+        String programDtoJson = GsonFactory.getGson().toJson(programDTO);
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(contextJson);
+        resp.getWriter().write(programDtoJson);
     }
 }

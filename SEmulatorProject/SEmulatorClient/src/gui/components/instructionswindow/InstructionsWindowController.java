@@ -123,7 +123,7 @@ public class InstructionsWindowController {
     }
 
     public InstructionDTO onBreakpointToggled(int instructionIndex, boolean isSet){
-        return clientController.updateInstructionBreakpoint(instructionIndex, isSet);
+        return executionScreenController.updateInstructionBreakpoint(instructionIndex, isSet);
     }
 
     public void setExecutionScreenController(ExecutionScreenController executionScreenController) {

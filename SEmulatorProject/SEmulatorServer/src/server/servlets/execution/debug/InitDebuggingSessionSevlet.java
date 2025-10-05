@@ -27,7 +27,7 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
-            EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
 
             RunResultsDTO initialState = (RunResultsDTO) engine.initDebuggingSession(runDegree, inputVariables);
             String initialStateJson = GsonFactory.getGson().toJson(initialState);

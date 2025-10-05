@@ -18,7 +18,7 @@ public class GetLoadedProgramServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
 
         ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
 

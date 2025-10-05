@@ -56,4 +56,8 @@ public class ProgramsRepo {
         return programs.values().stream().map(UploadedProgram::createDTO).toList();
     }
 
+    public UploadedProgram getProgramByName(String name){
+        return programs.get(name);
+    }
+
 }

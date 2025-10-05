@@ -23,6 +23,8 @@ public class ServerPaths {
 
     //EXECUTION
     public final static String RUN_PROGRAM = FULL_SERVER_PATH + EXECUTION_CONTEXT_PATH + "/runProgram";
+    public final static String SET_PROGRAM_TO_EXECUTE = FULL_SERVER_PATH + EXECUTION_CONTEXT_PATH + "/setProgramToExecute";
+
 
     //DEBUGGING
     public final static String GET_NEXT_INSTRUCTION_TO_EXECUTE = FULL_SERVER_PATH + DEBUG_CONTEXT_PATH + "/nextInstructionToExecute";

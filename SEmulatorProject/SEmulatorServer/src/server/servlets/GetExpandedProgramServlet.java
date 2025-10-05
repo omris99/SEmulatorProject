@@ -19,7 +19,7 @@ public class GetExpandedProgramServlet extends HttpServlet {
         int degreeParam = Integer.parseInt(req.getParameter("degree"));
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
 
         ProgramDTO program = (ProgramDTO) engine.showExpandedProgramOnScreen(degreeParam);
 

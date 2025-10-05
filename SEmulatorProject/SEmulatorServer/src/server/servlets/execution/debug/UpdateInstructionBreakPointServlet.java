@@ -23,7 +23,7 @@ public class UpdateInstructionBreakPointServlet extends HttpServlet {
         int index = ((Double) payLoad.get("index")).intValue();
         boolean isSet = (boolean) payLoad.get("isSet");
 
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
         InstructionDTO instruction = engine.updateInstructionBreakpoint(index, isSet);
         String instructionJson = GsonFactory.getGson().toJson(instruction);
         resp.setStatus(HttpServletResponse.SC_OK);

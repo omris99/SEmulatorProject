@@ -1,6 +1,7 @@
 package server.servlets;
 
 import clientserverdto.ProgramDTO;
+import clientserverdto.UploadedProgramDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,15 +9,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.exceptions.InvalidArgumentException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
+import serverengine.logic.exceptions.XmlErrorType;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
+import serverengine.logic.model.argument.label.FixedLabel;
+import serverengine.logic.model.argument.label.Label;
+import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.logic.model.functionsrepo.UploadedProgram;
+import serverengine.logic.model.generated.SProgram;
+import serverengine.logic.model.mappers.ProgramMapper;
+import serverengine.logic.model.program.Program;
 import serverengine.users.UserManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @WebServlet(name = "LoadFileServlet", urlPatterns = {"/loadFile"})
 @MultipartConfig(
@@ -31,17 +43,16 @@ public class LoadFileServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         try {
-            EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
             String userName = (String) req.getSession().getAttribute("username");
 
             Part fileContent = req.getPart("fileContent");
-            engine.loadProgram(userName, fileContent.getInputStream());
-            ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
-            userManager.getUser(userName).addMainProgram(program);
-            String programDtoJson = GsonFactory.getGson().toJson(program);
+            UploadedProgramDTO program = loadProgram(userName, fileContent.getInputStream());
+//            ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
+            userManager.getUser(userName).addMainProgram(program.getProgram());
+//            String programDtoJson = GsonFactory.getGson().toJson(program);
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(programDtoJson);
+//            resp.getWriter().write(programDtoJson);
 
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -67,4 +78,27 @@ public class LoadFileServlet extends HttpServlet {
             resp.getWriter().write(content);
         }
     }
+
+    private synchronized UploadedProgramDTO loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
+        Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
+        Label problemLabel = loadedProgram.validate();
+        if (problemLabel != FixedLabel.EMPTY) {
+            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
+        }
+
+//        this.mainProgram = loadedProgram;
+//        setCurrentContextProgram(mainProgram);
+        UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
+
+        ProgramsRepo.getInstance().addProgram(uploadedProgram);
+        return uploadedProgram.createDTO();
+
+//        savedHistories.clear();
+    }
+
 }

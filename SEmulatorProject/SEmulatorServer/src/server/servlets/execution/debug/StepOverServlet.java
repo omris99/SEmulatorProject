@@ -18,7 +18,7 @@ public class StepOverServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
-        EmulatorEngine engine = ServletUtils.getEmulatorEngine(getServletContext());
+        EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(req);
         RunResultsDTO stepResult = (RunResultsDTO) engine.stepOver();
         String stepResultJson = GsonFactory.getGson().toJson(stepResult);
         resp.setStatus(HttpServletResponse.SC_OK);

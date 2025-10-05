@@ -109,11 +109,8 @@ public class DashBoardController {
         this.clientManager = clientManager;
     }
 
-    public void setUserName(String userName) {
-        userNameLabel.setText(userName);
-    }
-
     public void setActive() {
+        userNameLabel.setText(clientManager.getUserName());
         usersWindowController.startAvailableUsersTableRefresher();
         usersWindowController.setHistory();
         programsWindowController.startAvailableFunctionsTableRefresher();

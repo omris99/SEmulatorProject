@@ -65,7 +65,7 @@ public class ClientManager {
     public void switchToExecutionScreen(UploadedProgramDTO selectedProgram) {
         executionScreenController.setProgramToExecute(selectedProgram);
         setMainPanelTo(executionScreen);
-//        executionScreen.setActive();
+        executionScreenController.setActive();
     }
 
     public void switchToLoginScreen() {
@@ -75,7 +75,6 @@ public class ClientManager {
 
     public void setUserName(String username) {
         this.userName = username;
-        dashBoardController.setUserName(username);
     }
 
     public String getUserName() {

@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
 
@@ -28,6 +29,9 @@ public class ExecutionScreenController {
 
     @FXML
     private Button backToDashboardButton;
+
+    @FXML
+    private Label userNameLabel;
 
     @FXML
     private ClientManager clientManager;
@@ -453,6 +457,9 @@ public class ExecutionScreenController {
         });
     }
 
+    public void setActive() {
+        userNameLabel.setText(clientManager.getUserName());
+    }
 
 
 

@@ -1,6 +1,7 @@
 package gui.components.availablefunctionstable;
 
 import dto.UploadedProgramDTO;
+import gui.components.programswindow.ProgramsWindowController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,9 @@ public class AvailableFunctionsTableController {
     private Timer timer;
     private TimerTask listRefresher;
     private boolean autoUpdate;
+
+    @FXML
+    private ProgramsWindowController programsWindowController;
 
     @FXML
     private TableColumn<UploadedProgramDTO, String> colContextProgram;
@@ -96,6 +100,10 @@ public class AvailableFunctionsTableController {
                 this::updateFunctionsTable);
         timer = new Timer();
         timer.schedule(listRefresher, 500, 500);
+    }
+
+    public void setProgramsWindowController(ProgramsWindowController programsWindowController) {
+        this.programsWindowController = programsWindowController;
     }
 
 }

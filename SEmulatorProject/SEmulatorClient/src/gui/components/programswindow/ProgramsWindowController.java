@@ -1,20 +1,42 @@
 package gui.components.programswindow;
 
+import dto.UploadedProgramDTO;
+import gui.app.ClientManager;
 import gui.components.availablefunctionstable.AvailableFunctionsTableController;
 import gui.components.availablefunctionstable.AvailableFunctionsTableRefresher;
 import gui.components.availableprogramstable.AvailableProgramsTableController;
+import gui.dashboard.DashBoardController;
 import javafx.fxml.FXML;
 
 public class ProgramsWindowController {
     @FXML
-    AvailableFunctionsTableController availableFunctionsTableController;
+    private AvailableFunctionsTableController availableFunctionsTableController;
     @FXML
-    AvailableProgramsTableController availableProgramsTableController;
+    private AvailableProgramsTableController availableProgramsTableController;
+
+    @FXML
+    private DashBoardController dashBoardController;
+
+
+    @FXML
+    public void initialize() {
+        availableFunctionsTableController.setProgramsWindowController(this);
+        availableProgramsTableController.setProgramsWindowController(this);
+    }
 
     public void startAvailableFunctionsTableRefresher() {
         availableFunctionsTableController.startTableRefresher();
     }
+
     public void startAvailableProgramsTableRefresher() {
         availableProgramsTableController.startTableRefresher();
+    }
+
+    public void executeProgramButtonClicked(UploadedProgramDTO selectedProgram){
+        dashBoardController.executeProgramButtonClicked(selectedProgram);
+    }
+
+    public void setDashBoardController(DashBoardController dashBoardController) {
+        this.dashBoardController = dashBoardController;
     }
 }

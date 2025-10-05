@@ -1,5 +1,6 @@
 package gui.app;
 
+import dto.UploadedProgramDTO;
 import gui.dashboard.DashBoardController;
 import gui.execution.ExecutionScreenController;
 import gui.login.LoginController;
@@ -59,7 +60,8 @@ public class ClientManager {
         dashBoardController.setActive();
     }
 
-    public void switchToExecutionScreen() {
+    public void switchToExecutionScreen(UploadedProgramDTO selectedProgram) {
+        executionScreenController.setProgramToExecute(selectedProgram);
         setMainPanelTo(executionScreen);
 //        executionScreen.setActive();
     }

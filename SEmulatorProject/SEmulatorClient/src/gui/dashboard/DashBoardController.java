@@ -1,6 +1,7 @@
 package gui.dashboard;
 
 import dto.ProgramDTO;
+import dto.UploadedProgramDTO;
 import gui.app.ClientManager;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
@@ -39,6 +40,7 @@ public class DashBoardController {
     @FXML
     private void initialize() {
         loadFileBarController.setDashBoardController(this);
+        programsWindowController.setDashBoardController(this);
     }
 
     public void loadProgramWithProgress(File selectedFile) {
@@ -116,5 +118,7 @@ public class DashBoardController {
         programsWindowController.startAvailableProgramsTableRefresher();
     }
 
-
+    public void executeProgramButtonClicked(UploadedProgramDTO selectedProgram) {
+        clientManager.switchToExecutionScreen(selectedProgram);
+    }
 }

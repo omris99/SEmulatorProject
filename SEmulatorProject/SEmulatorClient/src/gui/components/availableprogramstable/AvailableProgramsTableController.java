@@ -1,6 +1,7 @@
 package gui.components.availableprogramstable;
 
 import dto.UploadedProgramDTO;
+import gui.components.programswindow.ProgramsWindowController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,9 @@ public class AvailableProgramsTableController {
     private Timer timer;
     private TimerTask listRefresher;
     private boolean autoUpdate;
+
+    @FXML
+    private ProgramsWindowController programsWindowController;
 
     @FXML
     private TableColumn<UploadedProgramDTO, String> colTotalExecutions;
@@ -70,7 +74,8 @@ public class AvailableProgramsTableController {
 
     @FXML
     void onExecuteProgramButtonClick(ActionEvent event) {
-
+        UploadedProgramDTO selectedProgram = programsTable.getSelectionModel().getSelectedItem();
+        programsWindowController.executeProgramButtonClicked(selectedProgram);
     }
 
 
@@ -102,4 +107,7 @@ public class AvailableProgramsTableController {
         timer.schedule(listRefresher, 500, 500);
     }
 
+    public void setProgramsWindowController(ProgramsWindowController programsWindowController) {
+        this.programsWindowController = programsWindowController;
+    }
 }

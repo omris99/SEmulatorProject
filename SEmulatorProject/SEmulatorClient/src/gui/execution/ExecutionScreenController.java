@@ -2,12 +2,15 @@ package gui.execution;
 
 import dto.ProgramDTO;
 import dto.UploadedProgramDTO;
+import gui.app.ClientManager;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import logic.json.GsonFactory;
 import okhttp3.*;
 
@@ -20,6 +23,12 @@ public class ExecutionScreenController {
     private InstructionsWindowController instructionsWindowController;
     @FXML
     private DebuggerWindowController debuggerWindowController;
+
+    @FXML
+    private Button backToDashboardButton;
+
+    @FXML
+    private ClientManager clientManager;
 
     @FXML
     public void initialize() {
@@ -35,6 +44,11 @@ public class ExecutionScreenController {
         debuggerWindowController.reset();
 //        historyWindowController.reset();
 //        displayCommandsBarController.disableTreeTableViewAndSpecificExpansionButton(false);
+    }
+
+    @FXML
+    public void onBackToDashboardButtonClicked(ActionEvent e) {
+        clientManager.switchToDashBoard();
     }
 
     public void showExpandedProgram(int degree) {
@@ -72,6 +86,10 @@ public class ExecutionScreenController {
                 response.close();
             }
         });
+    }
+
+    public void setClientManager(ClientManager clientManager) {
+        this.clientManager = clientManager;
     }
 
 }

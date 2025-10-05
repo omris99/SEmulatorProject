@@ -1,5 +1,6 @@
 package users;
 
+import dto.ProgramDTO;
 import dto.UserDTO;
 import logic.model.program.Function;
 import logic.model.program.Program;
@@ -9,8 +10,8 @@ import java.util.List;
 
 public class User {
     private String userName;
-    private List<Program> mainProgramsUploaded;
-    private List<Program> functionsContributed;
+    private List<String> mainProgramsUploaded;
+    private List<String> functionsContributed;
     private int creditsUsed;
     private int creditBalance;
     private int executionsPerformed;
@@ -30,10 +31,18 @@ public class User {
         return new dto.UserDTO(userName, mainPrograms, functions, creditsUsed, creditBalance, executionsPerformed);
     }
 
-    private String programsListToString(List<Program> programs) {
+    private String programsListToString(List<String> programs) {
         if(programs.isEmpty()) {
             return "None";
         }
-        return String.join(", ", programs.stream().map(Program::getName).toList());
+        return String.join(", ", programs.stream().toList());
+    }
+
+    public void addMainProgram(ProgramDTO program) {
+        System.out.println("Adding main program: " + program.getName() + " to user: " + this.userName);
+        this.mainProgramsUploaded.add(program.getName());
+        this.functionsContributed.addAll(program.getFunctionsNames());
+        System.out.println("Adding main program: " + program.getName() + " to user: " + this.userName);
+
     }
 }

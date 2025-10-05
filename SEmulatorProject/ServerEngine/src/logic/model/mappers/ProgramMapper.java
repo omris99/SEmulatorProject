@@ -8,6 +8,7 @@ import logic.model.generated.SProgram;
 import logic.model.program.Function;
 import logic.model.program.Program;
 import logic.model.program.ProgramImpl;
+import users.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;

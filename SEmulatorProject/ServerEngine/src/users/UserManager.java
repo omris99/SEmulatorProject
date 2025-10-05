@@ -35,4 +35,8 @@ public class UserManager {
     public boolean isUserExists(String username) {
         return usersMap.containsKey(username);
     }
+
+    public synchronized User getUser(String username) {
+        return usersMap.get(username);
+    }
 }

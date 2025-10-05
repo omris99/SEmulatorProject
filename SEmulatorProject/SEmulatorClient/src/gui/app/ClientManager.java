@@ -35,6 +35,7 @@ public class ClientManager {
             FXMLLoader execLoader = new FXMLLoader(getClass().getResource("/gui/execution/ExecutionScreen.fxml"));
             executionScreen = execLoader.load();
             executionScreenController = execLoader.getController();
+            executionScreenController.setClientManager(this);
 
             FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/gui/login/Login.fxml"));
             loginScreen = loginLoader.load();

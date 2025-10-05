@@ -16,6 +16,7 @@ import logic.exceptions.InvalidXmlFileException;
 import logic.json.GsonFactory;
 import logic.model.generated.SProgram;
 import server.utils.ServletUtils;
+import users.User;
 import users.UserManager;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class LoadFileServlet extends HttpServlet {
             engine.loadProgram(userName, fileContent.getInputStream());
 
             ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
-
+            userManager.getUser(userName).addMainProgram(program);
             String programDtoJson = GsonFactory.getGson().toJson(program);
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(programDtoJson);
@@ -67,7 +68,7 @@ public class LoadFileServlet extends HttpServlet {
                 case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
                 default -> content = "Unexpected error: " + e.getMessage();
             }
-                resp.getWriter().write(content);
+            resp.getWriter().write(content);
         }
     }
 }

@@ -7,6 +7,7 @@ import clientserverdto.ExecutionHistoryDTO;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.exceptions.XmlErrorType;
@@ -80,12 +81,12 @@ public class EmulatorEngine implements Engine {
                 currentExecutionNumber,
                 runResults,
                 currentOnScreenProgram instanceof Function ? "Function" : "Program",
-                currentOnScreenProgram.getRepresentation(),
-                "Need to Implement"));
+                currentOnScreenProgram.getRepresentation()));
         currentExecutionNumber++;
     }
 
-    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
+    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException {
+        checkArchitectureCompatibility(architecture);
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
         ProgramExecutor executor = new ProgramExecutorImpl(currentOnScreenProgram);
 
@@ -105,7 +106,8 @@ public class EmulatorEngine implements Engine {
                 programInitialInputVariablesMap,
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
-                executor.getCyclesCount());
+                executor.getCyclesCount(),
+                architecture.getUserString());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
         addExecutionToHistory(runResults);
         updateCreditsAfterRun(executor.getCreditsCost());
@@ -171,6 +173,12 @@ public class EmulatorEngine implements Engine {
         System.exit(0);
     }
 
+    private void checkArchitectureCompatibility(ArchitectureType architecture) {
+        if (architecture.getNumber() < currentOnScreenProgram.getMinimalArchitectureType().getNumber()) {
+            throw new InvalidArchitectureException(architecture.getUserString(), currentOnScreenProgram.getMinimalArchitectureType().getUserString());
+        }
+    }
+
     private Map<Variable, Long> convertGuiVariablesMapToDomainVariablesMap(Map<String, String> guiVariablesMap) {
         Map<Variable, Long> userInputToVariablesMapConverted = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : guiVariablesMap.entrySet()) {
@@ -185,7 +193,8 @@ public class EmulatorEngine implements Engine {
         return userInputToVariablesMapConverted;
     }
 
-    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap) throws NumberFormatException, NumberNotInRangeException {
+    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException {
+        checkArchitectureCompatibility(architecture);
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
@@ -196,7 +205,7 @@ public class EmulatorEngine implements Engine {
         }
         programInitialInputVariablesMap.put(Variable.RESULT, 0L);
 
-        debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap));
+        debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap), architecture);
 
 
         return new RunResultsDTO(
@@ -206,6 +215,7 @@ public class EmulatorEngine implements Engine {
                 userInputToVariablesMapConverted,
                 Utils.extractVariablesTypesFromMap(programInitialInputVariablesMap, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
     }
 
@@ -222,6 +232,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished()
         );
         if (debuggerExecutor.isFinished()) {
@@ -248,6 +259,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished()
         );
     }
@@ -270,6 +282,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
                 Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
         if (debuggerExecutor.isFinished()) {
             savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);

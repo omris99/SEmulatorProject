@@ -5,14 +5,12 @@ public class ExecutionHistoryDTO {
     private RunResultsDTO runResults;
     private String programType;
     private String programName;
-    private String Architecture;
 
-    public ExecutionHistoryDTO(int executionNumber, RunResultsDTO runResults, String programType, String programName, String architecture) {
+    public ExecutionHistoryDTO(int executionNumber, RunResultsDTO runResults, String programType, String programName) {
         this.executionNumber = executionNumber;
         this.runResults = runResults;
         this.programType = programType;
         this.programName = programName;
-        this.Architecture = architecture;
     }
 
     public int getExecutionNumber() {
@@ -28,7 +26,7 @@ public class ExecutionHistoryDTO {
     }
 
     public String getArchitecture() {
-        return Architecture;
+        return runResults.getArchitecture();
     }
 
     public int getDegree() {

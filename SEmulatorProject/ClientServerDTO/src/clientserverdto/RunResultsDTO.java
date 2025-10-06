@@ -15,10 +15,11 @@ public class RunResultsDTO implements DTO {
     private final Map<String, Long> inputVariablesValueResult;
     private final Map<String, Long> workVariablesValues;
     private final int totalCyclesCount;
+    private final String architecture;
     private boolean isFinished = false;
 
-    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesInitialValues, Map<Variable, Long> inputVariablesValueResult, Map<Variable, Long> workVariablesValues, int totalCyclesCount) {
-        this(degree, yValue, inputVariablesInitialValues, inputVariablesValueResult, workVariablesValues, totalCyclesCount, false);
+    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesInitialValues, Map<Variable, Long> inputVariablesValueResult, Map<Variable, Long> workVariablesValues, int totalCyclesCount, String architecture) {
+        this(degree, yValue, inputVariablesInitialValues, inputVariablesValueResult, workVariablesValues, totalCyclesCount, architecture, false);
     }
 
     public RunResultsDTO(int degree,
@@ -27,6 +28,7 @@ public class RunResultsDTO implements DTO {
                          Map<Variable, Long> inputVariablesValueResult,
                          Map<Variable, Long> workVariablesValues,
                          int totalCyclesCount,
+                         String architecture,
                          boolean isFinished) {
         this.degree = degree;
         this.yValue = yValue;
@@ -35,6 +37,7 @@ public class RunResultsDTO implements DTO {
         this.workVariablesValues = convertKeyToStringAndSortVariablesMap(workVariablesValues);
         this.totalCyclesCount = totalCyclesCount;
         this.isFinished = isFinished;
+        this.architecture = architecture;
     }
 
 
@@ -75,5 +78,9 @@ public class RunResultsDTO implements DTO {
 
     public boolean isFinished() {
         return isFinished;
+    }
+
+    public String getArchitecture() {
+        return architecture;
     }
 }

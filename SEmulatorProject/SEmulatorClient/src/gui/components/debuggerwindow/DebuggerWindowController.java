@@ -81,7 +81,7 @@ public class DebuggerWindowController {
     }
 
     public void onStartClick() {
-        executionScreenController.startProgramExecution(getInputVariablesValues());
+        executionScreenController.startProgramExecution(getInputVariablesValues(), architectureSelectorController.getSelectedArchitecture());
     }
 
     private Map<String, String> getInputVariablesValues() {
@@ -106,7 +106,7 @@ public class DebuggerWindowController {
     }
 
     public void onDebugButtonClick() {
-        executionScreenController.startDebuggingSession(getInputVariablesValues());
+        executionScreenController.startDebuggingSession(getInputVariablesValues(), architectureSelectorController.getSelectedArchitecture());
     }
 
     public void onStepOverClick() {

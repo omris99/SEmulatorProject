@@ -135,11 +135,12 @@ public class ExecutionScreenController {
         this.clientManager = clientManager;
     }
 
-    public void startProgramExecution(Map<String, String> inputVariables) {
+    public void startProgramExecution(Map<String, String> inputVariables, String architecture) {
         int runDegree = instructionsWindowController.getDegreeChoice();
         Map<String, Object> payload = new HashMap<>();
         payload.put("runDegree", runDegree);
         payload.put("inputVariables", inputVariables);
+        payload.put("architecture", architecture);
 
         String json = GsonFactory.getGson().toJson(payload);
         RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
@@ -213,11 +214,12 @@ public class ExecutionScreenController {
         });
     }
 
-    public void startDebuggingSession(Map<String, String> inputVariables) {
+    public void startDebuggingSession(Map<String, String> inputVariables, String architecture) {
         int runDegree = instructionsWindowController.getDegreeChoice();
         Map<String, Object> payload = new HashMap<>();
         payload.put("runDegree", runDegree);
         payload.put("inputVariables", inputVariables);
+        payload.put("architecture", architecture);
 
         String json = GsonFactory.getGson().toJson(payload);
         RequestBody body = RequestBody.create(json, MediaType.get("application/json"));

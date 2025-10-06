@@ -3,6 +3,7 @@ package serverengine.logic.execution;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.program.Program;
 
@@ -23,11 +24,13 @@ public class DebuggerExecutor implements ProgramExecutor {
     private Instruction previousInstructionExecuted;
     private boolean isPausedAtBreakpoint;
     private boolean isFinished = false;
+    private final ArchitectureType architecture;
 
-    public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap) {
+    public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap, ArchitectureType architecture) {
         this.contextsHistory = new LinkedList<>();
         this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
+        this.architecture = architecture;
     }
 
     @Override
@@ -141,5 +144,9 @@ public class DebuggerExecutor implements ProgramExecutor {
 
     public Instruction getCurrentInstructionToExecute() {
         return currentInstructionToExecute;
+    }
+
+    public ArchitectureType getArchitecture() {
+        return architecture;
     }
 }

@@ -9,6 +9,7 @@ import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.instruction.Instructions;
 
@@ -111,5 +112,17 @@ public abstract class AbstractProgram implements Program {
         }
 
         return programLabelsNames;
+    }
+
+    public ArchitectureType getMinimalArchitectureType() {
+        ArchitectureType minimalArchitectureType = ArchitectureType.ONE;
+
+        for(Instruction instruction : instructions.getInstructionsList()) {
+            if(instruction.getArchitectureType().getNumber() > minimalArchitectureType.getNumber()){
+                minimalArchitectureType = instruction.getArchitectureType();
+            }
+        }
+
+        return minimalArchitectureType;
     }
 }

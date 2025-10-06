@@ -36,6 +36,7 @@ public class Instructions implements Serializable {
         this.instructions.add(indexToAdd, instruction);
         instruction.setIndex(indexToAdd + 1);
         cycles += instruction.getCycles();
+
         Variable variable = instruction.getVariable();
 
         if (variable.getType() == VariableType.INPUT) {

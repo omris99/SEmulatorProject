@@ -4,6 +4,7 @@ import clientserverdto.DTO;
 import serverengine.logic.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 
 import java.io.Serializable;
@@ -25,4 +26,5 @@ public interface Program extends Serializable {
     DTO createDTO();
     int getDegree();
     InstructionsTree getInstructionsTree();
+    ArchitectureType getMinimalArchitectureType();
 }

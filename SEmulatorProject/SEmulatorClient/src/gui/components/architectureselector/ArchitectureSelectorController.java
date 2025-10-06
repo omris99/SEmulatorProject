@@ -41,4 +41,8 @@ public class ArchitectureSelectorController {
         architectureComboBox.getSelectionModel().clearSelection();
         architectureComboBox.setValue(architectureComboBox.getItems().getFirst());
     }
+
+    public String getSelectedArchitecture(){
+        return architectureComboBox.getSelectionModel().getSelectedItem();
+    }
 }

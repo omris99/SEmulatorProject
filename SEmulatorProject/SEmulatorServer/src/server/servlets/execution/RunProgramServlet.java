@@ -11,10 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
+import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.users.User;
 import serverengine.users.UserManager;
 
@@ -32,13 +34,14 @@ public class RunProgramServlet extends HttpServlet {
 
             int runDegree = ((Double) payload.get("runDegree")).intValue();
             Map<String, String> inputVariables = (Map<String, String>) payload.get("inputVariables");
+            String architecture = (String) payload.get("architecture");
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
             String username = SessionUtils.getUsername(req);
             EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
 
-            RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
+            RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
             ProgramsRepo.getInstance().getProgramByName(engine.getLoadedProgramName()).incrementTotalExecutions();
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -55,6 +58,16 @@ public class RunProgramServlet extends HttpServlet {
                     "Negative Number Submitted",
                     "You entered the number: " + e.getNumber() + " which is not positive.\n" +
                     "Please enter only Positive Numbers.");
+            String errorJson = GsonFactory.getGson().toJson(error);
+            resp.getWriter().write(errorJson);
+        } catch (InvalidArchitectureException e){
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ErrorAlertDTO error = new ErrorAlertDTO(
+                    "Error Starting Execution",
+                    "Invalid Architecture Selected",
+                    "Minimum architecture required for this program is: " + e.getMinimumArchitecture() + ".\n" +
+                            "You selected: " + e.getSelectedArchitecture() + ".\n" +
+                            "Please select a valid architecture and try again.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
         }

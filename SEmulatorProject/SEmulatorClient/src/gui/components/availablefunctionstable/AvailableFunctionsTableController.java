@@ -69,9 +69,11 @@ public class AvailableFunctionsTableController {
 
 
     @FXML
-    void onExecuteFunctionButtonClick(ActionEvent event) {
+    public void onExecuteFunctionButtonClick(ActionEvent event) {
         UploadedProgramDTO selectedProgram = functionsTable.getSelectionModel().getSelectedItem();
-        programsWindowController.executeProgramButtonClicked(selectedProgram);
+        if (selectedProgram != null) {
+            programsWindowController.executeProgramButtonClicked(selectedProgram);
+        }
     }
 
 

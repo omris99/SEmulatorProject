@@ -28,6 +28,7 @@ public class ProgramsRepo {
 
     public void addProgram(UploadedProgram program){
         programs.put(program.getName(), program);
+        userStringToProgramName.put(program.getUserString(), program.getName());
     }
 
     public void addFunction(UploadedProgram function){
@@ -61,7 +62,7 @@ public class ProgramsRepo {
             return programs.get(name);
         }
         else {
-            return functions.get(getFunctionNameByUserString(name));
+            return functions.get(name);
         }
     }
 

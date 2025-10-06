@@ -15,6 +15,8 @@ import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.users.User;
+import serverengine.users.UserManager;
 
 import java.io.IOException;
 import java.util.Map;
@@ -33,7 +35,8 @@ public class RunProgramServlet extends HttpServlet {
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
-            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));;
+            String username = SessionUtils.getUsername(req);
+            EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
 
             RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);

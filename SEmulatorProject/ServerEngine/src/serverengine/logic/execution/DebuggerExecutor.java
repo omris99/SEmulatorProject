@@ -18,6 +18,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     private ExecutionContext initialContext;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
+    private int creditsCost;
     private Instruction nextInstructionToExecute;
     private Instruction previousInstructionExecuted;
     private boolean isPausedAtBreakpoint;
@@ -45,6 +46,7 @@ public class DebuggerExecutor implements ProgramExecutor {
             isPausedAtBreakpoint = false;
             nextLabel = currentInstructionToExecute.execute(context);
             cyclesCount += currentInstructionToExecute.getCycles();
+            creditsCost += currentInstructionToExecute.getArchitectureType().getExecutionCost();
 
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
@@ -67,6 +69,7 @@ public class DebuggerExecutor implements ProgramExecutor {
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         currentInstructionToExecute = instructionsQueue.getFirstInQueue();
         cyclesCount = 0;
+        creditsCost = 0;
         isFinished = false;
     }
 
@@ -83,6 +86,7 @@ public class DebuggerExecutor implements ProgramExecutor {
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
+        creditsCost += currentInstructionToExecute.getArchitectureType().getExecutionCost();
         if (nextLabel != FixedLabel.EXIT) {
             previousInstructionExecuted = currentInstructionToExecute;
             if (nextLabel == FixedLabel.EMPTY) {
@@ -115,6 +119,9 @@ public class DebuggerExecutor implements ProgramExecutor {
         return context.getVariablesStatus();
     }
 
+    public int getCreditsCost() {
+        return creditsCost;
+    }
 
     public boolean isFinished() {
         return isFinished;

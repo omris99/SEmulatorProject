@@ -11,7 +11,7 @@
       <Label fx:id="availableCreditsLabel" alignment="CENTER" prefHeight="17.0" prefWidth="263.0" styleClass="mini-window-header" text="Charge Credits" textFill="WHITE" />
       <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">
          <children>
-            <Button id="chargeCreditsButton" fx:id="chargeCreditButton" mnemonicParsing="false" text="Charge" />
+            <Button id="chargeCreditsButton" fx:id="chargeCreditButton" mnemonicParsing="false" onAction="#onChargeCreditButtonClicked" text="Charge" />
             <TextField fx:id="creditsTextField" prefHeight="25.0" prefWidth="95.0" />
          </children>
       </HBox>

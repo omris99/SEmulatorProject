@@ -1,22 +1,22 @@
 package gui.dashboard;
 
+import clientserverdto.ErrorAlertDTO;
 import clientserverdto.ProgramDTO;
 import clientserverdto.UploadedProgramDTO;
 import gui.app.ClientManager;
+import gui.components.creditswindow.CreditsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
 import gui.components.userswindow.UsersWindowController;
 import http.HttpClientUtil;
+import http.ServerPaths;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import okhttp3.*;
 import serverengine.logic.json.GsonFactory;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,9 +38,14 @@ public class DashBoardController {
     private ProgramsWindowController programsWindowController;
 
     @FXML
+    private CreditsWindowController creditsWindowController;
+
+    @FXML
     private void initialize() {
         loadFileBarController.setDashBoardController(this);
         programsWindowController.setDashBoardController(this);
+        creditsWindowController.setDashBoardController(this);
+
     }
 
     public void loadProgramWithProgress(File selectedFile) {
@@ -119,5 +124,43 @@ public class DashBoardController {
 
     public void executeProgramButtonClicked(UploadedProgramDTO selectedProgram) {
         clientManager.switchToExecutionScreen(selectedProgram);
+    }
+
+    public void chargeCredits(String credits) {
+        RequestBody formBody = new FormBody.Builder()
+                .add("creditsAmount", credits)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(ServerPaths.CHARGE_CREDITS)
+                .post(formBody)
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Credits Charge Failed",
+                        "Failed to charge credits",
+                        e.getMessage()
+                ));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    Platform.runLater(() -> {
+                        creditsWindowController.resetCreditsInput();
+                    });
+                } else {
+                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+
+                            Platform.runLater(() -> showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
+                }
+
+                response.close();
+            }
+        });
     }
 }

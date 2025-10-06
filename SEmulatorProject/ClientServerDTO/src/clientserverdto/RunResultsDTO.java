@@ -21,7 +21,13 @@ public class RunResultsDTO implements DTO{
         this(degree, yValue, inputVariablesInitialValues, inputVariablesValueResult, workVariablesValues, totalCyclesCount, false);
     }
 
-    public RunResultsDTO(int degree, Long yValue, Map<Variable, Long> inputVariablesInitialValues, Map<Variable, Long> inputVariablesValueResult,Map<Variable, Long> workVariablesValues, int totalCyclesCount, boolean isFinished) {
+    public RunResultsDTO(int degree,
+                         Long yValue,
+                         Map<Variable, Long> inputVariablesInitialValues,
+                         Map<Variable, Long> inputVariablesValueResult,
+                         Map<Variable, Long> workVariablesValues,
+                         int totalCyclesCount,
+                         boolean isFinished) {
         this.degree = degree;
         this.yValue = yValue;
         this.inputVariablesInitialValues = convertKeyToStringAndSortVariablesMap(inputVariablesInitialValues);

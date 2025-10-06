@@ -20,6 +20,7 @@ public class ServerPaths {
     public final static String GET_INPUTS_NAMES = FULL_SERVER_PATH + "/programInputsNames";
     public final static String GET_ON_SCREEN_PROGRAM_INSTRUCTIONS_TREE = FULL_SERVER_PATH + "/onScreenProgramInstructionsTree";
     public final static String GET_SPECIFIC_EXPANSION_INSTRUCTIONS_TREE = FULL_SERVER_PATH + "/specificExpansionInstructionsTree";
+    public final static String CHARGE_CREDITS = FULL_SERVER_PATH + "/chargeCredits";
 
     //EXECUTION
     public final static String RUN_PROGRAM = FULL_SERVER_PATH + EXECUTION_CONTEXT_PATH + "/runProgram";

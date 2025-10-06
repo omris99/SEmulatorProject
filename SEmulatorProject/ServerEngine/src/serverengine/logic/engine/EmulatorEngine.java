@@ -39,11 +39,15 @@ public class EmulatorEngine implements Engine {
     private DebuggerExecutor debuggerExecutor;
     private final Map<String, List<RunResultsDTO>> savedHistories;
     private final List<ExecutionHistoryDTO> executionsHistory;
-    private int currentExecutionNumber = 1;
+    private int currentExecutionNumber;
+    private int creditsUsed;
+    private int creditsBalance;
 
     public EmulatorEngine() {
         this.savedHistories = new HashMap<>();
         this.executionsHistory = new LinkedList<>();
+        this.currentExecutionNumber = 1;
+        this.creditsUsed = 0;
     }
 
     @Override
@@ -148,7 +152,7 @@ public class EmulatorEngine implements Engine {
         return runResults;
     }
 
-    private void addExecutionToHistory(RunResultsDTO runResults){
+    private void addExecutionToHistory(RunResultsDTO runResults) {
         executionsHistory.add(new ExecutionHistoryDTO(
                 currentExecutionNumber,
                 runResults,
@@ -181,6 +185,8 @@ public class EmulatorEngine implements Engine {
                 executor.getCyclesCount());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
         addExecutionToHistory(runResults);
+        creditsUsed += executor.getCreditsCost();
+
         return runResults;
     }
 
@@ -281,7 +287,6 @@ public class EmulatorEngine implements Engine {
         }
 
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
-
         RunResultsDTO debugResults = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
@@ -295,6 +300,8 @@ public class EmulatorEngine implements Engine {
             savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
             addExecutionToHistory(debugResults);
         }
+
+        creditsUsed += debuggerExecutor.getCreditsCost();
 
         return debugResults;
     }
@@ -341,6 +348,8 @@ public class EmulatorEngine implements Engine {
             addExecutionToHistory(debugResults);
         }
 
+        creditsUsed += debuggerExecutor.getCreditsCost();
+
         return debugResults;
     }
 
@@ -367,7 +376,7 @@ public class EmulatorEngine implements Engine {
         return currentOnScreenProgram.getInstructionsTree();
     }
 
-    public InstructionsTree getSpecificExpansionInstructionsTree(){
+    public InstructionsTree getSpecificExpansionInstructionsTree() {
         Program fullExpandedProgram = currentContextProgram.getExpandedProgram(currentContextProgram.getMaximalDegree());
         return fullExpandedProgram.getInstructionsTree();
     }
@@ -376,7 +385,28 @@ public class EmulatorEngine implements Engine {
         return executionsHistory.size();
     }
 
-    public String getLoadedProgramName(){
+    public String getLoadedProgramName() {
         return currentOnScreenProgram.getName();
+    }
+
+    public int getCreditsUsed() {
+        return creditsUsed;
+    }
+
+    public int getCreditsBalance() {
+        return creditsBalance;
+    }
+
+    public void chargeCredits(String amount) {
+        try {
+            int creditsToCharge = Integer.parseInt(amount);
+            if (creditsToCharge < 0) {
+                throw new NumberNotInRangeException(creditsToCharge);
+            }
+
+            this.creditsBalance += creditsToCharge;
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Invalid number format for credits: " + amount);
+        }
     }
 }

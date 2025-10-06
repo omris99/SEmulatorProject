@@ -1,7 +1,8 @@
 package gui.components.debuggerwindow;
 
+import clientserverdto.ProgramDTO;
 import clientserverdto.RunResultsDTO;
-import gui.app.ClientController;
+import gui.components.architectureselector.ArchitectureSelectorController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
 import gui.components.inputrow.InputRowController;
 import gui.execution.ExecutionScreenController;
@@ -10,11 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import gui.components.debuggercommandsbar.debuggerCommandsBarController;
 import javafx.scene.layout.VBox;
+import serverengine.logic.model.instruction.ArchitectureType;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DebuggerWindowController {
     private ExecutionScreenController executionScreenController;
@@ -28,11 +28,15 @@ public class DebuggerWindowController {
     @FXML
     private ExecutionStateWindowController executionStateWindowController;
 
+    @FXML
+    private ArchitectureSelectorController architectureSelectorController;
+
     private final List<InputRowController> inputVariableRows = new ArrayList<>();
 
     @FXML
     private void initialize() {
         debuggerCommandsBarController.setDebuggerWindowController(this);
+        architectureSelectorController.setDebuggerWindowController(this);
     }
 
     public void reset() {
@@ -41,6 +45,7 @@ public class DebuggerWindowController {
         debuggerCommandsBarController.reset();
         executionStateWindowController.reset();
         debuggerCommandsBarController.disableNewRunButton(false);
+        architectureSelectorController.reset();
     }
 
     public void prepareForNewRun(List<String> names) {
@@ -140,4 +145,9 @@ public class DebuggerWindowController {
         debuggerCommandsBarController.disableDebuggerControlButtons(false);
         disableInputFields(true);
     }
+
+    public void onArchitectureSelected(String architecture) {
+        executionScreenController.highlightInstructionsByArchitecture(architecture);
+    }
+
 }

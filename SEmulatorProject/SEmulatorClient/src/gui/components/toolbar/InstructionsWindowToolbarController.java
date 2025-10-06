@@ -78,10 +78,6 @@ public class InstructionsWindowToolbarController {
         instructionsWindowController.onHighlightSelectionChange(selection);
     }
 
-    public void onProgramSelectorChange(String selection) {
-        instructionsWindowController.onProgramSelectorChange(selection);
-    }
-
     public void updateHighlightOptions(ProgramDTO programDTO) {
         List<String> highlightOptions = new ArrayList<>();
         highlightOptions.addAll(programDTO.getLabelsNames());

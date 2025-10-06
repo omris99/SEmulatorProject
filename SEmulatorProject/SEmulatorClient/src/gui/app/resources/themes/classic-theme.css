@@ -100,6 +100,18 @@
     -fx-border-width: 1;
 }
 
+.table-row-cell.architecture-highlighted{
+    -fx-background-color: linear-gradient(to bottom, rgba(232, 0, 0, 0.65), #ffffff, rgba(232, 0, 0, 0.65));
+    -fx-border-color: #e80000;
+    -fx-border-width: 1;
+}
+
+.table-row-cell.architecture-highlighted.highlighted{
+    -fx-background-color: linear-gradient(to bottom, rgba(232, 0, 0, 0.65), rgba(43, 0, 90, 0.25), #ffffff, rgba(43, 0, 90, 0.25), rgba(232, 0, 0, 0.65));
+    -fx-border-color: #e80000;
+    -fx-border-width: 1;
+}
+
 #progressBar {
     -fx-base: #c6c6c6;
     -fx-accent: #18a300;

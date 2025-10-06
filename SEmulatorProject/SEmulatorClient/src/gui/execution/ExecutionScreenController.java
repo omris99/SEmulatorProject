@@ -11,9 +11,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
+import serverengine.logic.model.instruction.ArchitectureType;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -115,7 +115,9 @@ public class ExecutionScreenController {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
                     ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
-                    Platform.runLater(() -> instructionsWindowController.onExpandationLevelChanged(programDTO));
+                    Platform.runLater(() -> {
+                        instructionsWindowController.onExpandationLevelChanged(programDTO);
+                    });
                 }
                 else {
                     Platform.runLater(() -> showErrorAlert(
@@ -426,6 +428,7 @@ public class ExecutionScreenController {
 
         return null;
     }
+
     public void executeNextDebugStep() {
         Request request = HttpClientUtil.createEmptyBodyPostRequest(ServerPaths.STEP_OVER);
 
@@ -469,6 +472,10 @@ public class ExecutionScreenController {
 
     public void setUserInfo(UserDTO userDTO) {
         userInfoBannerController.updateUserInfo(userDTO);
+    }
+
+    public void highlightInstructionsByArchitecture(String architecture) {
+        instructionsWindowController.highlightInstructionsByArchitecture(architecture);
     }
 
 }

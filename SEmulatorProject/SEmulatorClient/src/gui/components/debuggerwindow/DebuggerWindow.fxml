@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="685.0" prefWidth="833.0" styleClass="window-view" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.debuggerwindow.DebuggerWindowController">
+<VBox alignment="CENTER" prefHeight="685.0" prefWidth="833.0" styleClass="window-view" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.debuggerwindow.DebuggerWindowController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="833.0" styleClass="window-header" text="Execution Window" textFill="WHITE">
          <font>
@@ -15,6 +15,14 @@
          </font>
       </Label>
       <fx:include fx:id="debuggerCommandsBar" source="../debuggercommandsbar/DebuggerCommandsBar.fxml" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <fx:include fx:id="architectureSelector" source="../architectureselector/ArchitectureSelector.fxml" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </HBox>
       <HBox alignment="TOP_CENTER" prefHeight="564.0" prefWidth="786.0" spacing="10.0">
          <children>
             <VBox prefHeight="433.0" prefWidth="274.0">

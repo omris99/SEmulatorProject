@@ -97,14 +97,6 @@ public class InstructionsWindowController {
         instructionsTableController.highlightInstructionsWithSelection(selection);
     }
 
-    public void onProgramSelectorChange(String selection) {
-        if(selection == null){
-            return;
-        }
-
-        clientController.changeLoadedProgramToFunction(selection);
-    }
-
 
     public int getDegreeChoice() {
         return instructionsWindowToolbarController.getDegreeChoice();
@@ -132,5 +124,9 @@ public class InstructionsWindowController {
 
     public void setExecutionScreenController(ExecutionScreenController executionScreenController) {
         this.executionScreenController = executionScreenController;
+    }
+
+    public void highlightInstructionsByArchitecture(String architecture){
+        instructionsTableController.highlightInstructionsByArchitecture(architecture);
     }
 }

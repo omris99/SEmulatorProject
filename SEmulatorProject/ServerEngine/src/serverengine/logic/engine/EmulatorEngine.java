@@ -23,6 +23,7 @@ import serverengine.logic.model.argument.variable.VariableType;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.functionsrepo.UploadedProgram;
 import serverengine.logic.model.generated.SProgram;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.mappers.ProgramMapper;
 import serverengine.logic.model.program.Function;

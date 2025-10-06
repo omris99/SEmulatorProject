@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import serverengine.logic.model.instruction.ArchitectureType;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class InstructionsTableController {
 
 
     private String highlightedSelection;
+    private ArchitectureType selectedArchitecture;
     private int nextInstructionToExecuteIndex;
     private final ObservableList<InstructionDTO> data = FXCollections.observableArrayList();
 
@@ -53,7 +55,7 @@ public class InstructionsTableController {
             protected void updateItem(InstructionDTO item, boolean empty) {
                 super.updateItem(item, empty);
 
-                getStyleClass().removeAll("highlighted", "next-instruction");
+                getStyleClass().removeAll("highlighted", "next-instruction", "architecture-highlighted");
 
                 if (item == null || empty) {
                     return;
@@ -65,11 +67,18 @@ public class InstructionsTableController {
                 boolean isNextInstruction = nextInstructionToExecuteIndex > 0 &&
                         item.getIndex() == nextInstructionToExecuteIndex;
 
+                ArchitectureType instructionArchitecture = ArchitectureType.fromUserString(item.getArchitectureType());
+
+                boolean isArchitectureHighlighted = instructionArchitecture.getNumber() > selectedArchitecture.getNumber();
+
                 if (isNextInstruction) {
                     getStyleClass().add("next-instruction");
                     AnimationsManager.playFadeIn(tv, 200);
-                } else if (isHighlighted) {
+                } if (isHighlighted) {
                     getStyleClass().add("highlighted");
+                }
+                if (isArchitectureHighlighted) {
+                    getStyleClass().add("architecture-highlighted");
                 }
             }
         });
@@ -97,6 +106,11 @@ public class InstructionsTableController {
                     .findFirst()
                     .ifPresent(instr -> InstructionsTable.scrollTo(instr));
         });
+    }
+
+    public void highlightInstructionsByArchitecture(String architecture) {
+        this.selectedArchitecture = ArchitectureType.fromUserString(architecture);
+        InstructionsTable.refresh();
     }
 
     public void stopHighlightingNextInstructionToExecute(){

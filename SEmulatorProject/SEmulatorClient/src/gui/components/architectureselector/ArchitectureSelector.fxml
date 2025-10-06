@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="61.0" prefWidth="263.0" spacing="2.0" styleClass="mini-window" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.architectureselector.ArchitectureSelectorController">
+   <children>
+      <Label alignment="CENTER" prefHeight="17.0" prefWidth="263.0" styleClass="mini-window-header" text="Architecture Selector" textFill="WHITE" />
+      <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">
+         <children>
+            <ComboBox fx:id="architectureComboBox" prefHeight="26.0" prefWidth="164.0" promptText="Architecture..." styleClass="choice-box" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

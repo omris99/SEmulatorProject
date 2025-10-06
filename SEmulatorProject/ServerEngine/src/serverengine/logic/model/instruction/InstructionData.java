@@ -1,25 +1,27 @@
 package serverengine.logic.model.instruction;
 
 public enum InstructionData {
-    NEUTRAL(InstructionType.BASIC, 0),
-    INCREASE(InstructionType.BASIC, 1),
-    DECREASE(InstructionType.BASIC, 1),
-    JUMP_NOT_ZERO(InstructionType.BASIC, 2),
-    ZERO_VARIABLE(InstructionType.SYNTHETIC, 1),
-    ASSIGNMENT(InstructionType.SYNTHETIC, 4),
-    GOTO_LABEL(InstructionType.SYNTHETIC, 1),
-    CONSTANT_ASSIGNMENT(InstructionType.SYNTHETIC, 2),
-    JUMP_ZERO(InstructionType.SYNTHETIC, 2),
-    JUMP_EQUAL_CONSTANT(InstructionType.SYNTHETIC, 2),
-    JUMP_EQUAL_VARIABLE(InstructionType.SYNTHETIC, 2),
-    QUOTE(InstructionType.SYNTHETIC, 5),
-    JUMP_EQUAL_FUNCTION(InstructionType.SYNTHETIC, 6);
+    NEUTRAL(InstructionType.BASIC, ArchitectureType.ONE ,0),
+    INCREASE(InstructionType.BASIC, ArchitectureType.ONE, 1),
+    DECREASE(InstructionType.BASIC, ArchitectureType.ONE, 1),
+    JUMP_NOT_ZERO(InstructionType.BASIC, ArchitectureType.ONE, 2),
+    ZERO_VARIABLE(InstructionType.SYNTHETIC, ArchitectureType.TWO, 1),
+    ASSIGNMENT(InstructionType.SYNTHETIC, ArchitectureType.THREE, 4),
+    GOTO_LABEL(InstructionType.SYNTHETIC, ArchitectureType.TWO,1),
+    CONSTANT_ASSIGNMENT(InstructionType.SYNTHETIC, ArchitectureType.TWO, 2),
+    JUMP_ZERO(InstructionType.SYNTHETIC, ArchitectureType.THREE, 2),
+    JUMP_EQUAL_CONSTANT(InstructionType.SYNTHETIC, ArchitectureType.THREE, 2),
+    JUMP_EQUAL_VARIABLE(InstructionType.SYNTHETIC, ArchitectureType.THREE, 2),
+    QUOTE(InstructionType.SYNTHETIC, ArchitectureType.FOUR, 5),
+    JUMP_EQUAL_FUNCTION(InstructionType.SYNTHETIC, ArchitectureType.FOUR, 6);
 
     private final InstructionType type;
+    private final ArchitectureType architectureType;
     private final int cycles;
 
-    InstructionData(InstructionType type, int cycles) {
+    InstructionData(InstructionType type, ArchitectureType architectureType, int cycles) {
         this.type = type;
+        this.architectureType = architectureType;
         this.cycles = cycles;
     }
 
@@ -47,5 +49,9 @@ public enum InstructionData {
         }
 
         throw new IllegalArgumentException("Unknown instruction: name=" + name + ", type=" + type);
+    }
+
+    public ArchitectureType getArchitectureType() {
+        return architectureType;
     }
 }

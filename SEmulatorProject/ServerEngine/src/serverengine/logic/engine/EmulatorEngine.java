@@ -40,8 +40,8 @@ public class EmulatorEngine implements Engine {
     private final Map<String, List<RunResultsDTO>> savedHistories;
     private final List<ExecutionHistoryDTO> executionsHistory;
     private int currentExecutionNumber;
-    private int creditsUsed;
-    private int creditsBalance;
+    private long creditsUsed;
+    private long creditsBalance;
 
     public EmulatorEngine() {
         this.savedHistories = new HashMap<>();
@@ -49,53 +49,6 @@ public class EmulatorEngine implements Engine {
         this.currentExecutionNumber = 1;
         this.creditsUsed = 0;
     }
-
-    @Override
-    public void loadProgram(String xmlPath) throws JAXBException, InvalidXmlFileException {
-        if (!xmlPath.endsWith(".xml") || !(xmlPath.length() > 4)) {
-            throw new InvalidXmlFileException(xmlPath, XmlErrorType.INVALID_EXTENSION);
-        }
-
-        File xmlFile = new File(xmlPath);
-        if (!xmlFile.exists()) {
-            throw new InvalidXmlFileException(xmlPath, XmlErrorType.FILE_MISSING);
-        }
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(xmlFile);
-
-        Program loadedProgram = ProgramMapper.toDomain(sProgram);
-        Label problemLabel = loadedProgram.validate();
-        if (problemLabel != FixedLabel.EMPTY) {
-            throw new InvalidXmlFileException(xmlPath, XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
-        }
-
-        this.mainProgram = loadedProgram;
-        setCurrentContextProgram(mainProgram);
-
-        savedHistories.clear();
-    }
-
-//    public void loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
-//        JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
-//        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//
-//        SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
-//        Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
-//        Label problemLabel = loadedProgram.validate();
-//        if (problemLabel != FixedLabel.EMPTY) {
-//            throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
-//        }
-//
-//        this.mainProgram = loadedProgram;
-//        setCurrentContextProgram(mainProgram);
-//        UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
-//
-//        ProgramsRepo.getInstance().addProgram(uploadedProgram);
-//
-//        savedHistories.clear();
-//    }
 
     public void setMainProgram(UploadedProgram uploadedProgram) {
         this.mainProgram = uploadedProgram.getProgram();
@@ -119,37 +72,6 @@ public class EmulatorEngine implements Engine {
     @Override
     public DTO getLoadedProgramDTO() {
         return currentOnScreenProgram.createDTO();
-    }
-
-    @Override
-    public DTO runLoadedProgramWithCommaSeperatedInput(int degree, String input) {
-        ProgramExecutor executor = new ProgramExecutorImpl(currentContextProgram.getExpandedProgram(degree));
-        Long[] inputs = Arrays.stream(input.split(","))
-                .map(String::trim)
-                .map(Long::parseLong)
-                .toArray(Long[]::new);
-        for (Long number : inputs) {
-            if (number < 0) {
-                throw new NumberNotInRangeException(Integer.parseInt(number.toString()));
-            }
-        }
-
-        Map<Variable, Long> userInputToVariablesMap = mapUserInputToVariables(inputs);
-        Map<Variable, Long> programUseInitialInputVariablesMap = createProgramUseInitialVariablesMap(inputs);
-
-        Map<Variable, Long> finalVariablesResult = executor.run(new LinkedHashMap<>(programUseInitialInputVariablesMap));
-
-        RunResultsDTO runResults = new RunResultsDTO(
-                degree,
-                finalVariablesResult.get(Variable.RESULT),
-                userInputToVariablesMap,
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
-                executor.getCyclesCount());
-        addExecutionToHistory(runResults);
-        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
-
-        return runResults;
     }
 
     private void addExecutionToHistory(RunResultsDTO runResults) {
@@ -185,9 +107,14 @@ public class EmulatorEngine implements Engine {
                 executor.getCyclesCount());
         savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
         addExecutionToHistory(runResults);
-        creditsUsed += executor.getCreditsCost();
+        updateCreditsAfterRun(executor.getCreditsCost());
 
         return runResults;
+    }
+
+    private void updateCreditsAfterRun(int creditsCost) {
+        this.creditsUsed += creditsCost;
+        this.creditsBalance -= creditsCost;
     }
 
     private Set<Variable> getProgramInputVariablesFromOneToN() {
@@ -301,7 +228,7 @@ public class EmulatorEngine implements Engine {
             addExecutionToHistory(debugResults);
         }
 
-        creditsUsed += debuggerExecutor.getCreditsCost();
+        updateCreditsAfterRun(debuggerExecutor.getCreditsCost());
 
         return debugResults;
     }
@@ -348,7 +275,7 @@ public class EmulatorEngine implements Engine {
             addExecutionToHistory(debugResults);
         }
 
-        creditsUsed += debuggerExecutor.getCreditsCost();
+        updateCreditsAfterRun(debuggerExecutor.getCreditsCost());
 
         return debugResults;
     }
@@ -389,11 +316,11 @@ public class EmulatorEngine implements Engine {
         return currentOnScreenProgram.getName();
     }
 
-    public int getCreditsUsed() {
+    public long getCreditsUsed() {
         return creditsUsed;
     }
 
-    public int getCreditsBalance() {
+    public long getCreditsBalance() {
         return creditsBalance;
     }
 

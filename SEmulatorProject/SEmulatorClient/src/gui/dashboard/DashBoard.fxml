@@ -13,38 +13,16 @@
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
+      <HBox prefHeight="28.0" prefWidth="2576.0">
+         <children>
+            <fx:include fx:id="userInfoBanner" source="../components/userInfoBanner/UserInfoBanner.fxml" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
       <VBox prefHeight="1030.0" prefWidth="2560.0">
          <children>
-            <HBox prefHeight="28.0" prefWidth="2560.0">
-               <children>
-                  <HBox minHeight="0.0" minWidth="0.0" prefHeight="28.0" prefWidth="2395.0">
-                     <children>
-                        <Label text="User Name: ">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="userNameLabel">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="434.0">
-                     <children>
-                        <Label prefHeight="23.0" prefWidth="425.0" text="Available Credits:  -">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
             <HBox prefHeight="53.0" prefWidth="2560.0" spacing="10.0">
                <children>
                   <HBox prefHeight="53.0" prefWidth="2321.0">

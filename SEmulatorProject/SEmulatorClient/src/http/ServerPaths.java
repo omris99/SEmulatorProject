@@ -7,10 +7,11 @@ public class ServerPaths {
     private final static String EXECUTION_CONTEXT_PATH = "/execution";
     private final static String DEBUG_CONTEXT_PATH = EXECUTION_CONTEXT_PATH + "/debug";
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
+    private final static String USERS_CONTEXT_PATH = "/users";
 
+    //GENERAL
     public final static String PROGRAMS_LIST = FULL_SERVER_PATH + "/programs";
     public final static String FUNCTIONS_LIST = FULL_SERVER_PATH + "/functions";
-    public final static String USERS_LIST = FULL_SERVER_PATH + "/serverengine";
     public final static String LOGIN = FULL_SERVER_PATH + "/login";
     public final static String LOAD_FILE = FULL_SERVER_PATH + "/loadFile";
     public final static String GET_EXPANDED_PROGRAM = FULL_SERVER_PATH + "/expandedProgram";
@@ -36,5 +37,7 @@ public class ServerPaths {
     public final static String STOP_DEBUGGER_EXECUTION = FULL_SERVER_PATH + DEBUG_CONTEXT_PATH + "/stop";
     public final static String UPDATE_INSTRUCTION_BREAKPOINT = FULL_SERVER_PATH + DEBUG_CONTEXT_PATH + "/updateInstructionBreakPoint";
 
-
+    //USERS
+    public final static String GET_USER_INFO = FULL_SERVER_PATH + USERS_CONTEXT_PATH + "/loggedUserInfo";
+    public final static String USERS_LIST = FULL_SERVER_PATH + USERS_CONTEXT_PATH + "/list";
 }

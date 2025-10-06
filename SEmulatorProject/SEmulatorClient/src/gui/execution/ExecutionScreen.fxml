@@ -14,22 +14,9 @@
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
+      <fx:include fx:id="userInfoBanner" source="../components/userInfoBanner/UserInfoBanner.fxml" />
       <VBox prefHeight="1030.0" prefWidth="2560.0">
          <children>
-            <HBox prefHeight="28.0" prefWidth="2560.0">
-               <children>
-                  <Label text="User Name: ">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="userNameLabel" layoutX="10.0" layoutY="10.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
             <HBox alignment="CENTER" prefHeight="953.0" prefWidth="2540.0" spacing="10.0">
                <children>
                   <VBox prefHeight="953.0" prefWidth="1236.0">

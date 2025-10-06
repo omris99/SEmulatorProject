@@ -3,10 +3,12 @@ package gui.dashboard;
 import clientserverdto.ErrorAlertDTO;
 import clientserverdto.ProgramDTO;
 import clientserverdto.UploadedProgramDTO;
+import clientserverdto.UserDTO;
 import gui.app.ClientManager;
 import gui.components.creditswindow.CreditsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
+import gui.components.userInfoBanner.UserInfoBannerController;
 import gui.components.userswindow.UsersWindowController;
 import http.HttpClientUtil;
 import http.ServerPaths;
@@ -26,10 +28,10 @@ public class DashBoardController {
     private LoadFileBarController loadFileBarController;
 
     @FXML
-    private ClientManager clientManager;
+    private UserInfoBannerController userInfoBannerController;
 
     @FXML
-    private Label userNameLabel;
+    private ClientManager clientManager;
 
     @FXML
     private UsersWindowController usersWindowController;
@@ -115,7 +117,6 @@ public class DashBoardController {
     }
 
     public void setActive() {
-        userNameLabel.setText(clientManager.getUserName());
         usersWindowController.startAvailableUsersTableRefresher();
         usersWindowController.setHistory();
         programsWindowController.startAvailableFunctionsTableRefresher();
@@ -153,6 +154,7 @@ public class DashBoardController {
                     Platform.runLater(() -> {
                         creditsWindowController.resetCreditsInput();
                     });
+                    clientManager.updateUserInfo();
                 } else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
 
@@ -162,5 +164,9 @@ public class DashBoardController {
                 response.close();
             }
         });
+    }
+
+    public void setUserInfo(UserDTO userDTO) {
+        userInfoBannerController.updateUserInfo(userDTO);
     }
 }

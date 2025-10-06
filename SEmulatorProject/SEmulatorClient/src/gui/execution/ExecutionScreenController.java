@@ -4,6 +4,7 @@ import clientserverdto.*;
 import gui.app.ClientManager;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
+import gui.components.userInfoBanner.UserInfoBannerController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -31,7 +32,7 @@ public class ExecutionScreenController {
     private Button backToDashboardButton;
 
     @FXML
-    private Label userNameLabel;
+    private UserInfoBannerController userInfoBannerController;
 
     @FXML
     private ClientManager clientManager;
@@ -164,6 +165,8 @@ public class ExecutionScreenController {
                         debuggerWindowController.updateRunResults(runResultsDTO);
                         finishExecutionMode();
                     });
+
+                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
@@ -376,6 +379,8 @@ public class ExecutionScreenController {
                     } else {
                         fetchAndHighlightNextInstructionToExecute();
                     }
+
+                    clientManager.updateUserInfo();
                 }
                 else {
                     Platform.runLater(() -> showErrorAlert(
@@ -444,6 +449,8 @@ public class ExecutionScreenController {
                     } else {
                         fetchAndHighlightNextInstructionToExecute();
                     }
+
+                    clientManager.updateUserInfo();
                 }
                 else {
                     Platform.runLater(() -> showErrorAlert(
@@ -458,9 +465,10 @@ public class ExecutionScreenController {
     }
 
     public void setActive() {
-        userNameLabel.setText(clientManager.getUserName());
     }
 
-
+    public void setUserInfo(UserDTO userDTO) {
+        userInfoBannerController.updateUserInfo(userDTO);
+    }
 
 }

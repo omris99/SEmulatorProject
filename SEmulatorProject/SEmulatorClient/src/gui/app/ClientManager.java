@@ -1,14 +1,24 @@
 package gui.app;
 
+import clientserverdto.ProgramDTO;
 import clientserverdto.UploadedProgramDTO;
+import clientserverdto.UserDTO;
 import gui.dashboard.DashBoardController;
 import gui.execution.ExecutionScreenController;
 import gui.login.LoginController;
+import http.HttpClientUtil;
+import http.ServerPaths;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
+import serverengine.logic.json.GsonFactory;
 
 import java.io.IOException;
 
@@ -59,12 +69,14 @@ public class ClientManager {
     public void switchToDashBoard() {
         setMainPanelTo(dashBoardScreen);
         AnimationsManager.playFadeIn(dashBoardScreen, 1500);
+        updateUserInfo();
         dashBoardController.setActive();
     }
 
     public void switchToExecutionScreen(UploadedProgramDTO selectedProgram) {
         executionScreenController.setProgramToExecute(selectedProgram);
         setMainPanelTo(executionScreen);
+        updateUserInfo();
         executionScreenController.setActive();
     }
 
@@ -90,5 +102,38 @@ public class ClientManager {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void updateUserInfo(){
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_USER_INFO);
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "User Info Fetch Failed",
+                        "Failed to fetch user info from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    UserDTO userDTO = GsonFactory.getGson().fromJson(responseBodyString, UserDTO.class);
+                    Platform.runLater(() -> {
+                        dashBoardController.setUserInfo(userDTO);
+                        executionScreenController.setUserInfo(userDTO);
+                    });
+                }
+                else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch user info from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
     }
 }

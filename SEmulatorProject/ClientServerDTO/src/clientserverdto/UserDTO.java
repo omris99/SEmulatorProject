@@ -4,11 +4,11 @@ public class UserDTO {
     private final String userName;
     private final String mainProgramsUploaded;
     private final String functionsContributed;
-    private final int creditsUsed;
-    private final int creditBalance;
+    private final long creditsUsed;
+    private final long creditBalance;
     private final int executionsPerformed;
 
-    public UserDTO(String userName, String mainProgramsUploaded, String functionsContributed, int creditsUsed, int creditBalance, int executionsPerformed) {
+    public UserDTO(String userName, String mainProgramsUploaded, String functionsContributed, long creditsUsed, long creditBalance, int executionsPerformed) {
         this.userName = userName;
         this.mainProgramsUploaded = mainProgramsUploaded;
         this.functionsContributed = functionsContributed;
@@ -26,10 +26,10 @@ public class UserDTO {
     public String getFunctionsContributed() {
         return functionsContributed;
     }
-    public int getCreditsUsed() {
+    public long getCreditsUsed() {
         return creditsUsed;
     }
-    public int getCreditBalance() {
+    public long getCreditBalance() {
         return creditBalance;
     }
     public int getExecutionsPerformed() {

@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RunResultsDTO implements DTO{
+public class RunResultsDTO implements DTO {
     private final int degree;
     private final Long yValue;
     private final Map<String, Long> inputVariablesInitialValues;
@@ -38,7 +38,7 @@ public class RunResultsDTO implements DTO{
     }
 
 
-        public Long getYValue() {
+    public Long getYValue() {
         return yValue;
     }
 
@@ -46,7 +46,7 @@ public class RunResultsDTO implements DTO{
         return inputVariablesInitialValues;
     }
 
-    public  Map<String, Long> getInputVariablesValueResult() {
+    public Map<String, Long> getInputVariablesValueResult() {
         return inputVariablesValueResult;
     }
 
@@ -73,7 +73,7 @@ public class RunResultsDTO implements DTO{
                 ));
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return isFinished;
     }
 }

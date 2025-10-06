@@ -1,5 +1,6 @@
 package server.servlets.execution;
 
+import clientserverdto.ProgramDTO;
 import com.google.gson.reflect.TypeToken;
 import clientserverdto.ErrorAlertDTO;
 import clientserverdto.RunResultsDTO;
@@ -13,6 +14,7 @@ import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
+import serverengine.logic.model.functionsrepo.ProgramsRepo;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class RunProgramServlet extends HttpServlet {
 
             RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables);
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
+            ProgramsRepo.getInstance().getProgramByName(engine.getLoadedProgramName()).incrementTotalExecutions();
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(runResultsDtoJson);
         } catch (NumberFormatException e) {

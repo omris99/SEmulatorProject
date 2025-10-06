@@ -17,6 +17,8 @@ public class InstructionDTODeserializer implements JsonDeserializer<InstructionD
         String displayFormat = jsonObject.get("displayFormat").getAsString();
         int cycles = jsonObject.get("cycles").getAsInt();
         boolean isBreakpointSet = jsonObject.get("isBreakpointSet").getAsBoolean();
+        String architectureType = jsonObject.get("architectureType").getAsString();
+
 
         List<InstructionDTO> parentInstructions = context.deserialize(
                 jsonObject.get("parentInstructions"), new TypeToken<List<InstructionDTO>>() {}.getType()
@@ -26,6 +28,6 @@ public class InstructionDTODeserializer implements JsonDeserializer<InstructionD
                 jsonObject.get("associatedArgumentsAndLabels"), new TypeToken<List<String>>() {}.getType()
         );
 
-        return new InstructionDTO(index, instructionType, label, displayFormat, cycles, parentInstructions, associatedArgumentsAndLabels, isBreakpointSet);
+        return new InstructionDTO(index, instructionType, label, displayFormat, cycles, parentInstructions, associatedArgumentsAndLabels, isBreakpointSet, architectureType);
     }
 }

@@ -45,4 +45,8 @@ public class UploadedProgramDTO {
         return contextProgram;
     }
 
+    public int getCreditsCost(){
+        return program.getCreditsCost();
+    }
+
 }

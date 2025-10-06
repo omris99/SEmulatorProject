@@ -43,7 +43,7 @@ public class InstructionsTableController {
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));
         colInstructionDisplayFormat.setCellValueFactory(new PropertyValueFactory<>("displayFormat"));
         colCycle.setCellValueFactory(new PropertyValueFactory<>("cycles"));
-//        colArchitecture.setCellValueFactory(new PropertyValueFactory<>("architecture"));
+        colArchitecture.setCellValueFactory(new PropertyValueFactory<>("architectureType"));
 
 
         InstructionsTable.setItems(data);

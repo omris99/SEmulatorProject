@@ -1,6 +1,7 @@
 package clientserverdto;
 
 
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.InstructionType;
 
 import java.util.List;
@@ -14,13 +15,15 @@ public class ProgramDTO implements DTO{
     private final List<String> instructionsInDisplayFormat;
     private final List<InstructionDTO> instructionsDTO;
     private final Map<InstructionType, Integer> instructionsTypeCount;
+    private final Map<ArchitectureType, Integer> instructionsArchitectureTypeCount;
     private final int expandLevelDegree;
     private final int maximalDegree;
     private final List<String> functionsNames;
 
     public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames,
                       List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO,
-                      Map<InstructionType, Integer> instructionsTypeCount, int expandLevelDegree,
+                      Map<ArchitectureType, Integer> instructionsArchitectureTypeCount, Map<InstructionType, Integer> instructionsTypeCount,
+                      int expandLevelDegree,
                       int maximalDegree, List<String> workVariables, List<String> functionsNames) {
         this.name = name;
         this.inputNames = inputNames;
@@ -28,6 +31,7 @@ public class ProgramDTO implements DTO{
         this.instructionsInDisplayFormat = instructionsInDisplayFormat;
         this.instructionsDTO = instructionsDTO;
         this.instructionsTypeCount = instructionsTypeCount;
+        this.instructionsArchitectureTypeCount = instructionsArchitectureTypeCount;
         this.expandLevelDegree = expandLevelDegree;
         this.maximalDegree = maximalDegree;
         this.workVariables = workVariables;
@@ -58,6 +62,10 @@ public class ProgramDTO implements DTO{
         return instructionsTypeCount;
     }
 
+    public Map<ArchitectureType, Integer> getInstructionsCountByArchitecture() {
+        return instructionsArchitectureTypeCount;
+    }
+
     public int getExpandLevelDegree() {
         return expandLevelDegree;
     }
@@ -72,5 +80,14 @@ public class ProgramDTO implements DTO{
 
     public List<String> getFunctionsNames() {
         return functionsNames;
+    }
+
+    public int getCreditsCost(){
+        int creditsCost = 0;
+        for(ArchitectureType architectureType : instructionsArchitectureTypeCount.keySet()){
+            creditsCost += instructionsArchitectureTypeCount.get(architectureType) * architectureType.getExecutionCost();
+        }
+
+        return creditsCost;
     }
 }

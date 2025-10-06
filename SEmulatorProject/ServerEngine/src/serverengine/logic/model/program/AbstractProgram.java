@@ -69,6 +69,7 @@ public abstract class AbstractProgram implements Program {
                 getProgramLabelsNames(),
                 getInstructions().stream().map(Instruction::getInstructionDisplayFormat).collect(Collectors.toList()),
                 getInstructions().stream().map(Instruction::getInstructionDTO).collect(Collectors.toList()),
+                instructions.getInstructionsArchitectureTypeCount(),
                 instructions.getInstructionsTypeCount(),
                 instructions.getDegree(),
                 instructions.getMaximalDegree(),
@@ -111,5 +112,4 @@ public abstract class AbstractProgram implements Program {
 
         return programLabelsNames;
     }
-
 }

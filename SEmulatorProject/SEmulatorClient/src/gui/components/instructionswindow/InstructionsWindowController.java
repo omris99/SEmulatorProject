@@ -11,6 +11,7 @@ import gui.execution.ExecutionScreenController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.InstructionType;
 
 import java.util.List;
@@ -77,8 +78,11 @@ public class InstructionsWindowController {
         instructionsTableController.setInstructions(programDTO.getInstructionsDTO());
         stopHighlightingNextInstructionToExecute();
         Map<InstructionType, Integer> instructionsTypeCount = programDTO.getInstructionsTypeCount();
-        summaryLineController.setSummaryLineValues(instructionsTypeCount.get(InstructionType.BASIC),
-                instructionsTypeCount.get(InstructionType.SYNTHETIC));
+        Map<ArchitectureType, Integer> instructionsCountByArchitecture = programDTO.getInstructionsCountByArchitecture();
+        summaryLineController.setSummaryLineValues(
+                instructionsTypeCount,
+                instructionsCountByArchitecture
+                );
     }
 
     public void onDegreeChoice(int newDegree) {

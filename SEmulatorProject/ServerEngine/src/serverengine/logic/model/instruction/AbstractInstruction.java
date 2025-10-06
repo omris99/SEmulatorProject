@@ -61,7 +61,16 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
             currentParentInstruction = currentParentInstruction.getParent();
         }
 
-        return new InstructionDTO(index, getType().toString(), label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "", instructionDisplayFormat, getCycles(), parentInstructions, getAssociatedArgumentsAndLabels(), isBreakpointSet);
+        return new InstructionDTO(
+                index,
+                getType().toString(),
+                label != FixedLabel.EMPTY ? getLabel().getRepresentation() : "",
+                instructionDisplayFormat, getCycles(),
+                parentInstructions,
+                getAssociatedArgumentsAndLabels(),
+                isBreakpointSet,
+                instructionData.getArchitectureType().getUserString()
+        );
     }
 
     public String getInstructionDisplayFormat(String instructionDisplayFormat) {
@@ -162,6 +171,11 @@ public abstract class AbstractInstruction implements Instruction, Cloneable {
         ExpandableInstruction thisInstruction = (ExpandableInstruction) this;
         List<Instruction> expandedInstructions = thisInstruction.expand(1,1, FixedLabel.EMPTY);
         return expandedInstructions.stream().mapToInt(Instruction::getDegree).max().orElse(0) + 1;
+    }
+
+    @Override
+    public ArchitectureType getArchitectureType() {
+        return instructionData.getArchitectureType();
     }
 
     @Override

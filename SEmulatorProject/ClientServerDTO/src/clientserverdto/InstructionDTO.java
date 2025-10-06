@@ -1,5 +1,7 @@
 package clientserverdto;
 
+import serverengine.logic.model.instruction.ArchitectureType;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -12,10 +14,11 @@ public class InstructionDTO implements DTO{
     private final List<InstructionDTO> parentInstructions;
     private final List<String> associatedArgumentsAndLabels;
     private boolean isBreakpointSet;
+    private final String architectureType;
 
     public InstructionDTO(int index, String instructionType, String label,
                           String displayFormat, int cycles, List<InstructionDTO> parentInstructions,
-                          List<String> associatedArgumentsAndLabels, boolean isBreakpointSet) {
+                          List<String> associatedArgumentsAndLabels, boolean isBreakpointSet, String architectureType) {
         this.index = index;
         this.instructionType = instructionType;
         this.label = label;
@@ -24,6 +27,7 @@ public class InstructionDTO implements DTO{
         this.parentInstructions = parentInstructions;
         this.associatedArgumentsAndLabels = associatedArgumentsAndLabels;
         this.isBreakpointSet = isBreakpointSet;
+        this.architectureType = architectureType;
     }
 
     public int getIndex() {
@@ -59,6 +63,10 @@ public class InstructionDTO implements DTO{
 
     public void getIsBreakpointSet(boolean isBreakpointSet) {
         this.isBreakpointSet = isBreakpointSet;
+    }
+
+    public String getArchitectureType() {
+        return architectureType;
     }
 
     @Override

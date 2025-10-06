@@ -13,4 +13,12 @@ public enum ArchitectureType {
         this.userString = userString;
         this.executionCost = executionCost;
     }
+
+    public String getUserString() {
+        return userString;
+    }
+
+    public int getExecutionCost() {
+        return executionCost;
+    }
 }

@@ -152,6 +152,20 @@ public class Instructions implements Serializable {
         return instructionsTypeCount;
     }
 
+    public Map<ArchitectureType, Integer> getInstructionsArchitectureTypeCount() {
+        Map<ArchitectureType, Integer> instructionsTypeCount = new HashMap<>();
+        for (ArchitectureType architectureType : ArchitectureType.values()) {
+            instructionsTypeCount.put(architectureType, 0);
+        }
+
+        for (Instruction instruction : instructions) {
+            ArchitectureType architectureType = instruction.getArchitectureType();
+            instructionsTypeCount.put(architectureType, instructionsTypeCount.get(architectureType) + 1);
+        }
+
+        return instructionsTypeCount;
+    }
+
     public int getDegree() {
         return degree;
     }

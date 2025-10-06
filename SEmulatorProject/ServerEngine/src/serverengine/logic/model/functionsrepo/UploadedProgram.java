@@ -40,4 +40,8 @@ public class UploadedProgram {
     public Program getProgram(){
         return program;
     }
+
+    public void incrementTotalExecutions(){
+        totalExecutions++;
+    }
 }

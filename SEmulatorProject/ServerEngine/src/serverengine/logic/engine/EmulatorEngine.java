@@ -375,4 +375,8 @@ public class EmulatorEngine implements Engine {
     public int getExecutionsPerformed() {
         return executionsHistory.size();
     }
+
+    public String getLoadedProgramName(){
+        return currentOnScreenProgram.getName();
+    }
 }

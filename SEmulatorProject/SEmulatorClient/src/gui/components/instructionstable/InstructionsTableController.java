@@ -40,6 +40,7 @@ public class InstructionsTableController {
 
     @FXML
     public void initialize() {
+        selectedArchitecture = ArchitectureType.ONE;
         ColIndex.setCellValueFactory(new PropertyValueFactory<>("index"));
         colInstructionType.setCellValueFactory(new PropertyValueFactory<>("instructionType"));
         colLabel.setCellValueFactory(new PropertyValueFactory<>("label"));

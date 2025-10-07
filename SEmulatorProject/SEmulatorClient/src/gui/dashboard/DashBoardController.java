@@ -1,9 +1,6 @@
 package gui.dashboard;
 
-import clientserverdto.ErrorAlertDTO;
-import clientserverdto.ProgramDTO;
-import clientserverdto.UploadedProgramDTO;
-import clientserverdto.UserDTO;
+import clientserverdto.*;
 import gui.app.ClientManager;
 import gui.components.creditswindow.CreditsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
@@ -47,7 +44,7 @@ public class DashBoardController {
         loadFileBarController.setDashBoardController(this);
         programsWindowController.setDashBoardController(this);
         creditsWindowController.setDashBoardController(this);
-
+        usersWindowController.setDashboardController(this);
     }
 
     public void loadProgramWithProgress(File selectedFile) {
@@ -166,6 +163,9 @@ public class DashBoardController {
         });
     }
 
+    public void reRunSelectedHistory(ExecutionHistoryDTO selectedRun) {
+        clientManager.reRunSelectedHistory(selectedRun);
+    }
     public void setUserInfo(UserDTO userDTO) {
         userInfoBannerController.updateUserInfo(userDTO);
     }

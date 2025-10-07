@@ -1,8 +1,6 @@
 package gui.app;
 
-import clientserverdto.ProgramDTO;
-import clientserverdto.UploadedProgramDTO;
-import clientserverdto.UserDTO;
+import clientserverdto.*;
 import gui.dashboard.DashBoardController;
 import gui.execution.ExecutionScreenController;
 import gui.login.LoginController;
@@ -14,17 +12,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import serverengine.logic.json.GsonFactory;
 
 import java.io.IOException;
 
 //TODO:
 // 1. CHANGE VALIDATION OF PROGRAM'S FUNCITON BY EXERCISE 3
-// 2. SHOW AND RE-RUN BUTTONS NEED TO IMPLEMENTED.
 // 3. TRY TO MAKE ErrorType CLASS TO HANDLE ERRORS - AND MAYBE ADD CREATE DTO FUNCTION THERE
 // 4. IF PROGRAM NOT RUN BECAUSE OF INITIAL CHARGING - MAKE THE ALERT CLEARER
 
@@ -132,5 +126,10 @@ public class ClientManager {
                 response.close();
             }
         });
+    }
+
+    public void reRunSelectedHistory(ExecutionHistoryDTO selectedRun) {
+        switchToExecutionScreen(selectedRun.getUploadedProgramDTO());
+        executionScreenController.reRunSelectedHistory(selectedRun.getRunResults());
     }
 }

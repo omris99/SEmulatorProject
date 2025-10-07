@@ -2,9 +2,12 @@ package gui.components.userswindow;
 
 import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.InstructionDTO;
+import clientserverdto.RunResultsDTO;
 import clientserverdto.UserDTO;
 import gui.components.availableusers.AvailableUsersTableController;
 import gui.components.userhistorytable.UsersHistoryTableController;
+import gui.dashboard.DashBoardController;
+import gui.execution.ExecutionScreenController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -21,12 +24,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static gui.app.ClientManager.showErrorAlert;
+
 public class UsersWindowController {
     @FXML
     private AvailableUsersTableController availableUsersTableController;
 
     @FXML
     private UsersHistoryTableController usersHistoryTableController;
+
+    private DashBoardController dashBoardController;
 
     public void startAvailableUsersTableRefresher() {
         availableUsersTableController.startTableRefresher();
@@ -49,7 +56,10 @@ public class UsersWindowController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                // In case of failure, set an empty history
+                Platform.runLater(() -> showErrorAlert(
+                        "Error to Fetch History",
+                        "Failed to fetch execution history from server",
+                        e.getMessage()));
             }
 
             @Override
@@ -66,8 +76,13 @@ public class UsersWindowController {
                         }
                     });
                 } else {
-                    Platform.runLater(() -> usersHistoryTableController.setHistory(List.of()));
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch history from server"),
+                            null));
                 }
+
+                response.close();
             }
         });
     }
@@ -76,8 +91,14 @@ public class UsersWindowController {
         setHistory(null);
     }
 
+    public void reRunSelectedHistory(ExecutionHistoryDTO selectedRun) {
+        dashBoardController.reRunSelectedHistory(selectedRun);
+    }
+
+
     @FXML
     public void initialize() {
+        usersHistoryTableController.setUsersWindowController(this);
         availableUsersTableController.getTable().getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<UserDTO>() {
                     @Override
@@ -101,5 +122,9 @@ public class UsersWindowController {
                     }
                 }
         );
+    }
+
+    public void setDashboardController(DashBoardController dashboardController) {
+        this.dashBoardController = dashboardController;
     }
 }

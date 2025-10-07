@@ -84,8 +84,6 @@ public class ExecutionScreenController {
 
     private void resetComponents() {
         debuggerWindowController.reset();
-//        historyWindowController.reset();
-//        displayCommandsBarController.disableTreeTableViewAndSpecificExpansionButton(false);
     }
 
     @FXML
@@ -486,6 +484,42 @@ public class ExecutionScreenController {
 
     public void highlightInstructionsByArchitecture(String architecture) {
         instructionsWindowController.highlightInstructionsByArchitecture(architecture);
+    }
+
+    public void reRunSelectedHistory(RunResultsDTO selectedRun) {
+        Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_INPUTS_NAMES);
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> showErrorAlert(
+                        "Error Fetching inputs names",
+                        "Failed to fetch inputs names from server",
+                        e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBodyString = response.body().string();
+                if (response.isSuccessful()) {
+                    String[] inputsNames = GsonFactory.getGson().fromJson(responseBodyString, String[].class);
+                    Platform.runLater(() -> {
+                        debuggerWindowController.prepareForNewRun(List.of(inputsNames));
+                        instructionsWindowController.setProgramDegree(selectedRun.getDegree());
+                        debuggerWindowController.setInputVariablesValues(selectedRun.getInputVariablesInitialValues());
+                        debuggerWindowController.setProgramArchitecture(selectedRun.getArchitecture());
+                    });
+                }
+                else {
+                    Platform.runLater(() -> showErrorAlert(
+                            ("HTTP " + response.code() + " Error"),
+                            ("Failed to fetch input names from server"),
+                            null));
+                }
+
+                response.close();
+            }
+        });
     }
 
 }

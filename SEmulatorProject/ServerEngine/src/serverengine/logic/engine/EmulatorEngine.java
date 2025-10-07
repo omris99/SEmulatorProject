@@ -70,7 +70,8 @@ public class EmulatorEngine implements Engine {
                 currentExecutionNumber,
                 runResults,
                 currentOnScreenProgram instanceof Function ? "Function" : "Program",
-                currentOnScreenProgram.getRepresentation()));
+                currentOnScreenProgram.getRepresentation(),
+                ProgramsRepo.getInstance().getProgramByName(currentOnScreenProgram.getName()).createDTO()));
         currentExecutionNumber++;
     }
 

@@ -4,18 +4,25 @@ import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.InstructionDTO;
 import clientserverdto.UploadedProgramDTO;
 import gui.components.historywindow.HistoryWindowController;
+import gui.components.userswindow.UsersWindowController;
+import gui.popups.showallvariables.ShowAllVariablesController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.util.List;
 
 public class UsersHistoryTableController {
+    private UsersWindowController usersWindowController;
 
     @FXML
     private TableColumn<ExecutionHistoryDTO, String> colArchitecture;
@@ -63,16 +70,43 @@ public class UsersHistoryTableController {
         });
     }
 
-    @FXML
-    void onReRunButtonClick(ActionEvent event) {
+    public void onShowButtonClick() {
+        ExecutionHistoryDTO selected = userHistoryTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/popups/showallvariables/ShowAllVariables.fxml"));
+            Parent load = loader.load();
+
+            ShowAllVariablesController controller = loader.getController();
+            controller.setRunResults(selected.getRunResults());
+
+            Scene scene = new Scene(load, 400, 200);
+            Stage showWindow = new Stage();
+            showWindow.setTitle("Show All Variables");
+            showWindow.setScene(scene);
+            showWindow.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    void onShowButtonClick(ActionEvent event) {
+    public void onReRunButtonClick() {
+        ExecutionHistoryDTO selected = userHistoryTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
 
+        usersWindowController.reRunSelectedHistory(selected);
     }
 
     public void setHistory(List<ExecutionHistoryDTO> history) {
         data.setAll(history);
-    }}
+    }
+
+    public void setUsersWindowController(UsersWindowController usersWindowController) {
+        this.usersWindowController = usersWindowController;
+    }
+}

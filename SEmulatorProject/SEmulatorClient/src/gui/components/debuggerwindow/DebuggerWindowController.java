@@ -105,6 +105,10 @@ public class DebuggerWindowController {
         }
     }
 
+    public void setProgramArchitecture(String architecture) {
+        architectureSelectorController.setSelectedArchitecture(architecture);
+    }
+
     public void onDebugButtonClick() {
         executionScreenController.startDebuggingSession(getInputVariablesValues(), architectureSelectorController.getSelectedArchitecture());
     }

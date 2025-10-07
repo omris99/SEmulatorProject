@@ -21,7 +21,9 @@ public class ArchitectureSelectorController {
     private void initialize() {
         updateOptions();
         architectureComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            debuggerWindowController.onArchitectureSelected(newVal);
+            if(newVal != null) {
+                debuggerWindowController.onArchitectureSelected(newVal);
+            }
         });
     }
 
@@ -43,9 +45,10 @@ public class ArchitectureSelectorController {
     }
 
     public String getSelectedArchitecture(){
-        if(architectureComboBox.getSelectionModel().getSelectedItem() == null){
-            System.out.println("No architecture selected, returning default (Von Neumann)");
-        }
         return architectureComboBox.getSelectionModel().getSelectedItem();
+    }
+
+    public void setSelectedArchitecture(String architecture){
+        architectureComboBox.setValue(architecture);
     }
 }

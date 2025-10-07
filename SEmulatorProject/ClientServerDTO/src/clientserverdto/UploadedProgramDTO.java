@@ -6,13 +6,15 @@ public class UploadedProgramDTO {
     private final int totalExecutions;
     private final int instructionsCount;
     private final String contextProgram;
+    private final long averageCyclesPerExecution;
 
-    public UploadedProgramDTO(String uploadedBy, ProgramDTO program, int totalExecutions, String contextProgram, int instructionsCount) {
+    public UploadedProgramDTO(String uploadedBy, ProgramDTO program, int totalExecutions, String contextProgram, int instructionsCount, long averageCyclesPerExecution) {
         this.uploadedBy = uploadedBy;
         this.program = program;
         this.totalExecutions = totalExecutions;
         this.instructionsCount = instructionsCount;
         this.contextProgram = contextProgram;
+        this.averageCyclesPerExecution = averageCyclesPerExecution;
     }
 
     public String getName() {
@@ -45,8 +47,8 @@ public class UploadedProgramDTO {
         return contextProgram;
     }
 
-    public int getCreditsCost(){
-        return program.getCreditsCost();
+    public long getCreditsCost(){
+        return averageCyclesPerExecution;
     }
 
 }

@@ -6,6 +6,7 @@ import clientserverdto.UploadedProgramDTO;
 import gui.components.historywindow.HistoryWindowController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -60,6 +61,16 @@ public class UsersHistoryTableController {
                 super.updateItem(item, empty);
             }
         });
+    }
+
+    @FXML
+    void onReRunButtonClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onShowButtonClick(ActionEvent event) {
+
     }
 
     public void setHistory(List<ExecutionHistoryDTO> history) {

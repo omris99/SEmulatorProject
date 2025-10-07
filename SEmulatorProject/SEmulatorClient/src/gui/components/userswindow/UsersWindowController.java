@@ -19,6 +19,7 @@ import serverengine.logic.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class UsersWindowController {
     @FXML
@@ -31,7 +32,7 @@ public class UsersWindowController {
         availableUsersTableController.startTableRefresher();
     }
 
-    public void setHistory(String userName) {
+    private void setHistory(String userName) {
         Request request;
         if(userName == null) {
             request = HttpClientUtil.createGetRequest(ServerPaths.GET_HISTORY);
@@ -84,6 +85,12 @@ public class UsersWindowController {
                         if (availableUsersTableController.isRefreshing()) {
                             return;
                         }
+
+                        if (oldSel != null && newSel != null &&
+                                Objects.equals(oldSel.getUserName(), newSel.getUserName())) {
+                            return;
+                        }
+
                         if (newSel != null) {
                             String userName = newSel.getUserName();
                             setHistory(userName);

@@ -79,7 +79,6 @@ public class LoginController {
                     );
                 } else {
                     Platform.runLater(() -> {
-                        clientManager.setUserName(userName);
                         clientManager.switchToDashBoard();
                     });
                 }

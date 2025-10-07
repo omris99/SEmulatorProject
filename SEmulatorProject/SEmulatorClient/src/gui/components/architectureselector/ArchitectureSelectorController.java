@@ -43,6 +43,9 @@ public class ArchitectureSelectorController {
     }
 
     public String getSelectedArchitecture(){
+        if(architectureComboBox.getSelectionModel().getSelectedItem() == null){
+            System.out.println("No architecture selected, returning default (Von Neumann)");
+        }
         return architectureComboBox.getSelectionModel().getSelectedItem();
     }
 }

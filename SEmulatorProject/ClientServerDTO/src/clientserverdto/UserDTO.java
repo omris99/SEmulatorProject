@@ -1,5 +1,7 @@
 package clientserverdto;
 
+import java.util.Objects;
+
 public class UserDTO {
     private final String userName;
     private final String mainProgramsUploaded;
@@ -34,5 +36,18 @@ public class UserDTO {
     }
     public int getExecutionsPerformed() {
         return executionsPerformed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+
+        return Objects.equals(userName, userDTO.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, mainProgramsUploaded, functionsContributed, creditsUsed, creditBalance, executionsPerformed);
     }
 }

@@ -4,34 +4,23 @@ import clientserverdto.DTO;
 import clientserverdto.InstructionDTO;
 import clientserverdto.RunResultsDTO;
 import clientserverdto.ExecutionHistoryDTO;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import serverengine.logic.exceptions.InvalidArchitectureException;
-import serverengine.logic.exceptions.InvalidXmlFileException;
+import serverengine.logic.exceptions.CreditBalanceTooLowException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
-import serverengine.logic.exceptions.XmlErrorType;
 import serverengine.logic.execution.DebuggerExecutor;
-import serverengine.logic.execution.ProgramExecutor;
-import serverengine.logic.execution.ProgramExecutorImpl;
 import serverengine.logic.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.Argument;
-import serverengine.logic.model.argument.label.FixedLabel;
-import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableImpl;
 import serverengine.logic.model.argument.variable.VariableType;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.functionsrepo.UploadedProgram;
-import serverengine.logic.model.generated.SProgram;
 import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
-import serverengine.logic.model.mappers.ProgramMapper;
 import serverengine.logic.model.program.Function;
 import serverengine.logic.model.program.Program;
 import serverengine.logic.utils.Utils;
 
-import java.io.File;
 import java.util.*;
 
 public class EmulatorEngine implements Engine {
@@ -85,37 +74,27 @@ public class EmulatorEngine implements Engine {
         currentExecutionNumber++;
     }
 
-    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException {
-        checkArchitectureCompatibility(architecture);
-        Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        ProgramExecutor executor = new ProgramExecutorImpl(currentOnScreenProgram);
+    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
+        initDebuggingSession(degree, guiUserInputMap, architecture);
 
-        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
+        RunResultsDTO runResults;
 
-        Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
-        for (Variable inputVariable : programActualInputVariables) {
-            programInitialInputVariablesMap.put(
-                    inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
-        }
+        do{
+            runResults = executeNextInstructionOnDebugger();
+        } while (!runResults.isFinished());
 
-        Map<Variable, Long> finalVariablesResult = executor.run(new LinkedHashMap<>(programInitialInputVariablesMap));
-
-        RunResultsDTO runResults = new RunResultsDTO(
-                degree,
-                finalVariablesResult.get(Variable.RESULT),
-                programInitialInputVariablesMap,
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
-                executor.getCyclesCount(),
-                architecture.getUserString());
-        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(runResults);
+        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>())
+                .add(runResults);
         addExecutionToHistory(runResults);
-        updateCreditsAfterRun(executor.getCreditsCost());
 
         return runResults;
     }
 
-    private void updateCreditsAfterRun(int creditsCost) {
+    private void chargeCredits(long creditsCost) throws CreditBalanceTooLowException{
+        if(creditsCost > creditsBalance){
+            throw new CreditBalanceTooLowException(creditsCost, creditsBalance);
+        }
+
         this.creditsUsed += creditsCost;
         this.creditsBalance -= creditsCost;
     }
@@ -173,10 +152,17 @@ public class EmulatorEngine implements Engine {
         System.exit(0);
     }
 
-    private void checkArchitectureCompatibility(ArchitectureType architecture) {
+    private void checkArchitectureCompatibilityAndChargeInitialCredits(ArchitectureType architecture) throws CreditBalanceTooLowException {
+        long averageExecutionCost = ProgramsRepo.getInstance().getProgramByName(currentOnScreenProgram.getName()).getAverageCyclesPerExecution();
+
         if (architecture.getNumber() < currentOnScreenProgram.getMinimalArchitectureType().getNumber()) {
             throw new InvalidArchitectureException(architecture.getUserString(), currentOnScreenProgram.getMinimalArchitectureType().getUserString());
         }
+        else if(architecture.getExecutionCost() + averageExecutionCost > creditsBalance){
+            throw new CreditBalanceTooLowException(architecture.getExecutionCost() + averageExecutionCost, creditsBalance);
+        }
+
+        chargeCredits(architecture.getExecutionCost());
     }
 
     private Map<Variable, Long> convertGuiVariablesMapToDomainVariablesMap(Map<String, String> guiVariablesMap) {
@@ -193,8 +179,8 @@ public class EmulatorEngine implements Engine {
         return userInputToVariablesMapConverted;
     }
 
-    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException {
-        checkArchitectureCompatibility(architecture);
+    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
+        checkArchitectureCompatibilityAndChargeInitialCredits(architecture);
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
@@ -219,30 +205,27 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.isFinished());
     }
 
-    public DTO stepOver() {
+    public DTO stepOver() throws CreditBalanceTooLowException{
         if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
-        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
-        RunResultsDTO debugResults = new RunResultsDTO(
-                debuggerExecutor.getProgramDegree(),
-                finalVariablesResult.get(Variable.RESULT),
-                debuggerExecutor.getInitialInputVariablesMap(),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
-                debuggerExecutor.getCyclesCount(),
-                debuggerExecutor.getArchitecture().getUserString(),
-                debuggerExecutor.isFinished()
-        );
+        RunResultsDTO debugResults = executeNextInstructionOnDebugger();
         if (debuggerExecutor.isFinished()) {
             savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
             addExecutionToHistory(debugResults);
         }
 
-        updateCreditsAfterRun(debuggerExecutor.getCreditsCost());
-
         return debugResults;
+    }
+
+    private void chargeCreditsForCurrentInstruction() throws CreditBalanceTooLowException{
+        try {
+            chargeCredits(debuggerExecutor.getCurrentInstructionToExecute().getCycles());
+        }  catch (CreditBalanceTooLowException e){
+            stopDebuggingSession();
+            throw e;
+        }
     }
 
     public DTO stepBackward() {
@@ -268,10 +251,14 @@ public class EmulatorEngine implements Engine {
         debuggerExecutor.stop();
     }
 
-    public DTO resumeDebuggingSession() {
+    public DTO resumeDebuggingSession() throws  CreditBalanceTooLowException {
         if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
+//        DTO debugResults;
+//        while (debuggerExecutor.isFinished()) {
+//            debugResults = stepOver();
+//        }
 
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.run(new LinkedHashMap<>());
 
@@ -289,9 +276,49 @@ public class EmulatorEngine implements Engine {
             addExecutionToHistory(debugResults);
         }
 
-        updateCreditsAfterRun(debuggerExecutor.getCreditsCost());
+//        chargeCreditsForCurrentSession();
+        return debugResults;
+    }
+
+    public DTO resume() throws CreditBalanceTooLowException {
+        if (debuggerExecutor == null) {
+            throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
+        }
+
+        RunResultsDTO debugResults;
+        boolean isExitedLoopBecauseBreakpoint = false;
+
+        do{
+            debugResults = executeNextInstructionOnDebugger();
+            if (debuggerExecutor.isPausedAtBreakpoint()) {
+                isExitedLoopBecauseBreakpoint = true;
+                break;
+            }
+        } while (!debugResults.isFinished());
+
+        if(!isExitedLoopBecauseBreakpoint){
+            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>())
+                    .add(debugResults);
+            addExecutionToHistory(debugResults);
+        }
 
         return debugResults;
+    }
+
+    private RunResultsDTO executeNextInstructionOnDebugger() throws CreditBalanceTooLowException {
+        chargeCreditsForCurrentInstruction();
+
+        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
+        return new RunResultsDTO(
+                debuggerExecutor.getProgramDegree(),
+                finalVariablesResult.get(Variable.RESULT),
+                debuggerExecutor.getInitialInputVariablesMap(),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
+                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                debuggerExecutor.getCyclesCount(),
+                debuggerExecutor.getArchitecture().getUserString(),
+                debuggerExecutor.isFinished()
+        );
     }
 
     public DTO getNextInstructionToExecute() {
@@ -311,7 +338,6 @@ public class EmulatorEngine implements Engine {
         currentContextProgram = program;
         currentOnScreenProgram = program;
     }
-
 
     public InstructionsTree getOnScreenProgramInstructionsTree() {
         return currentOnScreenProgram.getInstructionsTree();

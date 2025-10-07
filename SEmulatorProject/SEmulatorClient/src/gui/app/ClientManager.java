@@ -22,16 +22,24 @@ import serverengine.logic.json.GsonFactory;
 
 import java.io.IOException;
 
+//TODO:
+// 1. CHANGE VALIDATION OF PROGRAM'S FUNCITON BY EXERCISE 3
+// 2. SHOW AND RE-RUN BUTTONS NEED TO IMPLEMENTED.
+// 3. TRY TO MAKE ErrorType CLASS TO HANDLE ERRORS - AND MAYBE ADD CREATE DTO FUNCTION THERE
+// 4. IF PROGRAM NOT RUN BECAUSE OF INITIAL CHARGING - MAKE THE ALERT CLEARER
+
+
 public class ClientManager {
     @FXML
     private AnchorPane mainPanel;
     private Parent loginScreen;
     private LoginController loginController;
+
     private Parent dashBoardScreen;
     private DashBoardController dashBoardController;
+
     private Parent executionScreen;
     private ExecutionScreenController executionScreenController;
-    private String userName;
 
 
     @FXML
@@ -83,17 +91,6 @@ public class ClientManager {
     public void switchToLoginScreen() {
         setMainPanelTo(loginScreen);
 //        executionScreen.setActive();
-    }
-
-    public void setUserName(String username) {
-        this.userName = username;
-    }
-
-    public String getUserName() {
-        if (userName == null) {
-            return "";
-        }
-        return userName;
     }
 
     public static void showErrorAlert(String title, String header, String content) {

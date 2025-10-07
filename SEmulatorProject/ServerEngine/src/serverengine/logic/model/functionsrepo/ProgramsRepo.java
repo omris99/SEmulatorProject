@@ -49,7 +49,6 @@ public class ProgramsRepo {
     }
 
     public List<UploadedProgramDTO> getAllFunctions(){
-        System.out.println(functions.values());
         return functions.values().stream().map(UploadedProgram::createDTO).toList();
     }
 

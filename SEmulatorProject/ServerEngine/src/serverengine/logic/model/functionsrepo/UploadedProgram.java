@@ -10,6 +10,7 @@ public class UploadedProgram {
     private int totalExecutions;
     private final String contextProgram;
     private final int instructionsCount;
+    private long averageCyclesPerExecution;
 
     public UploadedProgram(String uploadedBy, Program program, String contextProgram) {
         this.uploadedBy = uploadedBy;
@@ -17,6 +18,7 @@ public class UploadedProgram {
         this.totalExecutions = 0;
         this.contextProgram = contextProgram;
         this.instructionsCount = program.getInstructions().size();
+        this.averageCyclesPerExecution = 0;
     }
 
     public UploadedProgramDTO createDTO() {
@@ -25,7 +27,8 @@ public class UploadedProgram {
                 (ProgramDTO) program.createDTO(),
                 totalExecutions,
                 contextProgram,
-                instructionsCount
+                instructionsCount,
+                averageCyclesPerExecution
         );
     }
 
@@ -41,7 +44,24 @@ public class UploadedProgram {
         return program;
     }
 
-    public void incrementTotalExecutions(){
+    private void incrementTotalExecutions(){
         totalExecutions++;
+    }
+
+    private void updateAverageCyclesPerExecution(long cycles){
+        if(totalExecutions == 1){
+            averageCyclesPerExecution = cycles;
+        } else {
+            averageCyclesPerExecution = (averageCyclesPerExecution * (totalExecutions - 1) + cycles) / totalExecutions;
+        }
+    }
+
+    public void updateDataAfterExecution(long cycles){
+        incrementTotalExecutions();
+        updateAverageCyclesPerExecution(cycles);
+    }
+
+    public long getAverageCyclesPerExecution(){
+        return averageCyclesPerExecution;
     }
 }

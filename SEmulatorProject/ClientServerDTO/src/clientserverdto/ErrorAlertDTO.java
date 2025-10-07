@@ -1,11 +1,15 @@
 package clientserverdto;
 
+import serverengine.logic.exceptions.ExecutionErrorType;
+
 public class ErrorAlertDTO implements DTO{
+    private final ExecutionErrorType type;
     private final String title;
     private final String header;
     private final String content;
 
-    public ErrorAlertDTO(String title, String header, String content) {
+    public ErrorAlertDTO(ExecutionErrorType type, String title, String header, String content) {
+        this.type = type;
         this.title = title;
         this.header = header;
         this.content = content;
@@ -21,5 +25,9 @@ public class ErrorAlertDTO implements DTO{
 
     public String getContent() {
         return content;
+    }
+
+    public ExecutionErrorType getType() {
+        return type;
     }
 }

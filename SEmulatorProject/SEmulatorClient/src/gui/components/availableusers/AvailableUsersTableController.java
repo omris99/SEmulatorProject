@@ -66,7 +66,7 @@ public class AvailableUsersTableController {
             @Override
             protected void updateItem(UserDTO item, boolean empty) {
                 super.updateItem(item, empty);
-        }
+            }
         });
     }
 
@@ -77,9 +77,9 @@ public class AvailableUsersTableController {
     }
 
     public void updateUsersList(List<UserDTO> users) {
-        try {
-            isRefreshing = true;
-            Platform.runLater(() -> {
+        isRefreshing = true;
+        Platform.runLater(() -> {
+            try {
                 UserDTO selectedUser = usersTable.getSelectionModel().getSelectedItem();
                 String selectedUserName = (selectedUser != null) ? selectedUser.getUserName() : null;
 
@@ -93,10 +93,10 @@ public class AvailableUsersTableController {
                         }
                     }
                 }
-            });
-        } finally {
-            isRefreshing = false;
-        }
+            } finally {
+                isRefreshing = false;
+            }
+        });
     }
 
     public void startTableRefresher() {

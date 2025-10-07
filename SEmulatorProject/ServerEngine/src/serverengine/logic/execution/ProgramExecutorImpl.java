@@ -13,14 +13,12 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     private final Program program;
     private InstructionsQueue instructionsQueue;
     private int cyclesCount;
-    private int creditsCost;
     private final int degree;
 
     public ProgramExecutorImpl(Program program) {
         this.program = program;
         this.instructionsQueue = new InstructionsQueue(program.getInstructions());
         this.cyclesCount = 0;
-        this.creditsCost = 0;
         this.degree = program.getDegree();
     }
 
@@ -35,8 +33,6 @@ public class ProgramExecutorImpl implements ProgramExecutor{
         do {
             nextLabel = currentInstruction.execute(context);
             cyclesCount += currentInstruction.getCycles();
-            creditsCost += currentInstruction.getArchitectureType().getExecutionCost();
-
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstruction = instructionsQueue.next();
             } else if (nextLabel != FixedLabel.EXIT) {
@@ -50,7 +46,7 @@ public class ProgramExecutorImpl implements ProgramExecutor{
     public int getCyclesCount(){
         return cyclesCount;
     }
-    public int getCreditsCost(){
-        return creditsCost;
+    public int getCurrentSessionCyclesCount(){
+        return cyclesCount;
     }
 }

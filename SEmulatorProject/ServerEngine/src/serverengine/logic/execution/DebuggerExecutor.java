@@ -19,7 +19,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     private ExecutionContext initialContext;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
-    private int creditsCost;
+    private int currentSessionCyclesCount;
     private Instruction nextInstructionToExecute;
     private Instruction previousInstructionExecuted;
     private boolean isPausedAtBreakpoint;
@@ -35,6 +35,7 @@ public class DebuggerExecutor implements ProgramExecutor {
 
     @Override
     public Map<Variable, Long> run(Map<Variable, Long> inputVariablesMap) {
+        currentSessionCyclesCount = 0;
         Label nextLabel;
 
         do {
@@ -49,7 +50,7 @@ public class DebuggerExecutor implements ProgramExecutor {
             isPausedAtBreakpoint = false;
             nextLabel = currentInstructionToExecute.execute(context);
             cyclesCount += currentInstructionToExecute.getCycles();
-            creditsCost += currentInstructionToExecute.getArchitectureType().getExecutionCost();
+            currentSessionCyclesCount += currentInstructionToExecute.getArchitectureType().getExecutionCost();
 
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
@@ -66,13 +67,22 @@ public class DebuggerExecutor implements ProgramExecutor {
         return cyclesCount;
     }
 
+    public boolean isPausedAtBreakpoint() {
+        if(currentInstructionToExecute == null) {
+            return false;
+        }
+
+        isPausedAtBreakpoint = currentInstructionToExecute.getBreakpoint() && !isPausedAtBreakpoint;
+        return isPausedAtBreakpoint;
+    }
+
     private void loadProgramForDebugging(Program program, Map<Variable, Long> inputVariablesMap) {
         this.program = program;
         initializeContext(inputVariablesMap);
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         currentInstructionToExecute = instructionsQueue.getFirstInQueue();
         cyclesCount = 0;
-        creditsCost = 0;
+        currentSessionCyclesCount = 0;
         isFinished = false;
     }
 
@@ -83,13 +93,14 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public Map<Variable, Long> stepOver() {
-        contextsHistory.add(context);
+        currentSessionCyclesCount = 0;
 
+        contextsHistory.add(context);
         context = contextsHistory.getLast().copy();
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
-        creditsCost += currentInstructionToExecute.getArchitectureType().getExecutionCost();
+        currentSessionCyclesCount += currentInstructionToExecute.getArchitectureType().getExecutionCost();
         if (nextLabel != FixedLabel.EXIT) {
             previousInstructionExecuted = currentInstructionToExecute;
             if (nextLabel == FixedLabel.EMPTY) {
@@ -109,7 +120,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public Map<Variable, Long> stepBackward() {
-        if(contextsHistory.isEmpty()){
+        if (contextsHistory.isEmpty()) {
             return initialContext.getVariablesStatus();
         }
 
@@ -122,8 +133,8 @@ public class DebuggerExecutor implements ProgramExecutor {
         return context.getVariablesStatus();
     }
 
-    public int getCreditsCost() {
-        return creditsCost;
+    public int getCurrentSessionCyclesCount() {
+        return currentSessionCyclesCount;
     }
 
     public boolean isFinished() {

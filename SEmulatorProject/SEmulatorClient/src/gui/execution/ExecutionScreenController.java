@@ -11,9 +11,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import serverengine.logic.exceptions.CreditBalanceTooLowException;
+import serverengine.logic.exceptions.ExecutionErrorType;
 import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
-import serverengine.logic.model.instruction.ArchitectureType;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -173,12 +174,21 @@ public class ExecutionScreenController {
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
+                    Platform.runLater(() -> handleError(error));
                 }
 
                 response.close();
             }
         });
+    }
+
+    private void handleError(ErrorAlertDTO errorDTO) {
+        showErrorAlert(errorDTO.getTitle(), errorDTO.getHeader(), errorDTO.getContent());
+        if(errorDTO.getType() == ExecutionErrorType.CREDIT_BALANCE_TOO_LOW)
+        {
+            finishExecutionMode();
+            clientManager.switchToDashBoard();
+        }
     }
 
     public void prepareDebuggerForNewRun() {
@@ -248,10 +258,12 @@ public class ExecutionScreenController {
                         fetchAndHighlightNextInstructionToExecute();
                         instructionsWindowController.disableDegreeChoiceControls(true);
                     });
+
+                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
+                    Platform.runLater(() -> handleError(error));
                 }
 
                 response.close();
@@ -387,10 +399,8 @@ public class ExecutionScreenController {
                     clientManager.updateUserInfo();
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
-                            ("HTTP " + response.code() + " Error"),
-                            ("Failed to resume debugger execution from server"),
-                            null));
+                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    Platform.runLater(() -> handleError(error));
                 }
 
                 response.close();
@@ -458,10 +468,8 @@ public class ExecutionScreenController {
                     clientManager.updateUserInfo();
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
-                            ("HTTP " + response.code() + " Error"),
-                            ("Failed to Step Over in debugging session from server"),
-                            null));
+                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    Platform.runLater(() -> handleError(error));
                 }
 
                 response.close();

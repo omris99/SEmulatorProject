@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class UserDTO {
     private final String userName;
-    private final String mainProgramsUploaded;
-    private final String functionsContributed;
+    private final int mainProgramsUploaded;
+    private final int functionsContributed;
     private final long creditsUsed;
     private final long creditBalance;
     private final int executionsPerformed;
 
-    public UserDTO(String userName, String mainProgramsUploaded, String functionsContributed, long creditsUsed, long creditBalance, int executionsPerformed) {
+    public UserDTO(String userName, int mainProgramsUploaded, int functionsContributed, long creditsUsed, long creditBalance, int executionsPerformed) {
         this.userName = userName;
         this.mainProgramsUploaded = mainProgramsUploaded;
         this.functionsContributed = functionsContributed;
@@ -22,10 +22,10 @@ public class UserDTO {
     public String getUserName() {
         return userName;
     }
-    public String getMainProgramsUploaded() {
+    public int getMainProgramsUploaded() {
         return mainProgramsUploaded;
     }
-    public String getFunctionsContributed() {
+    public int getFunctionsContributed() {
         return functionsContributed;
     }
     public long getCreditsUsed() {

@@ -28,7 +28,7 @@ public class ResumeDebuggerExecutionServlet extends HttpServlet {
         try {
             context = (RunResultsDTO) engine.resume();
             if(context.isFinished()){
-                ProgramsRepo.getInstance().getProgramByName(engine.getLoadedProgramName()).updateDataAfterExecution(context.getTotalCyclesCount());
+                ProgramsRepo.getInstance().getProgramOrFunctionByName(engine.getLoadedProgramName()).updateDataAfterExecution(context.getTotalCyclesCount());
             }
         } catch (CreditBalanceTooLowException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -1,6 +1,5 @@
 package server.servlets;
 
-import clientserverdto.ProgramDTO;
 import clientserverdto.UploadedProgramDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -12,12 +11,10 @@ import jakarta.servlet.http.Part;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.exceptions.AlreadyExistsProgramException;
 import serverengine.logic.exceptions.InvalidArgumentException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
 import serverengine.logic.exceptions.XmlErrorType;
-import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
@@ -70,7 +67,7 @@ public class LoadFileServlet extends HttpServlet {
                         ia.getErrorType().getArgumentType(),
                         ia.getArgumentName());
                 case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
-                case AlreadyExistsProgramException aep -> content = "Program Already Exists: " + aep.getProgramName();
+                case AlreadyExistsProgramException aep -> content = (aep.isFunction() ?  "Function" : "Program") + " Already Exists: " + aep.getProgramName();
                 default -> content = "Unexpected error: " + e.getMessage();
             }
             resp.getWriter().write(content);
@@ -84,8 +81,8 @@ public class LoadFileServlet extends HttpServlet {
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
-        if(programsRepo.getProgramByName(sProgram.getName()) != null){
-            throw new AlreadyExistsProgramException(sProgram.getName());
+        if(programsRepo.getProgramOrFunctionByName(sProgram.getName()) != null){
+            throw new AlreadyExistsProgramException(sProgram.getName(), false);
         }
 
         Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);

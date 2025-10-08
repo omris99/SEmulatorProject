@@ -56,7 +56,7 @@ public class ProgramsRepo {
         return programs.values().stream().map(UploadedProgram::createDTO).toList();
     }
 
-    public UploadedProgram getProgramByName(String name){
+    public UploadedProgram getProgramOrFunctionByName(String name){
         if(programs.containsKey(name)){
             return programs.get(name);
         }

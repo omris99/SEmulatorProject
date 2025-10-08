@@ -34,10 +34,10 @@ public class AvailableUsersTableController {
     private TableColumn<UserDTO, Integer> colExecutionsPerformed;
 
     @FXML
-    private TableColumn<UserDTO, String> colFunctionsContributed;
+    private TableColumn<UserDTO, Integer> colFunctionsContributed;
 
     @FXML
-    private TableColumn<UserDTO, String> colMainProgramsUploaded;
+    private TableColumn<UserDTO, Integer> colMainProgramsUploaded;
 
     @FXML
     private TableColumn<UserDTO, String> colUserName;

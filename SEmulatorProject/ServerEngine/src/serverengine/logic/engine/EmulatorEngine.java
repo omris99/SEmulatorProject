@@ -4,6 +4,7 @@ import clientserverdto.DTO;
 import clientserverdto.InstructionDTO;
 import clientserverdto.RunResultsDTO;
 import clientserverdto.ExecutionHistoryDTO;
+import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
 import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.CreditBalanceTooLowException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
@@ -69,7 +70,7 @@ public class EmulatorEngine implements Engine {
                 runResults,
                 currentOnScreenProgram instanceof Function ? "Function" : "Program",
                 currentOnScreenProgram.getRepresentation(),
-                ProgramsRepo.getInstance().getProgramByName(currentOnScreenProgram.getName()).createDTO()));
+                ProgramsRepo.getInstance().getProgramOrFunctionByName(currentOnScreenProgram.getName()).createDTO()));
         currentExecutionNumber++;
     }
 
@@ -116,16 +117,28 @@ public class EmulatorEngine implements Engine {
         return executionsHistory;
     }
 
-    private void checkArchitectureCompatibilityAndChargeInitialCredits(ArchitectureType architecture) throws CreditBalanceTooLowException {
-        long averageExecutionCost = ProgramsRepo.getInstance().getProgramByName(currentOnScreenProgram.getName()).getAverageCyclesPerExecution();
+    private void checkArchitectureCompatibilityAndChargeInitialCredits(ArchitectureType architecture) throws CreditBalanceTooLowForInitialChargeException {
+        long averageExecutionCost = ProgramsRepo.getInstance().getProgramOrFunctionByName(currentOnScreenProgram.getName()).getAverageCyclesPerExecution();
 
         if (architecture.getNumber() < currentOnScreenProgram.getMinimalArchitectureType().getNumber()) {
             throw new InvalidArchitectureException(architecture.getUserString(), currentOnScreenProgram.getMinimalArchitectureType().getUserString());
         } else if (architecture.getExecutionCost() + averageExecutionCost > creditsBalance) {
-            throw new CreditBalanceTooLowException(architecture.getExecutionCost() + averageExecutionCost, creditsBalance);
+            throw new CreditBalanceTooLowForInitialChargeException(
+                    architecture.getExecutionCost() + averageExecutionCost,
+                    creditsBalance,
+                    architecture.getExecutionCost(),
+                    averageExecutionCost);
         }
 
-        chargeCredits(architecture.getExecutionCost());
+        try {
+            chargeCredits(architecture.getExecutionCost());
+        } catch (CreditBalanceTooLowException e){
+            throw new CreditBalanceTooLowForInitialChargeException(
+                    architecture.getExecutionCost() + averageExecutionCost,
+                    creditsBalance,
+                    architecture.getExecutionCost(),
+                    averageExecutionCost);
+        }
     }
 
     private Map<Variable, Long> convertGuiVariablesMapToDomainVariablesMap(Map<String, String> guiVariablesMap) {
@@ -142,7 +155,7 @@ public class EmulatorEngine implements Engine {
         return userInputToVariablesMapConverted;
     }
 
-    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
+    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowForInitialChargeException {
         checkArchitectureCompatibilityAndChargeInitialCredits(architecture);
         Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
         Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();

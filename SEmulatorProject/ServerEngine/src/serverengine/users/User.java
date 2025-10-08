@@ -23,11 +23,9 @@ public class User {
     }
 
     public UserDTO createDTO() {
-        String mainPrograms = programsListToString(this.mainProgramsUploaded);
-        String functions = programsListToString(this.functionsContributed);
         return new UserDTO(userName,
-                mainPrograms,
-                functions,
+                mainProgramsUploaded.size(),
+                functionsContributed.size(),
                 engine.getCreditsUsed(),
                 engine.getCreditsBalance(),
                 engine.getExecutionsPerformed());

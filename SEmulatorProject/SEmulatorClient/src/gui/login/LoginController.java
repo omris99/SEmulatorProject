@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -72,13 +73,22 @@ public class LoginController {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
                 if (response.code() != 200) {
-                    String responseBody = response.body().string();
                     Platform.runLater(() ->
                             errorMessageProperty.set("Something went wrong: " + responseBody)
                     );
                 } else {
                     Platform.runLater(() -> {
+                        Boolean isExist = Boolean.parseBoolean(responseBody);
+                        if (isExist) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Login Info");
+                            alert.setHeaderText("Welcome back " + userName + "!");
+                            alert.setContentText("You have successfully logged in.");
+                            alert.showAndWait();
+                        }
+
                         clientManager.switchToDashBoard();
                     });
                 }

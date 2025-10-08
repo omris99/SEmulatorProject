@@ -1,6 +1,5 @@
 package server.servlets.execution;
 
-import clientserverdto.ProgramDTO;
 import com.google.gson.reflect.TypeToken;
 import clientserverdto.ErrorAlertDTO;
 import clientserverdto.RunResultsDTO;
@@ -11,16 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import serverengine.logic.exceptions.CreditBalanceTooLowException;
-import serverengine.logic.exceptions.ExecutionErrorType;
-import serverengine.logic.exceptions.InvalidArchitectureException;
-import serverengine.logic.exceptions.NumberNotInRangeException;
+import serverengine.logic.exceptions.*;
 import serverengine.logic.json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.instruction.ArchitectureType;
-import serverengine.users.User;
-import serverengine.users.UserManager;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,9 +24,10 @@ import java.util.stream.Collectors;
 public class RunProgramServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try{
+        try {
             String json = req.getReader().lines().collect(Collectors.joining());
-            Map<String, Object> payload = GsonFactory.getGson().fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+            Map<String, Object> payload = GsonFactory.getGson().fromJson(json, new TypeToken<Map<String, Object>>() {
+            }.getType());
 
             int runDegree = ((Double) payload.get("runDegree")).intValue();
             Map<String, String> inputVariables = (Map<String, String>) payload.get("inputVariables");
@@ -45,7 +40,7 @@ public class RunProgramServlet extends HttpServlet {
 
             RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
-            ProgramsRepo.getInstance().getProgramByName(engine.getLoadedProgramName()).updateDataAfterExecution(runResultsDTO.getTotalCyclesCount());
+            ProgramsRepo.getInstance().getProgramOrFunctionByName(engine.getLoadedProgramName()).updateDataAfterExecution(runResultsDTO.getTotalCyclesCount());
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(runResultsDtoJson);
         } catch (NumberFormatException e) {
@@ -59,10 +54,10 @@ public class RunProgramServlet extends HttpServlet {
                     ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution",
                     "Negative Number Submitted",
                     "You entered the number: " + e.getNumber() + " which is not positive.\n" +
-                    "Please enter only Positive Numbers.");
+                            "Please enter only Positive Numbers.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
-        } catch (InvalidArchitectureException e){
+        } catch (InvalidArchitectureException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             ErrorAlertDTO error = new ErrorAlertDTO(
                     ExecutionErrorType.UNCOMPATIBLE_ARCHITECTURE, "Error Starting Execution",
@@ -72,14 +67,37 @@ public class RunProgramServlet extends HttpServlet {
                             "Please select a valid architecture and try again.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
-        } catch (CreditBalanceTooLowException e){
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(
-                    ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
-                    "Can't Run Program",
-                    "Credit Balance Too Low. Cost of current instruction: " + e.getCreditsCost() + ",Your Balance: " + e.getCreditsBalance());
-            String errorJson = GsonFactory.getGson().toJson(error);
-            resp.getWriter().write(errorJson);
+        } catch (CreditBalanceTooLowException e) {
+            if (e instanceof CreditBalanceTooLowForInitialChargeException) {
+                CreditBalanceTooLowForInitialChargeException ex = (CreditBalanceTooLowForInitialChargeException) e;
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+                String message = String.format(
+                        "Your credit balance is too low to start a debugging session.%n%n" +
+                                "• Architecture cost: %d%n" +
+                                "• Average program cost: %d%n" +
+                                "• Minimum Balance Required: %d%n" +
+                                "• Your balance: %d",
+                        ex.getArchitectureCost(),
+                        ex.getAverageProgramCost(),
+                        ex.getCreditsCost(),
+                        ex.getCreditsBalance()
+                );
+                ErrorAlertDTO error = new ErrorAlertDTO(
+                        ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
+                        "Can't Start Program run",
+                        message);
+                String errorJson = GsonFactory.getGson().toJson(error);
+                resp.getWriter().write(errorJson);
+            } else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                ErrorAlertDTO error = new ErrorAlertDTO(
+                        ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
+                        "Can't Run Program",
+                        "Credit Balance Too Low. Cost of current instruction: " + e.getCreditsCost() + ",Your Balance: " + e.getCreditsBalance());
+                String errorJson = GsonFactory.getGson().toJson(error);
+                resp.getWriter().write(errorJson);
+            }
         }
     }
 }

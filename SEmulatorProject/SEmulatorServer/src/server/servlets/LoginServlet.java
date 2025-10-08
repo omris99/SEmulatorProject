@@ -11,7 +11,7 @@ import serverengine.users.UserManager;
 
 import java.io.IOException;
 
-@WebServlet(name="LoginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,15 +26,17 @@ public class LoginServlet extends HttpServlet {
             } else {
                 usernameFromParameter = usernameFromParameter.trim();
                 synchronized (this) {
-                    if (userManager.isUserExists(usernameFromParameter)) {
-                        String errorMessage = "Username " + usernameFromParameter + " already exists. Please enter a different username.";
-                        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        resp.getWriter().write(errorMessage);
-                    } else {
+                    boolean isExists = userManager.isUserExists(usernameFromParameter);
+                    if(isExists){
+                        req.getSession(true).setAttribute("username", usernameFromParameter);
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        resp.getWriter().write(String.valueOf(isExists));
+                    } else{
                         userManager.addUser(usernameFromParameter);
                         req.getSession(true).setAttribute("username", usernameFromParameter);
                         resp.setStatus(HttpServletResponse.SC_OK);
-                        resp.getWriter().write("Login successful");
+                        resp.getWriter().write(String.valueOf(isExists));
+
                     }
                 }
             }

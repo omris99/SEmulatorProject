@@ -80,6 +80,15 @@ public class DashBoardController {
                                 System.out.println("HTTP " + response.code() + " Error: " + responseBodyString);
                             });
                         }
+                        else{
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("File Uploaded Successfully");
+                                alert.setHeaderText("The program has been uploaded successfully.");
+                                alert.setContentText("You can now find it in the programs list.");
+                                alert.showAndWait();
+                            });
+                        }
 
                         response.close();
                     }

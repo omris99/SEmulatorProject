@@ -28,7 +28,7 @@ public class StepOverServlet extends HttpServlet {
         try {
             stepResult = (RunResultsDTO) engine.stepOver();
             if(stepResult.isFinished()){
-                ProgramsRepo.getInstance().getProgramByName(engine.getLoadedProgramName()).updateDataAfterExecution(stepResult.getTotalCyclesCount());
+                ProgramsRepo.getInstance().getProgramOrFunctionByName(engine.getLoadedProgramName()).updateDataAfterExecution(stepResult.getTotalCyclesCount());
             }
         } catch (CreditBalanceTooLowException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

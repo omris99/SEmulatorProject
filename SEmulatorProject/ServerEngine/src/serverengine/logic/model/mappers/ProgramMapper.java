@@ -1,5 +1,6 @@
 package serverengine.logic.model.mappers;
 
+import serverengine.logic.exceptions.AlreadyExistsProgramException;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.functionsrepo.UploadedProgram;
 import serverengine.logic.model.generated.SFunction;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class ProgramMapper {
     public static Program toDomain(String uploadedBy, SProgram jaxbProgram) {
+        ProgramsRepo programsRepo = ProgramsRepo.getInstance();
         if (jaxbProgram == null) {
             return null;
         }
@@ -23,6 +25,9 @@ public class ProgramMapper {
         List<String> functionNames = new ArrayList<>();
         if(jaxbProgram.getSFunctions() != null) {
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()) {
+                if(programsRepo.getProgramOrFunctionByName(jaxbFunction.getName()) != null){
+                    throw new AlreadyExistsProgramException(jaxbFunction.getName(), true);
+                }
                 functionNames.add(jaxbFunction.getName());
             }
         }

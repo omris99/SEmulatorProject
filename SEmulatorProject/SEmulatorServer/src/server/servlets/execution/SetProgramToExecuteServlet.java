@@ -23,7 +23,7 @@ public class SetProgramToExecuteServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
-        engine.setMainProgram(ProgramsRepo.getInstance().getProgramByName(programName));
+        engine.setMainProgram(ProgramsRepo.getInstance().getProgramOrFunctionByName(programName));
         ProgramDTO programDTO = (ProgramDTO) engine.getLoadedProgramDTO();
         String programDtoJson = GsonFactory.getGson().toJson(programDTO);
         resp.setStatus(HttpServletResponse.SC_OK);

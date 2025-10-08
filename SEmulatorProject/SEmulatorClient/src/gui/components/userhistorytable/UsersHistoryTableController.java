@@ -1,14 +1,10 @@
 package gui.components.userhistorytable;
 
 import clientserverdto.ExecutionHistoryDTO;
-import clientserverdto.InstructionDTO;
-import clientserverdto.UploadedProgramDTO;
-import gui.components.historywindow.HistoryWindowController;
 import gui.components.userswindow.UsersWindowController;
 import gui.popups.showallvariables.ShowAllVariablesController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

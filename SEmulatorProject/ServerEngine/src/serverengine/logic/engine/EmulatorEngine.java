@@ -28,14 +28,13 @@ public class EmulatorEngine implements Engine {
     private Program currentContextProgram;
     private Program currentOnScreenProgram;
     private DebuggerExecutor debuggerExecutor;
-    private final Map<String, List<RunResultsDTO>> savedHistories;
     private final List<ExecutionHistoryDTO> executionsHistory;
+    private RunResultsDTO lastDebuggerRunResult;
     private int currentExecutionNumber;
     private long creditsUsed;
     private long creditsBalance;
 
     public EmulatorEngine() {
-        this.savedHistories = new HashMap<>();
         this.executionsHistory = new LinkedList<>();
         this.currentExecutionNumber = 1;
         this.creditsUsed = 0;
@@ -44,7 +43,6 @@ public class EmulatorEngine implements Engine {
     public void setMainProgram(UploadedProgram uploadedProgram) {
         this.mainProgram = uploadedProgram.getProgram();
         setCurrentContextProgram(mainProgram);
-        savedHistories.clear();
     }
 
     public void changeLoadedProgramToFunction(String functionName) {
@@ -76,23 +74,20 @@ public class EmulatorEngine implements Engine {
     }
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
+        RunResultsDTO runResults;
         initDebuggingSession(degree, guiUserInputMap, architecture);
 
-        RunResultsDTO runResults;
-
-        do{
+        do {
             runResults = executeNextInstructionOnDebugger();
         } while (!runResults.isFinished());
 
-        savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>())
-                .add(runResults);
         addExecutionToHistory(runResults);
 
         return runResults;
     }
 
-    private void chargeCredits(long creditsCost) throws CreditBalanceTooLowException{
-        if(creditsCost > creditsBalance){
+    private void chargeCredits(long creditsCost) throws CreditBalanceTooLowException {
+        if (creditsCost > creditsBalance) {
             throw new CreditBalanceTooLowException(creditsCost, creditsBalance);
         }
 
@@ -111,24 +106,6 @@ public class EmulatorEngine implements Engine {
         return inputVariables;
     }
 
-    private Map<Variable, Long> mapUserInputToVariables(Long... input) {
-        int i = 1;
-        Map<Variable, Long> userInputToVariablesMap = new LinkedHashMap<>();
-
-        for (long value : input) {
-            userInputToVariablesMap.put(new VariableImpl(VariableType.INPUT, i), value);
-            i++;
-        }
-
-        return userInputToVariablesMap;
-    }
-
-    private Map<Variable, Long> createProgramUseInitialVariablesMap(Long... inputs) {
-        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
-
-        return Utils.createInputVariablesMap(programActualInputVariables, inputs);
-    }
-
     public DTO showExpandedProgramOnScreen(int degree) {
         currentOnScreenProgram = currentContextProgram.getExpandedProgram(degree);
         return currentOnScreenProgram.createDTO();
@@ -139,27 +116,12 @@ public class EmulatorEngine implements Engine {
         return executionsHistory;
     }
 
-    public int getMaximalDegree() {
-        return currentContextProgram.getMaximalDegree();
-    }
-
-    public boolean isProgramLoaded() {
-        return !(mainProgram == null);
-    }
-
-
-    @Override
-    public void quit() {
-        System.exit(0);
-    }
-
     private void checkArchitectureCompatibilityAndChargeInitialCredits(ArchitectureType architecture) throws CreditBalanceTooLowException {
         long averageExecutionCost = ProgramsRepo.getInstance().getProgramByName(currentOnScreenProgram.getName()).getAverageCyclesPerExecution();
 
         if (architecture.getNumber() < currentOnScreenProgram.getMinimalArchitectureType().getNumber()) {
             throw new InvalidArchitectureException(architecture.getUserString(), currentOnScreenProgram.getMinimalArchitectureType().getUserString());
-        }
-        else if(architecture.getExecutionCost() + averageExecutionCost > creditsBalance){
+        } else if (architecture.getExecutionCost() + averageExecutionCost > creditsBalance) {
             throw new CreditBalanceTooLowException(architecture.getExecutionCost() + averageExecutionCost, creditsBalance);
         }
 
@@ -194,8 +156,7 @@ public class EmulatorEngine implements Engine {
 
         debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap), architecture);
 
-
-        return new RunResultsDTO(
+        lastDebuggerRunResult = new RunResultsDTO(
                 degree,
                 programInitialInputVariablesMap.get(Variable.RESULT),
                 userInputToVariablesMapConverted,
@@ -204,26 +165,28 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
+
+        return lastDebuggerRunResult;
     }
 
-    public DTO stepOver() throws CreditBalanceTooLowException{
+    public DTO stepOver() throws CreditBalanceTooLowException {
         if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
         RunResultsDTO debugResults = executeNextInstructionOnDebugger();
+
         if (debuggerExecutor.isFinished()) {
-            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
             addExecutionToHistory(debugResults);
         }
 
         return debugResults;
     }
 
-    private void chargeCreditsForCurrentInstruction() throws CreditBalanceTooLowException{
+    private void chargeCreditsForCurrentInstruction() throws CreditBalanceTooLowException {
         try {
             chargeCredits(debuggerExecutor.getCurrentInstructionToExecute().getCycles());
-        }  catch (CreditBalanceTooLowException e){
+        } catch (CreditBalanceTooLowException e) {
             stopDebuggingSession();
             throw e;
         }
@@ -252,18 +215,41 @@ public class EmulatorEngine implements Engine {
         debuggerExecutor.stop();
     }
 
-    public DTO resumeDebuggingSession() throws  CreditBalanceTooLowException {
+    public DTO resume() throws CreditBalanceTooLowException {
         if (debuggerExecutor == null) {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
-//        DTO debugResults;
-//        while (debuggerExecutor.isFinished()) {
-//            debugResults = stepOver();
-//        }
 
-        Map<Variable, Long> finalVariablesResult = debuggerExecutor.run(new LinkedHashMap<>());
+        RunResultsDTO debugResults = lastDebuggerRunResult;
+        boolean isExitedLoopBecauseBreakpoint = false;
 
-        RunResultsDTO debugResults = new RunResultsDTO(
+        do {
+            debugResults = executeNextInstructionOnDebugger();
+
+            if (debuggerExecutor.isPausedAtBreakpoint()) {
+                isExitedLoopBecauseBreakpoint = true;
+                break;
+            }
+        } while (!debugResults.isFinished());
+
+        if (!isExitedLoopBecauseBreakpoint) {
+            addExecutionToHistory(debugResults);
+        }
+
+        return debugResults;
+    }
+
+    private RunResultsDTO executeNextInstructionOnDebugger() throws CreditBalanceTooLowException {
+        try {
+            chargeCreditsForCurrentInstruction();
+        } catch (CreditBalanceTooLowException e) {
+            addExecutionToHistory(lastDebuggerRunResult);
+            throw e;
+        }
+
+        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
+
+        lastDebuggerRunResult = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
                 debuggerExecutor.getInitialInputVariablesMap(),
@@ -272,54 +258,8 @@ public class EmulatorEngine implements Engine {
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
-        if (debuggerExecutor.isFinished()) {
-            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>()).add(debugResults);
-            addExecutionToHistory(debugResults);
-        }
 
-//        chargeCreditsForCurrentSession();
-        return debugResults;
-    }
-
-    public DTO resume() throws CreditBalanceTooLowException {
-        if (debuggerExecutor == null) {
-            throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
-        }
-
-        RunResultsDTO debugResults;
-        boolean isExitedLoopBecauseBreakpoint = false;
-
-        do{
-            debugResults = executeNextInstructionOnDebugger();
-            if (debuggerExecutor.isPausedAtBreakpoint()) {
-                isExitedLoopBecauseBreakpoint = true;
-                break;
-            }
-        } while (!debugResults.isFinished());
-
-        if(!isExitedLoopBecauseBreakpoint){
-            savedHistories.computeIfAbsent(currentOnScreenProgram.getName(), name -> new LinkedList<>())
-                    .add(debugResults);
-            addExecutionToHistory(debugResults);
-        }
-
-        return debugResults;
-    }
-
-    private RunResultsDTO executeNextInstructionOnDebugger() throws CreditBalanceTooLowException {
-        chargeCreditsForCurrentInstruction();
-
-        Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
-        return new RunResultsDTO(
-                debuggerExecutor.getProgramDegree(),
-                finalVariablesResult.get(Variable.RESULT),
-                debuggerExecutor.getInitialInputVariablesMap(),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
-                debuggerExecutor.getCyclesCount(),
-                debuggerExecutor.getArchitecture().getUserString(),
-                debuggerExecutor.isFinished()
-        );
+        return lastDebuggerRunResult;
     }
 
     public DTO getNextInstructionToExecute() {

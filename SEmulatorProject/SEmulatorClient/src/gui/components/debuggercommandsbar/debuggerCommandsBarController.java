@@ -48,10 +48,8 @@ public class debuggerCommandsBarController {
 
     @FXML
     void startButtonAction(ActionEvent event) {
-        startButton.setDisable(true);
         AnimationsManager.playBigger(startButton, 400);
         debuggerWindowController.onStartClick();
-        startButton.setDisable(false);
     }
 
     @FXML
@@ -84,7 +82,7 @@ public class debuggerCommandsBarController {
         debugButton.setDisable(false);
     }
 
-    public void reset(){
+    public void disableAllButtons(){
         startButton.setDisable(true);
         debugButton.setDisable(true);
         resumeButton.setDisable(true);
@@ -94,13 +92,27 @@ public class debuggerCommandsBarController {
         newRunButton.setDisable(true);
     }
 
-    public void disableDebuggerControlButtons(boolean disable){
+    public void debugModeButtons(boolean disable){
         startButton.setDisable(!disable);
         debugButton.setDisable(!disable);
         resumeButton.setDisable(disable);
         stepOverButton.setDisable(disable);
         stepBackwardButton.setDisable(disable);
         stopButton.setDisable(disable);
+    }
+
+    public void executionModeButtons(boolean disable){
+        if(!disable){
+            disableAllButtons();
+        } else {
+            startButton.setDisable(false);
+            debugButton.setDisable(false);
+            newRunButton.setDisable(false);
+            resumeButton.setDisable(true);
+            stepOverButton.setDisable(true);
+            stepBackwardButton.setDisable(true);
+            stopButton.setDisable(true);
+        }
     }
 
 

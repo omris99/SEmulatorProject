@@ -1,17 +1,16 @@
 package gui.components.debuggerwindow;
 
-import clientserverdto.ProgramDTO;
 import clientserverdto.RunResultsDTO;
 import gui.components.architectureselector.ArchitectureSelectorController;
 import gui.components.executionstatewindow.ExecutionStateWindowController;
 import gui.components.inputrow.InputRowController;
+import gui.execution.ExecutionMode;
 import gui.execution.ExecutionScreenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import gui.components.debuggercommandsbar.debuggerCommandsBarController;
 import javafx.scene.layout.VBox;
-import serverengine.logic.model.instruction.ArchitectureType;
 
 import java.io.IOException;
 import java.util.*;
@@ -42,7 +41,7 @@ public class DebuggerWindowController {
     public void reset() {
         inputVariablesContainer.getChildren().clear();
         inputVariableRows.clear();
-        debuggerCommandsBarController.reset();
+        debuggerCommandsBarController.disableAllButtons();
         executionStateWindowController.reset();
         debuggerCommandsBarController.disableNewRunButton(false);
         architectureSelectorController.reset();
@@ -90,10 +89,10 @@ public class DebuggerWindowController {
                         InputRowController::getValue));
     }
 
-    public void updateRunResults(RunResultsDTO results) {
+    public void updateRunResultsAndFinishExecutionModeIfNeeded(RunResultsDTO results, ExecutionMode mode) {
         executionStateWindowController.updateTableAndCycles(results);
         if (results.isFinished()) {
-            finishExecutionMode();
+            finishDebugMode(mode);
         }
     }
 
@@ -123,7 +122,7 @@ public class DebuggerWindowController {
 
     public void onStopButtonClick() {
         executionScreenController.stopDebuggingSession();
-        finishExecutionMode();
+        finishDebugMode(ExecutionMode.DEBUG);
     }
 
     public void onResumeClick() {
@@ -136,17 +135,25 @@ public class DebuggerWindowController {
         }
     }
 
-    public void finishExecutionMode() {
+    public void finishDebugMode(ExecutionMode mode) {
         debuggerCommandsBarController.disableNewRunButton(false);
-        debuggerCommandsBarController.disableDebuggerControlButtons(true);
+        if(mode == ExecutionMode.DEBUG){
+            debuggerCommandsBarController.debugModeButtons(true);
+        }else{
+            debuggerCommandsBarController.executionModeButtons(true);
+        }
         disableInputFields(false);
         executionStateWindowController.unmarkHighlightedLines();
     }
 
-    public void startExecutionMode() {
+    public void startExecutionMode(ExecutionMode mode) {
         executionStateWindowController.reset();
         debuggerCommandsBarController.disableNewRunButton(true);
-        debuggerCommandsBarController.disableDebuggerControlButtons(false);
+        if(mode == ExecutionMode.DEBUG){
+            debuggerCommandsBarController.debugModeButtons(false);
+        }else{
+            debuggerCommandsBarController.executionModeButtons(false);
+        }
         disableInputFields(true);
     }
 

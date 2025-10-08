@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import serverengine.logic.exceptions.CreditBalanceTooLowException;
 import serverengine.logic.exceptions.ExecutionErrorType;
 import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
@@ -149,13 +148,19 @@ public class ExecutionScreenController {
                 .post(body)
                 .build();
 
+        startExecutionMode(ExecutionMode.REGULAR);
+
         HttpClientUtil.runAsync(request, new Callback() {
+
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
-                        "Run Program failed",
-                        "Failed to get program's run results from server",
-                        e.getMessage()));
+                Platform.runLater(() -> {
+                    finishExecutionMode(ExecutionMode.REGULAR);
+                    showErrorAlert(
+                            "Run Program failed",
+                            "Failed to get program's run results from server",
+                            e.getMessage());
+                });
             }
 
             @Override
@@ -164,27 +169,28 @@ public class ExecutionScreenController {
                 if (response.isSuccessful()) {
                     RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
                     Platform.runLater(() -> {
-                        debuggerWindowController.updateRunResults(runResultsDTO);
-                        finishExecutionMode();
+                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
+                        finishExecutionMode(ExecutionMode.REGULAR);
                     });
 
-                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> handleError(error));
+                    Platform.runLater(() -> handleError(error, ExecutionMode.REGULAR));
                 }
+
+                clientManager.updateUserInfo();
 
                 response.close();
             }
         });
     }
 
-    private void handleError(ErrorAlertDTO errorDTO) {
+    private void handleError(ErrorAlertDTO errorDTO, ExecutionMode executionMode) {
         showErrorAlert(errorDTO.getTitle(), errorDTO.getHeader(), errorDTO.getContent());
+        finishExecutionMode(executionMode);
         if(errorDTO.getType() == ExecutionErrorType.CREDIT_BALANCE_TOO_LOW)
         {
-            finishExecutionMode();
             clientManager.switchToDashBoard();
         }
     }
@@ -251,18 +257,17 @@ public class ExecutionScreenController {
                 if (response.isSuccessful()) {
                     RunResultsDTO initialState = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
                     Platform.runLater(() -> {
-                        debuggerWindowController.startExecutionMode();
-                        debuggerWindowController.updateRunResults(initialState);
-                        fetchAndHighlightNextInstructionToExecute();
-                        instructionsWindowController.disableDegreeChoiceControls(true);
+                        startExecutionMode(ExecutionMode.DEBUG);
+                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(initialState, ExecutionMode.DEBUG);
                     });
 
-                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> handleError(error));
+                    Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
+
+                clientManager.updateUserInfo();
 
                 response.close();
             }
@@ -301,13 +306,6 @@ public class ExecutionScreenController {
     }
 
 
-
-    private void finishExecutionMode() {
-        debuggerWindowController.finishExecutionMode();
-        instructionsWindowController.stopHighlightingNextInstructionToExecute();
-        instructionsWindowController.disableDegreeChoiceControls(false);
-    }
-
     public void executePreviousDebugStep() {
         Request request = HttpClientUtil.createEmptyBodyPostRequest(ServerPaths.STEP_BACKWARD);
         HttpClientUtil.runAsync(request, new Callback() {
@@ -325,7 +323,7 @@ public class ExecutionScreenController {
                 if (response.isSuccessful()) {
                     RunResultsDTO context = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
                     Platform.runLater(() -> {
-                        debuggerWindowController.updateRunResults(context);
+                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(context, ExecutionMode.DEBUG);
                         fetchAndHighlightNextInstructionToExecute();
                     });
 
@@ -356,7 +354,7 @@ public class ExecutionScreenController {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    Platform.runLater(() -> finishExecutionMode());
+                    Platform.runLater(() -> finishExecutionMode(ExecutionMode.DEBUG));
                 }
                 else {
                     Platform.runLater(() -> showErrorAlert(
@@ -387,19 +385,20 @@ public class ExecutionScreenController {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
                     RunResultsDTO context = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
-                    Platform.runLater(() -> debuggerWindowController.updateRunResults(context));
+                    Platform.runLater(() -> debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(context, ExecutionMode.DEBUG));
                     if (context.isFinished()) {
-                        Platform.runLater(() -> finishExecutionMode());
+                        Platform.runLater(() -> finishExecutionMode(ExecutionMode.DEBUG));
                     } else {
                         fetchAndHighlightNextInstructionToExecute();
                     }
 
-                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> handleError(error));
+                    Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
+
+                clientManager.updateUserInfo();
 
                 response.close();
             }
@@ -456,19 +455,20 @@ public class ExecutionScreenController {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
                     RunResultsDTO context = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
-                    Platform.runLater(() -> debuggerWindowController.updateRunResults(context));
+                    Platform.runLater(() -> debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(context, ExecutionMode.DEBUG));
                     if (context.isFinished()) {
-                        Platform.runLater(() -> finishExecutionMode());
+                        Platform.runLater(() -> finishExecutionMode(ExecutionMode.DEBUG));
                     } else {
                         fetchAndHighlightNextInstructionToExecute();
                     }
 
-                    clientManager.updateUserInfo();
                 }
                 else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
-                    Platform.runLater(() -> handleError(error));
+                    Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
+
+                clientManager.updateUserInfo();
 
                 response.close();
             }
@@ -521,5 +521,25 @@ public class ExecutionScreenController {
             }
         });
     }
+
+    private void startExecutionMode(ExecutionMode mode) {
+        debuggerWindowController.startExecutionMode(mode);
+        if(mode == ExecutionMode.DEBUG) {
+            fetchAndHighlightNextInstructionToExecute();
+        }
+        instructionsWindowController.disableDegreeChoiceControls(true);
+        backToDashboardButton.setDisable(true);
+    }
+
+    private void finishExecutionMode(ExecutionMode mode) {
+        debuggerWindowController.finishDebugMode(mode);
+        if (mode == ExecutionMode.DEBUG) {
+            instructionsWindowController.stopHighlightingNextInstructionToExecute();
+        }
+
+        instructionsWindowController.disableDegreeChoiceControls(false);
+        backToDashboardButton.setDisable(false);
+    }
+
 
 }

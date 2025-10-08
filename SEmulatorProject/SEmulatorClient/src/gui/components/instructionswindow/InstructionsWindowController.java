@@ -2,7 +2,6 @@ package gui.components.instructionswindow;
 
 import clientserverdto.InstructionDTO;
 import clientserverdto.ProgramDTO;
-import gui.app.ClientController;
 import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class InstructionsWindowController {
-    private ClientController clientController;
 
     @FXML
     private ExecutionScreenController executionScreenController;
@@ -87,10 +85,6 @@ public class InstructionsWindowController {
 
     public void onDegreeChoice(int newDegree) {
         executionScreenController.showExpandedProgram(newDegree);
-    }
-
-    public void setClientController(ClientController clientController) {
-        this.clientController = clientController;
     }
 
     public void onHighlightSelectionChange(String selection) {

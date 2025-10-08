@@ -13,15 +13,12 @@ public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
     private final List<ExecutionContext> contextsHistory;
-    private List<InstructionsQueue> queueHistory;
     private InstructionsQueue instructionsQueue;
     private final Map<Variable, Long> initialInputVariablesMap;
     private ExecutionContext initialContext;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
     private int currentSessionCyclesCount;
-    private Instruction nextInstructionToExecute;
-    private Instruction previousInstructionExecuted;
     private boolean isPausedAtBreakpoint;
     private boolean isFinished = false;
     private final ArchitectureType architecture;
@@ -102,7 +99,6 @@ public class DebuggerExecutor implements ProgramExecutor {
         cyclesCount += currentInstructionToExecute.getCycles();
         currentSessionCyclesCount += currentInstructionToExecute.getArchitectureType().getExecutionCost();
         if (nextLabel != FixedLabel.EXIT) {
-            previousInstructionExecuted = currentInstructionToExecute;
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
                 if (currentInstructionToExecute == null) {
@@ -160,4 +156,5 @@ public class DebuggerExecutor implements ProgramExecutor {
     public ArchitectureType getArchitecture() {
         return architecture;
     }
+
 }

@@ -13,5 +13,4 @@ import java.util.List;
 public interface Engine extends Serializable {
     DTO getLoadedProgramDTO();
     List<ExecutionHistoryDTO> getHistory();
-    void quit();
 }

@@ -1,7 +1,6 @@
 package gui.components.loadfilebar;
 
 import gui.app.AnimationsManager;
-import gui.app.ClientController;
 import gui.dashboard.DashBoardController;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;

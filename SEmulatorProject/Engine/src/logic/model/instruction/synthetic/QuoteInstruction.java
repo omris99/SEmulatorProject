@@ -75,7 +75,6 @@ public class QuoteInstruction extends AbstractInstruction implements Instruction
     @Override
     public List<Instruction> expand(int maxLabelIndex, int maxWorkVariableIndex, Label instructionLabel){
         Function contextFunction = FunctionsRepo.getInstance().getFunctionByName(arguments.get(InstructionArgument.FUNCTION_NAME).getRepresentation());
-
         QuotedFunction quotedFunction = contextFunction.quote(maxWorkVariableIndex, maxLabelIndex);
         List<Instruction> expandedInstructions = quotedFunction.getQuotedFunctionInstructions();
 

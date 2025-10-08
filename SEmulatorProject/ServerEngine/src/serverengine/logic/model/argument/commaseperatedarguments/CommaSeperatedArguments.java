@@ -123,6 +123,21 @@ public class CommaSeperatedArguments implements Argument {
         return variables;
     }
 
+    public List<String> extractAllFunctionsNames() {
+        List<String> functionNames = new LinkedList<>();
+        List<String> extractedArguments = extractArguments();
+        for (String argument : extractedArguments) {
+            if (argument.startsWith("(") && argument.endsWith(")")) {
+                CommaSeperatedArguments nestedArguments = new CommaSeperatedArguments(argument.substring(1, argument.length() - 1));
+                functionNames.addAll(nestedArguments.extractAllFunctionsNames());
+            } else if (VariableImpl.stringVarTypeToVariableType(argument.substring(0, 1)) == null) {
+                functionNames.add(argument);
+            }
+        }
+
+        return functionNames;
+    }
+
     public int getTotalCycles() {
         int totalCycles = 0;
         List<String> extractedArguments = extractArguments();

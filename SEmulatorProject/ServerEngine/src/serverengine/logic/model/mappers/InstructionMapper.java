@@ -11,6 +11,7 @@ import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.label.LabelImpl;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableImpl;
+import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.generated.SInstruction;
 import serverengine.logic.model.generated.SInstructionArgument;
 import serverengine.logic.model.generated.SInstructionArguments;
@@ -116,7 +117,14 @@ public class InstructionMapper{
                     }
                     break;
                 case COMMA_SEPERATED_ARGUMENTS:
-                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new CommaSeperatedArguments(jaxbInstructionArgument.getValue()));
+                    CommaSeperatedArguments arguments = new CommaSeperatedArguments(jaxbInstructionArgument.getValue());
+                    List<String> extractedFunctionsNames = arguments.extractAllFunctionsNames();
+                    for(String extractedFunctionName : extractedFunctionsNames) {
+                        if(!functions.contains(extractedFunctionName) && ProgramsRepo.getInstance().getFunctionByName(extractedFunctionName) == null) {
+                            throw new InvalidArgumentException(extractedFunctionName, ArgumentErrorType.FUNCTION_NOT_FOUND);
+                        }
+                    }
+                    domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), arguments);
                     break;
             }
         }

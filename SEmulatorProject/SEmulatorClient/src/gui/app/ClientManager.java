@@ -18,10 +18,12 @@ import serverengine.logic.json.GsonFactory;
 import java.io.IOException;
 
 //TODO:
-// 1. CHANGE VALIDATION OF PROGRAM'S FUNCITON BY EXERCISE 3
+// 1. CHANGE VALIDATION OF PROGRAM'S FUNCITON BY EXERCISE 3 - NEEDS TO CHECK FUNCTIONS IN COMMA SEPERATED ARGUMENTS TOO !!
 // 3. TRY TO MAKE ErrorType CLASS TO HANDLE ERRORS - AND MAYBE ADD CREATE DTO FUNCTION THERE
 // 4. IF PROGRAM NOT RUN BECAUSE OF INITIAL CHARGING - MAKE THE ALERT CLEARER
-
+// 5. Predicates program should not success uploading as first to server because of QUOTE instruction with Minus function context - quote function failed to invoke.
+// 6. IMPLEMENT SHOW ERROR ALERT AS STATIC UTIL AND USE IT Refreshers!!
+// 7. MAKE GENERIC RESPONSE FOR FAILURE WITH SERVER CONNECTION - LIKE "FAILED TO CONNECT TO SERVER" - AND USE IT IN ALL CALLS
 
 public class ClientManager {
     @FXML

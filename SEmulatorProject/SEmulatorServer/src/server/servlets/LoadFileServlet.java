@@ -48,12 +48,8 @@ public class LoadFileServlet extends HttpServlet {
 
             Part fileContent = req.getPart("fileContent");
             UploadedProgramDTO program = loadProgram(userName, fileContent.getInputStream());
-//            ProgramDTO program = (ProgramDTO) engine.getLoadedProgramDTO();
             userManager.getUser(userName).addMainProgram(program.getProgram());
-//            String programDtoJson = GsonFactory.getGson().toJson(program);
             resp.setStatus(HttpServletResponse.SC_OK);
-//            resp.getWriter().write(programDtoJson);
-
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             String content;
@@ -91,14 +87,10 @@ public class LoadFileServlet extends HttpServlet {
             throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());
         }
 
-//        this.mainProgram = loadedProgram;
-//        setCurrentContextProgram(mainProgram);
         UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
-
         ProgramsRepo.getInstance().addProgram(uploadedProgram);
-        return uploadedProgram.createDTO();
 
-//        savedHistories.clear();
+        return uploadedProgram.createDTO();
     }
 
 }

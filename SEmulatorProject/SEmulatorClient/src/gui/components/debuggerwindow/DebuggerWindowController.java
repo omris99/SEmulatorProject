@@ -92,7 +92,7 @@ public class DebuggerWindowController {
     public void updateRunResultsAndFinishExecutionModeIfNeeded(RunResultsDTO results, ExecutionMode mode) {
         executionStateWindowController.updateTableAndCycles(results);
         if (results.isFinished()) {
-            finishDebugMode(mode);
+            finishExecutionMode(mode);
         }
     }
 
@@ -122,7 +122,7 @@ public class DebuggerWindowController {
 
     public void onStopButtonClick() {
         executionScreenController.stopDebuggingSession();
-        finishDebugMode(ExecutionMode.DEBUG);
+        finishExecutionMode(ExecutionMode.DEBUG);
     }
 
     public void onResumeClick() {
@@ -135,7 +135,7 @@ public class DebuggerWindowController {
         }
     }
 
-    public void finishDebugMode(ExecutionMode mode) {
+    public void finishExecutionMode(ExecutionMode mode) {
         debuggerCommandsBarController.disableNewRunButton(false);
         if(mode == ExecutionMode.DEBUG){
             debuggerCommandsBarController.debugModeButtons(true);

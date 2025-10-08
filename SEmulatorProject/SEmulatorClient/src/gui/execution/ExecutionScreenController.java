@@ -532,7 +532,7 @@ public class ExecutionScreenController {
     }
 
     private void finishExecutionMode(ExecutionMode mode) {
-        debuggerWindowController.finishDebugMode(mode);
+        debuggerWindowController.finishExecutionMode(mode);
         if (mode == ExecutionMode.DEBUG) {
             instructionsWindowController.stopHighlightingNextInstructionToExecute();
         }

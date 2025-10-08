@@ -93,6 +93,7 @@ public class debuggerCommandsBarController {
     }
 
     public void debugModeButtons(boolean disable){
+        newRunButton.setDisable(!disable);
         startButton.setDisable(!disable);
         debugButton.setDisable(!disable);
         resumeButton.setDisable(disable);

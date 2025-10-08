@@ -136,7 +136,6 @@ public class DebuggerWindowController {
     }
 
     public void finishExecutionMode(ExecutionMode mode) {
-        debuggerCommandsBarController.disableNewRunButton(false);
         if(mode == ExecutionMode.DEBUG){
             debuggerCommandsBarController.debugModeButtons(true);
         }else{
@@ -148,7 +147,6 @@ public class DebuggerWindowController {
 
     public void startExecutionMode(ExecutionMode mode) {
         executionStateWindowController.reset();
-        debuggerCommandsBarController.disableNewRunButton(true);
         if(mode == ExecutionMode.DEBUG){
             debuggerCommandsBarController.debugModeButtons(false);
         }else{

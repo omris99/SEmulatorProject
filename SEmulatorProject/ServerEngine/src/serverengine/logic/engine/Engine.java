@@ -3,7 +3,6 @@ package serverengine.logic.engine;
 import clientserverdto.DTO;
 import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.RunResultsDTO;
-import jakarta.xml.bind.JAXBException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
 
 import java.io.FileNotFoundException;

@@ -27,13 +27,13 @@ public class ProgramsRepo {
     }
 
     public void addProgram(UploadedProgram program){
-        programs.put(program.getName(), program);
-        userStringToProgramName.put(program.getUserString(), program.getName());
+        programs.putIfAbsent(program.getName(), program);
+        userStringToProgramName.putIfAbsent(program.getUserString(), program.getName());
     }
 
     public void addFunction(UploadedProgram function){
-        functions.put(function.getName(), function);
-        userStringToProgramName.put(function.getUserString(), function.getName());
+        functions.putIfAbsent(function.getName(), function);
+        userStringToProgramName.putIfAbsent(function.getUserString(), function.getName());
     }
 
     public String getFunctionUserString(String name){
@@ -63,6 +63,15 @@ public class ProgramsRepo {
         else {
             return functions.get(name);
         }
+    }
+
+    public boolean isFunctionUploadedByUser(String functionName, String username){
+        UploadedProgram function = functions.get(functionName);
+        if(function != null){
+            return function.getUploadedBy().equals(username);
+        }
+
+        return false;
     }
 
 }

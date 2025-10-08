@@ -16,7 +16,10 @@ import serverengine.logic.model.instruction.basic.NeutralInstruction;
 import serverengine.logic.model.program.Function;
 import serverengine.logic.model.program.quotedfunction.QuotedFunction;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class QuoteInstruction extends AbstractInstruction implements InstructionWithArguments, ExpandableInstruction {
     Map<InstructionArgument, Argument> arguments;

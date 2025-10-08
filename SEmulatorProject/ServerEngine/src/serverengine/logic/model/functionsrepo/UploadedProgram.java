@@ -64,4 +64,8 @@ public class UploadedProgram {
     public long getAverageCyclesPerExecution(){
         return averageCyclesPerExecution;
     }
+
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
 }

@@ -71,13 +71,7 @@ public class DashBoardController {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String responseBodyString = response.body().string();
-                        if (response.isSuccessful()) {
-                            ProgramDTO programDTO = GsonFactory.getGson().fromJson(responseBodyString, ProgramDTO.class);
-                            Platform.runLater(() -> {
-//                                instructionWindowController.onProgramLoaded(programDTO);
-//                                resetComponents();
-                            });
-                        } else {
+                        if(!response.isSuccessful()){
                             Platform.runLater(() -> {
                                 loadFileBarController.setProgressBarLoadErrorStyle();
                                 showErrorAlert(
@@ -87,6 +81,7 @@ public class DashBoardController {
                                 System.out.println("HTTP " + response.code() + " Error: " + responseBodyString);
                             });
                         }
+
                         response.close();
                     }
                 });

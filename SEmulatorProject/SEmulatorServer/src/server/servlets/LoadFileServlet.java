@@ -13,6 +13,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import serverengine.logic.engine.EmulatorEngine;
+import serverengine.logic.exceptions.AlreadyExistsProgramException;
 import serverengine.logic.exceptions.InvalidArgumentException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
 import serverengine.logic.exceptions.XmlErrorType;
@@ -69,6 +70,7 @@ public class LoadFileServlet extends HttpServlet {
                         ia.getErrorType().getArgumentType(),
                         ia.getArgumentName());
                 case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();
+                case AlreadyExistsProgramException aep -> content = "Program Already Exists: " + aep.getProgramName();
                 default -> content = "Unexpected error: " + e.getMessage();
             }
             resp.getWriter().write(content);
@@ -76,12 +78,18 @@ public class LoadFileServlet extends HttpServlet {
     }
 
     private synchronized UploadedProgramDTO loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
+        ProgramsRepo programsRepo = ProgramsRepo.getInstance();
 
         JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
+        if(programsRepo.getProgramByName(sProgram.getName()) != null){
+            throw new AlreadyExistsProgramException(sProgram.getName());
+        }
+
         Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
+
         Label problemLabel = loadedProgram.validate();
         if (problemLabel != FixedLabel.EMPTY) {
             throw new InvalidXmlFileException("", XmlErrorType.UNKNOWN_LABEL, problemLabel.getRepresentation());

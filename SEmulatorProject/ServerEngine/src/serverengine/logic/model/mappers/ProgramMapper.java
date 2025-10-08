@@ -35,8 +35,12 @@ public class ProgramMapper {
         }
 
         if(!functionNames.isEmpty()){
+            List<Function> functions = new ArrayList<>();
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()){
                 Function function = FunctionMapper.toDomain(jaxbFunction, functionNames);
+                functions.add(function);
+            }
+            for(Function function : functions){
                 ProgramsRepo.getInstance().addFunction(new UploadedProgram(uploadedBy, function, jaxbProgram.getName()));
             }
         }

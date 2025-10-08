@@ -105,22 +105,30 @@ public class InstructionMapper{
                 case NAME:
                     boolean functionFound = false;
 
-                    for(String functionName : functions) {
-                        if(functionName.equals(jaxbInstructionArgument.getValue())) {
-                            domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new NameArgument(functionName));
-                            functionFound = true;
-                            break;
+                    if(ProgramsRepo.getInstance().getFunctionByName(jaxbInstructionArgument.getValue()) != null){
+                        domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new NameArgument(jaxbInstructionArgument.getValue()));
+                        functionFound = true;
+                    }
+                    else{
+                        for(String functionName : functions) {
+                            if(functionName.equals(jaxbInstructionArgument.getValue())) {
+                                domainArguments.put(InstructionArgument.fromXmlNameFormat(argumentName), new NameArgument(functionName));
+                                functionFound = true;
+                                break;
+                            }
                         }
                     }
+
                     if(!functionFound) {
                         throw new InvalidArgumentException(jaxbInstructionArgument.getValue(), ArgumentErrorType.FUNCTION_NOT_FOUND);
                     }
                     break;
+
                 case COMMA_SEPERATED_ARGUMENTS:
                     CommaSeperatedArguments arguments = new CommaSeperatedArguments(jaxbInstructionArgument.getValue());
                     List<String> extractedFunctionsNames = arguments.extractAllFunctionsNames();
                     for(String extractedFunctionName : extractedFunctionsNames) {
-                        if(!functions.contains(extractedFunctionName) && ProgramsRepo.getInstance().getFunctionByName(extractedFunctionName) == null) {
+                        if((!functions.contains(extractedFunctionName)) && ProgramsRepo.getInstance().getFunctionByName(extractedFunctionName) == null) {
                             throw new InvalidArgumentException(extractedFunctionName, ArgumentErrorType.FUNCTION_NOT_FOUND);
                         }
                     }

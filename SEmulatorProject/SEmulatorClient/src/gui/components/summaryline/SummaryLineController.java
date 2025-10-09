@@ -3,8 +3,8 @@ package gui.components.summaryline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import serverengine.logic.model.instruction.ArchitectureType;
-import serverengine.logic.model.instruction.InstructionType;
+import types.ArchitectureType;
+import types.InstructionType;
 
 import java.util.Map;
 

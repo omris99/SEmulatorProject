@@ -1,6 +1,6 @@
 package serverengine.logic.model.program;
 
-import serverengine.logic.exceptions.NumberNotInRangeException;
+import exceptions.NumberNotInRangeException;
 import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;

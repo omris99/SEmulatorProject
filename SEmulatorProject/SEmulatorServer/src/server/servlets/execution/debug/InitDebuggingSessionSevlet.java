@@ -10,10 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import serverengine.logic.exceptions.*;
-import serverengine.logic.json.GsonFactory;
+import exceptions.*;
+import json.GsonFactory;
 import server.utils.ServletUtils;
-import serverengine.logic.model.instruction.ArchitectureType;
+import types.ArchitectureType;
 
 import java.io.IOException;
 import java.util.Map;

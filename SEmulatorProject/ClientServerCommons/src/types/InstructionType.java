@@ -1,4 +1,4 @@
-package serverengine.logic.model.instruction;
+package types;
 
 public enum InstructionType {
     BASIC,

@@ -1,10 +1,9 @@
 package serverengine.logic.model.program;
 
-import serverengine.logic.exceptions.NumberNotInRangeException;
+import exceptions.NumberNotInRangeException;
 import serverengine.logic.execution.ProgramExecutor;
 import serverengine.logic.execution.ProgramExecutorImpl;
 import serverengine.logic.model.argument.Argument;
-import serverengine.logic.model.argument.ArgumentType;
 import serverengine.logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
@@ -18,6 +17,7 @@ import serverengine.logic.model.instruction.InstructionArgument;
 import serverengine.logic.model.instruction.InstructionWithArguments;
 import serverengine.logic.model.mappers.InstructionMapper;
 import serverengine.logic.model.program.quotedfunction.QuotedFunction;
+import types.ArgumentType;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

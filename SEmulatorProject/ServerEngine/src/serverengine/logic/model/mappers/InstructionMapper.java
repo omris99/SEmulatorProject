@@ -1,7 +1,7 @@
 package serverengine.logic.model.mappers;
 
-import serverengine.logic.exceptions.ArgumentErrorType;
-import serverengine.logic.exceptions.InvalidArgumentException;
+import exceptions.ArgumentErrorType;
+import exceptions.InvalidArgumentException;
 import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.NameArgument;
 import serverengine.logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;

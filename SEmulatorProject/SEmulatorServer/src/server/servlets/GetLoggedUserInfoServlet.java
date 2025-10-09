@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
-import serverengine.logic.json.GsonFactory;
+import json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.users.UserManager;
 

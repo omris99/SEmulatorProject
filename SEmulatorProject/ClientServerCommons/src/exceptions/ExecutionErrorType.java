@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public enum ExecutionErrorType {
     CREDIT_BALANCE_TOO_LOW,

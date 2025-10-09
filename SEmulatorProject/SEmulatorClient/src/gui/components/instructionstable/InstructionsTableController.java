@@ -10,7 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import serverengine.logic.model.instruction.ArchitectureType;
+import types.ArchitectureType;
 
 import java.util.List;
 

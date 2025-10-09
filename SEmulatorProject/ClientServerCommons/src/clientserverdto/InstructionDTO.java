@@ -1,7 +1,5 @@
 package clientserverdto;
 
-import serverengine.logic.model.instruction.ArchitectureType;
-
 import java.util.List;
 import java.util.Objects;
 

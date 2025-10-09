@@ -4,8 +4,8 @@ import clientserverdto.DTO;
 import serverengine.logic.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
-import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
+import types.ArchitectureType;
 
 import java.io.Serializable;
 import java.util.List;

@@ -9,9 +9,10 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Utils {
-    public static Map<Variable, Long> extractVariablesTypesFromMap(Map<Variable, Long> variables, VariableType variableType) {
+    public static Map<String, Long> extractVariablesTypesAsStringsFromMap(Map<Variable, Long> variables, VariableType variableType) {
         Map<Variable, Long> result = new LinkedHashMap<>();
 
         for(Map.Entry<Variable, Long> entry : variables.entrySet()){
@@ -20,7 +21,7 @@ public class Utils {
             }
         }
 
-        return result;
+        return convertKeyToStringAndSortVariablesMap(result);
     }
 
     public static Map<Variable, Long> createInputVariablesMap(Set<Variable> variables, Long... inputs) {
@@ -42,6 +43,17 @@ public class Utils {
 
     public static int getMaxGeneralVariableIndex(Set<Variable> instructionsVariables) {
         return instructionsVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
+    }
+
+    public static Map<String, Long> convertKeyToStringAndSortVariablesMap(Map<Variable, Long> variablesMap) {
+        return variablesMap.entrySet().stream()
+                .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))
+                .collect(Collectors.toMap(
+                        e -> e.getKey().getRepresentation(),
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 
 }

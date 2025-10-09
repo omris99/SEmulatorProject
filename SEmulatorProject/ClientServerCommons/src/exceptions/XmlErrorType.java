@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public enum XmlErrorType {
     FILE_MISSING,

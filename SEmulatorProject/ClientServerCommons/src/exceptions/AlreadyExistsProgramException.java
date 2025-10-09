@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class AlreadyExistsProgramException extends RuntimeException {
     private String programName;

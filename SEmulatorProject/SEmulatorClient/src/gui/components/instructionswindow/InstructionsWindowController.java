@@ -10,8 +10,8 @@ import gui.execution.ExecutionScreenController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import serverengine.logic.model.instruction.ArchitectureType;
-import serverengine.logic.model.instruction.InstructionType;
+import types.ArchitectureType;
+import types.InstructionType;
 
 import java.util.List;
 import java.util.Map;

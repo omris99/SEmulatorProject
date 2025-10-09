@@ -1,8 +1,9 @@
 package clientserverdto;
 
 
-import serverengine.logic.model.instruction.ArchitectureType;
-import serverengine.logic.model.instruction.InstructionType;
+
+import types.ArchitectureType;
+import types.InstructionType;
 
 import java.util.List;
 import java.util.Map;

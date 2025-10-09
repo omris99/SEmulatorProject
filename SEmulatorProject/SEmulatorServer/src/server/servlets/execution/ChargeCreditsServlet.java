@@ -9,9 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import serverengine.logic.exceptions.ExecutionErrorType;
-import serverengine.logic.exceptions.NumberNotInRangeException;
-import serverengine.logic.json.GsonFactory;
+import exceptions.ExecutionErrorType;
+import exceptions.NumberNotInRangeException;
+import json.GsonFactory;
 
 import java.io.IOException;
 

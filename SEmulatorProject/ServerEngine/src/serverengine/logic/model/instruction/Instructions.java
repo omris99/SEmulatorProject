@@ -8,6 +8,8 @@ import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableType;
+import types.ArchitectureType;
+import types.InstructionType;
 
 import java.io.Serializable;
 import java.util.*;

@@ -1,6 +1,6 @@
 package clientserverdto;
 
-import serverengine.logic.exceptions.ExecutionErrorType;
+import exceptions.ExecutionErrorType;
 
 public class ErrorAlertDTO implements DTO{
     private final ExecutionErrorType type;

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.instructiontree.InstructionsTree;
-import serverengine.logic.json.GsonFactory;
+import json.GsonFactory;
 import server.utils.ServletUtils;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class InvalidXmlFileException extends Exception {
     private final XmlErrorType errorType;

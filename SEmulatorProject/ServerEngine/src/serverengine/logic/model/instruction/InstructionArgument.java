@@ -1,6 +1,6 @@
 package serverengine.logic.model.instruction;
 
-import serverengine.logic.model.argument.ArgumentType;
+import types.ArgumentType;
 
 public enum InstructionArgument {
     JNZ_LABEL(ArgumentType.LABEL, "JNZLabel"),

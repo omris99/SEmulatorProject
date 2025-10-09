@@ -13,8 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import okhttp3.*;
-import serverengine.logic.json.GsonFactory;
-
+import json.GsonFactory;
 import java.io.IOException;
 
 //TODO:

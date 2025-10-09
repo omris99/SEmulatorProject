@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class NumberNotInRangeException extends RuntimeException {
     private final int number;

@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class CreditBalanceTooLowException extends Exception {
     private final long creditsCost;

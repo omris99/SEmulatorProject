@@ -1,8 +1,8 @@
-package serverengine.logic.json.deserialize;
+package json.deserialize;
 
+import clientserverdto.InstructionDTO;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import clientserverdto.InstructionDTO;
 
 import java.lang.reflect.Type;
 import java.util.List;

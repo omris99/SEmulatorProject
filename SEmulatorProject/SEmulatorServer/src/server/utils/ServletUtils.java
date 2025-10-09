@@ -4,7 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import serverengine.logic.engine.EmulatorEngine;
-import serverengine.logic.json.GsonFactory;
+import json.GsonFactory;
 import serverengine.users.UserManager;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class InvalidArchitectureException extends RuntimeException {
     private final String selectedArchitecture;

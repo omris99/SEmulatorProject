@@ -1,4 +1,4 @@
-package serverengine.logic.model.argument;
+package types;
 
 public enum ArgumentType {
     LABEL,

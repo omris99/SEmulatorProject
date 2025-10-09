@@ -3,7 +3,7 @@ package gui.components.availablefunctionstable;
 import clientserverdto.UploadedProgramDTO;
 import http.HttpClientUtil;
 import http.ServerPaths;
-import serverengine.logic.json.GsonFactory;
+import json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

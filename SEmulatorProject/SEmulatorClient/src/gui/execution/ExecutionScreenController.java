@@ -1,6 +1,7 @@
 package gui.execution;
 
 import clientserverdto.*;
+import exceptions.ExecutionErrorType;
 import gui.app.ClientManager;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
@@ -11,9 +12,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import serverengine.logic.exceptions.ExecutionErrorType;
-import serverengine.logic.json.GsonFactory;
 import okhttp3.*;
+import json.GsonFactory;
 
 import java.io.IOException;
 import java.util.HashMap;

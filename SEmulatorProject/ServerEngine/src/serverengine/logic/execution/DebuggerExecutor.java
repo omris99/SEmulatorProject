@@ -3,9 +3,9 @@ package serverengine.logic.execution;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
-import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.program.Program;
+import types.ArchitectureType;
 
 import java.util.*;
 

@@ -16,8 +16,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
-import serverengine.logic.json.GsonFactory;
-import serverengine.logic.utils.Utils;
+import json.GsonFactory;
 
 import java.io.IOException;
 import java.util.Arrays;

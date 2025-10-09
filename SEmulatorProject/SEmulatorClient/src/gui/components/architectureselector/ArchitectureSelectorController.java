@@ -4,7 +4,7 @@ import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import serverengine.logic.model.instruction.ArchitectureType;
+import types.ArchitectureType;
 
 import java.util.Arrays;
 import java.util.LinkedList;

@@ -1,6 +1,7 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
-import serverengine.logic.model.argument.ArgumentType;
+
+import types.ArgumentType;
 
 public enum ArgumentErrorType {
     LABEL_MUST_START_WITH_L("Label not starts with L", ArgumentType.LABEL),

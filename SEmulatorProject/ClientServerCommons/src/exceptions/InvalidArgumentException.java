@@ -1,4 +1,4 @@
-package serverengine.logic.exceptions;
+package exceptions;
 
 public class InvalidArgumentException extends RuntimeException {
   private final String argumentName;

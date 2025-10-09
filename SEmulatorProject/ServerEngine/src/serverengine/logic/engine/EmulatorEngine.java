@@ -4,10 +4,10 @@ import clientserverdto.DTO;
 import clientserverdto.InstructionDTO;
 import clientserverdto.RunResultsDTO;
 import clientserverdto.ExecutionHistoryDTO;
-import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
-import serverengine.logic.exceptions.InvalidArchitectureException;
-import serverengine.logic.exceptions.CreditBalanceTooLowException;
-import serverengine.logic.exceptions.NumberNotInRangeException;
+import exceptions.CreditBalanceTooLowForInitialChargeException;
+import exceptions.InvalidArchitectureException;
+import exceptions.CreditBalanceTooLowException;
+import exceptions.NumberNotInRangeException;
 import serverengine.logic.execution.DebuggerExecutor;
 import serverengine.logic.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.Argument;
@@ -16,13 +16,14 @@ import serverengine.logic.model.argument.variable.VariableImpl;
 import serverengine.logic.model.argument.variable.VariableType;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.functionsrepo.UploadedProgram;
-import serverengine.logic.model.instruction.ArchitectureType;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.program.Function;
 import serverengine.logic.model.program.Program;
 import serverengine.logic.utils.Utils;
+import types.ArchitectureType;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     private Program mainProgram;
@@ -173,9 +174,9 @@ public class EmulatorEngine implements Engine {
         lastDebuggerRunResult = new RunResultsDTO(
                 degree,
                 programInitialInputVariablesMap.get(Variable.RESULT),
-                userInputToVariablesMapConverted,
-                userInputToVariablesMapConverted,
-                Utils.extractVariablesTypesFromMap(programInitialInputVariablesMap, VariableType.WORK),
+                Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
+                Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
+                Utils.extractVariablesTypesAsStringsFromMap(programInitialInputVariablesMap, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
@@ -216,9 +217,9 @@ public class EmulatorEngine implements Engine {
         return new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
-                debuggerExecutor.getInitialInputVariablesMap(),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                Utils.convertKeyToStringAndSortVariablesMap(debuggerExecutor.getInitialInputVariablesMap()),
+                Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.INPUT),
+                Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished()
@@ -266,9 +267,9 @@ public class EmulatorEngine implements Engine {
         lastDebuggerRunResult = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),
-                debuggerExecutor.getInitialInputVariablesMap(),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.INPUT),
-                Utils.extractVariablesTypesFromMap(finalVariablesResult, VariableType.WORK),
+                Utils.convertKeyToStringAndSortVariablesMap(debuggerExecutor.getInitialInputVariablesMap()),
+                Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.INPUT),
+                Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
                 debuggerExecutor.isFinished());
@@ -330,5 +331,16 @@ public class EmulatorEngine implements Engine {
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Invalid number format for credits: " + amount);
         }
+    }
+
+    private Map<String, Long> convertKeyToStringAndSortVariablesMap(Map<Variable, Long> variablesMap) {
+        return variablesMap.entrySet().stream()
+                .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))
+                .collect(Collectors.toMap(
+                        e -> e.getKey().getRepresentation(),
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
     }
 }

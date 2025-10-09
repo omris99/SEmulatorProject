@@ -1,5 +1,8 @@
 package serverengine.logic.model.instruction;
 
+import types.ArchitectureType;
+import types.InstructionType;
+
 public enum InstructionData {
     NEUTRAL(InstructionType.BASIC, ArchitectureType.ONE ,0),
     INCREASE(InstructionType.BASIC, ArchitectureType.ONE, 1),

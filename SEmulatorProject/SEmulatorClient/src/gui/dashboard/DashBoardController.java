@@ -14,7 +14,8 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import okhttp3.*;
-import serverengine.logic.json.GsonFactory;
+import json.GsonFactory;
+
 
 import java.io.File;
 import java.io.IOException;

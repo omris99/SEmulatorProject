@@ -27,9 +27,6 @@ public class ResumeDebuggerExecutionServlet extends HttpServlet {
         RunResultsDTO context;
         try {
             context = (RunResultsDTO) engine.resume();
-            if(context.isFinished()){
-                ProgramsRepo.getInstance().getProgramOrFunctionByName(engine.getLoadedProgramName()).updateDataAfterExecution(context.getTotalCyclesCount());
-            }
         } catch (CreditBalanceTooLowException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             ErrorAlertDTO error = new ErrorAlertDTO(ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",

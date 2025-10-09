@@ -40,7 +40,6 @@ public class RunProgramServlet extends HttpServlet {
 
             RunResultsDTO runResultsDTO = (RunResultsDTO) engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
             String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
-            ProgramsRepo.getInstance().getProgramOrFunctionByName(engine.getLoadedProgramName()).updateDataAfterExecution(runResultsDTO.getTotalCyclesCount());
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(runResultsDtoJson);
         } catch (NumberFormatException e) {
@@ -73,7 +72,7 @@ public class RunProgramServlet extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
                 String message = String.format(
-                        "Your credit balance is too low to start a debugging session.%n%n" +
+                        "Your credit balance is too low to run this program.%n%n" +
                                 "• Architecture cost: %d%n" +
                                 "• Average program cost: %d%n" +
                                 "• Minimum Balance Required: %d%n" +

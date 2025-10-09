@@ -64,7 +64,7 @@ public class EmulatorEngine implements Engine {
         return currentOnScreenProgram.createDTO();
     }
 
-    private void addExecutionToHistory(RunResultsDTO runResults) {
+    private void addExecutionToHistoryAndUpdateUploadedProgramData(RunResultsDTO runResults) {
         executionsHistory.add(new ExecutionHistoryDTO(
                 currentExecutionNumber,
                 runResults,
@@ -72,6 +72,7 @@ public class EmulatorEngine implements Engine {
                 currentOnScreenProgram.getRepresentation(),
                 ProgramsRepo.getInstance().getProgramOrFunctionByName(currentOnScreenProgram.getName()).createDTO()));
         currentExecutionNumber++;
+        ProgramsRepo.getInstance().getProgramOrFunctionByName(currentOnScreenProgram.getName()).updateDataAfterExecution(runResults.getTotalCyclesCount());
     }
 
     public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
@@ -82,7 +83,7 @@ public class EmulatorEngine implements Engine {
             runResults = executeNextInstructionOnDebugger();
         } while (!runResults.isFinished());
 
-        addExecutionToHistory(runResults);
+        addExecutionToHistoryAndUpdateUploadedProgramData(runResults);
 
         return runResults;
     }
@@ -190,7 +191,7 @@ public class EmulatorEngine implements Engine {
         RunResultsDTO debugResults = executeNextInstructionOnDebugger();
 
         if (debuggerExecutor.isFinished()) {
-            addExecutionToHistory(debugResults);
+            addExecutionToHistoryAndUpdateUploadedProgramData(debugResults);
         }
 
         return debugResults;
@@ -246,7 +247,7 @@ public class EmulatorEngine implements Engine {
         } while (!debugResults.isFinished());
 
         if (!isExitedLoopBecauseBreakpoint) {
-            addExecutionToHistory(debugResults);
+            addExecutionToHistoryAndUpdateUploadedProgramData(debugResults);
         }
 
         return debugResults;
@@ -256,7 +257,7 @@ public class EmulatorEngine implements Engine {
         try {
             chargeCreditsForCurrentInstruction();
         } catch (CreditBalanceTooLowException e) {
-            addExecutionToHistory(lastDebuggerRunResult);
+            addExecutionToHistoryAndUpdateUploadedProgramData(lastDebuggerRunResult);
             throw e;
         }
 

@@ -1,8 +1,8 @@
 package serverengine.logic.model.mappers;
 
 import exceptions.AlreadyExistsProgramException;
-import serverengine.logic.model.functionsrepo.ProgramsRepo;
-import serverengine.logic.model.functionsrepo.UploadedProgram;
+import serverengine.programs.repo.ProgramsRepo;
+import serverengine.programs.UploadedProgram;
 import serverengine.logic.model.generated.SFunction;
 import serverengine.logic.model.generated.SInstruction;
 import serverengine.logic.model.generated.SProgram;

@@ -1,4 +1,4 @@
-package serverengine.logic.model.functionsrepo;
+package serverengine.programs;
 
 import clientserverdto.ProgramDTO;
 import clientserverdto.UploadedProgramDTO;

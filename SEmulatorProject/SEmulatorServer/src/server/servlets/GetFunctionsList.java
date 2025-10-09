@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import json.GsonFactory;
-import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.programs.repo.ProgramsRepo;
 
 import java.io.IOException;
 import java.util.List;

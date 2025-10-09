@@ -24,27 +24,6 @@ public class Utils {
         return convertKeyToStringAndSortVariablesMap(result);
     }
 
-    public static Map<Variable, Long> createInputVariablesMap(Set<Variable> variables, Long... inputs) {
-        Map<Variable, Long> inputVariablesMap = new LinkedHashMap<>();
-        int i = 0;
-
-        for (Variable inputVariable : variables) {
-            long value = (i < inputs.length) ? inputs[i] : 0L;
-            inputVariablesMap.put(inputVariable, value);
-            i++;
-        }
-
-        return inputVariablesMap;
-    }
-
-    public static int getMaxLabelIndex(Set<Label> instructionsLabels) {
-        return instructionsLabels.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
-    }
-
-    public static int getMaxGeneralVariableIndex(Set<Variable> instructionsVariables) {
-        return instructionsVariables.stream().map(Argument::getIndex).max(Comparator.naturalOrder()).orElse(0);
-    }
-
     public static Map<String, Long> convertKeyToStringAndSortVariablesMap(Map<Variable, Long> variablesMap) {
         return variablesMap.entrySet().stream()
                 .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))

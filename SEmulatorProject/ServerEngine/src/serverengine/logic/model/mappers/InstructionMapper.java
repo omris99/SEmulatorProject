@@ -11,7 +11,7 @@ import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.label.LabelImpl;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableImpl;
-import serverengine.logic.model.functionsrepo.ProgramsRepo;
+import serverengine.programs.repo.ProgramsRepo;
 import serverengine.logic.model.generated.SInstruction;
 import serverengine.logic.model.generated.SInstructionArgument;
 import serverengine.logic.model.generated.SInstructionArguments;

@@ -6,8 +6,8 @@ import serverengine.logic.model.argument.commaseperatedarguments.CommaSeperatedA
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
-import types.ArchitectureType;
-import types.InstructionType;
+import types.modeltypes.ArchitectureType;
+import types.modeltypes.InstructionType;
 
 import java.util.LinkedList;
 import java.util.List;

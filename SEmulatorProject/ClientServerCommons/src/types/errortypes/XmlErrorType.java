@@ -1,4 +1,4 @@
-package exceptions;
+package types.errortypes;
 
 public enum XmlErrorType {
     FILE_MISSING,

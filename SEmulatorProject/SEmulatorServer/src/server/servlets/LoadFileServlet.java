@@ -14,7 +14,7 @@ import jakarta.xml.bind.Unmarshaller;
 import exceptions.AlreadyExistsProgramException;
 import exceptions.InvalidArgumentException;
 import exceptions.InvalidXmlFileException;
-import exceptions.XmlErrorType;
+import types.errortypes.XmlErrorType;
 import server.utils.ServletUtils;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;

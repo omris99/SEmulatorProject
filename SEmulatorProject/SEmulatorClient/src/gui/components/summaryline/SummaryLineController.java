@@ -1,10 +1,9 @@
 package gui.components.summaryline;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import types.ArchitectureType;
-import types.InstructionType;
+import types.modeltypes.ArchitectureType;
+import types.modeltypes.InstructionType;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package gui.execution;
 
 import clientserverdto.*;
-import exceptions.ExecutionErrorType;
+import types.errortypes.ExecutionErrorType;
 import gui.app.ClientManager;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;

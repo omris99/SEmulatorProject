@@ -10,10 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import exceptions.CreditBalanceTooLowException;
-import exceptions.ExecutionErrorType;
+import types.errortypes.ExecutionErrorType;
 import json.GsonFactory;
 import server.utils.ServletUtils;
-import serverengine.logic.model.functionsrepo.ProgramsRepo;
 
 import java.io.IOException;
 

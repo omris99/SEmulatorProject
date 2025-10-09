@@ -1,7 +1,7 @@
 package serverengine.logic.model.instruction;
 
-import types.ArchitectureType;
-import types.InstructionType;
+import types.modeltypes.ArchitectureType;
+import types.modeltypes.InstructionType;
 
 public enum InstructionData {
     NEUTRAL(InstructionType.BASIC, ArchitectureType.ONE ,0),

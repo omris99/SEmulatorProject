@@ -17,7 +17,7 @@ import serverengine.logic.model.instruction.InstructionArgument;
 import serverengine.logic.model.instruction.InstructionWithArguments;
 import serverengine.logic.model.mappers.InstructionMapper;
 import serverengine.logic.model.program.quotedfunction.QuotedFunction;
-import types.ArgumentType;
+import types.modeltypes.ArgumentType;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

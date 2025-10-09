@@ -2,8 +2,8 @@ package clientserverdto;
 
 
 
-import types.ArchitectureType;
-import types.InstructionType;
+import types.modeltypes.ArchitectureType;
+import types.modeltypes.InstructionType;
 
 import java.util.List;
 import java.util.Map;

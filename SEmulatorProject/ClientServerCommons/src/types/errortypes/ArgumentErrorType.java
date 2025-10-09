@@ -1,7 +1,7 @@
-package exceptions;
+package types.errortypes;
 
 
-import types.ArgumentType;
+import types.modeltypes.ArgumentType;
 
 public enum ArgumentErrorType {
     LABEL_MUST_START_WITH_L("Label not starts with L", ArgumentType.LABEL),

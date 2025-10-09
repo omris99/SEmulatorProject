@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import exceptions.ExecutionErrorType;
+import types.errortypes.ExecutionErrorType;
 import exceptions.NumberNotInRangeException;
 import json.GsonFactory;
 

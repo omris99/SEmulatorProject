@@ -1,5 +1,7 @@
 package exceptions;
 
+import types.errortypes.XmlErrorType;
+
 public class InvalidXmlFileException extends Exception {
     private final XmlErrorType errorType;
     private final String filePath;

@@ -1,4 +1,4 @@
-package types;
+package types.modeltypes;
 
 public enum ArgumentType {
     LABEL,

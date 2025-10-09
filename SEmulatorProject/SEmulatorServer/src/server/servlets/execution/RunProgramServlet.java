@@ -13,7 +13,8 @@ import serverengine.logic.engine.EmulatorEngine;
 import exceptions.*;
 import json.GsonFactory;
 import server.utils.ServletUtils;
-import types.ArchitectureType;
+import types.modeltypes.ArchitectureType;
+import types.errortypes.ExecutionErrorType;
 
 import java.io.IOException;
 import java.util.Map;

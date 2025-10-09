@@ -5,7 +5,7 @@ import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.program.Program;
-import types.ArchitectureType;
+import types.modeltypes.ArchitectureType;
 
 import java.util.*;
 

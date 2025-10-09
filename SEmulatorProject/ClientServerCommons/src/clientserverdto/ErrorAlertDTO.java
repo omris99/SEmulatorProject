@@ -1,6 +1,6 @@
 package clientserverdto;
 
-import exceptions.ExecutionErrorType;
+import types.errortypes.ExecutionErrorType;
 
 public class ErrorAlertDTO implements DTO{
     private final ExecutionErrorType type;

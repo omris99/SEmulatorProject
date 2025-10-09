@@ -11,7 +11,7 @@ import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.functionsrepo.ProgramsRepo;
 import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.instruction.Instructions;
-import types.ArchitectureType;
+import types.modeltypes.ArchitectureType;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package types;
+package types.modeltypes;
 
 public enum ArchitectureType {
     ONE("I", 5, 1),

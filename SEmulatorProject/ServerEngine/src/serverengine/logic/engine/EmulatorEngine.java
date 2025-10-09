@@ -20,7 +20,7 @@ import serverengine.logic.model.instruction.Instruction;
 import serverengine.logic.model.program.Function;
 import serverengine.logic.model.program.Program;
 import serverengine.logic.utils.Utils;
-import types.ArchitectureType;
+import types.modeltypes.ArchitectureType;
 
 import java.util.*;
 import java.util.stream.Collectors;

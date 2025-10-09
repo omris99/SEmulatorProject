@@ -1,5 +1,7 @@
 package exceptions;
 
+import types.errortypes.ArgumentErrorType;
+
 public class InvalidArgumentException extends RuntimeException {
   private final String argumentName;
   private final ArgumentErrorType errorType;

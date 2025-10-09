@@ -1,4 +1,4 @@
-package exceptions;
+package types.errortypes;
 
 public enum ExecutionErrorType {
     CREDIT_BALANCE_TOO_LOW,

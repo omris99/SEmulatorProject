@@ -1,10 +1,9 @@
 package gui.components.architectureselector;
 
 import gui.components.debuggerwindow.DebuggerWindowController;
-import gui.components.toolbar.InstructionsWindowToolbarController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import types.ArchitectureType;
+import types.modeltypes.ArchitectureType;
 
 import java.util.Arrays;
 import java.util.LinkedList;

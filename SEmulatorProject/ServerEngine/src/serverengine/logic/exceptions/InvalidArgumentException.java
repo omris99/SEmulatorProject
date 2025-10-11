@@ -1,4 +1,4 @@
-package exceptions;
+package serverengine.logic.exceptions;
 
 import types.errortypes.ArgumentErrorType;
 

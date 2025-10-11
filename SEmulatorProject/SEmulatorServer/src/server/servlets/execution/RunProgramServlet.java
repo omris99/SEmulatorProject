@@ -1,7 +1,7 @@
 package server.servlets.execution;
 
 import com.google.gson.reflect.TypeToken;
-import clientserverdto.ErrorAlertDTO;
+import clientserverdto.ErrorDTO;
 import clientserverdto.RunResultsDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,9 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import exceptions.*;
 import json.GsonFactory;
 import server.utils.ServletUtils;
+import serverengine.logic.exceptions.CreditBalanceTooLowException;
+import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
+import serverengine.logic.exceptions.InvalidArchitectureException;
+import serverengine.logic.exceptions.NumberNotInRangeException;
 import types.modeltypes.ArchitectureType;
 import types.errortypes.ExecutionErrorType;
 
@@ -44,12 +47,12 @@ public class RunProgramServlet extends HttpServlet {
             resp.getWriter().write(runResultsDtoJson);
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
+            ErrorDTO error = new ErrorDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
         } catch (NumberNotInRangeException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(
+            ErrorDTO error = new ErrorDTO(
                     ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution",
                     "Negative Number Submitted",
                     "You entered the number: " + e.getNumber() + " which is not positive.\n" +
@@ -58,7 +61,7 @@ public class RunProgramServlet extends HttpServlet {
             resp.getWriter().write(errorJson);
         } catch (InvalidArchitectureException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(
+            ErrorDTO error = new ErrorDTO(
                     ExecutionErrorType.UNCOMPATIBLE_ARCHITECTURE, "Error Starting Execution",
                     "Invalid Architecture Selected",
                     "Minimum architecture required for this program is: " + e.getMinimumArchitecture() + ".\n" +
@@ -82,7 +85,7 @@ public class RunProgramServlet extends HttpServlet {
                         ex.getCreditsCost(),
                         ex.getCreditsBalance()
                 );
-                ErrorAlertDTO error = new ErrorAlertDTO(
+                ErrorDTO error = new ErrorDTO(
                         ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
                         "Can't Start Program run",
                         message);
@@ -90,7 +93,7 @@ public class RunProgramServlet extends HttpServlet {
                 resp.getWriter().write(errorJson);
             } else {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                ErrorAlertDTO error = new ErrorAlertDTO(
+                ErrorDTO error = new ErrorDTO(
                         ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
                         "Can't Run Program",
                         "Credit Balance Too Low. Cost of current instruction: " + e.getCreditsCost() + ",Your Balance: " + e.getCreditsBalance());

@@ -2,13 +2,13 @@ package clientserverdto;
 
 import types.errortypes.ExecutionErrorType;
 
-public class ErrorAlertDTO implements DTO{
+public class ErrorDTO implements DTO{
     private final ExecutionErrorType type;
     private final String title;
     private final String header;
     private final String content;
 
-    public ErrorAlertDTO(ExecutionErrorType type, String title, String header, String content) {
+    public ErrorDTO(ExecutionErrorType type, String title, String header, String content) {
         this.type = type;
         this.title = title;
         this.header = header;

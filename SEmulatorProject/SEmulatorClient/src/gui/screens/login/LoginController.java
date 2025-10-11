@@ -1,6 +1,7 @@
 package gui.screens.login;
 
 import gui.app.ClientController;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -82,11 +83,9 @@ public class LoginController {
                     Platform.runLater(() -> {
                         Boolean isExist = Boolean.parseBoolean(responseBody);
                         if (isExist) {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Login Info");
-                            alert.setHeaderText("Welcome back " + userName + "!");
-                            alert.setContentText("You have successfully logged in.");
-                            alert.showAndWait();
+                            Utils.showInfoAlert("Login Info",
+                                    "Welcome back " + userName + "!",
+                                    "You have successfully logged in.");
                         }
 
                         clientController.switchToDashBoard();

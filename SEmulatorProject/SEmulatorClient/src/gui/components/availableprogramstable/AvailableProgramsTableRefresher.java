@@ -18,27 +18,21 @@ import java.util.function.Consumer;
 
 public class AvailableProgramsTableRefresher extends TimerTask {
     private final Consumer<List<UploadedProgramDTO>> programsListConsumer;
-    private final boolean shouldUpdate;
 
-
-    public AvailableProgramsTableRefresher(boolean shouldUpdate, Consumer<List<UploadedProgramDTO>> programsListConsumer) {
-        this.shouldUpdate = shouldUpdate;
+    public AvailableProgramsTableRefresher(Consumer<List<UploadedProgramDTO>> programsListConsumer) {
         this.programsListConsumer = programsListConsumer;
     }
 
     @Override
     public void run() {
-
-        if (!shouldUpdate) {
-            return;
-        }
         Request request = HttpClientUtil.createGetRequest(ServerPaths.PROGRAMS_LIST);
 
         HttpClientUtil.runAsync(request, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                // Handle failure if needed
+                System.out.println("Failed to fetch programs list: (failure) " + e.getMessage());
+
             }
 
             @Override
@@ -46,6 +40,8 @@ public class AvailableProgramsTableRefresher extends TimerTask {
                 String jsonArrayOfUsersNames = response.body().string();
                 UploadedProgramDTO[] programs = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, UploadedProgramDTO[].class);
                 programsListConsumer.accept(Arrays.asList(programs));
+
+                response.close();
             }
         });
     }

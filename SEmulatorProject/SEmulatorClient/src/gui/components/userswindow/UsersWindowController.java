@@ -5,6 +5,7 @@ import clientserverdto.UserDTO;
 import gui.components.availableusers.AvailableUsersTableController;
 import gui.components.userhistorytable.UsersHistoryTableController;
 import gui.screens.dashboard.DashBoardController;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static gui.app.ClientController.showErrorAlert;
 
 public class UsersWindowController implements Closeable {
     @FXML
@@ -53,7 +52,7 @@ public class UsersWindowController implements Closeable {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error to Fetch History",
                         "Failed to fetch execution history from server",
                         e.getMessage()));
@@ -73,7 +72,7 @@ public class UsersWindowController implements Closeable {
                         }
                     });
                 } else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch history from server"),
                             null));

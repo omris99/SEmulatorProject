@@ -2,17 +2,29 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="2560.0" stylesheets="@../../app/resources/themes/classic-theme.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.screens.dashboard.DashBoardController">
    <children>
-      <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="2560.0" text="S-Emulator - Dashboard" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="Verdana" size="20.0" />
-         </font>
-      </Label>
+      <StackPane id="app-header" prefHeight="100.0" prefWidth="2560.0">
+         <HBox alignment="CENTER_LEFT">
+            <children>
+               <ImageView fitHeight="90.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../app/resources/images/header-logo.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </HBox>
+
+         <Label alignment="CENTER" prefHeight="39.0" prefWidth="147.0" text="Dashboard" textFill="#7c7c7c" />
+      </StackPane>
+
+
       <HBox prefHeight="28.0" prefWidth="2576.0">
          <children>
             <fx:include fx:id="userInfoBanner" source="../../components/userInfoBanner/UserInfoBanner.fxml" />

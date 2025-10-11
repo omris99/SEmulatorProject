@@ -21,7 +21,6 @@ import java.util.TimerTask;
 public class AvailableUsersTableController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
-    private boolean autoUpdate;
     private boolean isRefreshing;
 
 
@@ -101,10 +100,7 @@ public class AvailableUsersTableController implements Closeable {
     }
 
     public void startTableRefresher() {
-        autoUpdate = true;
-        listRefresher = new AvailabaleUsersRefresher(
-                autoUpdate,
-                this::updateUsersList);
+        listRefresher = new AvailabaleUsersRefresher(this::updateUsersList);
         timer = new Timer();
         timer.schedule(listRefresher, 500, 500);
     }
@@ -122,6 +118,7 @@ public class AvailableUsersTableController implements Closeable {
         if (listRefresher != null && timer != null) {
             listRefresher.cancel();
             timer.cancel();
+            timer.purge();
         }
     }
 }

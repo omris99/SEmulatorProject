@@ -7,12 +7,12 @@ import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
 import gui.components.userInfoBanner.UserInfoBannerController;
 import gui.components.userswindow.UsersWindowController;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import okhttp3.*;
 import json.GsonFactory;
 
@@ -61,7 +61,7 @@ public class DashBoardController implements Closeable {
                     public void onFailure(Call call, IOException e) {
                         Platform.runLater(() -> {
                             loadFileBarController.setProgressBarLoadErrorStyle();
-                            showErrorAlert(
+                            Utils.showErrorAlert(
                                     "Upload Failed",
                                     "Failed to upload file to server",
                                     e.getMessage()
@@ -75,20 +75,17 @@ public class DashBoardController implements Closeable {
                         if(!response.isSuccessful()){
                             Platform.runLater(() -> {
                                 loadFileBarController.setProgressBarLoadErrorStyle();
-                                showErrorAlert(
+                                Utils.showErrorAlert(
                                         ("HTTP " + response.code() + " Error"),
                                         ("Failed to load XML file"),
                                         responseBodyString);
-                                System.out.println("HTTP " + response.code() + " Error: " + responseBodyString);
                             });
                         }
                         else{
                             Platform.runLater(() -> {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("File Uploaded Successfully");
-                                alert.setHeaderText("The program has been uploaded successfully.");
-                                alert.setContentText("You can now find it in the programs list.");
-                                alert.showAndWait();
+                                Utils.showInfoAlert("File Uploaded Successfully",
+                                        "The program has been uploaded successfully.",
+                                        "You can now find it in the programs list.");
                             });
                         }
 
@@ -106,14 +103,6 @@ public class DashBoardController implements Closeable {
         new Thread(loadTask).start();
     }
 
-    private void showErrorAlert(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
     public void setClientManager(ClientController clientController) {
         this.clientController = clientController;
     }
@@ -123,6 +112,12 @@ public class DashBoardController implements Closeable {
         usersWindowController.setHistory();
         programsWindowController.startAvailableFunctionsTableRefresher();
         programsWindowController.startAvailableProgramsTableRefresher();
+    }
+
+    public void setInActive() {
+        try {
+            close();
+        } catch (Exception ignored) {}
     }
 
     public void executeProgramButtonClicked(UploadedProgramDTO selectedProgram) {
@@ -142,7 +137,7 @@ public class DashBoardController implements Closeable {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Credits Charge Failed",
                         "Failed to charge credits",
                         e.getMessage()
@@ -158,9 +153,9 @@ public class DashBoardController implements Closeable {
                     });
                     clientController.updateUserInfo();
                 } else {
-                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
 
-                            Platform.runLater(() -> showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
+                            Platform.runLater(() -> Utils.showErrorAlert(error.getTitle(), error.getHeader(), error.getContent()));
                 }
 
                 response.close();

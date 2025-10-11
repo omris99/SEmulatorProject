@@ -1,6 +1,7 @@
 package gui.screens.execution;
 
 import clientserverdto.*;
+import gui.utils.Utils;
 import types.errortypes.ExecutionErrorType;
 import gui.app.ClientController;
 import gui.components.debuggerwindow.DebuggerWindowController;
@@ -19,8 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static gui.app.ClientController.showErrorAlert;
 
 public class ExecutionScreenController {
     @FXML
@@ -56,7 +55,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Setting Program",
                         "Failed to set program to execute on server",
                         e.getMessage()));
@@ -70,7 +69,7 @@ public class ExecutionScreenController {
                     });
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to set program to execute on server"),
                             null));
@@ -102,7 +101,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Fetching Expanded Program",
                         "Failed to fetch expanded program from server",
                         e.getMessage()));
@@ -118,7 +117,7 @@ public class ExecutionScreenController {
                     });
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch expanded program from server"),
                             null));
@@ -156,7 +155,7 @@ public class ExecutionScreenController {
             public void onFailure(Call call, IOException e) {
                 Platform.runLater(() -> {
                     finishExecutionMode(ExecutionMode.REGULAR);
-                    showErrorAlert(
+                    Utils.showErrorAlert(
                             "Run Program failed",
                             "Failed to get program's run results from server",
                             e.getMessage());
@@ -175,7 +174,7 @@ public class ExecutionScreenController {
 
                 }
                 else {
-                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
                     Platform.runLater(() -> handleError(error, ExecutionMode.REGULAR));
                 }
 
@@ -186,8 +185,8 @@ public class ExecutionScreenController {
         });
     }
 
-    private void handleError(ErrorAlertDTO errorDTO, ExecutionMode executionMode) {
-        showErrorAlert(errorDTO.getTitle(), errorDTO.getHeader(), errorDTO.getContent());
+    private void handleError(ErrorDTO errorDTO, ExecutionMode executionMode) {
+        Utils.showErrorAlert(errorDTO.getTitle(), errorDTO.getHeader(), errorDTO.getContent());
         finishExecutionMode(executionMode);
         if(errorDTO.getType() == ExecutionErrorType.CREDIT_BALANCE_TOO_LOW)
         {
@@ -201,7 +200,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Fetching inputs names",
                         "Failed to fetch inputs names from server",
                         e.getMessage()));
@@ -217,7 +216,7 @@ public class ExecutionScreenController {
                     });
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch input names from server"),
                             null));
@@ -245,7 +244,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Init Debugging Session failed",
                         "Failed to initialize debugging session from server",
                         e.getMessage()));
@@ -263,7 +262,7 @@ public class ExecutionScreenController {
 
                 }
                 else {
-                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
@@ -280,7 +279,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Fetching Next Instruction",
                         "Failed to fetch next instruction to execute from server",
                         e.getMessage()));
@@ -294,7 +293,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> instructionsWindowController.highlightNextInstructionToExecute(nextInstruction));
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch next instruction to execute from server"),
                             null));
@@ -311,7 +310,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Step Backward Error",
                         "Failed to Step Backward in debugging session from server",
                         e.getMessage()));
@@ -329,7 +328,7 @@ public class ExecutionScreenController {
 
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to Step Backward in debugging session from server"),
                             null));
@@ -345,7 +344,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Stopping Debugging Session",
                         "Failed to stop debugging session from server",
                         e.getMessage()));
@@ -357,7 +356,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> finishExecutionMode(ExecutionMode.DEBUG));
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to stop debugging session from server"),
                             null));
@@ -374,7 +373,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Resuming Debugger Execution",
                         "Failed to resume debugger execution from server",
                         e.getMessage()));
@@ -394,7 +393,7 @@ public class ExecutionScreenController {
 
                 }
                 else {
-                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
@@ -423,13 +422,13 @@ public class ExecutionScreenController {
             if (response.isSuccessful()) {
                 return GsonFactory.getGson().fromJson(responseBodyString, InstructionDTO.class);
             } else {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         ("HTTP " + response.code() + " Error"),
                         ("Failed to update instruction breakpoint on server"),
                         responseBodyString));
             }
         } catch (Exception e) {
-            Platform.runLater(() -> showErrorAlert(
+            Platform.runLater(() -> Utils.showErrorAlert(
                     "Error Updating Instruction Breakpoint",
                     "Failed to update instruction breakpoint on server",
                     e.getMessage()));
@@ -444,7 +443,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Step Over Error",
                         "Failed to Step Over in debugging session from server",
                         e.getMessage()));
@@ -464,7 +463,7 @@ public class ExecutionScreenController {
 
                 }
                 else {
-                    ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
+                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
@@ -473,9 +472,6 @@ public class ExecutionScreenController {
                 response.close();
             }
         });
-    }
-
-    public void setActive() {
     }
 
     public void setUserInfo(UserDTO userDTO) {
@@ -492,7 +488,7 @@ public class ExecutionScreenController {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "Error Fetching inputs names",
                         "Failed to fetch inputs names from server",
                         e.getMessage()));
@@ -511,7 +507,7 @@ public class ExecutionScreenController {
                     });
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch input names from server"),
                             null));

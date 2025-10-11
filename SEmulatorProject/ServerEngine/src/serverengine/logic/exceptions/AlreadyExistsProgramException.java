@@ -1,8 +1,8 @@
-package exceptions;
+package serverengine.logic.exceptions;
 
 public class AlreadyExistsProgramException extends RuntimeException {
-    private String programName;
-    private boolean isFunction;
+    private final String programName;
+    private final boolean isFunction;
     public AlreadyExistsProgramException(String programName, boolean isFunction) {
         this.programName = programName;
         this.isFunction = isFunction;

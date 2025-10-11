@@ -1,5 +1,6 @@
 package server.servlets;
 
+import clientserverdto.ErrorDTO;
 import clientserverdto.UploadedProgramDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -11,9 +12,9 @@ import jakarta.servlet.http.Part;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import exceptions.AlreadyExistsProgramException;
-import exceptions.InvalidArgumentException;
-import exceptions.InvalidXmlFileException;
+import serverengine.logic.exceptions.AlreadyExistsProgramException;
+import serverengine.logic.exceptions.InvalidArgumentException;
+import serverengine.logic.exceptions.InvalidXmlFileException;
 import types.errortypes.XmlErrorType;
 import server.utils.ServletUtils;
 import serverengine.logic.model.argument.label.FixedLabel;
@@ -51,6 +52,7 @@ public class LoadFileServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             String content;
+            ErrorDTO error;
             switch (e) {
                 case InvalidXmlFileException iv -> {
                     switch (iv.getType()) {
@@ -63,7 +65,7 @@ public class LoadFileServlet extends HttpServlet {
                 }
                 case JAXBException jaxb -> content = "Can't read XML File";
                 case InvalidArgumentException ia -> content = String.format("%s.  \nError %s: %s ",
-                        ia.getErrorType().getUserMessage(),
+                        ia.getErrorType().getUserString(),
                         ia.getErrorType().getArgumentType(),
                         ia.getArgumentName());
                 case IllegalArgumentException iae -> content = "Invalid XML File: " + iae.getMessage();

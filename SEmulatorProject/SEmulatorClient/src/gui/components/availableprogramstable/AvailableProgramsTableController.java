@@ -22,7 +22,6 @@ import java.util.TimerTask;
 public class AvailableProgramsTableController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
-    private boolean autoUpdate;
 
     @FXML
     private ProgramsWindowController programsWindowController;
@@ -103,10 +102,7 @@ public class AvailableProgramsTableController implements Closeable {
     }
 
     public void startTableRefresher() {
-        autoUpdate = true;
-        listRefresher = new AvailableProgramsTableRefresher(
-                autoUpdate,
-                this::updateProgramsTable);
+        listRefresher = new AvailableProgramsTableRefresher(this::updateProgramsTable);
         timer = new Timer();
         timer.schedule(listRefresher, 500, 500);
     }
@@ -120,6 +116,7 @@ public class AvailableProgramsTableController implements Closeable {
         if(listRefresher != null && timer != null) {
             listRefresher.cancel();
             timer.cancel();
+            timer.purge();
         }
     }
 }

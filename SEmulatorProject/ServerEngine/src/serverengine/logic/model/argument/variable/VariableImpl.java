@@ -1,7 +1,7 @@
 package serverengine.logic.model.argument.variable;
 
 import types.errortypes.ArgumentErrorType;
-import exceptions.InvalidArgumentException;
+import serverengine.logic.exceptions.InvalidArgumentException;
 import serverengine.logic.model.argument.Argument;
 
 import java.util.Objects;

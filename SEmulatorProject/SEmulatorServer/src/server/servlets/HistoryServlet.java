@@ -22,14 +22,12 @@ public class HistoryServlet extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         String username = req.getParameter("username");
-        System.out.println(username);
         EmulatorEngine engine;
         if(username != null) {
             engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
         }
         else {
             engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
-            System.out.println("No username provided, using session username: " + SessionUtils.getUsername(req));
         }
 
         List<ExecutionHistoryDTO> history = engine.getHistory();

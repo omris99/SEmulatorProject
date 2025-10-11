@@ -1,7 +1,7 @@
 package server.servlets.execution.debug;
 
 
-import clientserverdto.ErrorAlertDTO;
+import clientserverdto.ErrorDTO;
 import clientserverdto.RunResultsDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,9 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import exceptions.*;
 import json.GsonFactory;
 import server.utils.ServletUtils;
+import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
+import serverengine.logic.exceptions.NumberNotInRangeException;
 import types.modeltypes.ArchitectureType;
 import types.errortypes.ExecutionErrorType;
 
@@ -41,12 +42,12 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
 
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
+            ErrorDTO error = new ErrorDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
         } catch (NumberNotInRangeException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(
+            ErrorDTO error = new ErrorDTO(
                     ExecutionErrorType.BAD_INPUT_VARIABLES,
                     "Error Starting Execution",
                     "Negative Number Submitted",
@@ -69,7 +70,7 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
                     e.getCreditsBalance()
             );
 
-            ErrorAlertDTO error = new ErrorAlertDTO(
+            ErrorDTO error = new ErrorDTO(
                     ExecutionErrorType.CREDIT_BALANCE_TOO_LOW,
                     "Credit Balance Too Low",
                     "Cannot Start Debugging Session",

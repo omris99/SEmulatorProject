@@ -1,6 +1,6 @@
 package serverengine.logic.model.program;
 
-import exceptions.NumberNotInRangeException;
+import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.execution.ProgramExecutor;
 import serverengine.logic.execution.ProgramExecutorImpl;
 import serverengine.logic.model.argument.Argument;

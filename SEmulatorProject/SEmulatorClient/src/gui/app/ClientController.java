@@ -4,6 +4,7 @@ import clientserverdto.*;
 import gui.screens.dashboard.DashBoardController;
 import gui.screens.execution.ExecutionScreenController;
 import gui.screens.login.LoginController;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -78,23 +79,14 @@ public class ClientController implements Closeable {
     }
 
     public void switchToExecutionScreen(UploadedProgramDTO selectedProgram) {
+        dashBoardController.setInActive();
         executionScreenController.setProgramToExecute(selectedProgram);
         setMainPanelTo(executionScreen);
         updateUserInfo();
-        executionScreenController.setActive();
     }
 
     public void switchToLoginScreen() {
         setMainPanelTo(loginScreen);
-//        executionScreen.setActive();
-    }
-
-    public static void showErrorAlert(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     public void updateUserInfo(){
@@ -102,7 +94,7 @@ public class ClientController implements Closeable {
         HttpClientUtil.runAsync(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Platform.runLater(() -> showErrorAlert(
+                Platform.runLater(() -> Utils.showErrorAlert(
                         "User Info Fetch Failed",
                         "Failed to fetch user info from server",
                         e.getMessage()));
@@ -119,7 +111,7 @@ public class ClientController implements Closeable {
                     });
                 }
                 else {
-                    Platform.runLater(() -> showErrorAlert(
+                    Platform.runLater(() -> Utils.showErrorAlert(
                             ("HTTP " + response.code() + " Error"),
                             ("Failed to fetch user info from server"),
                             null));

@@ -18,27 +18,21 @@ import java.util.function.Consumer;
 
 public class AvailabaleUsersRefresher extends TimerTask {
     private final Consumer<List<UserDTO>> usersListConsumer;
-    private final boolean shouldUpdate;
 
 
-    public AvailabaleUsersRefresher(boolean shouldUpdate, Consumer<List<UserDTO>> usersListConsumer) {
-        this.shouldUpdate = shouldUpdate;
+    public AvailabaleUsersRefresher(Consumer<List<UserDTO>> usersListConsumer) {
         this.usersListConsumer = usersListConsumer;
     }
 
     @Override
     public void run() {
-
-        if (!shouldUpdate) {
-            return;
-        }
         Request request = HttpClientUtil.createGetRequest(ServerPaths.USERS_LIST);
 
         HttpClientUtil.runAsync(request, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                // Handle failure if needed
+                System.out.println("Failed to fetch users list: (failure) " + e.getMessage());
             }
 
             @Override

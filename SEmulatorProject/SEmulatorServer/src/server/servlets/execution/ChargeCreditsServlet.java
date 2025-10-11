@@ -1,6 +1,6 @@
 package server.servlets.execution;
 
-import clientserverdto.ErrorAlertDTO;
+import clientserverdto.ErrorDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,7 +10,7 @@ import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import types.errortypes.ExecutionErrorType;
-import exceptions.NumberNotInRangeException;
+import serverengine.logic.exceptions.NumberNotInRangeException;
 import json.GsonFactory;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class ChargeCreditsServlet extends HttpServlet {
             engine.chargeCredits(creditsStr);
         } catch (NumberFormatException | NumberNotInRangeException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorAlertDTO error = new ErrorAlertDTO(ExecutionErrorType.INVALID_CREDITS_AMOUNT, "Invalid credits amount",
+            ErrorDTO error = new ErrorDTO(ExecutionErrorType.INVALID_CREDITS_AMOUNT, "Invalid credits amount",
                     "Can't charge " + creditsStr + " credits.",
                     "The credits amount must be a positive integer.");
             String errorJson = GsonFactory.getGson().toJson(error);

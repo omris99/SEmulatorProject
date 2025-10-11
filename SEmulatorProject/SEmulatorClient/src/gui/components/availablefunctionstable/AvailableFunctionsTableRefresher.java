@@ -18,28 +18,21 @@ import java.util.function.Consumer;
 
 public class AvailableFunctionsTableRefresher extends TimerTask {
     private final Consumer<List<UploadedProgramDTO>> functionsListConsumer;
-    private final boolean shouldUpdate;
 
 
-    public AvailableFunctionsTableRefresher(boolean shouldUpdate, Consumer<List<UploadedProgramDTO>> functionsListConsumer) {
-        this.shouldUpdate = shouldUpdate;
+    public AvailableFunctionsTableRefresher(Consumer<List<UploadedProgramDTO>> functionsListConsumer) {
         this.functionsListConsumer = functionsListConsumer;
     }
 
     @Override
     public void run() {
-
-        if (!shouldUpdate) {
-            return;
-        }
         Request request = HttpClientUtil.createGetRequest(ServerPaths.FUNCTIONS_LIST);
-
         HttpClientUtil.runAsync(request, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 // Handle failure if needed
-                System.out.println("Failed to fetch functions list: " + e.getMessage());
+                System.out.println("Failed to fetch functions list: (failure) " + e.getMessage());
             }
 
             @Override

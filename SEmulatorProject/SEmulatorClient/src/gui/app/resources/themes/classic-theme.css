@@ -11,14 +11,12 @@
     -fx-background-color: linear-gradient(to bottom, #757380, #5a5768);
 }
 
-#sEmulatorLogo {
-    -fx-background-color: linear-gradient(to bottom, #6a11cb, #4565b1, #ffffff);
-    -fx-text-fill: white;
-    -fx-font-size: 23px;
-    -fx-font-weight: bold;
+#app-header {
+    -fx-background-color: linear-gradient(to bottom, #d3d3d3, #ffffff, #d3d3d3);
+    -fx-text-fill: #7d7d7d;
+    -fx-font-size: 21px;
+    -fx-font-weight: 600;
     -fx-alignment: center;
-    -fx-padding: 12px;
-    -fx-background-radius: 0 0 10 10;
 }
 
 .window-header {

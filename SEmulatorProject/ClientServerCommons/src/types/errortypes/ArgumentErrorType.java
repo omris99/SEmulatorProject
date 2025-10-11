@@ -3,7 +3,7 @@ package types.errortypes;
 
 import types.modeltypes.ArgumentType;
 
-public enum ArgumentErrorType {
+public enum ArgumentErrorType implements ErrorType {
     LABEL_MUST_START_WITH_L("Label not starts with L", ArgumentType.LABEL),
     VARIABLE_PREFIX_INVALID("Variable name must start with X, Y, or Z", ArgumentType.VARIABLE),
     Y_VARIABLE_HAS_INDEX("Y Variable cannot have an index", ArgumentType.VARIABLE),
@@ -14,16 +14,16 @@ public enum ArgumentErrorType {
     CONSTANT_MUST_BE_A_NUMBER("Constant must be a numeric value", ArgumentType.CONSTANT),
     FUNCTION_NOT_FOUND("Function not found", ArgumentType.FUNCTION);
 
-    private final String userMessage;
+    private final String userString;
     private final ArgumentType argumentType;
 
-    ArgumentErrorType(String userMessage, ArgumentType type) {
-        this.userMessage = userMessage;
+    ArgumentErrorType(String userString, ArgumentType type) {
+        this.userString = userString;
         this.argumentType = type;
     }
 
-    public String getUserMessage(){
-        return userMessage;
+    public String getUserString(){
+        return userString;
     }
     public ArgumentType getArgumentType(){
         return argumentType;

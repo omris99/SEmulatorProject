@@ -49,8 +49,8 @@ public class Main extends Application {
 
     @Override
     public void stop() throws Exception {
-        HttpClientUtil.shutdown();
         clientController.close();
+        HttpClientUtil.shutdown();
     }
 
     public static void main(String[] args) {

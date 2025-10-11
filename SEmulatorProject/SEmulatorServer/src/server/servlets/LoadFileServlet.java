@@ -46,8 +46,8 @@ public class LoadFileServlet extends HttpServlet {
             String userName = (String) req.getSession().getAttribute("username");
 
             Part fileContent = req.getPart("fileContent");
-            UploadedProgramDTO program = loadProgram(userName, fileContent.getInputStream());
-            userManager.getUser(userName).addMainProgram(program.getProgram());
+            UploadedProgram program = loadProgram(userName, fileContent.getInputStream());
+            userManager.getUser(userName).addMainProgram(program);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -75,7 +75,7 @@ public class LoadFileServlet extends HttpServlet {
         }
     }
 
-    private synchronized UploadedProgramDTO loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
+    private synchronized UploadedProgram loadProgram(String userName, InputStream inputStream) throws JAXBException, InvalidXmlFileException {
         ProgramsRepo programsRepo = ProgramsRepo.getInstance();
 
         JAXBContext jaxbContext = JAXBContext.newInstance(SProgram.class);
@@ -96,7 +96,7 @@ public class LoadFileServlet extends HttpServlet {
         UploadedProgram uploadedProgram = new UploadedProgram(userName, loadedProgram, null);
         ProgramsRepo.getInstance().addProgram(uploadedProgram);
 
-        return uploadedProgram.createDTO();
+        return uploadedProgram;
     }
 
 }

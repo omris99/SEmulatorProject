@@ -126,4 +126,15 @@ public abstract class AbstractProgram implements Program {
 
         return minimalArchitectureType;
     }
+
+    @Override
+    public void setFunctionsNames(List<String> functionsNames) {
+        this.functionsNames = functionsNames;
+    }
+
+    @Override
+    public List<String> getFunctionsNames() {
+        return functionsNames;
+    }
+
 }

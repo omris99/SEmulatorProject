@@ -27,4 +27,6 @@ public interface Program extends Serializable {
     int getDegree();
     InstructionsTree getInstructionsTree();
     ArchitectureType getMinimalArchitectureType();
+    List<String> getFunctionsNames();
+    void setFunctionsNames(List<String> functionsNames);
 }

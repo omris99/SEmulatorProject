@@ -62,8 +62,4 @@ public class ProgramImpl extends AbstractProgram {
             return expandedProgram;
         }
     }
-
-    public void setFunctionsNames(List<String> functionsNames) {
-        this.functionsNames = functionsNames;
-    }
 }

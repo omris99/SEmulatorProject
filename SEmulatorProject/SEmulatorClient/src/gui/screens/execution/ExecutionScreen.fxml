@@ -7,26 +7,26 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="2560.0" stylesheets="@../app/resources/themes/classic-theme.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.execution.ExecutionScreenController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="2560.0" stylesheets="@../../app/resources/themes/classic-theme.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.screens.execution.ExecutionScreenController">
    <children>
       <Label id="sEmulatorLogo" alignment="CENTER" prefHeight="52.0" prefWidth="2560.0" text="S-Emulator - Execution" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
-      <fx:include fx:id="userInfoBanner" source="../components/userInfoBanner/UserInfoBanner.fxml" />
+      <fx:include fx:id="userInfoBanner" source="../../components/userInfoBanner/UserInfoBanner.fxml" />
       <VBox prefHeight="1030.0" prefWidth="2560.0">
          <children>
             <HBox alignment="CENTER" prefHeight="953.0" prefWidth="2540.0" spacing="10.0">
                <children>
                   <VBox prefHeight="953.0" prefWidth="1236.0">
                      <children>
-                        <fx:include fx:id="instructionsWindow" source="../components/instructionswindow/InstructionsWindow.fxml" />
+                        <fx:include fx:id="instructionsWindow" source="../../components/instructionswindow/InstructionsWindow.fxml" />
                      </children>
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="953.0" prefWidth="847.0">
                      <children>
-                        <fx:include fx:id="debuggerWindow" source="../components/debuggerwindow/DebuggerWindow.fxml" />
+                        <fx:include fx:id="debuggerWindow" source="../../components/debuggerwindow/DebuggerWindow.fxml" />
                         <Button fx:id="backToDashboardButton" alignment="CENTER" mnemonicParsing="false" onAction="#onBackToDashboardButtonClicked" prefHeight="41.0" prefWidth="514.0" text="Back To Dashboard">
                            <VBox.margin>
                               <Insets bottom="10.0" top="20.0" />

@@ -1,4 +1,4 @@
-package gui.app;
+package gui.app.resources.themes;
 
 public enum Theme {
     CLASSIC("Classic", "/gui/app/resources/themes/classic-theme.css"),

@@ -1,7 +1,7 @@
 //package gui.components.displaycommandsbar;
 //
 //import gui.app.ClientController;
-//import gui.app.Theme;
+//import gui.app.resources.themes.Theme;
 //import javafx.event.ActionEvent;
 //import javafx.fxml.FXML;
 //import javafx.scene.control.Button;

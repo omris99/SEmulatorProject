@@ -1,9 +1,9 @@
 package gui.app;
 
 import clientserverdto.*;
-import gui.dashboard.DashBoardController;
-import gui.execution.ExecutionScreenController;
-import gui.login.LoginController;
+import gui.screens.dashboard.DashBoardController;
+import gui.screens.execution.ExecutionScreenController;
+import gui.screens.login.LoginController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -41,17 +41,17 @@ public class ClientController implements Closeable {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader dashLoader = new FXMLLoader(getClass().getResource("/gui/dashboard/DashBoard.fxml"));
+            FXMLLoader dashLoader = new FXMLLoader(getClass().getResource("/gui/screens/dashboard/DashBoard.fxml"));
             dashBoardScreen = dashLoader.load();
             dashBoardController = dashLoader.getController();
             dashBoardController.setClientManager(this);
 
-            FXMLLoader execLoader = new FXMLLoader(getClass().getResource("/gui/execution/ExecutionScreen.fxml"));
+            FXMLLoader execLoader = new FXMLLoader(getClass().getResource("/gui/screens/execution/ExecutionScreen.fxml"));
             executionScreen = execLoader.load();
             executionScreenController = execLoader.getController();
             executionScreenController.setClientManager(this);
 
-            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/gui/login/Login.fxml"));
+            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/gui/screens/login/Login.fxml"));
             loginScreen = loginLoader.load();
             loginController = loginLoader.getController();
             loginController.setClientManager(this);

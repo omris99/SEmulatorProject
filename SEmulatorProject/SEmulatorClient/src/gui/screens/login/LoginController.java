@@ -1,4 +1,4 @@
-package gui.login;
+package gui.screens.login;
 
 import gui.app.ClientController;
 import http.HttpClientUtil;

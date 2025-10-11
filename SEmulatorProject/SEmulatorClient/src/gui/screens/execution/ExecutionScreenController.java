@@ -1,4 +1,4 @@
-package gui.execution;
+package gui.screens.execution;
 
 import clientserverdto.*;
 import types.errortypes.ExecutionErrorType;

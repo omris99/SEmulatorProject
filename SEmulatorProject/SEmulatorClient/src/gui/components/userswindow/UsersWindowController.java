@@ -4,7 +4,7 @@ import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.UserDTO;
 import gui.components.availableusers.AvailableUsersTableController;
 import gui.components.userhistorytable.UsersHistoryTableController;
-import gui.dashboard.DashBoardController;
+import gui.screens.dashboard.DashBoardController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;

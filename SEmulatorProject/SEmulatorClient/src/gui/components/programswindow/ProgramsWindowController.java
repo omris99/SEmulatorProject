@@ -3,7 +3,7 @@ package gui.components.programswindow;
 import clientserverdto.UploadedProgramDTO;
 import gui.components.availablefunctionstable.AvailableFunctionsTableController;
 import gui.components.availableprogramstable.AvailableProgramsTableController;
-import gui.dashboard.DashBoardController;
+import gui.screens.dashboard.DashBoardController;
 import javafx.fxml.FXML;
 
 import java.io.Closeable;

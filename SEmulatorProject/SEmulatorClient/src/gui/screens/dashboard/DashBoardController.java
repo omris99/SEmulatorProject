@@ -1,4 +1,4 @@
-package gui.dashboard;
+package gui.screens.dashboard;
 
 import clientserverdto.*;
 import gui.app.ClientController;

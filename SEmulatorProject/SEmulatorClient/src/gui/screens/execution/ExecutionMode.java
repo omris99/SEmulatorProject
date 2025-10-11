@@ -1,4 +1,4 @@
-package gui.execution;
+package gui.screens.execution;
 
 public enum ExecutionMode {
     DEBUG,

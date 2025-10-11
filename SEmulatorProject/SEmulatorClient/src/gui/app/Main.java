@@ -1,20 +1,17 @@
 package gui.app;
 
+import gui.app.resources.themes.Theme;
 import http.HttpClientUtil;
-import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main extends Application {
     private static Scene scene;
@@ -47,7 +44,6 @@ public class Main extends Application {
 
     public static void applyTheme(Theme theme) {
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("app.css")).toExternalForm());
         scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource(theme.getCssFilePath())).toExternalForm());
     }
 

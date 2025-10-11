@@ -6,7 +6,7 @@ import gui.components.instructionstable.InstructionsTableController;
 import gui.components.instructionstablewithbreakpoints.InstructionsTableWithBreakpointsController;
 import gui.components.summaryline.SummaryLineController;
 import gui.components.toolbar.InstructionsWindowToolbarController;
-import gui.execution.ExecutionScreenController;
+import gui.screens.execution.ExecutionScreenController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

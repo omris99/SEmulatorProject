@@ -3,10 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<HBox id="userInfoBanner" minHeight="-Infinity" prefHeight="28.0" prefWidth="2594.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userInfoBanner.UserInfoBannerController">
+
+<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userInfoBanner.UserInfoBannerController">
    <children>
+      <HBox alignment="TOP_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="341.0">
+         <children>
+            <Label prefHeight="80.0" prefWidth="140.0" text="Available Credits: ">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="availableCreditsLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="129.0" styleClass="value-label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <HBox minHeight="0.0" minWidth="0.0" prefHeight="28.0" prefWidth="2328.0">
          <children>
             <Label prefHeight="45.0" prefWidth="93.0" text="User Name: ">
@@ -24,19 +40,5 @@
             </Label>
          </children>
       </HBox>
-      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="341.0">
-         <children>
-            <Label prefHeight="80.0" prefWidth="140.0" text="Available Credits: ">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="availableCreditsLabel" prefHeight="28.0" prefWidth="177.0" styleClass="value-label">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
    </children>
-</HBox>
+</StackPane>

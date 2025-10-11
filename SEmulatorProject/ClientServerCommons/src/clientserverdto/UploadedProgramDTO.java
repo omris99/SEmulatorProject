@@ -17,6 +17,10 @@ public class UploadedProgramDTO {
         this.averageCyclesPerExecution = averageCyclesPerExecution;
     }
 
+    public String getUserString() {
+        return program.getUserString();
+    }
+
     public String getName() {
         return program.getName();
     }

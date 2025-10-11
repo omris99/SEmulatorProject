@@ -18,8 +18,7 @@ import java.io.IOException;
 public class SetProgramToExecuteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String programUserString = req.getParameter("programName");
-        String programName = ProgramsRepo.getInstance().getFunctionNameByUserString(programUserString);
+        String programName = req.getParameter("programName");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));

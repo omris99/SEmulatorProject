@@ -65,6 +65,7 @@ public abstract class AbstractProgram implements Program {
     @Override
     public DTO createDTO() {
         return new ProgramDTO(
+                getName(),
                 getRepresentation(),
                 getProgramInputsNames(),
                 getProgramLabelsNames(),

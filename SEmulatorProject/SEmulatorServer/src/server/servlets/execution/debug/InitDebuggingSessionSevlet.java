@@ -13,6 +13,7 @@ import serverengine.logic.engine.EmulatorEngine;
 import json.GsonFactory;
 import server.utils.ServletUtils;
 import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
+import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import types.modeltypes.ArchitectureType;
 import types.errortypes.ExecutionErrorType;
@@ -53,6 +54,16 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
                     "Negative Number Submitted",
                     "You entered the number: " + e.getNumber() + " which is not positive.\n" +
                             "Please enter only Positive Numbers.");
+            String errorJson = GsonFactory.getGson().toJson(error);
+            resp.getWriter().write(errorJson);
+        } catch (InvalidArchitectureException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ErrorDTO error = new ErrorDTO(
+                    ExecutionErrorType.UNCOMPATIBLE_ARCHITECTURE, "Error Starting Execution",
+                    "Invalid Architecture Selected",
+                    "Minimum architecture required for this program is: " + e.getMinimumArchitecture() + ".\n" +
+                            "You selected: " + e.getSelectedArchitecture() + ".\n" +
+                            "Please select a valid architecture and try again.");
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
         } catch (CreditBalanceTooLowForInitialChargeException e) {

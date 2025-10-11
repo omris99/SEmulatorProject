@@ -1,14 +1,14 @@
 package serverengine.logic.exceptions;
 
 public class NumberNotInRangeException extends RuntimeException {
-    private final int number;
+    private final long number;
 
-    public NumberNotInRangeException(int number) {
+    public NumberNotInRangeException(long number) {
         super(number + " is not in range");
         this.number = number;
     }
 
-    public int getNumber() {
+    public long getNumber() {
         return number;
     }
 

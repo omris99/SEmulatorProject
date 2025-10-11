@@ -166,6 +166,7 @@ public class DashBoardController implements Closeable {
     public void reRunSelectedHistory(ExecutionHistoryDTO selectedRun) {
         clientController.reRunSelectedHistory(selectedRun);
     }
+
     public void setUserInfo(UserDTO userDTO) {
         userInfoBannerController.updateUserInfo(userDTO);
     }

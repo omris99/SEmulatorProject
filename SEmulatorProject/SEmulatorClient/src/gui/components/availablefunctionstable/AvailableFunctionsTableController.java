@@ -51,7 +51,7 @@ public class AvailableFunctionsTableController implements Closeable {
 
     @FXML
     public void initialize() {
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("userString"));
         colUploadedBy.setCellValueFactory(new PropertyValueFactory<>("uploadedBy"));
         colContextProgram.setCellValueFactory(new PropertyValueFactory<>("contextProgram"));
         colInstructionsCount.setCellValueFactory(new PropertyValueFactory<>("instructionsCount"));
@@ -88,6 +88,8 @@ public class AvailableFunctionsTableController implements Closeable {
 
             if (selectedProgramName != null) {
                 for (UploadedProgramDTO function : data) {
+                    System.out.println(function.getProgram().getUserString());
+                    System.out.println(selectedProgramName);
                     if (function.getProgram().getName().equals(selectedProgramName)) {
                         functionsTable.getSelectionModel().select(function);
                         break;

@@ -40,7 +40,7 @@ public class User {
 
     public void addMainProgram(ProgramDTO program) {
         ProgramsRepo programsRepo = ProgramsRepo.getInstance();
-        System.out.println("Adding main program: " + program.getName() + " to user: " + this.userName);
+        System.out.println("Adding main program: " + program.getUserString() + " to user: " + this.userName);
         this.mainProgramsUploaded.add(program.getName());
 
         for (String functionName : program.getFunctionsNames()) {

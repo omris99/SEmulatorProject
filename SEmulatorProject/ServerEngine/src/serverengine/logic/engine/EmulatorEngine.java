@@ -322,7 +322,7 @@ public class EmulatorEngine implements Engine {
 
     public void chargeCredits(String amount) {
         try {
-            int creditsToCharge = Integer.parseInt(amount);
+            long creditsToCharge = Long.parseLong(amount);
             if (creditsToCharge < 0) {
                 throw new NumberNotInRangeException(creditsToCharge);
             }

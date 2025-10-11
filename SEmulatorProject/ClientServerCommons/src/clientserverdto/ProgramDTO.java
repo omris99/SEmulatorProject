@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class ProgramDTO implements DTO{
     private final String name;
+    private final String userString;
     private final List<String> inputNames;
     private final List<String> workVariables;
     private final List<String> labelsNames;
@@ -21,12 +22,13 @@ public class ProgramDTO implements DTO{
     private final int maximalDegree;
     private final List<String> functionsNames;
 
-    public ProgramDTO(String name, List<String> inputNames, List<String> labelsNames,
+    public ProgramDTO(String name, String userString, List<String> inputNames, List<String> labelsNames,
                       List<String> instructionsInDisplayFormat, List<InstructionDTO> instructionsDTO,
                       Map<ArchitectureType, Integer> instructionsArchitectureTypeCount, Map<InstructionType, Integer> instructionsTypeCount,
                       int expandLevelDegree,
                       int maximalDegree, List<String> workVariables, List<String> functionsNames) {
         this.name = name;
+        this.userString = userString;
         this.inputNames = inputNames;
         this.labelsNames = labelsNames;
         this.instructionsInDisplayFormat = instructionsInDisplayFormat;
@@ -39,8 +41,8 @@ public class ProgramDTO implements DTO{
         this.functionsNames = functionsNames;
     }
 
-    public String getName() {
-        return name;
+    public String getUserString() {
+        return userString;
     }
 
     public List<String> getInputNames() {
@@ -90,5 +92,9 @@ public class ProgramDTO implements DTO{
         }
 
         return creditsCost;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -1,7 +1,7 @@
 package serverengine.logic.model.program;
 
 import clientserverdto.DTO;
-import serverengine.logic.instructiontree.InstructionsTree;
+import clientserverdto.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.instruction.Instruction;

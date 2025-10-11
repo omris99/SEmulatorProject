@@ -1,4 +1,4 @@
-package serverengine.logic.instructiontree;
+package clientserverdto.instructiontree;
 
 import clientserverdto.InstructionDTO;
 

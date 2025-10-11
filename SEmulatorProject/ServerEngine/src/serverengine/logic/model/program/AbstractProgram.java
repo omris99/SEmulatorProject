@@ -3,7 +3,7 @@ package serverengine.logic.model.program;
 
 import clientserverdto.DTO;
 import clientserverdto.ProgramDTO;
-import serverengine.logic.instructiontree.InstructionsTree;
+import clientserverdto.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;

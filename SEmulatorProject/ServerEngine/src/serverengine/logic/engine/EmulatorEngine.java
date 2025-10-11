@@ -9,7 +9,7 @@ import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.CreditBalanceTooLowException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
 import serverengine.logic.execution.DebuggerExecutor;
-import serverengine.logic.instructiontree.InstructionsTree;
+import clientserverdto.instructiontree.InstructionsTree;
 import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableImpl;

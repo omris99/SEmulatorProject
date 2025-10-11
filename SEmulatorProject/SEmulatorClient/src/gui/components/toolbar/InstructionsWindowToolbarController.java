@@ -58,7 +58,6 @@ public class InstructionsWindowToolbarController {
 
     public void onExpandButtonClick() {
         if (expandationLevelWindowController.getMaximalDegree() > expandationLevelWindowController.getCurrentDegree()) {
-            onDegreeChoice(expandationLevelWindowController.getCurrentDegree() + 1);
             expandationLevelWindowController.setDegree(expandationLevelWindowController.getCurrentDegree() + 1);
         }
     }

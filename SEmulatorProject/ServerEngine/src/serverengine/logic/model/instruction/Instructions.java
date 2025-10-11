@@ -1,7 +1,7 @@
 package serverengine.logic.model.instruction;
 
-import serverengine.logic.instructiontree.InstructionsTree;
-import serverengine.logic.instructiontree.InstructionsTreeNode;
+import clientserverdto.instructiontree.InstructionsTree;
+import clientserverdto.instructiontree.InstructionsTreeNode;
 import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.commaseperatedarguments.CommaSeperatedArguments;
 import serverengine.logic.model.argument.label.FixedLabel;

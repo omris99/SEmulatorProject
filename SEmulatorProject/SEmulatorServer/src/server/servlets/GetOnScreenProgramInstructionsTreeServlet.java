@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
-import serverengine.logic.instructiontree.InstructionsTree;
+import clientserverdto.instructiontree.InstructionsTree;
 import json.GsonFactory;
 import server.utils.ServletUtils;
 

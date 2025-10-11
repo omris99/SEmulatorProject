@@ -1,7 +1,14 @@
 package gui.screens.execution;
 
 import clientserverdto.*;
+import clientserverdto.instructiontree.InstructionsTree;
+import gui.components.treetablecommandsbar.TreeTableCommandsBarController;
+import gui.components.instructionstreetable.InstructionsTreeTableController;
 import gui.utils.Utils;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import types.errortypes.ExecutionErrorType;
 import gui.app.ClientController;
 import gui.components.debuggerwindow.DebuggerWindowController;
@@ -37,9 +44,13 @@ public class ExecutionScreenController {
     private ClientController clientController;
 
     @FXML
+    private TreeTableCommandsBarController treeTableCommandsBarController;
+
+    @FXML
     public void initialize() {
         instructionsWindowController.setExecutionScreenController(this);
         debuggerWindowController.setExecutionScreenController(this);
+        treeTableCommandsBarController.setExecutionScreenController(this);
     }
 
     public void setProgramToExecute(UploadedProgramDTO selectedProgram) {
@@ -82,6 +93,7 @@ public class ExecutionScreenController {
 
     private void resetComponents() {
         debuggerWindowController.reset();
+        treeTableCommandsBarController.disableTreeTableViewAndSpecificExpansionButton(false);
     }
 
     @FXML
@@ -537,5 +549,92 @@ public class ExecutionScreenController {
         backToDashboardButton.setDisable(false);
     }
 
+    public void showOnScreenProgramTreeTableView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
+            Parent load = loader.load();
+            InstructionsTreeTableController controller = loader.getController();
+
+            Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_ON_SCREEN_PROGRAM_INSTRUCTIONS_TREE);
+            HttpClientUtil.runAsync(request, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Platform.runLater(() -> Utils.showErrorAlert(
+                            "Error Fetching Instructions Tree",
+                            "Failed to fetch instructions tree from server",
+                            e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseBodyString = response.body().string();
+                    if (response.isSuccessful()) {
+                        InstructionsTree instructionsTree = GsonFactory.getGson().fromJson(responseBodyString, InstructionsTree.class);
+                        Platform.runLater(() -> {
+                            controller.setInstructions(instructionsTree);
+                            Scene scene = new Scene(load, 700, 400);
+                            Stage showWindow = new Stage();
+                            showWindow.setTitle("Tree Table View");
+                            showWindow.setScene(scene);
+                            showWindow.show();
+                        });
+                    } else {
+                        Platform.runLater(() -> Utils.showErrorAlert(
+                                ("HTTP " + response.code() + " Error"),
+                                ("Failed to fetch instructions tree from server"),
+                                null));
+                    }
+
+                    response.close();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSpecificExpansionView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
+            Parent load = loader.load();
+            InstructionsTreeTableController controller = loader.getController();
+
+            Request request = HttpClientUtil.createGetRequest(ServerPaths.GET_SPECIFIC_EXPANSION_INSTRUCTIONS_TREE);
+            HttpClientUtil.runAsync(request, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Platform.runLater(() -> Utils.showErrorAlert(
+                            "Error Fetching Specific Expansion Instructions Tree",
+                            "Failed to fetch specific expansion instructions tree from server",
+                            e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseBodyString = response.body().string();
+                    if (response.isSuccessful()) {
+                        InstructionsTree instructionsTree = GsonFactory.getGson().fromJson(responseBodyString, InstructionsTree.class);
+                        Platform.runLater(() -> {
+                            controller.setInstructions(instructionsTree);
+                            Scene scene = new Scene(load, 700, 400);
+                            Stage showWindow = new Stage();
+                            showWindow.setTitle("Specific Expansion View");
+                            showWindow.setScene(scene);
+                            showWindow.show();
+                        });
+                    } else {
+                        Platform.runLater(() -> Utils.showErrorAlert(
+                                ("HTTP " + response.code() + " Error"),
+                                ("Failed to fetch specific expansion instructions tree from server"),
+                                null));
+                    }
+
+                    response.close();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -30,9 +30,10 @@
          <children>
             <HBox alignment="CENTER" prefHeight="953.0" prefWidth="2540.0" spacing="10.0">
                <children>
-                  <VBox prefHeight="953.0" prefWidth="1236.0">
+                  <VBox alignment="CENTER" prefHeight="953.0" prefWidth="1236.0">
                      <children>
                         <fx:include fx:id="instructionsWindow" source="../../components/instructionswindow/InstructionsWindow.fxml" />
+                        <fx:include fx:id="treeTableCommandsBar" source="../../components/treetablecommandsbar/TreeTableCommandsBar.fxml" />
                      </children>
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="953.0" prefWidth="847.0">
@@ -47,7 +48,7 @@
                   </VBox>
                </children>
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
             </HBox>
          </children>

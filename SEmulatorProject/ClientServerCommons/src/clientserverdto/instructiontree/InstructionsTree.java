@@ -1,4 +1,4 @@
-package serverengine.logic.instructiontree;
+package clientserverdto.instructiontree;
 
 public class InstructionsTree {
     InstructionsTreeNode root;

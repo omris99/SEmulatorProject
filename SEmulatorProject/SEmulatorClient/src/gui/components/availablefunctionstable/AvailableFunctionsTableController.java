@@ -88,8 +88,6 @@ public class AvailableFunctionsTableController implements Closeable {
 
             if (selectedProgramName != null) {
                 for (UploadedProgramDTO function : data) {
-                    System.out.println(function.getProgram().getUserString());
-                    System.out.println(selectedProgramName);
                     if (function.getProgram().getName().equals(selectedProgramName)) {
                         functionsTable.getSelectionModel().select(function);
                         break;

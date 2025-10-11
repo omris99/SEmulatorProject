@@ -51,7 +51,7 @@
             </HBox>
             <HBox prefHeight="787.0" prefWidth="2540.0" spacing="10.0">
                <children>
-                  <VBox prefHeight="787.0" prefWidth="1217.0">
+                  <VBox prefHeight="787.0" prefWidth="1719.0">
                      <children>
                         <fx:include fx:id="usersWindow" source="../../components/userswindow/UsersWindow.fxml" />
                      </children>

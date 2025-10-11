@@ -1,6 +1,8 @@
 package gui.app;
 
-import clientserverdto.*;
+import clientserverdto.ExecutionHistoryDTO;
+import clientserverdto.UploadedProgramDTO;
+import clientserverdto.UserDTO;
 import gui.screens.dashboard.DashBoardController;
 import gui.screens.execution.ExecutionScreenController;
 import gui.screens.login.LoginController;
@@ -11,18 +13,18 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
-import okhttp3.*;
 import json.GsonFactory;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 //TODO:
-// 1. CHANGE VALIDATION OF PROGRAM'S FUNCITON BY EXERCISE 3 - NEEDS TO CHECK FUNCTIONS IN COMMA SEPERATED ARGUMENTS TOO !!
 // 3. TRY TO MAKE ErrorType CLASS TO HANDLE ERRORS - AND MAYBE ADD CREATE DTO FUNCTION THERE
-// 4. IF PROGRAM NOT RUN BECAUSE OF INITIAL CHARGING - MAKE THE ALERT CLEARER
 // 6. IMPLEMENT SHOW ERROR ALERT AS STATIC UTIL AND USE IT Refreshers!!
 // 7. MAKE GENERIC RESPONSE FOR FAILURE WITH SERVER CONNECTION - LIKE "FAILED TO CONNECT TO SERVER" - AND USE IT IN ALL CALLS
 

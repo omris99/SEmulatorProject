@@ -52,7 +52,6 @@ public class LoadFileServlet extends HttpServlet {
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             String content;
-            ErrorDTO error;
             switch (e) {
                 case InvalidXmlFileException iv -> {
                     switch (iv.getType()) {

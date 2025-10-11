@@ -1,6 +1,6 @@
 package gui.login;
 
-import gui.app.ClientManager;
+import gui.app.ClientController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -31,15 +31,15 @@ public class LoginController {
     private final StringProperty errorMessageProperty = new SimpleStringProperty();
 
     @FXML
-    private ClientManager clientManager;
+    private ClientController clientController;
 
     @FXML
     public void initialize() {
         errorMessageLabel.textProperty().bind(errorMessageProperty);
     }
 
-    public void setClientManager(ClientManager clientManager) {
-        this.clientManager = clientManager;
+    public void setClientManager(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     @FXML
@@ -89,7 +89,7 @@ public class LoginController {
                             alert.showAndWait();
                         }
 
-                        clientManager.switchToDashBoard();
+                        clientController.switchToDashBoard();
                     });
                 }
             }

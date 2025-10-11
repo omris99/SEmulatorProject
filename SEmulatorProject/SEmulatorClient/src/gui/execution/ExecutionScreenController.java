@@ -2,7 +2,7 @@ package gui.execution;
 
 import clientserverdto.*;
 import types.errortypes.ExecutionErrorType;
-import gui.app.ClientManager;
+import gui.app.ClientController;
 import gui.components.debuggerwindow.DebuggerWindowController;
 import gui.components.instructionswindow.InstructionsWindowController;
 import gui.components.userInfoBanner.UserInfoBannerController;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static gui.app.ClientManager.showErrorAlert;
+import static gui.app.ClientController.showErrorAlert;
 
 public class ExecutionScreenController {
     @FXML
@@ -35,7 +35,7 @@ public class ExecutionScreenController {
     private UserInfoBannerController userInfoBannerController;
 
     @FXML
-    private ClientManager clientManager;
+    private ClientController clientController;
 
     @FXML
     public void initialize() {
@@ -87,7 +87,7 @@ public class ExecutionScreenController {
 
     @FXML
     public void onBackToDashboardButtonClicked(ActionEvent e) {
-        clientManager.switchToDashBoard();
+        clientController.switchToDashBoard();
     }
 
     public void showExpandedProgram(int degree) {
@@ -129,8 +129,8 @@ public class ExecutionScreenController {
         });
     }
 
-    public void setClientManager(ClientManager clientManager) {
-        this.clientManager = clientManager;
+    public void setClientManager(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void startProgramExecution(Map<String, String> inputVariables, String architecture) {
@@ -179,7 +179,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> handleError(error, ExecutionMode.REGULAR));
                 }
 
-                clientManager.updateUserInfo();
+                clientController.updateUserInfo();
 
                 response.close();
             }
@@ -191,7 +191,7 @@ public class ExecutionScreenController {
         finishExecutionMode(executionMode);
         if(errorDTO.getType() == ExecutionErrorType.CREDIT_BALANCE_TOO_LOW)
         {
-            clientManager.switchToDashBoard();
+            clientController.switchToDashBoard();
         }
     }
 
@@ -267,7 +267,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
-                clientManager.updateUserInfo();
+                clientController.updateUserInfo();
 
                 response.close();
             }
@@ -398,7 +398,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
-                clientManager.updateUserInfo();
+                clientController.updateUserInfo();
 
                 response.close();
             }
@@ -468,7 +468,7 @@ public class ExecutionScreenController {
                     Platform.runLater(() -> handleError(error, ExecutionMode.DEBUG));
                 }
 
-                clientManager.updateUserInfo();
+                clientController.updateUserInfo();
 
                 response.close();
             }

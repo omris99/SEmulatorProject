@@ -1,7 +1,7 @@
 package gui.dashboard;
 
 import clientserverdto.*;
-import gui.app.ClientManager;
+import gui.app.ClientController;
 import gui.components.creditswindow.CreditsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
@@ -17,10 +17,11 @@ import okhttp3.*;
 import json.GsonFactory;
 
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 
-public class DashBoardController {
+public class DashBoardController implements Closeable {
     @FXML
     private LoadFileBarController loadFileBarController;
 
@@ -28,7 +29,7 @@ public class DashBoardController {
     private UserInfoBannerController userInfoBannerController;
 
     @FXML
-    private ClientManager clientManager;
+    private ClientController clientController;
 
     @FXML
     private UsersWindowController usersWindowController;
@@ -113,8 +114,8 @@ public class DashBoardController {
         alert.showAndWait();
     }
 
-    public void setClientManager(ClientManager clientManager) {
-        this.clientManager = clientManager;
+    public void setClientManager(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     public void setActive() {
@@ -125,7 +126,7 @@ public class DashBoardController {
     }
 
     public void executeProgramButtonClicked(UploadedProgramDTO selectedProgram) {
-        clientManager.switchToExecutionScreen(selectedProgram);
+        clientController.switchToExecutionScreen(selectedProgram);
     }
 
     public void chargeCredits(String credits) {
@@ -155,7 +156,7 @@ public class DashBoardController {
                     Platform.runLater(() -> {
                         creditsWindowController.resetCreditsInput();
                     });
-                    clientManager.updateUserInfo();
+                    clientController.updateUserInfo();
                 } else {
                     ErrorAlertDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorAlertDTO.class);
 
@@ -168,9 +169,15 @@ public class DashBoardController {
     }
 
     public void reRunSelectedHistory(ExecutionHistoryDTO selectedRun) {
-        clientManager.reRunSelectedHistory(selectedRun);
+        clientController.reRunSelectedHistory(selectedRun);
     }
     public void setUserInfo(UserDTO userDTO) {
         userInfoBannerController.updateUserInfo(userDTO);
+    }
+
+    @Override
+    public void close() throws IOException {
+        usersWindowController.close();
+        programsWindowController.close();
     }
 }

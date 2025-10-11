@@ -13,11 +13,13 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AvailableProgramsTableController {
+public class AvailableProgramsTableController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
     private boolean autoUpdate;
@@ -111,5 +113,13 @@ public class AvailableProgramsTableController {
 
     public void setProgramsWindowController(ProgramsWindowController programsWindowController) {
         this.programsWindowController = programsWindowController;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if(listRefresher != null && timer != null) {
+            listRefresher.cancel();
+            timer.cancel();
+        }
     }
 }

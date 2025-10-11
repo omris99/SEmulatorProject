@@ -1,13 +1,10 @@
 package gui.components.userswindow;
 
 import clientserverdto.ExecutionHistoryDTO;
-import clientserverdto.InstructionDTO;
-import clientserverdto.RunResultsDTO;
 import clientserverdto.UserDTO;
 import gui.components.availableusers.AvailableUsersTableController;
 import gui.components.userhistorytable.UsersHistoryTableController;
 import gui.dashboard.DashBoardController;
-import gui.execution.ExecutionScreenController;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
@@ -18,14 +15,15 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import json.GsonFactory;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static gui.app.ClientManager.showErrorAlert;
+import static gui.app.ClientController.showErrorAlert;
 
-public class UsersWindowController {
+public class UsersWindowController implements Closeable {
     @FXML
     private AvailableUsersTableController availableUsersTableController;
 
@@ -125,5 +123,10 @@ public class UsersWindowController {
 
     public void setDashboardController(DashBoardController dashboardController) {
         this.dashBoardController = dashboardController;
+    }
+
+    @Override
+    public void close() throws IOException {
+        availableUsersTableController.close();
     }
 }

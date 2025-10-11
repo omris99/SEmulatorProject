@@ -6,7 +6,10 @@ import gui.components.availableprogramstable.AvailableProgramsTableController;
 import gui.dashboard.DashBoardController;
 import javafx.fxml.FXML;
 
-public class ProgramsWindowController {
+import java.io.Closeable;
+import java.io.IOException;
+
+public class ProgramsWindowController implements Closeable {
     @FXML
     private AvailableFunctionsTableController availableFunctionsTableController;
     @FXML
@@ -36,5 +39,11 @@ public class ProgramsWindowController {
 
     public void setDashBoardController(DashBoardController dashBoardController) {
         this.dashBoardController = dashBoardController;
+    }
+
+    @Override
+    public void close() throws IOException {
+        availableFunctionsTableController.close();
+        availableProgramsTableController.close();
     }
 }

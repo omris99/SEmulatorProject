@@ -7,32 +7,42 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import okhttp3.OkHttpClient;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main extends Application {
     private static Scene scene;
+    private ClientController clientController;
 
     @Override
-    public void start(javafx.stage.Stage primaryStage) throws Exception {
-        primaryStage.setTitle("S-Emulator");
-        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/gui/app/resources/images/icon.png")));
-        primaryStage.getIcons().add(icon);
-
-        Parent load = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Client.fxml")));
-        scene = new Scene(load, 1540, 750);
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setMinWidth(1100);
         primaryStage.setMinHeight(750);
-        applyTheme(Theme.CLASSIC);
+        primaryStage.setTitle("S-Emulator");
 
+        URL client = getClass().getResource("Client.fxml");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(client);
+            Parent root = fxmlLoader.load();
+            clientController = fxmlLoader.getController();
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/gui/app/resources/images/icon.png")));
+            primaryStage.getIcons().add(icon);
 
-
+            scene = new Scene(root, 1540, 750);
+            applyTheme(Theme.CLASSIC);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void applyTheme(Theme theme) {
@@ -44,6 +54,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         HttpClientUtil.shutdown();
+        clientController.close();
     }
 
     public static void main(String[] args) {

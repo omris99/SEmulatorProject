@@ -1,6 +1,5 @@
 package gui.components.availableusers;
 
-import clientserverdto.ExecutionHistoryDTO;
 import clientserverdto.UserDTO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -13,11 +12,13 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AvailableUsersTableController {
+public class AvailableUsersTableController implements Closeable {
     private Timer timer;
     private TimerTask listRefresher;
     private boolean autoUpdate;
@@ -114,5 +115,13 @@ public class AvailableUsersTableController {
 
     public boolean isRefreshing() {
         return isRefreshing;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (listRefresher != null && timer != null) {
+            listRefresher.cancel();
+            timer.cancel();
+        }
     }
 }

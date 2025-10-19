@@ -90,7 +90,7 @@ public class DebuggerExecutor implements ProgramExecutor {
 
     public Map<Variable, Long> stepOver() {
         contextsHistory.add(context);
-        context = contextsHistory.getLast().copy();
+        context = contextsHistory.getLast();
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();

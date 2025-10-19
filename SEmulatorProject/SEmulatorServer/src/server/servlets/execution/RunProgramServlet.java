@@ -21,19 +21,10 @@ import types.errortypes.ExecutionErrorType;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "runProgramServlet", urlPatterns = {"/execution/runProgram"})
 public class RunProgramServlet extends HttpServlet {
-    private final ExecutorService runProgramThreadExecutor = Executors.newFixedThreadPool(4);
-
-    @Override
-    public void destroy() {
-        runProgramThreadExecutor.shutdownNow();
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -49,20 +40,20 @@ public class RunProgramServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
             String username = SessionUtils.getUsername(req);
             EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
-            runProgramThreadExecutor.submit(() -> {
+
+            Thread runProgramThread = new Thread(() -> {
                 try {
                     engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-            resp.setStatus(HttpServletResponse.SC_OK);
-
-//            runProgramThread.setDaemon(true);
-//            runProgramThread.start();
+            runProgramThread.setDaemon(true);
+            runProgramThread.start();
 
 //            engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
 //            String runResultsDtoJson = GsonFactory.getGson().toJson(runResultsDTO);
+            resp.setStatus(HttpServletResponse.SC_OK);
 //            resp.getWriter().write(runResultsDtoJson);
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

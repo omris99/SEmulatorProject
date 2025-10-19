@@ -264,7 +264,6 @@ public class EmulatorEngine implements Engine {
         }
 
         Map<Variable, Long> finalVariablesResult = debuggerExecutor.stepOver();
-
         lastDebuggerRunResult = new RunResultsDTO(
                 debuggerExecutor.getProgramDegree(),
                 finalVariablesResult.get(Variable.RESULT),

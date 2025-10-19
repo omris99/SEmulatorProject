@@ -18,21 +18,21 @@ public class DebuggerExecutor implements ProgramExecutor {
     private ExecutionContext initialContext;
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
-    private int currentSessionCyclesCount;
     private boolean isPausedAtBreakpoint;
     private boolean isFinished = false;
     private final ArchitectureType architecture;
+    private Map<ArchitectureType, Long> performedInstructionsCountByArchitecture;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap, ArchitectureType architecture) {
         this.contextsHistory = new LinkedList<>();
         this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
         this.architecture = architecture;
+        resetPerformedInstructionsCountByArchitecture();
     }
 
     @Override
     public Map<Variable, Long> run(Map<Variable, Long> inputVariablesMap) {
-        currentSessionCyclesCount = 0;
         Label nextLabel;
 
         do {
@@ -47,7 +47,6 @@ public class DebuggerExecutor implements ProgramExecutor {
             isPausedAtBreakpoint = false;
             nextLabel = currentInstructionToExecute.execute(context);
             cyclesCount += currentInstructionToExecute.getCycles();
-            currentSessionCyclesCount += currentInstructionToExecute.getArchitectureType().getExecutionCost();
 
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
@@ -65,7 +64,7 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public boolean isPausedAtBreakpoint() {
-        if(currentInstructionToExecute == null) {
+        if (currentInstructionToExecute == null) {
             return false;
         }
 
@@ -79,7 +78,7 @@ public class DebuggerExecutor implements ProgramExecutor {
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         currentInstructionToExecute = instructionsQueue.getFirstInQueue();
         cyclesCount = 0;
-        currentSessionCyclesCount = 0;
+        resetPerformedInstructionsCountByArchitecture();
         isFinished = false;
     }
 
@@ -90,14 +89,13 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public Map<Variable, Long> stepOver() {
-        currentSessionCyclesCount = 0;
-
         contextsHistory.add(context);
         context = contextsHistory.getLast().copy();
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
-        currentSessionCyclesCount += currentInstructionToExecute.getArchitectureType().getExecutionCost();
+        performedInstructionsCountByArchitecture.put(currentInstructionToExecute.getArchitectureType(),
+                performedInstructionsCountByArchitecture.getOrDefault(currentInstructionToExecute.getArchitectureType(), 0L) + 1);
         if (nextLabel != FixedLabel.EXIT) {
             if (nextLabel == FixedLabel.EMPTY) {
                 currentInstructionToExecute = instructionsQueue.next();
@@ -106,7 +104,6 @@ public class DebuggerExecutor implements ProgramExecutor {
                 }
             } else {
                 currentInstructionToExecute = instructionsQueue.jumpToLabel(nextLabel);
-
             }
         } else {
             stop();
@@ -129,9 +126,6 @@ public class DebuggerExecutor implements ProgramExecutor {
         return context.getVariablesStatus();
     }
 
-    public int getCurrentSessionCyclesCount() {
-        return currentSessionCyclesCount;
-    }
 
     public boolean isFinished() {
         return isFinished;
@@ -157,4 +151,14 @@ public class DebuggerExecutor implements ProgramExecutor {
         return architecture;
     }
 
+    public Map<ArchitectureType, Long> getPerformedInstructionsCountByArchitecture() {
+        return performedInstructionsCountByArchitecture;
+    }
+
+    private void resetPerformedInstructionsCountByArchitecture() {
+        this.performedInstructionsCountByArchitecture = new HashMap<>();
+        for (ArchitectureType type : ArchitectureType.values()) {
+            this.performedInstructionsCountByArchitecture.put(type, 0L);
+        }
+    }
 }

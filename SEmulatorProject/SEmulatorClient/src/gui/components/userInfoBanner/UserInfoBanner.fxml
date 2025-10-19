@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userInfoBanner.UserInfoBannerController">
+<StackPane prefHeight="28.0" prefWidth="2560.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.userInfoBanner.UserInfoBannerController">
    <children>
       <HBox alignment="TOP_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="341.0">
          <children>

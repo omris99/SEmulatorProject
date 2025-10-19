@@ -2,6 +2,7 @@ package gui.screens.execution;
 
 import clientserverdto.*;
 import clientserverdto.instructiontree.InstructionsTree;
+import gui.components.dynamicexecutiondatawindow.DynamicExecutionDataWindowController;
 import gui.components.treetablecommandsbar.TreeTableCommandsBarController;
 import gui.components.instructionstreetable.InstructionsTreeTableController;
 import gui.utils.Utils;
@@ -178,12 +179,12 @@ public class ExecutionScreenController {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
-                    RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
-                    Platform.runLater(() -> {
-                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
-                        finishExecutionMode(ExecutionMode.REGULAR);
-                    });
-
+                    showDynamicExecutionDataWindow();
+//                    RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
+//                    Platform.runLater(() -> {
+//                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
+//                        finishExecutionMode(ExecutionMode.REGULAR);
+//                    });
                 }
                 else {
                     ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
@@ -593,6 +594,26 @@ public class ExecutionScreenController {
         }
     }
 
+    public void showDynamicExecutionDataWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/dynamicexecutiondatawindow/DynamicExecutionDataWindow.fxml"));
+            Parent load = loader.load();
+            DynamicExecutionDataWindowController controller = loader.getController();
+            controller.setExecutionScreenController(this);
+            controller.startExecutionDataWindowRefresher();
+            Platform.runLater(() -> {
+                Scene scene = new Scene(load, 700, 400);
+                Stage showWindow = new Stage();
+                showWindow.setTitle("Dynamic Execution Data");
+                showWindow.setScene(scene);
+                showWindow.show();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void showSpecificExpansionView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/instructionstreetable/InstructionsTreeTable.fxml"));
@@ -635,6 +656,13 @@ public class ExecutionScreenController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onExecutionFinished(RunResultsDTO runResultsDTO) {
+        Platform.runLater(() -> {
+            debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
+            finishExecutionMode(ExecutionMode.REGULAR);
+        });
     }
 
 }

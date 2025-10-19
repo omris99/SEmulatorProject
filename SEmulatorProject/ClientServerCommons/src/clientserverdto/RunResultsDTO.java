@@ -1,10 +1,9 @@
 package clientserverdto;
 
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import types.modeltypes.ArchitectureType;
+
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RunResultsDTO implements DTO {
     private final int degree;
@@ -14,11 +13,8 @@ public class RunResultsDTO implements DTO {
     private final Map<String, Long> workVariablesValues;
     private final int totalCyclesCount;
     private final String architecture;
+    private final Map<ArchitectureType, Long> performedInstructionsCountByArchitecture;
     private boolean isFinished = false;
-
-    public RunResultsDTO(int degree, Long yValue, Map<String, Long> inputVariablesInitialValues, Map<String, Long> inputVariablesValueResult, Map<String, Long> workVariablesValues, int totalCyclesCount, String architecture) {
-        this(degree, yValue, inputVariablesInitialValues, inputVariablesValueResult, workVariablesValues, totalCyclesCount, architecture, false);
-    }
 
     public RunResultsDTO(int degree,
                          Long yValue,
@@ -27,6 +23,7 @@ public class RunResultsDTO implements DTO {
                          Map<String, Long> workVariablesValues,
                          int totalCyclesCount,
                          String architecture,
+                         Map<ArchitectureType, Long> PerformedInstructionsCountByArchitecture,
                          boolean isFinished) {
         this.degree = degree;
         this.yValue = yValue;
@@ -34,8 +31,9 @@ public class RunResultsDTO implements DTO {
         this.inputVariablesValueResult = inputVariablesValueResult;
         this.workVariablesValues = workVariablesValues;
         this.totalCyclesCount = totalCyclesCount;
-        this.isFinished = isFinished;
         this.architecture = architecture;
+        this.performedInstructionsCountByArchitecture = PerformedInstructionsCountByArchitecture;
+        this.isFinished = isFinished;
     }
 
 
@@ -69,5 +67,9 @@ public class RunResultsDTO implements DTO {
 
     public String getArchitecture() {
         return architecture;
+    }
+
+    public Map<ArchitectureType, Long> getPerformedInstructionsCountByArchitecture() {
+        return performedInstructionsCountByArchitecture;
     }
 }

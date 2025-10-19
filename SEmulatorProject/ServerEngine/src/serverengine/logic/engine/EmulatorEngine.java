@@ -23,7 +23,6 @@ import serverengine.logic.utils.Utils;
 import types.modeltypes.ArchitectureType;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class EmulatorEngine implements Engine {
     private Program mainProgram;
@@ -179,6 +178,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesAsStringsFromMap(programInitialInputVariablesMap, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
+                debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
                 debuggerExecutor.isFinished());
 
         return lastDebuggerRunResult;
@@ -222,6 +222,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
+                debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
                 debuggerExecutor.isFinished()
         );
     }
@@ -235,7 +236,7 @@ public class EmulatorEngine implements Engine {
             throw new IllegalStateException("Debugging session not initialized. Call initDebuggingSession first.");
         }
 
-        RunResultsDTO debugResults = lastDebuggerRunResult;
+        RunResultsDTO debugResults;
         boolean isExitedLoopBecauseBreakpoint = false;
 
         do {
@@ -272,6 +273,7 @@ public class EmulatorEngine implements Engine {
                 Utils.extractVariablesTypesAsStringsFromMap(finalVariablesResult, VariableType.WORK),
                 debuggerExecutor.getCyclesCount(),
                 debuggerExecutor.getArchitecture().getUserString(),
+                debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
                 debuggerExecutor.isFinished());
 
         return lastDebuggerRunResult;
@@ -308,10 +310,6 @@ public class EmulatorEngine implements Engine {
         return executionsHistory.size();
     }
 
-    public String getLoadedProgramName() {
-        return currentOnScreenProgram.getName();
-    }
-
     public long getCreditsUsed() {
         return creditsUsed;
     }
@@ -333,14 +331,9 @@ public class EmulatorEngine implements Engine {
         }
     }
 
-    private Map<String, Long> convertKeyToStringAndSortVariablesMap(Map<Variable, Long> variablesMap) {
-        return variablesMap.entrySet().stream()
-                .sorted(Comparator.comparingInt(variable -> variable.getKey().getNumber()))
-                .collect(Collectors.toMap(
-                        e -> e.getKey().getRepresentation(),
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
+    public RunResultsDTO getLastDebuggerRunResult() {
+        return lastDebuggerRunResult;
     }
+
+
 }

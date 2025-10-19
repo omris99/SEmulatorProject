@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setMinWidth(1100);
+        primaryStage.setMinWidth(1120);
         primaryStage.setMinHeight(750);
         primaryStage.setTitle("S-Emulator");
 

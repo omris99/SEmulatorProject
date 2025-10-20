@@ -1,0 +1,29 @@
+.header{
+    -fx-background-color: #040078;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-background-radius: 0 0 4 4;
+}
+
+#executed-instructions-summary{
+    -fx-background-color: #a5a5a5;
+}
+
+#view{
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #dbeeff);
+}
+
+.keys{
+    -fx-text-fill: black;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+    -fx-alignment: center-left;
+}
+.values{
+    -fx-text-fill: #168800;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}

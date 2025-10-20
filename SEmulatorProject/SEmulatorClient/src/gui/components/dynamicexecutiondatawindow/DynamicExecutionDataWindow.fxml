@@ -4,24 +4,25 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="225.0" prefWidth="197.0" spacing="2.0" styleClass="mini-window" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.dynamicexecutiondatawindow.DynamicExecutionDataWindowController">
+<VBox id="view" prefHeight="225.0" prefWidth="197.0" spacing="2.0" stylesheets="@DynamicExecutionDataWindow.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.dynamicexecutiondatawindow.DynamicExecutionDataWindowController">
    <children>
-      <Label alignment="CENTER" prefHeight="17.0" prefWidth="341.0" styleClass="mini-window-header" text="Dynamic Execution Data" textFill="WHITE" />
+      <Label id="dynamic-execution-data" alignment="CENTER" prefHeight="17.0" prefWidth="341.0" styleClass="header" text="Dynamic Execution Data" textFill="WHITE" />
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="29.0" prefHeight="32.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="75.0" text="Cycles" />
-            <Label fx:id="cyclesLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="Cycles" />
+            <Label fx:id="cyclesLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />
          </padding>
       </HBox>
-      <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="318.0" style="-fx-background-color: gray;" styleClass="mini-window-header" text="Executed Instructions Summary" textFill="WHITE" />
+      <Label id="executed-instructions-summary" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="318.0" styleClass="header" text="Executed Instructions Summary" textFill="WHITE" />
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="97.0" prefHeight="27.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="161.0" text="Arch. I" />
-            <Label fx:id="archOneLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="Arch. I" />
+            <Label fx:id="archOneLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -29,8 +30,8 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="150.0" prefHeight="27.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="161.0" text="Arch. II" />
-            <Label fx:id="archTwoLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="Arch. II" />
+            <Label fx:id="archTwoLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -38,8 +39,8 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="179.0" prefHeight="27.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="161.0" text="Arch. III" />
-            <Label fx:id="archThreeLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="Arch. III" />
+            <Label fx:id="archThreeLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -47,8 +48,8 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="208.0" prefHeight="27.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="161.0" text="Arch. IV" />
-            <Label fx:id="archFourLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="Arch. IV" />
+            <Label fx:id="archFourLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -56,8 +57,11 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="116.0" prefHeight="27.0" prefWidth="318.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="161.0" text="TOTAL" />
-            <Label fx:id="totalLabel" />
+            <Label prefHeight="17.0" prefWidth="161.0" styleClass="keys" text="TOTAL" underline="true">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="totalLabel" styleClass="values" />
          </children>
          <padding>
             <Insets left="10.0" />

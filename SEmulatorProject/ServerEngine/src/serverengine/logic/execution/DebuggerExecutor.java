@@ -12,6 +12,7 @@ import java.util.*;
 public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
+    private static final int MAX_CONTEXTS_HISTORY = 100;
     private final List<ExecutionContext> contextsHistory;
     private InstructionsQueue instructionsQueue;
     private final Map<Variable, Long> initialInputVariablesMap;
@@ -36,7 +37,7 @@ public class DebuggerExecutor implements ProgramExecutor {
         Label nextLabel;
 
         do {
-            contextsHistory.add(context);
+            addToContextsHistory(context);
             context = contextsHistory.getLast().copy();
 
             if (currentInstructionToExecute.getBreakpoint() && !isPausedAtBreakpoint) {
@@ -89,8 +90,9 @@ public class DebuggerExecutor implements ProgramExecutor {
     }
 
     public Map<Variable, Long> stepOver() {
-        contextsHistory.add(context);
-        context = contextsHistory.getLast();
+        addToContextsHistory(context);
+        context = contextsHistory.getLast().copy();
+        System.out.println("Contexts: " + contextsHistory.size() + ", Current Context: " + context);
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
@@ -159,6 +161,13 @@ public class DebuggerExecutor implements ProgramExecutor {
         this.performedInstructionsCountByArchitecture = new HashMap<>();
         for (ArchitectureType type : ArchitectureType.values()) {
             this.performedInstructionsCountByArchitecture.put(type, 0L);
+        }
+    }
+
+    private void addToContextsHistory(ExecutionContext context) {
+        contextsHistory.add(context);
+        if (contextsHistory.size() > MAX_CONTEXTS_HISTORY) {
+            contextsHistory.removeFirst();
         }
     }
 }

@@ -602,10 +602,11 @@ public class ExecutionScreenController {
             controller.setExecutionScreenController(this);
             controller.startExecutionDataWindowRefresher();
             Platform.runLater(() -> {
-                Scene scene = new Scene(load, 700, 400);
+                Scene scene = new Scene(load, 250, 230);
                 Stage showWindow = new Stage();
                 showWindow.setTitle("Dynamic Execution Data");
                 showWindow.setScene(scene);
+                showWindow.setResizable(false);
                 showWindow.show();
             });
         } catch (Exception e) {

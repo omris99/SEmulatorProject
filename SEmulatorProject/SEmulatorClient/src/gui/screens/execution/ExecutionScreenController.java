@@ -179,7 +179,7 @@ public class ExecutionScreenController {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
-                    showDynamicExecutionDataWindow();
+                    activateDynamicExecutionDataWindow();
 //                    RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
 //                    Platform.runLater(() -> {
 //                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
@@ -198,7 +198,7 @@ public class ExecutionScreenController {
         });
     }
 
-    private void handleError(ErrorDTO errorDTO, ExecutionMode executionMode) {
+    public void handleError(ErrorDTO errorDTO, ExecutionMode executionMode) {
         Utils.showErrorAlert(errorDTO.getTitle(), errorDTO.getHeader(), errorDTO.getContent());
         finishExecutionMode(executionMode);
         if(errorDTO.getType() == ExecutionErrorType.CREDIT_BALANCE_TOO_LOW)
@@ -594,7 +594,7 @@ public class ExecutionScreenController {
         }
     }
 
-    public void showDynamicExecutionDataWindow() {
+    public void activateDynamicExecutionDataWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/dynamicexecutiondatawindow/DynamicExecutionDataWindow.fxml"));
             Parent load = loader.load();

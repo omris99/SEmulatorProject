@@ -1,5 +1,6 @@
 package server.servlets.execution;
 
+import clientserverdto.ExecutionStatusDTO;
 import clientserverdto.RunResultsDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,12 +23,9 @@ public class GetExecutionStatus extends HttpServlet {
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
 
         long start = System.currentTimeMillis();
-        RunResultsDTO executionLatestData = engine.getLastDebuggerRunResult();
+        ExecutionStatusDTO executionLatestData = engine.getExecutionStatus();
         long end = System.currentTimeMillis();
         System.out.println("DTO fetch took: " + (end - start) + "ms");
-
-        System.out.println("GetExecutionStatus: Fetched latest execution data: " + executionLatestData.getTotalCyclesCount() + "FINISHED: " + executionLatestData.isFinished());
-        System.out.println();
         String executionDtoJson = GsonFactory.getGson().toJson(executionLatestData);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(executionDtoJson);

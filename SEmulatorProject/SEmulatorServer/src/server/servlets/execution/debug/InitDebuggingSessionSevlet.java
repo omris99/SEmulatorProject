@@ -2,6 +2,8 @@ package server.servlets.execution.debug;
 
 
 import clientserverdto.ErrorDTO;
+import clientserverdto.ExecutionStatus;
+import clientserverdto.ExecutionStatusDTO;
 import clientserverdto.RunResultsDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import server.utils.ServletUtils;
 import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
 import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.NumberNotInRangeException;
+import serverengine.logic.utils.ErrorMapper;
 import types.modeltypes.ArchitectureType;
 import types.errortypes.ExecutionErrorType;
 
@@ -25,7 +28,6 @@ import java.util.Map;
 public class InitDebuggingSessionSevlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
             Map<String, Object> payload = ServletUtils.getPayloadFromRequest(req);
             int runDegree = ((Double) payload.get("runDegree")).intValue();
             Map<String, String> inputVariables = (Map<String, String>) payload.get("inputVariables");
@@ -34,62 +36,70 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");
             EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
-            ;
 
-            RunResultsDTO initialState = (RunResultsDTO) engine.initDebuggingSession(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
-            String initialStateJson = GsonFactory.getGson().toJson(initialState);
+            engine.initDebuggingSession(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
+            ExecutionStatusDTO initialState = engine.getExecutionStatus();
+            if(initialState.getStatus() == ExecutionStatus.ERROR){
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                System.out.println("Error initializing debugging session: " + initialState.getError());
+                ErrorDTO error = initialState.getError();
+                String errorJson = GsonFactory.getGson().toJson(error);
+                resp.getWriter().write(errorJson);
+                return;
+            }
+            String initialStateJson = GsonFactory.getGson().toJson(initialState.getLastRunResult());
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(initialStateJson);
-
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorDTO error = new ErrorDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
-            String errorJson = GsonFactory.getGson().toJson(error);
-            resp.getWriter().write(errorJson);
-        } catch (NumberNotInRangeException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorDTO error = new ErrorDTO(
-                    ExecutionErrorType.BAD_INPUT_VARIABLES,
-                    "Error Starting Execution",
-                    "Negative Number Submitted",
-                    "You entered the number: " + e.getNumber() + " which is not positive.\n" +
-                            "Please enter only Positive Numbers.");
-            String errorJson = GsonFactory.getGson().toJson(error);
-            resp.getWriter().write(errorJson);
-        } catch (InvalidArchitectureException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorDTO error = new ErrorDTO(
-                    ExecutionErrorType.UNCOMPATIBLE_ARCHITECTURE, "Error Starting Execution",
-                    "Invalid Architecture Selected",
-                    "Minimum architecture required for this program is: " + e.getMinimumArchitecture() + ".\n" +
-                            "You selected: " + e.getSelectedArchitecture() + ".\n" +
-                            "Please select a valid architecture and try again.");
-            String errorJson = GsonFactory.getGson().toJson(error);
-            resp.getWriter().write(errorJson);
-        } catch (CreditBalanceTooLowForInitialChargeException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-            String message = String.format(
-                    "Your credit balance is too low to start a debugging session.%n%n" +
-                            "• Architecture cost: %d%n" +
-                            "• Average program cost: %d%n" +
-                            "• Minimum Balance Required: %d%n" +
-                            "• Your balance: %d",
-                    e.getArchitectureCost(),
-                    e.getAverageProgramCost(),
-                    e.getCreditsCost(),
-                    e.getCreditsBalance()
-            );
-
-            ErrorDTO error = new ErrorDTO(
-                    ExecutionErrorType.CREDIT_BALANCE_TOO_LOW,
-                    "Credit Balance Too Low",
-                    "Cannot Start Debugging Session",
-                    message
-            );
-
-            String errorJson = GsonFactory.getGson().toJson(error);
-            resp.getWriter().write(errorJson);
-        }
+//
+//        } catch (NumberFormatException e) {
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            ErrorDTO error = new ErrorDTO(ExecutionErrorType.BAD_INPUT_VARIABLES, "Error Starting Execution", "Invalid Input", "The input is invalid. Please enter integers only.");
+//            String errorJson = GsonFactory.getGson().toJson(error);
+//            resp.getWriter().write(errorJson);
+//        } catch (NumberNotInRangeException e) {
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            ErrorDTO error = new ErrorDTO(
+//                    ExecutionErrorType.BAD_INPUT_VARIABLES,
+//                    "Error Starting Execution",
+//                    "Negative Number Submitted",
+//                    "You entered the number: " + e.getNumber() + " which is not positive.\n" +
+//                            "Please enter only Positive Numbers.");
+//            String errorJson = GsonFactory.getGson().toJson(error);
+//            resp.getWriter().write(errorJson);
+//        } catch (InvalidArchitectureException e) {
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            ErrorDTO error = new ErrorDTO(
+//                    ExecutionErrorType.UNCOMPATIBLE_ARCHITECTURE, "Error Starting Execution",
+//                    "Invalid Architecture Selected",
+//                    "Minimum architecture required for this program is: " + e.getMinimumArchitecture() + ".\n" +
+//                            "You selected: " + e.getSelectedArchitecture() + ".\n" +
+//                            "Please select a valid architecture and try again.");
+//            String errorJson = GsonFactory.getGson().toJson(error);
+//            resp.getWriter().write(errorJson);
+//        } catch (CreditBalanceTooLowForInitialChargeException e) {
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//
+//            String message = String.format(
+//                    "Your credit balance is too low to start a debugging session.%n%n" +
+//                            "• Architecture cost: %d%n" +
+//                            "• Average program cost: %d%n" +
+//                            "• Minimum Balance Required: %d%n" +
+//                            "• Your balance: %d",
+//                    e.getArchitectureCost(),
+//                    e.getAverageProgramCost(),
+//                    e.getCreditsCost(),
+//                    e.getCreditsBalance()
+//            );
+//
+//            ErrorDTO error = new ErrorDTO(
+//                    ExecutionErrorType.CREDIT_BALANCE_TOO_LOW,
+//                    "Credit Balance Too Low",
+//                    "Cannot Start Debugging Session",
+//                    message
+//            );
+//
+//            String errorJson = GsonFactory.getGson().toJson(error);
+//            resp.getWriter().write(errorJson);
+//        }
     }
 }

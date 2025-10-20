@@ -1,5 +1,7 @@
 package serverengine.logic.execution;
 
+import clientserverdto.ExecutionStatus;
+import clientserverdto.ExecutionStatusDTO;
 import serverengine.logic.model.argument.label.FixedLabel;
 import serverengine.logic.model.argument.label.Label;
 import serverengine.logic.model.argument.variable.Variable;
@@ -12,6 +14,7 @@ import java.util.*;
 public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
+    private ExecutionStatusDTO executionStatus;
     private static final int MAX_CONTEXTS_HISTORY = 100;
     private final List<ExecutionContext> contextsHistory;
     private InstructionsQueue instructionsQueue;
@@ -20,11 +23,11 @@ public class DebuggerExecutor implements ProgramExecutor {
     private int cyclesCount;
     private Instruction currentInstructionToExecute;
     private boolean isPausedAtBreakpoint;
-    private boolean isFinished = false;
     private final ArchitectureType architecture;
     private Map<ArchitectureType, Long> performedInstructionsCountByArchitecture;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap, ArchitectureType architecture) {
+        this.executionStatus = new ExecutionStatusDTO();
         this.contextsHistory = new LinkedList<>();
         this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
@@ -80,7 +83,7 @@ public class DebuggerExecutor implements ProgramExecutor {
         currentInstructionToExecute = instructionsQueue.getFirstInQueue();
         cyclesCount = 0;
         resetPerformedInstructionsCountByArchitecture();
-        isFinished = false;
+        executionStatus.setStatus(ExecutionStatus.RUNNING);
     }
 
     private void initializeContext(Map<Variable, Long> inputVariablesMap) {
@@ -92,7 +95,6 @@ public class DebuggerExecutor implements ProgramExecutor {
     public Map<Variable, Long> stepOver() {
         addToContextsHistory(context);
         context = contextsHistory.getLast().copy();
-        System.out.println("Contexts: " + contextsHistory.size() + ", Current Context: " + context);
 
         Label nextLabel = currentInstructionToExecute.execute(context);
         cyclesCount += currentInstructionToExecute.getCycles();
@@ -130,11 +132,11 @@ public class DebuggerExecutor implements ProgramExecutor {
 
 
     public boolean isFinished() {
-        return isFinished;
+        return executionStatus.getStatus() == ExecutionStatus.FINISHED;
     }
 
     public void stop() {
-        isFinished = true;
+        executionStatus.setStatus(ExecutionStatus.FINISHED);
     }
 
     public int getProgramDegree() {
@@ -169,5 +171,9 @@ public class DebuggerExecutor implements ProgramExecutor {
         if (contextsHistory.size() > MAX_CONTEXTS_HISTORY) {
             contextsHistory.removeFirst();
         }
+    }
+
+    public ExecutionStatusDTO getExecutionStatus() {
+        return executionStatus;
     }
 }

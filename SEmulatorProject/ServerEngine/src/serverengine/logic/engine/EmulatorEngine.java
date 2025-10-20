@@ -1,9 +1,6 @@
 package serverengine.logic.engine;
 
-import clientserverdto.DTO;
-import clientserverdto.InstructionDTO;
-import clientserverdto.RunResultsDTO;
-import clientserverdto.ExecutionHistoryDTO;
+import clientserverdto.*;
 import serverengine.logic.exceptions.CreditBalanceTooLowForInitialChargeException;
 import serverengine.logic.exceptions.InvalidArchitectureException;
 import serverengine.logic.exceptions.CreditBalanceTooLowException;
@@ -14,6 +11,7 @@ import serverengine.logic.model.argument.Argument;
 import serverengine.logic.model.argument.variable.Variable;
 import serverengine.logic.model.argument.variable.VariableImpl;
 import serverengine.logic.model.argument.variable.VariableType;
+import serverengine.logic.utils.ErrorMapper;
 import serverengine.programs.repo.ProgramsRepo;
 import serverengine.programs.UploadedProgram;
 import serverengine.logic.model.instruction.Instruction;
@@ -29,6 +27,7 @@ public class EmulatorEngine implements Engine {
     private Program currentContextProgram;
     private Program currentOnScreenProgram;
     private DebuggerExecutor debuggerExecutor;
+    private ExecutionStatusDTO executionStatus;
     private final List<ExecutionHistoryDTO> executionsHistory;
     private RunResultsDTO lastDebuggerRunResult;
     private int currentExecutionNumber;
@@ -75,17 +74,23 @@ public class EmulatorEngine implements Engine {
         ProgramsRepo.getInstance().getProgramOrFunctionByName(currentOnScreenProgram.getName()).updateDataAfterExecution(runResults.getTotalCyclesCount());
     }
 
-    public DTO runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
-        RunResultsDTO runResults;
-        initDebuggingSession(degree, guiUserInputMap, architecture);
+    public void runLoadedProgramWithDebuggerWindowInput(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowException {
+        try {
+            RunResultsDTO runResults;
+            initDebuggingSession(degree, guiUserInputMap, architecture);
+            if(executionStatus.getStatus() == ExecutionStatus.ERROR){
+                return;
+            }
 
-        do {
-            runResults = executeNextInstructionOnDebugger();
-        } while (!runResults.isFinished());
-
-        addExecutionToHistoryAndUpdateUploadedProgramData(runResults);
-
-        return runResults;
+            do {
+                runResults = executeNextInstructionOnDebugger();
+            } while (!runResults.isFinished());
+            addExecutionToHistoryAndUpdateUploadedProgramData(runResults);
+            executionStatus.setStatus(ExecutionStatus.FINISHED);
+        } catch (Exception e){
+            executionStatus.setStatus(ExecutionStatus.ERROR);
+            executionStatus.setError(ErrorMapper.fromException(e));
+        }
     }
 
     private void chargeCredits(long creditsCost) throws CreditBalanceTooLowException {
@@ -133,7 +138,7 @@ public class EmulatorEngine implements Engine {
 
         try {
             chargeCredits(architecture.getExecutionCost());
-        } catch (CreditBalanceTooLowException e){
+        } catch (CreditBalanceTooLowException e) {
             throw new CreditBalanceTooLowForInitialChargeException(
                     architecture.getExecutionCost() + averageExecutionCost,
                     creditsBalance,
@@ -156,32 +161,37 @@ public class EmulatorEngine implements Engine {
         return userInputToVariablesMapConverted;
     }
 
-    public DTO initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) throws NumberFormatException, NumberNotInRangeException, CreditBalanceTooLowForInitialChargeException {
-        checkArchitectureCompatibilityAndChargeInitialCredits(architecture);
-        Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
-        Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
+    public void initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) {
+        executionStatus = new ExecutionStatusDTO();
+        executionStatus.setStatus(ExecutionStatus.RUNNING);
+        try {
+            checkArchitectureCompatibilityAndChargeInitialCredits(architecture);
+            Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
+            Set<Variable> programActualInputVariables = getProgramInputVariablesFromOneToN();
 
-        Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
-        for (Variable inputVariable : programActualInputVariables) {
-            programInitialInputVariablesMap.put(
-                    inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
+            Map<Variable, Long> programInitialInputVariablesMap = new LinkedHashMap<>();
+            for (Variable inputVariable : programActualInputVariables) {
+                programInitialInputVariablesMap.put(
+                        inputVariable, userInputToVariablesMapConverted.getOrDefault(inputVariable, 0L));
+            }
+            programInitialInputVariablesMap.put(Variable.RESULT, 0L);
+
+            debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap), architecture);
+
+            lastDebuggerRunResult = new RunResultsDTO(
+                    degree,
+                    programInitialInputVariablesMap.get(Variable.RESULT),
+                    Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
+                    Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
+                    Utils.extractVariablesTypesAsStringsFromMap(programInitialInputVariablesMap, VariableType.WORK),
+                    debuggerExecutor.getCyclesCount(),
+                    debuggerExecutor.getArchitecture().getUserString(),
+                    debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
+                    debuggerExecutor.isFinished());
+        } catch (Exception e) {
+            executionStatus.setStatus(ExecutionStatus.ERROR);
+            executionStatus.setError(ErrorMapper.fromException(e));
         }
-        programInitialInputVariablesMap.put(Variable.RESULT, 0L);
-
-        debuggerExecutor = new DebuggerExecutor(currentOnScreenProgram, new LinkedHashMap<>(programInitialInputVariablesMap), architecture);
-
-        lastDebuggerRunResult = new RunResultsDTO(
-                degree,
-                programInitialInputVariablesMap.get(Variable.RESULT),
-                Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
-                Utils.convertKeyToStringAndSortVariablesMap(userInputToVariablesMapConverted),
-                Utils.extractVariablesTypesAsStringsFromMap(programInitialInputVariablesMap, VariableType.WORK),
-                debuggerExecutor.getCyclesCount(),
-                debuggerExecutor.getArchitecture().getUserString(),
-                debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
-                debuggerExecutor.isFinished());
-
-        return lastDebuggerRunResult;
     }
 
     public DTO stepOver() throws CreditBalanceTooLowException {
@@ -192,6 +202,7 @@ public class EmulatorEngine implements Engine {
         RunResultsDTO debugResults = executeNextInstructionOnDebugger();
 
         if (debuggerExecutor.isFinished()) {
+            executionStatus.setStatus(ExecutionStatus.FINISHED);
             addExecutionToHistoryAndUpdateUploadedProgramData(debugResults);
         }
 
@@ -203,7 +214,8 @@ public class EmulatorEngine implements Engine {
             chargeCredits(debuggerExecutor.getCurrentInstructionToExecute().getCycles());
         } catch (CreditBalanceTooLowException e) {
             stopDebuggingSession();
-            throw e;
+            executionStatus.setStatus(ExecutionStatus.ERROR);
+            executionStatus.setError(ErrorMapper.fromException(e));
         }
     }
 
@@ -249,6 +261,7 @@ public class EmulatorEngine implements Engine {
         } while (!debugResults.isFinished());
 
         if (!isExitedLoopBecauseBreakpoint) {
+            executionStatus.setStatus(ExecutionStatus.FINISHED);
             addExecutionToHistoryAndUpdateUploadedProgramData(debugResults);
         }
 
@@ -260,6 +273,8 @@ public class EmulatorEngine implements Engine {
             chargeCreditsForCurrentInstruction();
         } catch (CreditBalanceTooLowException e) {
             addExecutionToHistoryAndUpdateUploadedProgramData(lastDebuggerRunResult);
+
+
             throw e;
         }
 
@@ -330,8 +345,9 @@ public class EmulatorEngine implements Engine {
         }
     }
 
-    public RunResultsDTO getLastDebuggerRunResult() {
-        return lastDebuggerRunResult;
+    public ExecutionStatusDTO getExecutionStatus() {
+        executionStatus.setLastRunResult(lastDebuggerRunResult);
+        return executionStatus;
     }
 
 

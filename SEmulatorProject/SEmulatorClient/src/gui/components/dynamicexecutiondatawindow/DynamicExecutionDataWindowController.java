@@ -1,6 +1,9 @@
 package gui.components.dynamicexecutiondatawindow;
 
+import clientserverdto.ExecutionStatus;
+import clientserverdto.ExecutionStatusDTO;
 import clientserverdto.RunResultsDTO;
+import gui.screens.execution.ExecutionMode;
 import gui.screens.execution.ExecutionScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -45,7 +48,17 @@ public class DynamicExecutionDataWindowController implements Closeable {
         timer.schedule(executionDataWindowRefresher, 500, 500);
     }
 
-    public void updateExecutionDataWindow(RunResultsDTO runResultsDTO) {
+    public void updateExecutionDataWindow(ExecutionStatusDTO executionStatusDTO) {
+        if(executionStatusDTO.getStatus() == ExecutionStatus.ERROR)
+        {
+            Platform.runLater(() ->
+                    executionScreenController.handleError(executionStatusDTO.getError(), ExecutionMode.REGULAR));
+            stopExecutionDataWindowRefresher();
+            return;
+        }
+
+        RunResultsDTO runResultsDTO = executionStatusDTO.getLastRunResult();
+
         Map<ArchitectureType, Long> performedInstructionsCountByArchitecture = runResultsDTO.getPerformedInstructionsCountByArchitecture();
 
         Platform.runLater(() -> {
@@ -57,7 +70,7 @@ public class DynamicExecutionDataWindowController implements Closeable {
             totalLabel.setText(String.valueOf(performedInstructionsCountByArchitecture.values().stream().mapToLong(Long::longValue).sum()));
         });
 
-        if (runResultsDTO.isFinished()){
+        if (executionStatusDTO.getStatus() == ExecutionStatus.FINISHED){
             executionScreenController.onExecutionFinished(runResultsDTO);
             stopExecutionDataWindowRefresher();
         }

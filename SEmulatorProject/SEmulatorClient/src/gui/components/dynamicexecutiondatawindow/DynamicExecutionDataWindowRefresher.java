@@ -1,5 +1,6 @@
 package gui.components.dynamicexecutiondatawindow;
 
+import clientserverdto.ExecutionStatusDTO;
 import clientserverdto.RunResultsDTO;
 import http.HttpClientUtil;
 import http.ServerPaths;
@@ -15,11 +16,11 @@ import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class DynamicExecutionDataWindowRefresher extends TimerTask {
-    private final Consumer<RunResultsDTO> runResultsConsumer;
+    private final Consumer<ExecutionStatusDTO> ExecutionStatusConsumer;
 
 
-    public DynamicExecutionDataWindowRefresher(Consumer<RunResultsDTO> runResultsConsumer) {
-        this.runResultsConsumer = runResultsConsumer;
+    public DynamicExecutionDataWindowRefresher(Consumer<ExecutionStatusDTO> ExecutionStatusConsumer) {
+        this.ExecutionStatusConsumer = ExecutionStatusConsumer;
     }
 
     @Override
@@ -40,8 +41,8 @@ public class DynamicExecutionDataWindowRefresher extends TimerTask {
                     System.out.println("Failed to fetch execution Status. " + executionStatusString);
                     return;
                 }
-                RunResultsDTO executionStatus = GsonFactory.getGson().fromJson(executionStatusString, RunResultsDTO.class);
-                runResultsConsumer.accept(executionStatus);
+                ExecutionStatusDTO executionStatus = GsonFactory.getGson().fromJson(executionStatusString, ExecutionStatusDTO.class);
+                ExecutionStatusConsumer.accept(executionStatus);
 
                 response.close();
             }

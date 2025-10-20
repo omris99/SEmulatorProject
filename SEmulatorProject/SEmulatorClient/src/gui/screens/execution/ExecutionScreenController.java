@@ -663,6 +663,7 @@ public class ExecutionScreenController {
         Platform.runLater(() -> {
             debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
             finishExecutionMode(ExecutionMode.REGULAR);
+            clientController.updateUserInfo();
         });
     }
 

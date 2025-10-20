@@ -14,7 +14,6 @@ import java.util.*;
 public class DebuggerExecutor implements ProgramExecutor {
     private Program program;
     private ExecutionContext context;
-    private ExecutionStatusDTO executionStatus;
     private static final int MAX_CONTEXTS_HISTORY = 100;
     private final List<ExecutionContext> contextsHistory;
     private InstructionsQueue instructionsQueue;
@@ -25,9 +24,9 @@ public class DebuggerExecutor implements ProgramExecutor {
     private boolean isPausedAtBreakpoint;
     private final ArchitectureType architecture;
     private Map<ArchitectureType, Long> performedInstructionsCountByArchitecture;
+    boolean isFinished;
 
     public DebuggerExecutor(Program program, Map<Variable, Long> inputVariablesMap, ArchitectureType architecture) {
-        this.executionStatus = new ExecutionStatusDTO();
         this.contextsHistory = new LinkedList<>();
         this.initialInputVariablesMap = new LinkedHashMap<>(inputVariablesMap);
         loadProgramForDebugging(program, inputVariablesMap);
@@ -82,8 +81,8 @@ public class DebuggerExecutor implements ProgramExecutor {
         instructionsQueue = new InstructionsQueue(program.getInstructions());
         currentInstructionToExecute = instructionsQueue.getFirstInQueue();
         cyclesCount = 0;
+        isFinished = false;
         resetPerformedInstructionsCountByArchitecture();
-        executionStatus.setStatus(ExecutionStatus.RUNNING);
     }
 
     private void initializeContext(Map<Variable, Long> inputVariablesMap) {
@@ -132,11 +131,11 @@ public class DebuggerExecutor implements ProgramExecutor {
 
 
     public boolean isFinished() {
-        return executionStatus.getStatus() == ExecutionStatus.FINISHED;
+        return isFinished;
     }
 
     public void stop() {
-        executionStatus.setStatus(ExecutionStatus.FINISHED);
+        isFinished = true;
     }
 
     public int getProgramDegree() {
@@ -171,9 +170,5 @@ public class DebuggerExecutor implements ProgramExecutor {
         if (contextsHistory.size() > MAX_CONTEXTS_HISTORY) {
             contextsHistory.removeFirst();
         }
-    }
-
-    public ExecutionStatusDTO getExecutionStatus() {
-        return executionStatus;
     }
 }

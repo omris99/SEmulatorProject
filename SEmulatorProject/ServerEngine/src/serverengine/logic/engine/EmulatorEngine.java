@@ -214,8 +214,7 @@ public class EmulatorEngine implements Engine {
             chargeCredits(debuggerExecutor.getCurrentInstructionToExecute().getCycles());
         } catch (CreditBalanceTooLowException e) {
             stopDebuggingSession();
-            executionStatus.setStatus(ExecutionStatus.ERROR);
-            executionStatus.setError(ErrorMapper.fromException(e));
+            throw e;
         }
     }
 
@@ -273,8 +272,6 @@ public class EmulatorEngine implements Engine {
             chargeCreditsForCurrentInstruction();
         } catch (CreditBalanceTooLowException e) {
             addExecutionToHistoryAndUpdateUploadedProgramData(lastDebuggerRunResult);
-
-
             throw e;
         }
 

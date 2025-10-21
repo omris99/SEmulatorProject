@@ -30,7 +30,6 @@ public class DynamicExecutionDataWindowRefresher extends TimerTask {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                // Handle failure if needed
                 System.out.println("Failed to fetch execution Status: (failure) " + e.getMessage());
             }
 

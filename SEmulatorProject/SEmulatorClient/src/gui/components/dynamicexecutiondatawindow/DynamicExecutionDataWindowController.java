@@ -7,7 +7,11 @@ import gui.screens.execution.ExecutionMode;
 import gui.screens.execution.ExecutionScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import types.modeltypes.ArchitectureType;
 
 import java.io.Closeable;
@@ -19,6 +23,7 @@ import java.util.TimerTask;
 public class DynamicExecutionDataWindowController implements Closeable {
     private Timer timer;
     private TimerTask executionDataWindowRefresher;
+    private boolean windowShown = false;
 
 
     @FXML
@@ -41,6 +46,7 @@ public class DynamicExecutionDataWindowController implements Closeable {
 
     private ExecutionScreenController executionScreenController;
 
+
     public void startExecutionDataWindowRefresher() {
         executionDataWindowRefresher = new DynamicExecutionDataWindowRefresher(
                 this::updateExecutionDataWindow);
@@ -49,12 +55,16 @@ public class DynamicExecutionDataWindowController implements Closeable {
     }
 
     public void updateExecutionDataWindow(ExecutionStatusDTO executionStatusDTO) {
-        if(executionStatusDTO.getStatus() == ExecutionStatus.ERROR)
-        {
+        if (executionStatusDTO.getStatus() == ExecutionStatus.ERROR) {
             Platform.runLater(() ->
                     executionScreenController.handleError(executionStatusDTO.getError(), ExecutionMode.REGULAR));
             stopExecutionDataWindowRefresher();
             return;
+        }
+
+        if (executionStatusDTO.getStatus() == ExecutionStatus.RUNNING && !windowShown) {
+            windowShown = true;
+            Platform.runLater(this::showWindow);
         }
 
         RunResultsDTO runResultsDTO = executionStatusDTO.getLastRunResult();
@@ -70,7 +80,7 @@ public class DynamicExecutionDataWindowController implements Closeable {
             totalLabel.setText(String.valueOf(performedInstructionsCountByArchitecture.values().stream().mapToLong(Long::longValue).sum()));
         });
 
-        if (executionStatusDTO.getStatus() == ExecutionStatus.FINISHED){
+        if (executionStatusDTO.getStatus() == ExecutionStatus.FINISHED) {
             executionScreenController.onExecutionFinished(runResultsDTO);
             stopExecutionDataWindowRefresher();
         }
@@ -78,13 +88,13 @@ public class DynamicExecutionDataWindowController implements Closeable {
 
     @Override
     public void close() throws IOException {
-        if(executionDataWindowRefresher != null && timer != null) {
-            System.out.println("executionDataWindowController: Closing and cancelling refresher.");
+        if (executionDataWindowRefresher != null && timer != null) {
             executionDataWindowRefresher.cancel();
             timer.cancel();
             timer.purge();
-            System.out.println("executionDataWindowController:  CLOSED .");
         }
+
+        windowShown = false;
     }
 
     public void stopExecutionDataWindowRefresher() {
@@ -93,7 +103,13 @@ public class DynamicExecutionDataWindowController implements Closeable {
             timer = null;
         }
     }
+
     public void setExecutionScreenController(ExecutionScreenController executionScreenController) {
         this.executionScreenController = executionScreenController;
     }
+
+    private void showWindow() {
+        executionScreenController.showDynamicExecutionDataWindow();
+    }
 }
+

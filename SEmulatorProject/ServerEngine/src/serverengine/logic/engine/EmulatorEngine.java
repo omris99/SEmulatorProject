@@ -163,7 +163,7 @@ public class EmulatorEngine implements Engine {
 
     public void initDebuggingSession(int degree, Map<String, String> guiUserInputMap, ArchitectureType architecture) {
         executionStatus = new ExecutionStatusDTO();
-        executionStatus.setStatus(ExecutionStatus.RUNNING);
+        executionStatus.setStatus(ExecutionStatus.VALIDATING);
         try {
             checkArchitectureCompatibilityAndChargeInitialCredits(architecture);
             Map<Variable, Long> userInputToVariablesMapConverted = convertGuiVariablesMapToDomainVariablesMap(guiUserInputMap);
@@ -188,6 +188,7 @@ public class EmulatorEngine implements Engine {
                     debuggerExecutor.getArchitecture().getUserString(),
                     debuggerExecutor.getPerformedInstructionsCountByArchitecture(),
                     debuggerExecutor.isFinished());
+            executionStatus.setStatus(ExecutionStatus.RUNNING);
         } catch (Exception e) {
             executionStatus.setStatus(ExecutionStatus.ERROR);
             executionStatus.setError(ErrorMapper.fromException(e));

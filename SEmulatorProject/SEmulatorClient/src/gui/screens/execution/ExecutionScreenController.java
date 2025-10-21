@@ -47,6 +47,9 @@ public class ExecutionScreenController {
     @FXML
     private TreeTableCommandsBarController treeTableCommandsBarController;
 
+    Parent dynamicExecutionDataWindowRoot;
+    DynamicExecutionDataWindowController dynamicExecutionDataWindowController;
+
     @FXML
     public void initialize() {
         instructionsWindowController.setExecutionScreenController(this);
@@ -180,11 +183,6 @@ public class ExecutionScreenController {
                 String responseBodyString = response.body().string();
                 if (response.isSuccessful()) {
                     activateDynamicExecutionDataWindow();
-//                    RunResultsDTO runResultsDTO = GsonFactory.getGson().fromJson(responseBodyString, RunResultsDTO.class);
-//                    Platform.runLater(() -> {
-//                        debuggerWindowController.updateRunResultsAndFinishExecutionModeIfNeeded(runResultsDTO, ExecutionMode.REGULAR);
-//                        finishExecutionMode(ExecutionMode.REGULAR);
-//                    });
                 }
                 else {
                     ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
@@ -595,24 +593,8 @@ public class ExecutionScreenController {
     }
 
     public void activateDynamicExecutionDataWindow() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/dynamicexecutiondatawindow/DynamicExecutionDataWindow.fxml"));
-            Parent load = loader.load();
-            DynamicExecutionDataWindowController controller = loader.getController();
-            controller.setExecutionScreenController(this);
-            controller.startExecutionDataWindowRefresher();
-            Platform.runLater(() -> {
-                Scene scene = new Scene(load, 250, 230);
-                Stage showWindow = new Stage();
-                showWindow.setTitle("Dynamic Execution Data");
-                showWindow.setScene(scene);
-                showWindow.setResizable(false);
-                showWindow.show();
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        initializeDynamicExecutionDataWindow();
+        Platform.runLater(() -> dynamicExecutionDataWindowController.startExecutionDataWindowRefresher());
     }
 
     public void showSpecificExpansionView() {
@@ -667,4 +649,23 @@ public class ExecutionScreenController {
         });
     }
 
+    private void initializeDynamicExecutionDataWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/components/dynamicexecutiondatawindow/DynamicExecutionDataWindow.fxml"));
+            loader.load();
+            this.dynamicExecutionDataWindowController = loader.getController();
+            this.dynamicExecutionDataWindowRoot = loader.getRoot();
+            this.dynamicExecutionDataWindowController.setExecutionScreenController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showDynamicExecutionDataWindow() {
+            Stage stage = new Stage();
+            stage.setTitle("Dynamic Execution Data");
+            stage.setScene(new Scene(dynamicExecutionDataWindowRoot, 250, 230));
+            stage.setResizable(false);
+            stage.show();
+    }
 }

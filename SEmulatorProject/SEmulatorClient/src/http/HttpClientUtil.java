@@ -72,4 +72,8 @@ public class HttpClientUtil {
                 .get()
                 .build();
     }
+
+    public static void setCookieManagerLoggingFacility(Consumer<String> logConsumer) {
+        simpleCookieManager.setLogData(logConsumer);
+    }
 }

@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 public class SimpleCookieManager implements CookieJar {
 
     Map<String, Map<String, Cookie>> cookies = new HashMap<>();
+    private Consumer<String> logData = System.out::println;
 
     @NotNull
     @Override
@@ -44,5 +45,9 @@ public class SimpleCookieManager implements CookieJar {
         synchronized (this) {
             cookies.remove(domain);
         }
+    }
+
+    public void setLogData(Consumer<String> logData) {
+        this.logData = logData;
     }
 }

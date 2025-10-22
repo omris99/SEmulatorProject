@@ -70,6 +70,7 @@ public class ChatAppMainController implements Closeable, HttpStatusUpdate {
             chatRoomComponentController = fxmlLoader.getController();
             chatRoomComponentController.setChatAppMainController(this);
             setMainPanelTo(chatRoomComponent);
+            chatRoomComponentController.setActive();
         } catch (IOException e) {
             e.printStackTrace();
         }

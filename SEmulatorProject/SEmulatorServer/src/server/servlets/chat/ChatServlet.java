@@ -1,6 +1,7 @@
 package server.servlets.chat;
 
 import com.google.gson.Gson;
+import jakarta.servlet.annotation.WebServlet;
 import serverengine.chat.ChatManager;
 import serverengine.chat.SingleChatEntry;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 
+@WebServlet(name = "chatServlet", urlPatterns = {"/chat"})
 public class ChatServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

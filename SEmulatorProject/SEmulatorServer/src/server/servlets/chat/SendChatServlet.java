@@ -8,7 +8,7 @@ import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 import serverengine.chat.ChatManager;
 
-@WebServlet(name = "GetUserChatServlet", urlPatterns = {"/pages/chatroom/sendChat"})
+@WebServlet(name = "GetUserChatServlet", urlPatterns = {"/chat/chatroom/sendChat"})
 public class SendChatServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

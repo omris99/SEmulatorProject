@@ -8,6 +8,7 @@ public class ServerPaths {
     private final static String DEBUG_CONTEXT_PATH = EXECUTION_CONTEXT_PATH + "/debug";
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
     private final static String USERS_CONTEXT_PATH = "/users";
+    private final static String CHAT_CONTEXT_PATH = "/chat";
 
     //GENERAL
     public final static String PROGRAMS_LIST = FULL_SERVER_PATH + "/programs";
@@ -40,4 +41,9 @@ public class ServerPaths {
     //USERS
     public final static String GET_USER_INFO = FULL_SERVER_PATH + USERS_CONTEXT_PATH + "/loggedUserInfo";
     public final static String USERS_LIST = FULL_SERVER_PATH + USERS_CONTEXT_PATH + "/list";
+
+    //CHAT
+    public final static String CHAT_USERS_LIST = FULL_SERVER_PATH + CHAT_CONTEXT_PATH + "/userslist";
+    public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + CHAT_CONTEXT_PATH + "/chatroom/sendChat";
+    public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + CHAT_CONTEXT_PATH;
 }

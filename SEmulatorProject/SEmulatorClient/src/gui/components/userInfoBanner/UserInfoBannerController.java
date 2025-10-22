@@ -16,4 +16,8 @@ public class UserInfoBannerController {
         userNameLabel.setText(userDTO.getUserName());
         availableCreditsLabel.setText(String.valueOf(userDTO.getCreditBalance()));
     }
+
+    public String getUserName() {
+        return userNameLabel.getText();
+    }
 }

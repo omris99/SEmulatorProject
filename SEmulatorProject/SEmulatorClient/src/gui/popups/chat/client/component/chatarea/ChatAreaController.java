@@ -4,6 +4,7 @@ import gui.popups.chat.client.component.api.HttpStatusUpdate;
 import gui.popups.chat.client.component.chatarea.model.ChatLinesWithVersion;
 import gui.popups.chat.client.util.Constants;
 import http.HttpClientUtil;
+import http.ServerPaths;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -57,7 +58,7 @@ public class ChatAreaController implements Closeable {
     void sendButtonClicked(ActionEvent event) {
         String chatLine = chatLineTextArea.getText();
         String finalUrl = HttpUrl
-                .parse(Constants.SEND_CHAT_LINE)
+                .parse(ServerPaths.SEND_CHAT_LINE)
                 .newBuilder()
                 .addQueryParameter("userstring", chatLine)
                 .build()

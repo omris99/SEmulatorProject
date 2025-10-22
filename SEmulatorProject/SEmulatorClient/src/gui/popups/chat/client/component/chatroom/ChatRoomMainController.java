@@ -60,9 +60,4 @@ public class ChatRoomMainController implements Closeable, HttpStatusUpdate, Chat
     public void setChatAppMainController(ChatAppMainController chatAppMainController) {
         this.chatAppMainController = chatAppMainController;
     }
-
-    @Override
-    public void logout() {
-        chatAppMainController.switchToLogin();
-    }
 }

@@ -1,21 +1,29 @@
 package gui.screens.dashboard;
 
-import clientserverdto.*;
+import clientserverdto.ErrorDTO;
+import clientserverdto.ExecutionHistoryDTO;
+import clientserverdto.UploadedProgramDTO;
+import clientserverdto.UserDTO;
 import gui.app.ClientController;
 import gui.components.creditswindow.CreditsWindowController;
 import gui.components.loadfilebar.LoadFileBarController;
 import gui.components.programswindow.ProgramsWindowController;
 import gui.components.userInfoBanner.UserInfoBannerController;
 import gui.components.userswindow.UsersWindowController;
+import gui.popups.chat.client.component.main.ChatAppMainController;
 import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import okhttp3.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import json.GsonFactory;
-
+import okhttp3.*;
 
 import java.io.Closeable;
 import java.io.File;
@@ -39,6 +47,9 @@ public class DashBoardController implements Closeable {
 
     @FXML
     private CreditsWindowController creditsWindowController;
+
+    @FXML
+    private Button chatButton;
 
     @FXML
     private void initialize() {
@@ -175,5 +186,30 @@ public class DashBoardController implements Closeable {
     public void close() throws IOException {
         usersWindowController.close();
         programsWindowController.close();
+    }
+
+    public void chatButtonClicked() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/popups/chat/client/component/main/chat-app-main.fxml"));
+            loader.load();
+            ChatAppMainController controller = loader.getController();
+            controller.updateUserName(userInfoBannerController.getUserName());
+            Parent root = loader.getRoot();
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("S-Emulator Chat");
+            primaryStage.setMinHeight(600);
+            primaryStage.setMinWidth(600);
+            primaryStage.setScene(new Scene(root, 700, 600));
+            primaryStage.setOnCloseRequest(event -> {
+                try {
+                    controller.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

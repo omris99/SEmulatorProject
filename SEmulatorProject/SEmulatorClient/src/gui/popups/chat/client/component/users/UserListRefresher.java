@@ -1,9 +1,8 @@
 package gui.popups.chat.client.component.users;
 
 
-import com.google.gson.Gson;
-import gui.popups.chat.client.util.Constants;
 import http.HttpClientUtil;
+import http.ServerPaths;
 import javafx.beans.property.BooleanProperty;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,9 +42,9 @@ public class UserListRefresher extends TimerTask {
         }
 
         final int finalRequestNumber = ++requestNumber;
-        httpRequestLoggerConsumer.accept("About to invoke: " + Constants.USERS_LIST + " | Users Request # " + finalRequestNumber);
+        httpRequestLoggerConsumer.accept("About to invoke: " + ServerPaths.CHAT_USERS_LIST + " | Users Request # " + finalRequestNumber);
         Request request = new Request.Builder()
-                .url(Constants.USERS_LIST)
+                .url(ServerPaths.CHAT_USERS_LIST)
                 .build();
 
         HttpClientUtil.runAsync(request, new Callback() {

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import gui.popups.chat.client.component.chatarea.model.ChatLinesWithVersion;
 import gui.popups.chat.client.util.Constants;
 import http.HttpClientUtil;
+import http.ServerPaths;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import okhttp3.*;
@@ -42,7 +43,7 @@ public class ChatAreaRefresher extends TimerTask {
 
         //noinspection ConstantConditions
         String finalUrl = HttpUrl
-                .parse(Constants.CHAT_LINES_LIST)
+                .parse(ServerPaths.CHAT_LINES_LIST)
                 .newBuilder()
                 .addQueryParameter("chatversion", String.valueOf(chatVersion.get()))
                 .build()

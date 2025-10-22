@@ -10,11 +10,5 @@ public class Constants {
     public final static int REFRESH_RATE = 2000;
     public final static String CHAT_LINE_FORMATTING = "%tH:%tM:%tS | %.10s: %s%n";
 
-    // fxml locations
-    public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/gui/popups/chat/client/component/main/chat-app-main.fxml";
-    public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/gui/popups/chat/client/component/login/login.fxml";
     public final static String CHAT_ROOM_FXML_RESOURCE_LOCATION = "/gui/popups/chat/client/component/chatroom/chat-room-main.fxml";
-
-    // GSON instance
-    public final static Gson GSON_INSTANCE = new Gson();
 }

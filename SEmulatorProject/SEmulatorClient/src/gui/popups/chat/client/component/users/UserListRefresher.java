@@ -1,9 +1,11 @@
 package gui.popups.chat.client.component.users;
 
 
+import com.google.gson.Gson;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.beans.property.BooleanProperty;
+import json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -15,9 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.function.Consumer;
-
-import static gui.popups.chat.client.util.Constants.GSON_INSTANCE;
-
 
 public class UserListRefresher extends TimerTask {
 
@@ -59,7 +58,7 @@ public class UserListRefresher extends TimerTask {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonArrayOfUsersNames = response.body().string();
                 httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Response: " + jsonArrayOfUsersNames);
-                String[] usersNames = GSON_INSTANCE.fromJson(jsonArrayOfUsersNames, String[].class);
+                String[] usersNames = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, String[].class);
                 usersListConsumer.accept(Arrays.asList(usersNames));
             }
         });

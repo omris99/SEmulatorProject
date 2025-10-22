@@ -20,15 +20,9 @@ public class SendChatServlet extends HttpServlet {
 
         String userChatString = request.getParameter(Constants.CHAT_PARAMETER);
         if (userChatString != null && !userChatString.isEmpty()) {
-            logServerMessage("Adding chat string from " + username + ": " + userChatString);
             synchronized (getServletContext()) {
                 chatManager.addChatString(userChatString, username);
             }
         }
     }
-
-    private void logServerMessage(String message) {
-        System.out.println(message);
-    }
-
 }

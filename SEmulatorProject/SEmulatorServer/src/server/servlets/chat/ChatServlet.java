@@ -1,7 +1,7 @@
 package server.servlets.chat;
 
-import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
+import json.GsonFactory;
 import serverengine.chat.ChatManager;
 import serverengine.chat.SingleChatEntry;
 import java.io.IOException;
@@ -47,8 +47,7 @@ public class ChatServlet extends HttpServlet {
 
         // log and create the response json string
         ChatAndVersion cav = new ChatAndVersion(chatEntries, chatManagerVersion);
-        Gson gson = new Gson();
-        String jsonResponse = gson.toJson(cav);
+        String jsonResponse = GsonFactory.getGson().toJson(cav);
         logServerMessage("Server Chat version: " + chatManagerVersion + ", User '" + username + "' Chat version: " + chatVersion);
         logServerMessage(jsonResponse);
 

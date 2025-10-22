@@ -7,6 +7,7 @@ import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import json.GsonFactory;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,6 @@ import java.io.IOException;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-import static gui.popups.chat.client.util.Constants.GSON_INSTANCE;
 
 public class ChatAreaRefresher extends TimerTask {
 
@@ -65,7 +65,7 @@ public class ChatAreaRefresher extends TimerTask {
                 if (response.isSuccessful()) {
                     String rawBody = response.body().string();
                     httpRequestLoggerConsumer.accept("Response of Chat Request # " + finalRequestNumber + ": " + rawBody);
-                    ChatLinesWithVersion chatLinesWithVersion = GSON_INSTANCE.fromJson(rawBody, ChatLinesWithVersion.class);
+                    ChatLinesWithVersion chatLinesWithVersion = GsonFactory.getGson().fromJson(rawBody, ChatLinesWithVersion.class);
                     chatlinesConsumer.accept(chatLinesWithVersion);
                 } else {
                     httpRequestLoggerConsumer.accept("Something went wrong with Request # " + finalRequestNumber + ". Code is " + response.code());

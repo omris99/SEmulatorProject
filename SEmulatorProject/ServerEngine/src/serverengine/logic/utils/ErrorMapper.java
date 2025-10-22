@@ -65,12 +65,19 @@ public class ErrorMapper {
 
         if (e instanceof CreditBalanceTooLowException) {
             CreditBalanceTooLowException ex = (CreditBalanceTooLowException) e;
+            String message = String.format(
+                    "Your credit balance is too low to continue running this program.%n%n" +
+                            "• Current balance: %d%n" +
+                            "• Cost of the current instruction: %d%n",
+                    ex.getCreditsBalance(),
+                    ex.getCreditsCost()
+            );
+
             return new ErrorDTO(
                     ExecutionErrorType.CREDIT_BALANCE_TOO_LOW,
                     "Credit Balance Too Low",
-                    "Can't Run Program",
-                    "Credit Balance Too Low. Cost of current instruction: " + ex.getCreditsCost() +
-                            ", Your Balance: " + ex.getCreditsBalance()
+                    "Cannot Continue Program Execution",
+                    message
             );
         }
 

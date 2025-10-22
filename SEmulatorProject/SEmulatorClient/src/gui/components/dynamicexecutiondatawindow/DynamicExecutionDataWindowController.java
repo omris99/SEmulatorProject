@@ -7,11 +7,7 @@ import gui.screens.execution.ExecutionMode;
 import gui.screens.execution.ExecutionScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import types.modeltypes.ArchitectureType;
 
 import java.io.Closeable;

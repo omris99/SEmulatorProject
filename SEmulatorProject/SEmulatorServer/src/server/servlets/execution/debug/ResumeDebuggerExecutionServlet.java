@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
 import serverengine.logic.exceptions.CreditBalanceTooLowException;
+import serverengine.logic.utils.ErrorMapper;
 import types.errortypes.ExecutionErrorType;
 import json.GsonFactory;
 import server.utils.ServletUtils;
@@ -26,11 +27,9 @@ public class ResumeDebuggerExecutionServlet extends HttpServlet {
         RunResultsDTO context;
         try {
             context = (RunResultsDTO) engine.resume();
-        } catch (CreditBalanceTooLowException e){
+        } catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorDTO error = new ErrorDTO(ExecutionErrorType.CREDIT_BALANCE_TOO_LOW, "Credit Balance Too Low",
-                    "Can't Resume Debug",
-                    "Credit Balance Too Low. Cost of current instruction: " + e.getCreditsCost() + ",Your Balance: " + e.getCreditsBalance());
+            ErrorDTO error = ErrorMapper.fromException(e);
             String errorJson = GsonFactory.getGson().toJson(error);
             resp.getWriter().write(errorJson);
             return;

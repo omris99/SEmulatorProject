@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import json.GsonFactory;
+import server.execution.ExecutionManager;
 import server.utils.ServletUtils;
 import server.utils.SessionUtils;
 import serverengine.logic.engine.EmulatorEngine;
@@ -33,7 +34,7 @@ public class RunProgramServlet extends HttpServlet {
         String username = SessionUtils.getUsername(req);
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), username);
 
-        Thread runProgramThread = new Thread(() -> {
+        ExecutionManager.getExecutor().submit(() ->{
             try {
                 engine.runLoadedProgramWithDebuggerWindowInput(runDegree, inputVariables, ArchitectureType.fromUserString(architecture));
             } catch (Exception e) {
@@ -41,8 +42,6 @@ public class RunProgramServlet extends HttpServlet {
             }
         });
 
-        runProgramThread.setDaemon(true);
-        runProgramThread.start();
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 }

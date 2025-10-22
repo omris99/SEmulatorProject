@@ -21,11 +21,7 @@ public class GetExecutionStatus extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
         EmulatorEngine engine = ServletUtils.getUserEmulatorEngine(getServletContext(), SessionUtils.getUsername(req));
-
-        long start = System.currentTimeMillis();
         ExecutionStatusDTO executionLatestData = engine.getExecutionStatus();
-        long end = System.currentTimeMillis();
-        System.out.println("DTO fetch took: " + (end - start) + "ms");
         String executionDtoJson = GsonFactory.getGson().toJson(executionLatestData);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(executionDtoJson);

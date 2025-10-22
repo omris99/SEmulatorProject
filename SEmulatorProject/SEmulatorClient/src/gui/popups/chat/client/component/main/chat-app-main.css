@@ -1,11 +1,25 @@
-#chat-app-client-header {
-    -fx-text-fill: PURPLE;
-    -fx-font-size: 20px;
-    -fx-font-weight: BOLD;
+#chat-header {
+    -fx-background-color: linear-gradient(to bottom, #d3d3d3, #ffffff, #d3d3d3);
+    -fx-text-fill: #7d7d7d;
+    -fx-font-size: 21px;
+    -fx-font-weight: 600;
+    -fx-alignment: center;
 }
 
 #greeting-label {
-    -fx-text-fill: BLUE;
+    -fx-text-fill: #535353;
     -fx-font-size: 16px;
     -fx-font-weight: BOLD;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #9e9e9e, #7d7d7d);
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #757380, #5a5768);
 }

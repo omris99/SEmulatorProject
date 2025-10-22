@@ -1,14 +1,3 @@
-#send-button {
-    -fx-text-fill: PURPLE;
-    -fx-font-size: 20px;
-    -fx-font-weight: BOLD;
-}
-
-.toggle-action-button {
-    -fx-text-fill: GREEN;
-    -fx-font-size: 14px;
-    -fx-font-weight: BOLD;
-}
 
 #say-something-label {
     -fx-text-fill: PURPLE;
@@ -17,7 +6,7 @@
 }
 
 #chat-version-label {
-    -fx-text-fill: GREEN;
-    -fx-font-size: 14px;
+    -fx-text-fill: #959595;
+    -fx-font-size: 12px;
     -fx-font-weight: BOLD;
 }

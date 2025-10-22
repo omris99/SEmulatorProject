@@ -2,6 +2,7 @@ package gui.popups.chat.client.component.users;
 
 
 import com.google.gson.Gson;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.beans.property.BooleanProperty;
@@ -20,7 +21,6 @@ import java.util.function.Consumer;
 
 public class UserListRefresher extends TimerTask {
 
-    private final Consumer<String> httpRequestLoggerConsumer;
     private final Consumer<List<String>> usersListConsumer;
     private int requestNumber;
     private final BooleanProperty shouldUpdate;
@@ -28,7 +28,6 @@ public class UserListRefresher extends TimerTask {
 
     public UserListRefresher(BooleanProperty shouldUpdate, Consumer<String> httpRequestLoggerConsumer, Consumer<List<String>> usersListConsumer) {
         this.shouldUpdate = shouldUpdate;
-        this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;
         this.usersListConsumer = usersListConsumer;
         requestNumber = 0;
     }
@@ -41,7 +40,6 @@ public class UserListRefresher extends TimerTask {
         }
 
         final int finalRequestNumber = ++requestNumber;
-        httpRequestLoggerConsumer.accept("About to invoke: " + ServerPaths.CHAT_USERS_LIST + " | Users Request # " + finalRequestNumber);
         Request request = new Request.Builder()
                 .url(ServerPaths.CHAT_USERS_LIST)
                 .build();
@@ -50,14 +48,12 @@ public class UserListRefresher extends TimerTask {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Ended with failure...");
-
+                Utils.showErrorAlert("Chat Error", "Failure", "Something went wrong with Request");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonArrayOfUsersNames = response.body().string();
-                httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Response: " + jsonArrayOfUsersNames);
                 String[] usersNames = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, String[].class);
                 usersListConsumer.accept(Arrays.asList(usersNames));
             }

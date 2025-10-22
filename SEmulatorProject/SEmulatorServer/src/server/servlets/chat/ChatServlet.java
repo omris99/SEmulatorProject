@@ -48,18 +48,12 @@ public class ChatServlet extends HttpServlet {
         // log and create the response json string
         ChatAndVersion cav = new ChatAndVersion(chatEntries, chatManagerVersion);
         String jsonResponse = GsonFactory.getGson().toJson(cav);
-        logServerMessage("Server Chat version: " + chatManagerVersion + ", User '" + username + "' Chat version: " + chatVersion);
-        logServerMessage(jsonResponse);
 
         try (PrintWriter out = response.getWriter()) {
             out.print(jsonResponse);
             out.flush();
         }
 
-    }
-
-    private void logServerMessage(String message){
-        System.out.println(message);
     }
 
     private static class ChatAndVersion {

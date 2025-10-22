@@ -17,8 +17,6 @@ public class ChatRoomMainController implements Closeable, HttpStatusUpdate, Chat
 
     @FXML private VBox usersListComponent;
     @FXML private UsersListController usersListComponentController;
-    @FXML private VBox actionCommandsComponent;
-    @FXML private CommandsController actionCommandsComponentController;
     @FXML private GridPane chatAreaComponent;
     @FXML private ChatAreaController chatAreaComponentController;
 
@@ -27,11 +25,9 @@ public class ChatRoomMainController implements Closeable, HttpStatusUpdate, Chat
     @FXML
     public void initialize() {
         usersListComponentController.setHttpStatusUpdate(this);
-        actionCommandsComponentController.setChatCommands(this);
         chatAreaComponentController.setHttpStatusUpdate(this);
 
-        chatAreaComponentController.autoUpdatesProperty().bind(actionCommandsComponentController.autoUpdatesProperty());
-        usersListComponentController.autoUpdatesProperty().bind(actionCommandsComponentController.autoUpdatesProperty());
+        usersListComponentController.autoUpdatesProperty().bind(chatAreaComponentController.autoUpdatesProperty());
     }
 
     @Override

@@ -28,10 +28,13 @@ public class ChatAreaController implements Closeable {
 
     private final IntegerProperty chatVersion;
     private final BooleanProperty autoScroll;
-    private final BooleanProperty autoUpdate;
+    private final BooleanProperty autoUpdates;
     private HttpStatusUpdate httpStatusUpdate;
     private ChatAreaRefresher chatAreaRefresher;
     private Timer timer;
+
+    @FXML private ToggleButton autoUpdatesButton;
+
 
     @FXML private ToggleButton autoScrollButton;
     @FXML private TextArea chatLineTextArea;
@@ -39,19 +42,20 @@ public class ChatAreaController implements Closeable {
     @FXML private Label chatVersionLabel;
 
     public ChatAreaController() {
+        autoUpdates = new SimpleBooleanProperty();
         chatVersion = new SimpleIntegerProperty();
         autoScroll = new SimpleBooleanProperty();
-        autoUpdate = new SimpleBooleanProperty();
     }
 
     @FXML
     public void initialize() {
+        autoUpdates.bind(autoUpdatesButton.selectedProperty());
         autoScroll.bind(autoScrollButton.selectedProperty());
         chatVersionLabel.textProperty().bind(Bindings.concat("Chat Version: ", chatVersion.asString()));
     }
 
     public BooleanProperty autoUpdatesProperty() {
-        return autoUpdate;
+        return autoUpdates;
     }
 
     @FXML
@@ -63,8 +67,6 @@ public class ChatAreaController implements Closeable {
                 .addQueryParameter("userstring", chatLine)
                 .build()
                 .toString();
-
-        httpStatusUpdate.updateHttpLine(finalUrl);
 
         Request request = new Request.Builder()
                 .url(finalUrl)
@@ -120,7 +122,7 @@ public class ChatAreaController implements Closeable {
     public void startListRefresher() {
         chatAreaRefresher = new ChatAreaRefresher(
                 chatVersion,
-                autoUpdate,
+                autoUpdates,
                 httpStatusUpdate::updateHttpLine,
                 this::updateChatLines);
         timer = new Timer();

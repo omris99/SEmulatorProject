@@ -56,9 +56,12 @@ public class InstructionsTableController {
             protected void updateItem(InstructionDTO item, boolean empty) {
                 super.updateItem(item, empty);
 
-                getStyleClass().removeAll("highlighted", "next-instruction", "architecture-highlighted");
+                getStyleClass().removeAll("highlighted", "next-instruction", "architecture-inappropriate-highlighted", "architecture-ok-highlighted");
 
                 if (item == null || empty) {
+                    return;
+                }
+                if (!shouldHighlight()) {
                     return;
                 }
 
@@ -79,7 +82,10 @@ public class InstructionsTableController {
                     getStyleClass().add("highlighted");
                 }
                 if (isArchitectureHighlighted) {
-                    getStyleClass().add("architecture-highlighted");
+                    getStyleClass().add("architecture-inappropriate-highlighted");
+                }
+                else{
+                    getStyleClass().add("architecture-ok-highlighted");
                 }
             }
         });
@@ -117,5 +123,9 @@ public class InstructionsTableController {
     public void stopHighlightingNextInstructionToExecute(){
         this.nextInstructionToExecuteIndex = 0;
         InstructionsTable.refresh();
+    }
+
+    public boolean shouldHighlight() {
+        return false;
     }
 }

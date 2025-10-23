@@ -41,7 +41,6 @@ public class ChatAreaController implements Closeable {
     @FXML private ToggleButton autoScrollButton;
     @FXML private TextArea chatLineTextArea;
     @FXML private TextArea mainChatLinesTextArea;
-    @FXML private Label chatVersionLabel;
 
     public ChatAreaController() {
         autoUpdates = new SimpleBooleanProperty();
@@ -53,7 +52,6 @@ public class ChatAreaController implements Closeable {
     public void initialize() {
         autoUpdates.bind(autoUpdatesButton.selectedProperty());
         autoScroll.bind(autoScrollButton.selectedProperty());
-        chatVersionLabel.textProperty().bind(Bindings.concat("Chat Version: ", chatVersion.asString()));
     }
 
     public BooleanProperty autoUpdatesProperty() {

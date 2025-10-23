@@ -68,7 +68,7 @@ public class LoginController {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() ->
-                        errorMessageProperty.set("Something went wrong: " + e.getMessage())
+                        errorMessageProperty.set("Connection Failure! Please try again later.")
                 );
             }
 
@@ -77,7 +77,7 @@ public class LoginController {
                 String responseBody = response.body().string();
                 if (response.code() != 200) {
                     Platform.runLater(() ->
-                            errorMessageProperty.set("Something went wrong: " + responseBody)
+                            errorMessageProperty.set("Something went wrong: code " + response.code())
                     );
                 } else {
                     Platform.runLater(() -> {

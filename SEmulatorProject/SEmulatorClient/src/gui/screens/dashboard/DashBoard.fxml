@@ -67,7 +67,10 @@
                   <Insets bottom="10.0" top="10.0" />
                </VBox.margin>
             </HBox>
-            <Button fx:id="chatButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#chatButtonClicked" prefHeight="22.0" prefWidth="58.0" text="Chat" />
+            <Button id="chat-button" fx:id="chatButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#chatButtonClicked" prefHeight="22.0" prefWidth="58.0" text="Chat">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></Button>
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />

@@ -2,12 +2,14 @@ package gui.popups.chat.client.component.chatarea;
 
 import gui.popups.chat.client.component.api.HttpStatusUpdate;
 import gui.popups.chat.client.component.chatarea.model.ChatLinesWithVersion;
-import gui.popups.chat.client.util.Constants;
 import http.HttpClientUtil;
 import http.ServerPaths;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,0 +1,41 @@
+.header {
+    -fx-background-color: linear-gradient(to bottom, #040078, #1f1fa8);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-alignment: center;
+    -fx-padding: 4 0;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0.3, 0, 1);
+}
+
+#view {
+    -fx-background-color: linear-gradient(to bottom, #fcfcfc, #eef2ff);
+    -fx-background-radius: 0 0 6 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0.2, 0, 1);
+}
+
+#executed-instructions-summary {
+    -fx-background-color: linear-gradient(to bottom, #bcbcbc, #a5a5a5);
+    -fx-background-radius: 4;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #ffffff;
+}
+
+/* Text styling */
+.keys {
+    -fx-text-fill: #333333;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+    -fx-alignment: center-left;
+    -fx-padding: 1 0;
+}
+
+.values {
+    -fx-text-fill: #040078;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-alignment: center-left;
+}
+

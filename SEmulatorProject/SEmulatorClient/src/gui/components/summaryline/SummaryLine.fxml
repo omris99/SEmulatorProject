@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="53.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.summaryline.SummaryLineController">
+   <children>
+      <Label alignment="TOP_CENTER" prefHeight="20.0" prefWidth="1758.0" styleClass="component-header" text="Instructions Count:" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <HBox alignment="CENTER" spacing="7.0">
+               <children>
+                  <Label text="Basic" />
+                  <TextField fx:id="basicInstructionsCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Separator>
+            <HBox alignment="CENTER" spacing="7.0">
+               <children>
+                  <Label text="Synthetic" />
+                  <TextField fx:id="syntheticInstructionsCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator layoutX="557.0" layoutY="10.0" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0" />
+            <HBox alignment="CENTER" layoutX="598.0" layoutY="10.0" spacing="7.0">
+               <children>
+                  <Label text="Arch. I" />
+                  <TextField fx:id="architectureOneCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator layoutX="740.0" layoutY="10.0" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0" />
+            <HBox alignment="CENTER" layoutX="756.0" layoutY="10.0" spacing="7.0">
+               <children>
+                  <Label text="Arch. II" />
+                  <TextField fx:id="architectureTwoCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator layoutX="743.0" layoutY="10.0" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0" />
+            <HBox alignment="CENTER" layoutX="794.0" layoutY="10.0" spacing="7.0">
+               <children>
+                  <Label text="Arch. III" />
+                  <TextField fx:id="architectureThreeCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator layoutX="817.0" layoutY="10.0" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="40.0" />
+            <HBox alignment="CENTER" layoutX="833.0" layoutY="10.0" spacing="7.0">
+               <children>
+                  <Label text="Arch. IV" />
+                  <TextField fx:id="architectureFourCount" disable="true" editable="false" prefHeight="26.0" prefWidth="50.0" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

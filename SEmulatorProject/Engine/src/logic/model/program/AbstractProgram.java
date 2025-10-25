@@ -70,7 +70,7 @@ public abstract class AbstractProgram implements Program {
                 instructions.getInstructionsTypeCount(),
                 instructions.getDegree(),
                 instructions.getMaximalDegree(),
-                getAllInstructionsWorkVariables(),
+                getProgramWorkVariablesNames(),
                 functionsNames
         );
     }
@@ -87,6 +87,11 @@ public abstract class AbstractProgram implements Program {
 
     private List<String> getProgramInputsNames() {
         return getAllInstructionsInputs().stream()
+                .sorted(Comparator.comparingInt(Variable::getNumber))
+                .map(Argument::getRepresentation).collect(Collectors.toList());
+    }
+    private List<String> getProgramWorkVariablesNames() {
+        return getAllInstructionsWorkVariables().stream()
                 .sorted(Comparator.comparingInt(Variable::getNumber))
                 .map(Argument::getRepresentation).collect(Collectors.toList());
     }

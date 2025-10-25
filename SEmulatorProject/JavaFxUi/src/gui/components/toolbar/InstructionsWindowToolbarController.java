@@ -90,7 +90,7 @@ public class InstructionsWindowToolbarController {
         highlightOptions.addAll(programDTO.getLabelsNames());
         highlightOptions.add("y");
         highlightOptions.addAll(programDTO.getInputNames());
-        highlightOptions.addAll(programDTO.getWorkVariables().stream().map(Variable::getRepresentation).toList());
+        highlightOptions.addAll(programDTO.getWorkVariables());
         highlightSelectionController.updateOptions(highlightOptions);
     }
 

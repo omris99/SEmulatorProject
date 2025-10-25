@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<SplitPane dividerPositions="0.1348314606741573" orientation="VERTICAL" prefHeight="447.0" prefWidth="454.0" stylesheets="@chat-app-main.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.popups.chat.client.component.main.ChatAppMainController">
+<SplitPane dividerPositions="0.1348314606741573" orientation="VERTICAL" prefHeight="447.0" prefWidth="454.0" stylesheets="@chat-app-main.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.popups.chat.client.component.main.ChatAppMainController">
   <items>
       <StackPane id="chat-header" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="2560.0">
          <children>

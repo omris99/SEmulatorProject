@@ -23,10 +23,6 @@ import okhttp3.Response;
 import java.io.Closeable;
 import java.io.IOException;
 
-//TODO:
-// 3. TRY TO MAKE ErrorType CLASS TO HANDLE ERRORS - AND MAYBE ADD CREATE DTO FUNCTION THERE
-// 6. IMPLEMENT SHOW ERROR ALERT AS STATIC UTIL AND USE IT Refreshers!!
-// 7. MAKE GENERIC RESPONSE FOR FAILURE WITH SERVER CONNECTION - LIKE "FAILED TO CONNECT TO SERVER" - AND USE IT IN ALL CALLS
 
 public class ClientController implements Closeable {
     @FXML

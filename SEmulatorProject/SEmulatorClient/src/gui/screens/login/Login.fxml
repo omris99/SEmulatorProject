@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="2560.0" stylesheets="@../../app/resources/themes/classic-theme.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.screens.login.LoginController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="2560.0" stylesheets="@../../app/resources/themes/classic-theme.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.screens.login.LoginController">
    <children>
       <Label id="app-header" alignment="CENTER" minHeight="-Infinity" prefHeight="61.0" prefWidth="2560.0" text="Login" textAlignment="CENTER" textFill="#7d7d7d">
          <font>
@@ -19,7 +19,7 @@
       </Label>
       <VBox alignment="CENTER" prefHeight="1100.0" prefWidth="2560.0" spacing="20.0">
          <children>
-            <Label prefHeight="63.0" prefWidth="535.0" text="Welcome to S-Emulator ! " textFill="#b5b5b5">
+            <Label prefHeight="63.0" text="Welcome to S-Emulator ! " textFill="#b5b5b5">
                <font>
                   <Font size="50.0" />
                </font>

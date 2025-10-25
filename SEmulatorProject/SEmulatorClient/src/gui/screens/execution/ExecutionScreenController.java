@@ -185,8 +185,7 @@ public class ExecutionScreenController {
                     activateDynamicExecutionDataWindow();
                 }
                 else {
-                    ErrorDTO error = GsonFactory.getGson().fromJson(responseBodyString, ErrorDTO.class);
-                    Platform.runLater(() -> handleError(error, ExecutionMode.REGULAR));
+                    Utils.showErrorAlert("Error!", "Failed to run program on server", "code: " + response.code());
                 }
 
                 clientController.updateUserInfo();

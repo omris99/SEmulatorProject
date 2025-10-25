@@ -31,8 +31,7 @@ public class AvailableProgramsTableRefresher extends TimerTask {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("Failed to fetch programs list: (failure) " + e.getMessage());
-
+                // i think we can ignore failures here
             }
 
             @Override

@@ -111,11 +111,9 @@ public class AvailableFunctionsTableController implements Closeable {
     @Override
     public void close() throws IOException {
         if(listRefresher != null && timer != null) {
-            System.out.println("AvailableFunctionsTableController: Closing and cancelling refresher.");
             listRefresher.cancel();
             timer.cancel();
             timer.purge();
-            System.out.println("AvailableFunctionsTableController:  CLOSED .");
         }
     }
 }

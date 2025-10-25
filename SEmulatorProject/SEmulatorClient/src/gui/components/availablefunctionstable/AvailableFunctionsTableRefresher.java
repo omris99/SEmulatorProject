@@ -31,15 +31,13 @@ public class AvailableFunctionsTableRefresher extends TimerTask {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                // Handle failure if needed
-                System.out.println("Failed to fetch functions list: (failure) " + e.getMessage());
+                // i think we can ignore failures here
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonArrayOfUsersNames = response.body().string();
                 if(!response.isSuccessful()){
-                    System.out.println("Failed to fetch functions list. " + jsonArrayOfUsersNames);
                     return;
                 }
                 UploadedProgramDTO[] functions = GsonFactory.getGson().fromJson(jsonArrayOfUsersNames, UploadedProgramDTO[].class);

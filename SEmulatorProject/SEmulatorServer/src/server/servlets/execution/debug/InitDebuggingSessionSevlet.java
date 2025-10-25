@@ -35,7 +35,6 @@ public class InitDebuggingSessionSevlet extends HttpServlet {
             ExecutionStatusDTO initialState = engine.getExecutionStatus();
             if(initialState.getStatus() == ExecutionStatus.ERROR){
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                System.out.println("Error initializing debugging session: " + initialState.getError());
                 ErrorDTO error = initialState.getError();
                 String errorJson = GsonFactory.getGson().toJson(error);
                 resp.getWriter().write(errorJson);

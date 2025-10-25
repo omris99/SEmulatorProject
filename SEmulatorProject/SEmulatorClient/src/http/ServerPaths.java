@@ -3,7 +3,7 @@ package http;
 public class ServerPaths {
     public final static String BASE_DOMAIN = "localhost";
     private final static String BASE_URL = "http://" + BASE_DOMAIN + ":8080";
-    private final static String CONTEXT_PATH = "/SEmulatorServer_Web_exploded";
+    private final static String CONTEXT_PATH = "/SEmulatorServer";
     private final static String EXECUTION_CONTEXT_PATH = "/execution";
     private final static String DEBUG_CONTEXT_PATH = EXECUTION_CONTEXT_PATH + "/debug";
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;

@@ -41,11 +41,9 @@ public class User {
 
     public void addMainProgram(UploadedProgram program) {
         ProgramsRepo programsRepo = ProgramsRepo.getInstance();
-        System.out.println("Adding main program: " + program.getUserString() + " to user: " + this.userName);
         this.mainProgramsUploaded.add(program.getName());
 
         for (String functionName : program.getProgram().getFunctionsNames()) {
-            System.out.println("Adding function: " + functionName + " to user: " + this.userName);
             if (programsRepo.isFunctionUploadedByUser(functionName, this.userName) &&
                     !this.functionsContributed.contains(functionName)) {
                 this.functionsContributed.add(functionName);

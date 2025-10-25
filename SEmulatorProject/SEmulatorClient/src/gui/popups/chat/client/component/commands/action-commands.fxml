@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="126.0" spacing="5.0" stylesheets="@action-commands.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.popups.chat.client.component.commands.CommandsController">
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="126.0" spacing="5.0" stylesheets="@action-commands.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.popups.chat.client.component.commands.CommandsController">
    <children>
       <ToggleButton id="auto-updates-button" fx:id="autoUpdatesButton" mnemonicParsing="false" prefWidth="100.0" selected="true" styleClass="main-action-button" text="Auto Updates" textAlignment="CENTER" wrapText="true" />
    </children>

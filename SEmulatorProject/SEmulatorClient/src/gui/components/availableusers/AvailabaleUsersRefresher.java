@@ -1,8 +1,10 @@
 package gui.components.availableusers;
 
 import clientserverdto.UserDTO;
+import gui.utils.Utils;
 import http.HttpClientUtil;
 import http.ServerPaths;
+import javafx.application.Platform;
 import json.GsonFactory;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,7 +34,7 @@ public class AvailabaleUsersRefresher extends TimerTask {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("Failed to fetch users list: (failure) " + e.getMessage());
+                // error
             }
 
             @Override

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_RIGHT" prefHeight="440.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.availableusers.AvailableUsersTableController">
+<VBox alignment="TOP_RIGHT" prefHeight="440.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.availableusers.AvailableUsersTableController">
    <children>
       <TableView fx:id="usersTable" prefHeight="538.0" prefWidth="833.0">
         <columns>

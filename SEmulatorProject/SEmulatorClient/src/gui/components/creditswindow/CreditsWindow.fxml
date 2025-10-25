@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="250.0" styleClass="mini-window" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.creditswindow.CreditsWindowController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="250.0" styleClass="mini-window" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.components.creditswindow.CreditsWindowController">
    <children>
       <Label fx:id="availableCreditsLabel" alignment="CENTER" prefHeight="17.0" prefWidth="263.0" styleClass="mini-window-header" text="Charge Credits" textFill="WHITE" />
       <HBox alignment="CENTER" prefHeight="42.0" prefWidth="178.0" spacing="10.0">

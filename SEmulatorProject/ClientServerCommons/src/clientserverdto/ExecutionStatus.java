@@ -5,5 +5,6 @@ public enum ExecutionStatus {
     VALIDATING,
     RUNNING,
     ERROR,
+    STOPPED,
     FINISHED
 }

@@ -122,7 +122,6 @@ public class DebuggerWindowController {
 
     public void onStopButtonClick() {
         executionScreenController.stopDebuggingSession();
-        finishExecutionMode(ExecutionMode.DEBUG);
     }
 
     public void onResumeClick() {

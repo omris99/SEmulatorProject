@@ -85,8 +85,13 @@ public class EmulatorEngine implements Engine {
             do {
                 runResults = executeNextInstructionOnDebugger();
             } while (!runResults.isFinished());
-            addExecutionToHistoryAndUpdateUploadedProgramData(runResults);
+
+            if(!executionStatus.getStatus().equals(ExecutionStatus.STOPPED)){
+                addExecutionToHistoryAndUpdateUploadedProgramData(runResults);
+            }
+
             executionStatus.setStatus(ExecutionStatus.FINISHED);
+
         } catch (Exception e){
             executionStatus.setStatus(ExecutionStatus.ERROR);
             executionStatus.setError(ErrorMapper.fromException(e));
@@ -240,6 +245,7 @@ public class EmulatorEngine implements Engine {
     }
 
     public void stopDebuggingSession() {
+        executionStatus.setStatus(ExecutionStatus.STOPPED);
         debuggerExecutor.stop();
     }
 

@@ -105,6 +105,7 @@ public class debuggerCommandsBarController {
     public void executionModeButtons(boolean disable){
         if(!disable){
             disableAllButtons();
+            stopButton.setDisable(false);
         } else {
             startButton.setDisable(false);
             debugButton.setDisable(false);

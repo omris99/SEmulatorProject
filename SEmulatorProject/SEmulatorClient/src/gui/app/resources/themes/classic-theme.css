@@ -121,6 +121,11 @@
     -fx-border-color: #168800;
     -fx-border-width: 1;
 }
+.table-row-cell.architecture-ok-highlighted.next-instruction{
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 0, 0.7), rgba(255, 255, 255, 0), rgba(255, 255, 0, 0.7));
+    -fx-border-color: #168800;
+    -fx-border-width: 1;
+}
 
 #progressBar {
     -fx-base: #c6c6c6;

@@ -26,8 +26,11 @@ public class ProgramMapper {
         if(jaxbProgram.getSFunctions() != null) {
             for (SFunction jaxbFunction : jaxbProgram.getSFunctions().getSFunction()) {
                 if(programsRepo.getProgramOrFunctionByName(jaxbFunction.getName()) != null){
-                    throw new AlreadyExistsProgramException(jaxbFunction.getName(), true);
+                    if(programsRepo.getProgramOrFunctionByName(jaxbFunction.getName()).getProgram() instanceof Function){
+                        throw new AlreadyExistsProgramException(jaxbFunction.getName(), true);
+                    }
                 }
+
                 functionNames.add(jaxbFunction.getName());
             }
         }

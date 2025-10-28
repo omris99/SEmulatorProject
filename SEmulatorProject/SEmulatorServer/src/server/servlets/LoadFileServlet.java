@@ -15,6 +15,7 @@ import jakarta.xml.bind.Unmarshaller;
 import serverengine.logic.exceptions.AlreadyExistsProgramException;
 import serverengine.logic.exceptions.InvalidArgumentException;
 import serverengine.logic.exceptions.InvalidXmlFileException;
+import serverengine.logic.model.program.Function;
 import types.errortypes.XmlErrorType;
 import server.utils.ServletUtils;
 import serverengine.logic.model.argument.label.FixedLabel;
@@ -83,7 +84,9 @@ public class LoadFileServlet extends HttpServlet {
 
         SProgram sProgram = (SProgram) jaxbUnmarshaller.unmarshal(inputStream);
         if(programsRepo.getProgramOrFunctionByName(sProgram.getName()) != null){
-            throw new AlreadyExistsProgramException(sProgram.getName(), false);
+            if(!(programsRepo.getProgramOrFunctionByName(sProgram.getName()).getProgram() instanceof Function)){
+                throw new AlreadyExistsProgramException(sProgram.getName(), false);
+            }
         }
 
         Program loadedProgram = ProgramMapper.toDomain(userName, sProgram);
